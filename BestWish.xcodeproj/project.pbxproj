@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6A2DEF363A003242CA /* RxCocoa */; };
+		CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6C2DEF363A003242CA /* RxRelay */; };
+		CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6F2DEF364D003242CA /* SnapKit */; };
+		CBD6BA732DEF3656003242CA /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA722DEF3656003242CA /* Then */; };
+		CBD6BA762DEF370B003242CA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA752DEF370B003242CA /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CBD6BA282DEF1B3B003242CA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +73,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */,
+				CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */,
+				CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */,
+				CBD6BA732DEF3656003242CA /* Then in Frameworks */,
+				CBD6BA762DEF370B003242CA /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +138,11 @@
 			);
 			name = BestWish;
 			packageProductDependencies = (
+				CBD6BA6A2DEF363A003242CA /* RxCocoa */,
+				CBD6BA6C2DEF363A003242CA /* RxRelay */,
+				CBD6BA6F2DEF364D003242CA /* SnapKit */,
+				CBD6BA722DEF3656003242CA /* Then */,
+				CBD6BA752DEF370B003242CA /* Kingfisher */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -208,6 +226,12 @@
 			);
 			mainGroup = CBD6BA082DEF1B39003242CA;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */,
+				CBD6BA6E2DEF364D003242CA /* XCRemoteSwiftPackageReference "SnapKit" */,
+				CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */,
+				CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
 			projectDirPath = "";
@@ -563,6 +587,69 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
+		CBD6BA6E2DEF364D003242CA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CBD6BA6A2DEF363A003242CA /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		CBD6BA6C2DEF363A003242CA /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		CBD6BA6F2DEF364D003242CA /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA6E2DEF364D003242CA /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		CBD6BA722DEF3656003242CA /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		CBD6BA752DEF370B003242CA /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CBD6BA092DEF1B39003242CA /* Project object */;
 }
