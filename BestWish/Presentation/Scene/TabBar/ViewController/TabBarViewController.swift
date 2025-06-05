@@ -10,7 +10,18 @@ import UIKit
 // MARK: - 메인 탭바 컨트롤러
 final class TabBarViewController: UIViewController {
 
+    private let tabBarView = TabBarView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    override func loadView() {
+        view = tabBarView
+    }
+    
+    func bindViewModel() {
+        
+    }
 }
+
