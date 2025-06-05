@@ -18,7 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = HomeViewController()
+
+
+        let service = DummyServiceImpl()
+        let repository = DummyRepositoryImpl(service: service)
+        let useCase = DummyUseCaseImpl(repository: repository)
+        let vm = DummyViewModel(dummyUseCase: useCase)
+        window?.rootViewController = DummyViewController(viewModel: vm)
         window?.makeKeyAndVisible()
     }
 }
