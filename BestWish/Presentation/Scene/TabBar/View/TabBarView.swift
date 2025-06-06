@@ -37,6 +37,12 @@ final class TabBarView: UIView {
     }
     
     func configure() { }
+    
+    public var getLeftItemButton: UIButton { leftItemButton }
+    
+    public var getRightItemButton: UIButton { rightItemButton }
+    
+    public var getCenterItemButton: UIButton { centerItemButton }
 }
 
 private extension TabBarView {
