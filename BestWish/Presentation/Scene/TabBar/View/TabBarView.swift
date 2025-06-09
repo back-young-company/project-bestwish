@@ -46,6 +46,7 @@ final class TabBarView: UIView {
 }
 
 private extension TabBarView {
+    
     func setView() {
         setAttributes()
         setHierarchy()
