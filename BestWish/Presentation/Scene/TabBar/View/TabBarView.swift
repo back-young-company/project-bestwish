@@ -61,23 +61,25 @@ private extension TabBarView {
             $0.backgroundColor = .white
             $0.layer.cornerRadius = 24
             $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            $0.layer.shadowColor = UIColor.black.cgColor
+            $0.layer.shadowOffset = .init(width: 0, height: -4)
+            $0.layer.shadowOpacity = 0.2
+            $0.layer.shadowRadius = 8
         }
         
        
         leftItemButton.do {
-            $0.setImage(UIImage(named: "state=de1"), for: .normal)
             $0.contentVerticalAlignment = .fill
             $0.contentHorizontalAlignment = .fill
         }
         
         centerItemButton.do {
-            $0.setImage(UIImage(named: "state=de2"), for: .normal)
+            $0.setImage(UIImage(named: "home_de2"), for: .normal)
             $0.contentVerticalAlignment = .fill
             $0.contentHorizontalAlignment = .fill
         }
         
         rightItemButton.do {
-            $0.setImage(UIImage(named: "state=de3"), for: .normal)
             $0.contentVerticalAlignment = .fill
             $0.contentHorizontalAlignment = .fill
         }
@@ -97,22 +99,22 @@ private extension TabBarView {
         
         leftItemButton.snp.makeConstraints {
             $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -16)
-            $0.leading.equalToSuperview().inset(48)
-            $0.width.equalTo(60)
-            $0.height.equalTo(72)
+            $0.leading.equalToSuperview().inset(36)
+            $0.width.equalTo(93)
+            $0.height.equalTo(78)
         }
         
         centerItemButton.snp.makeConstraints {
             $0.centerX.equalTo(tabBar.snp.centerX)
             $0.centerY.equalTo(tabBar.snp.top).offset(8)
-            $0.width.height.equalTo(72)
+            $0.width.height.equalTo(64)
         }
         
         rightItemButton.snp.makeConstraints {
             $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -16)
-            $0.trailing.equalToSuperview().inset(48)
-            $0.width.equalTo(60)
-            $0.height.equalTo(72)
+            $0.trailing.equalToSuperview().inset(36)
+            $0.width.equalTo(93)
+            $0.height.equalTo(78)
         }
     }
     
