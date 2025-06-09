@@ -27,8 +27,7 @@ protocol ReuseIdentifier: AnyObject {
 }
 
 extension ReuseIdentifier {
-    static var identifer: String {
+    static var identifier: String {
         String(describing: self)
     }
 }
-
