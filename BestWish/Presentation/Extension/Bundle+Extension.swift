@@ -18,4 +18,33 @@ extension Bundle {
             .compactMap { $0["CFBundleURLSchemes"] as? [String] }
             .flatMap { $0 }
     }
+
+    var redirectURL: URL? {
+        guard
+            let urlTypes = infoDictionary?["CFBundleURLTypes"] as? [[String: Any]],
+            let firstType = urlTypes.first,
+            let schemes = firstType["CFBundleURLSchemes"] as? [String],
+            let scheme = schemes.first,
+            let callbackName = firstType["CFBundleURLName"] as? String
+        else {
+            print("⚠️ Info.plist의 CFBundleURLTypes 설정을 확인하세요.")
+            return nil
+        }
+
+        return URL(string: "\(scheme)://\(callbackName)")
+    }
+
+    var apiKey: String {
+        guard let value = infoDictionary?["API_KEY"] as? String else {
+            fatalError("❌ Info.plist에 API_KEY가 없습니다.")
+        }
+        return value
+    }
+
+    var supabaseURL: String {
+        guard let value = infoDictionary?["SUPABASE_URL"] as? String else {
+            fatalError("❌ Info.plist에 SUPABASE_URL이 없습니다.")
+        }
+        return value
+    }
 }
