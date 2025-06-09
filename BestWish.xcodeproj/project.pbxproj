@@ -12,6 +12,7 @@
 		14B8B66F2DF691AA00B7F5F8 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B66E2DF691AA00B7F5F8 /* RxSwift */; };
 		14B8B6712DF691B300B7F5F8 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6702DF691B300B7F5F8 /* SnapKit */; };
 		14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
+		14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
 		86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
 		CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6A2DEF363A003242CA /* RxCocoa */; };
 		CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6C2DEF363A003242CA /* RxRelay */; };
@@ -135,6 +136,7 @@
 			files = (
 				14B8B6712DF691B300B7F5F8 /* SnapKit in Frameworks */,
 				14B8B66F2DF691AA00B7F5F8 /* RxSwift in Frameworks */,
+				14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */,
 				14B8B66D2DF6919700B7F5F8 /* Kingfisher in Frameworks */,
 				14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */,
 			);
@@ -217,6 +219,7 @@
 				14B8B66E2DF691AA00B7F5F8 /* RxSwift */,
 				14B8B6702DF691B300B7F5F8 /* SnapKit */,
 				14B8B6722DF691BC00B7F5F8 /* Then */,
+				14B8B6782DF6C57000B7F5F8 /* RxCocoa */,
 			);
 			productName = BestWishShareExtension;
 			productReference = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */;
@@ -440,8 +443,10 @@
 		14B8B6452DF6861400B7F5F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DD66GTY4AT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BestWishShareExtension;
@@ -465,8 +470,10 @@
 		14B8B6462DF6861400B7F5F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DD66GTY4AT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BestWishShareExtension;
@@ -494,8 +501,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DD66GTY4AT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWish/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -523,8 +532,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DD66GTY4AT;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWish/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -867,6 +878,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
+		};
+		14B8B6782DF6C57000B7F5F8 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
 		};
 		86F6FD002DF66C8B00CAF678 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

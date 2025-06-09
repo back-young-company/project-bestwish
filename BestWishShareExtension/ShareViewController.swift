@@ -36,14 +36,14 @@ class ShareViewController: UIViewController {
     private let productDiscount = UILabel().then {
         $0.textColor = .systemRed
         $0.font = .systemFont(ofSize: 13, weight: .bold)
-        $0.setContentHuggingPriority(.required, for: .horizontal) // ✅ 필수
+        $0.setContentHuggingPriority(.required, for: .horizontal)
     }
     
     private let productPrice = UILabel().then {
         $0.textColor = .label
         $0.font = .systemFont(ofSize: 13, weight: .bold)
-        $0.setContentHuggingPriority(.defaultLow, for: .horizontal) // ✅
-        $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal) // ✅
+        $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     
     private let hStackView = UIStackView().then {
@@ -134,11 +134,16 @@ class ShareViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onSuccess: { [weak self] metadata in
                 guard let self else { return }
+                
                 self.productImage.kf.setImage(with: URL(string: metadata.imageURL ?? ""))
                 self.brandTitle.text = metadata.brandName
                 self.productTitle.text = metadata.productName
                 self.productDiscount.text = "\(metadata.discountRate ?? "0")%"
                 self.productPrice.text = "\(metadata.price ?? "-")원"
+                
+                print("저장되는 상품 url: \(metadata.productURL?.absoluteString)")
+                let sharedDefaults = UserDefaults(suiteName: "group.com.baekyeong.bestwish")
+                sharedDefaults?.setValue(metadata.productURL?.absoluteString, forKey: "productURL")
             }, onFailure: { error in
                 print("❌ Metadata fetch error: \(error.localizedDescription)")
             })
