@@ -82,26 +82,31 @@ final class ShareExtensionService {
     }
 
     // MARK: - Fetch Platform Metadata
-    func fetchPlatformMetadata(from sharedText: String) -> Single<ProductMetadataDTO> {
-        let platform = detectPlatform(from: sharedText)
-        guard let url = ShareExtensionService.extractURL(from: sharedText) else {
+    func fetchPlatformMetadata(from sharedText: String) -> Single<(String, ProductMetadataDTO)> {
+        guard let originalUrl = ShareExtensionService.extractURL(from: sharedText) else {
             return Single.error(NSError(domain: "NoURL", code: -1, userInfo: [NSLocalizedDescriptionKey: "No URL found in text"]))
         }
+        
+        let platform = detectPlatform(from: sharedText)
+        
         switch platform {
         case .musinsa:
-            return resolveFinalURL(url: url)
+            return resolveFinalURL(url: originalUrl)
                 .flatMap { finalURL in
-                    MusinsaFetcher().fetchMetadata(from: finalURL)
+                    MusinsaFetcher().fetchMetadata(ogUrl: originalUrl, extraUrl: finalURL)
+                        .map { metadata in (originalUrl.absoluteString, metadata) }
                 }
         case .zigzag:
-            return resolveZigzagFinalURL(url: url)
+            return resolveZigzagFinalURL(url: originalUrl)
                 .flatMap { (finalURL, html) in
-                    ZigzagFetcher().fetchMetadata(from: finalURL, html: html)
+                    ZigzagFetcher().fetchMetadata(ogUrl: originalUrl, extraUrl: finalURL, html: html)
+                        .map { metadata in (originalUrl.absoluteString, metadata) }
                 }
         case .ably:
-            return resolveFinalURL(url: url)
+            return resolveFinalURL(url: originalUrl)
                 .flatMap { finalURL in
-                    AblyFetcher().fetchMetadata(from: finalURL)
+                    AblyFetcher().fetchMetadata(ogUrl: originalUrl, extraUrl: finalURL)
+                        .map { metadata in (originalUrl.absoluteString, metadata) }
                 }
         case .unknown:
             return Single.error(NSError(domain: "Platform", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown platform"]))

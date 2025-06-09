@@ -11,9 +11,9 @@ import RxSwift
 
 // MARK: - Ably Fetcher
 class AblyFetcher: ShareMetadataFetcher {
-    func fetchMetadata(from url: URL) -> Single<ProductMetadataDTO> {
+    func fetchMetadata(ogUrl: URL, extraUrl: URL) -> Single<ProductMetadataDTO> {
         return Single<ProductMetadataDTO>.create { single in
-            let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            let task = URLSession.shared.dataTask(with: extraUrl) { data, _, error in
                 guard let data, let html = String(data: data, encoding: .utf8) else {
                     single(.failure(error ?? NSError(domain: "AblyFetcher", code: -1)))
                     return
@@ -32,7 +32,7 @@ class AblyFetcher: ShareMetadataFetcher {
                         discountRate: "\(goods?.priceInfo.discountRate ?? 0)",
                         price: "\(goods?.priceInfo.thumbnailPrice ?? 0)",
                         imageURL: goods?.coverImages.first,
-                        productURL: url,
+                        productURL: extraUrl,
                         extra: nil
                     )
                     single(.success(metadata))

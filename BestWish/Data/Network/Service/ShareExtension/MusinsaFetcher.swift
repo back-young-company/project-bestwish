@@ -11,9 +11,9 @@ import RxSwift
 
 // MARK: - Musinsa Fetcher
 class MusinsaFetcher: ShareMetadataFetcher {
-    func fetchMetadata(from url: URL) -> Single<ProductMetadataDTO> {
+    func fetchMetadata(ogUrl: URL, extraUrl: URL) -> Single<ProductMetadataDTO> {
         return Single<ProductMetadataDTO>.create { single in
-            let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            let task = URLSession.shared.dataTask(with: extraUrl) { data, _, error in
                 guard let data, let html = String(data: data, encoding: .utf8) else {
                     single(.failure(error ?? NSError(domain: "MusinsaFetcher", code: -1)))
                     return
@@ -22,7 +22,7 @@ class MusinsaFetcher: ShareMetadataFetcher {
                 if let productURLString = html.firstMatch(for: #"link=(https:\/\/www\.musinsa\.com\/products\/\d+)"#),
                    let productURL = URL(string: productURLString) {
                     // 리디렉션된 URL에 대한 재귀 호출
-                    _ = self.fetchMetadata(from: productURL).subscribe(single)
+                    _ = self.fetchMetadata(ogUrl: ogUrl, extraUrl: extraUrl).subscribe(single)
                     return
                 }
                 
@@ -38,7 +38,7 @@ class MusinsaFetcher: ShareMetadataFetcher {
                     discountRate: saleRate,
                     price: amountPrice,
                     imageURL: image,
-                    productURL: url,
+                    productURL: ogUrl,
                     extra: extra
                 )
                 single(.success(metadata))

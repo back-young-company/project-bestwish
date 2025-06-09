@@ -132,7 +132,7 @@ class ShareViewController: UIViewController {
         ShareExtensionService.shared
             .fetchPlatformMetadata(from: text)
             .observe(on: MainScheduler.instance)
-            .subscribe(onSuccess: { [weak self] metadata in
+            .subscribe(onSuccess: { [weak self] originalUrl, metadata in
                 guard let self else { return }
                 
                 self.productImage.kf.setImage(with: URL(string: metadata.imageURL ?? ""))

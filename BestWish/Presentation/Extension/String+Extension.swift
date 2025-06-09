@@ -34,4 +34,13 @@ extension String {
         let jsonString = self[startRange.upperBound..<endRange.lowerBound]
         return String(jsonString)
     }
+    
+    func extractapplicationLdJson() -> String? {
+        guard let startRange = self.range(of: #"<script id="__NEXT_DATA__" type="application/json">"#),
+              let endRange = self.range(of: "</script>", range: startRange.upperBound..<self.endIndex) else {
+            return nil
+        }
+        let jsonString = self[startRange.upperBound..<endRange.lowerBound]
+        return String(jsonString)
+    }
 }
