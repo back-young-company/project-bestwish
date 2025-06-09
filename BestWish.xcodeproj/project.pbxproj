@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
 		CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6A2DEF363A003242CA /* RxCocoa */; };
 		CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6C2DEF363A003242CA /* RxRelay */; };
 		CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6F2DEF364D003242CA /* SnapKit */; };
@@ -75,6 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */,
+				86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */,
 				CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */,
 				CBD6BB0B2DEFD165003242CA /* Supabase in Frameworks */,
 				CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */,
@@ -146,6 +148,7 @@
 				CBD6BA722DEF3656003242CA /* Then */,
 				CBD6BA752DEF370B003242CA /* Kingfisher */,
 				CBD6BB0A2DEFD165003242CA /* Supabase */,
+				86F6FD002DF66C8B00CAF678 /* Alamofire */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -226,6 +229,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = CBD6BA082DEF1B39003242CA;
 			minimizedProjectReferenceProxies = 1;
@@ -235,6 +239,7 @@
 				CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */,
 				CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -375,6 +380,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -440,6 +446,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -609,6 +616,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
 		CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -652,6 +667,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		86F6FD002DF66C8B00CAF678 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		CBD6BA6A2DEF363A003242CA /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
