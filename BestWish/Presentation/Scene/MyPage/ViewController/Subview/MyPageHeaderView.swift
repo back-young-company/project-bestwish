@@ -76,7 +76,7 @@ private extension MyPageHeaderView {
         profileImageView.snp.makeConstraints { make in
             make.verticalEdges.equalToSuperview().inset(24)
             make.leading.equalToSuperview().inset(CGFloat(16).fitWidth)
-            make.size.equalTo(CGFloat(48).fitWidth)
+            make.width.equalTo(profileImageView.snp.height)
         }
 
         infoStackView.snp.makeConstraints { make in

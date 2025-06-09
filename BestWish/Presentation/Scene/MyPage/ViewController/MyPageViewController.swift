@@ -98,9 +98,9 @@ extension MyPageViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch MyPageSectionType(rawValue: section) {
         case . userAccount:
-            return UITableView.automaticDimension
+            return CGFloat(96).fitHeight
         default:
-            return CGFloat(44).fitHeight
+            return 44
         }
     }
 
@@ -118,7 +118,7 @@ extension MyPageViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         switch MyPageSectionType(rawValue: section) {
         case . userAccount: 8
-        default: CGFloat(32).fitHeight
+        default: 32
         }
     }
 }
