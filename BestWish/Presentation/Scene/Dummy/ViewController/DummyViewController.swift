@@ -17,6 +17,12 @@ class DummyViewController: UIViewController {
     init(viewModel: DummyViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+
+        if let key = Bundle.main.infoDictionary?["API_KEY"] as? String,
+           let url = Bundle.main.infoDictionary?["SUPABASE_URL"] as? String {
+            print("key: \(key)")
+            print("url: \(url)")
+        }
     }
     
     required init?(coder: NSCoder) {
