@@ -9,6 +9,12 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+/// 커스텀 탭바  클래스
+///
+/// ```swift
+/// private let tabBar = TabBarViewController(viewControllers: [AVC(), BVC(), CVC()])
+/// ```
+
 // MARK: - 메인 탭바 컨트롤러
 final class TabBarViewController: UIViewController {
     
@@ -49,7 +55,7 @@ final class TabBarViewController: UIViewController {
     private let floatingMode = BehaviorRelay<FloatingMode>(value: .home)
     
     init(viewControllers: [UIViewController]) {
-        self.viewControllers = viewControllers
+        self.viewControllers = Array(viewControllers.prefix(3))
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -65,10 +71,11 @@ final class TabBarViewController: UIViewController {
     override func loadView() {
         view = tabBarView
     }
-    
-    /// 뷰 바인딩
-    private func bind() {
-        
+}
+
+// MARK: - Binding
+private extension TabBarViewController {
+    func bind() {
         tabBarView.getLeftItemButton.rx.tap
             .subscribe(with: self) { owner, _ in
                 owner.tabBarMode.accept(.left)
@@ -95,22 +102,22 @@ final class TabBarViewController: UIViewController {
             }
             .disposed(by: disposeBag)
     }
-    
-    /// 탭바 아이템 변경 시 호출되는 메서드
+}
+
+// MARK: - UI 업데이트
+private extension TabBarViewController {
     private func changedTabBarItem(_ tabBarMode: TabBarMode, _ floatingMode: FloatingMode) {
         switch floatingMode {
         case .home:
-            // 탭바 아이템 상태 이미지 변경
             tabBarView.getLeftItemButton.setImage(tabBarMode.homeModeImage?.left, for: .normal)
             tabBarView.getRightItemButton.setImage(tabBarMode.homeModeImage?.right, for: .normal)
-            
-            changeChildView(tabBarMode.rawValue) // 홈 모드일 때는 탭바의 역할을 수행
-            homeToCamera(tabBarMode) // 이미지 변경 및 모드 변경 이벤트 방출
-        case .camera: print("카메라 모드로 변경")
+            changeChildView(tabBarMode.rawValue)
+            homeToCamera(tabBarMode)
+        case .camera:
+            print("카메라 모드로 변경")
         }
     }
     
-    /// 홈 모드에서 카메라 모드로 변경
     private func homeToCamera(_ tabBarMode: TabBarMode) {
         guard let center = tabBarMode.homeModeImage?.center else { return }
         tabBarView.getCenterItemButton.setImage(center, for: .normal)
@@ -120,10 +127,11 @@ final class TabBarViewController: UIViewController {
         
         self.floatingMode.accept(.camera)
     }
-    
-    /// 탭바 선택 시 뷰 변경
-    private func changeChildView(_ index: Int) {
-        // 자식 VC 교체
+}
+
+// MARK: - 자식 VC 관리
+private extension TabBarViewController {
+    func changeChildView(_ index: Int) {
         children.forEach {
             $0.willMove(toParent: nil)
             $0.view.removeFromSuperview()
@@ -136,11 +144,12 @@ final class TabBarViewController: UIViewController {
         childVC.view.frame = CGRect(x: 0, y: 0, width: width, height: height)
 
         addChild(childVC)
-        view.insertSubview(childVC.view, at: 0) // ← 부모 탭바보다 아래에 배치
+        view.insertSubview(childVC.view, at: 0)
         childVC.didMove(toParent: self)
     }
 }
 
+// 나중에 지울 코드
 final class AVC: UIViewController {
     
     override func viewDidLoad() {
