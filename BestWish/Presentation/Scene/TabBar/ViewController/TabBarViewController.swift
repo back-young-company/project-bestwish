@@ -54,6 +54,8 @@ final class TabBarViewController: UIViewController {
     private let tabBarMode = BehaviorRelay<TabBarMode>(value: .left)
     private let floatingMode = BehaviorRelay<FloatingMode>(value: .home)
     
+    private var hasEnteredCameraMode = false
+    
     init(viewControllers: [UIViewController]) {
         self.viewControllers = Array(viewControllers.prefix(3))
         super.init(nibName: nil, bundle: nil)
@@ -114,7 +116,21 @@ private extension TabBarViewController {
             changeChildView(tabBarMode.rawValue)
             homeToCamera(tabBarMode)
         case .camera:
-            print("카메라 모드로 변경")
+            switch tabBarMode {
+            case .left:
+                print("갤러리 열림")
+            case .center:
+                if hasEnteredCameraMode {
+                    print("찰칵")
+                    guard let cameraVC = viewControllers[tabBarMode.rawValue] as? CameraViewController else { return }
+                    cameraVC.didTapTakePhoto()
+                    
+                } else {
+                    hasEnteredCameraMode = true
+                }
+            case .right:
+                print("화면 전환")
+            }
         }
     }
     
