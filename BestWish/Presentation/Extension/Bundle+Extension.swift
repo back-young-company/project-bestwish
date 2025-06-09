@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 extension Bundle {
     /// Info.plist의 CFBundleURLTypes에서 모든 URL 스킴을 배열로 리턴
     var urlSchemes: [String] {
