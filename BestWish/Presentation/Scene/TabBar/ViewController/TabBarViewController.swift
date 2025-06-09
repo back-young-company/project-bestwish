@@ -132,6 +132,11 @@ private extension TabBarViewController {
 // MARK: - 자식 VC 관리
 private extension TabBarViewController {
     func changeChildView(_ index: Int) {
+        
+        guard viewControllers.count == 3 else {
+            print("탭바 아이템은 반드시 3개가 존재해야 합니다.")
+            return
+        }
         children.forEach {
             $0.willMove(toParent: nil)
             $0.view.removeFromSuperview()
