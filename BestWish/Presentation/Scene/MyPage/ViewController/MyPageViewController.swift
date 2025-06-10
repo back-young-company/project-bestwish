@@ -27,12 +27,13 @@ final class MyPageViewController: UIViewController {
                 }
                 cell.configure(type: type)
                 return cell
-            case .empty:
-                return UITableViewCell()
             }
         },
         titleForHeaderInSection: { dataSource, index in
             return dataSource.sectionModels[index].header
+        },
+        titleForFooterInSection: { dataSource, index in
+            return dataSource.sectionModels[index].footer
         }
     )
 
@@ -53,14 +54,8 @@ final class MyPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        bindView()
         bindViewModel()
-    }
-
-    private func bindView() {
-        myPageView.tableView.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
+        setHeaderView()
     }
 
     private func bindViewModel() {
@@ -72,53 +67,22 @@ final class MyPageViewController: UIViewController {
             .bind(to: userInfo)
             .disposed(by: disposeBag)
     }
-}
 
-extension MyPageViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch MyPageSectionType(rawValue: section) {
-        case .userAccount:
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: MyPageHeaderView.identifier
-            ) as? MyPageHeaderView, let dataSource = userInfo.value else {
-                return nil
-            }
+    private func setHeaderView() {
+        guard let userInfo = userInfo.value else { return }
+        let frame = CGRect(
+            x: 0,
+            y: 0,
+            width: myPageView.frame.width,
+            height: CGFloat(96).fitHeight
+        )
+        let header = MyPageHeaderView(frame: frame)
 
-            headerView.configure(
-                profileImage: UIImage(systemName: dataSource.profileImageName) ?? .add,
-                nickname: dataSource.nickname,
-                email: dataSource.email
-            )
-            return headerView
-        default:
-            return nil
-        }
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch MyPageSectionType(rawValue: section) {
-        case . userAccount:
-            return CGFloat(96).fitHeight
-        default:
-            return 44
-        }
-    }
-
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        switch MyPageSectionType(rawValue: section) {
-        case . userAccount:
-            let view = UIView()
-            view.backgroundColor = .gray50
-            return view
-        default:
-            return nil
-        }
-    }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        switch MyPageSectionType(rawValue: section) {
-        case . userAccount: 8
-        default: 32
-        }
+        header.configure(
+            profileImage: UIImage(systemName: userInfo.profileImageName) ?? .add,
+            nickname: userInfo.nickname,
+            email: userInfo.email
+        )
+        myPageView.tableView.tableHeaderView = header
     }
 }

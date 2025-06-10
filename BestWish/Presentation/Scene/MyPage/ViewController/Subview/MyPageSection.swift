@@ -11,6 +11,7 @@ import RxDataSources
 
 struct MyPageSection {
     var header: String?
+    var footer: String?
     var items: [Item]
 }
 
@@ -19,6 +20,7 @@ extension MyPageSection: SectionModelType {
 
     init(original: MyPageSection, items: [Item]) {
         self = original
+        self.footer = " "
         self.items = items
     }
 }
@@ -26,7 +28,6 @@ extension MyPageSection: SectionModelType {
 //MARK: 마이페이지 셀 아이템
 
 enum MyPageCellItem {
-    case empty
     case seeMore(type: MyPageCellType)
     case basic(type: MyPageCellType)
 }
@@ -34,7 +35,6 @@ enum MyPageCellItem {
 // MARK: 마이페이지 섹션 타입
 
 enum MyPageSectionType: Int, CaseIterable {
-    case userAccount
     case userInfo
     case help
     case setting
@@ -46,7 +46,6 @@ extension MyPageSectionType {
         case .userInfo: "내 정보"
         case .help: "도움말"
         case .setting: "설정"
-        default: ""
         }
     }
 
@@ -62,7 +61,6 @@ extension MyPageSectionType {
             ]
         case .setting:
             [MyPageCellType.logout]
-        default: []
         }
     }
 }

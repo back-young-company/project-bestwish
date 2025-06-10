@@ -14,6 +14,7 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
     private let nicknameLabel = UILabel()
     private let emailLabel = UILabel()
     private let seeMoreButton = UIButton()
+    private let separatorView = UIView()
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -65,11 +66,15 @@ private extension MyPageHeaderView {
             $0.setImage(.init(systemName: "chevron.right"), for: .normal)
             $0.tintColor = .gray900
         }
+
+        separatorView.do {
+            $0.backgroundColor = .gray50
+        }
     }
 
     func setHierarchy() {
         infoStackView.addArrangedSubviews(nicknameLabel, emailLabel)
-        self.addSubviews(profileImageView, infoStackView, seeMoreButton)
+        self.addSubviews(profileImageView, infoStackView, seeMoreButton, separatorView)
     }
 
     func setConstraints() {
@@ -88,6 +93,11 @@ private extension MyPageHeaderView {
             make.centerY.equalToSuperview()
             make.size.equalTo(24)
             make.trailing.equalToSuperview().inset(CGFloat(16).fitWidth)
+        }
+
+        separatorView.snp.makeConstraints { make in
+            make.bottom.directionalHorizontalEdges.equalToSuperview()
+            make.height.equalTo(8)
         }
     }
 }
