@@ -20,11 +20,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
 
 
-        let service = DummyServiceImpl()
-        let repository = DummyRepositoryImpl(service: service)
-        let useCase = DummyUseCaseImpl(repository: repository)
-        let vm = DummyViewModel(dummyUseCase: useCase)
-        window?.rootViewController = DummyViewController(viewModel: vm)
+//        let service = DummyServiceImpl()
+//        let repository = DummyRepositoryImpl(service: service)
+//        let useCase = DummyUseCaseImpl(repository: repository)
+//        let vm = DummyViewModel(dummyUseCase: useCase)
+//        window?.rootViewController = DummyViewController(viewModel: vm)
+        window?.rootViewController = HomeViewController()
         window?.makeKeyAndVisible()
     }
 }
