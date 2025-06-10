@@ -16,8 +16,28 @@ final class MyPageViewModel: ViewModel {
     }
 
     struct State {
-        let sections: Observable<[MyPageSection]>
-        let userInfo: Observable<AccountDisplay>
+        let sections: Observable<[MyPageSection]> = Observable.just(
+            MyPageSectionType.allCases.map { type in
+                switch type {
+                case .userInfo:
+                    MyPageSection(header: type.title, items: type.cell.map {
+                        MyPageCellItem.seeMore(type: $0)
+                    })
+                case .help,
+                        .setting:
+                    MyPageSection(header: type.title, items: type.cell.map {
+                        MyPageCellItem.basic(type: $0)
+                    })
+                }
+            }
+        )
+        let userInfo: Observable<AccountDisplay> = Observable.just(
+            AccountDisplay(
+                profileImageName: "person.crop.circle",
+                nickname: "User",
+                email: "user@gmail.com"
+            )
+        )
     }
 
     private let _action = PublishSubject<Action>()
@@ -26,36 +46,11 @@ final class MyPageViewModel: ViewModel {
     let state: State
 
     init() {
-        let sections = Observable.just(
-            MyPageSectionType.allCases.map({ type in
-                switch type {
-                case .userAccount:
-                    MyPageSection(header: nil, items: [])
-                case .userInfo:
-                    MyPageSection(header: type.title, items: type.cell.map {
-                        MyPageCellItem.seeMore(type: $0)
-                    })
-                case .help, .setting:
-                    MyPageSection(header: type.title, items: type.cell.map {
-                        MyPageCellItem.basic(type: $0)
-                    })
-                }
-            })
-        )
-
-        let userInfo = Observable.just(
-            AccountDisplay(
-                profileImageName: "person.crop.circle",
-                nickname: "User",
-                email: "user@gmail.com"
-            )
-        )
-
-        state = State(sections: sections, userInfo: userInfo)
-
+        state = State()
         bindAction()
     }
 
     private func bindAction() {
+
     }
 }
