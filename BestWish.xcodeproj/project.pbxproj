@@ -86,9 +86,9 @@
 				Data/Network/Service/ShareExtension/MusinsaFetcher.swift,
 				Data/Network/Service/ShareExtension/ShareExtensionService.swift,
 				Data/Network/Service/ShareExtension/ZigzagFetcher.swift,
+				"Data/Util/String+Util.swift",
 				Domain/Entity/SharePlatform.swift,
 				Domain/Interface/MetadataFetcherRepository.swift,
-				"Presentation/Extension/String+Extension.swift",
 			);
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
 		};
