@@ -37,13 +37,14 @@ struct GoodsData: Codable {
 }
 
 struct Goods: Codable {
+    let sno: Int?
     let name: String?
     let priceInfo: PriceInfo
     let market: Market
     let coverImages: [String]
     
     enum CodingKeys: String, CodingKey {
-        case name, market
+        case sno, name, market
         case priceInfo = "price_info"
         case coverImages = "cover_images"
     }

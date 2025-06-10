@@ -44,10 +44,10 @@ final class ShareExtensionService {
             let task = URLSession.shared.dataTask(with: request) { _, response, error in
                 if let finalURL = response?.url {
                     single(.success(finalURL))
-                } else if let error = error {
+                } else if let error {
                     single(.failure(error))
                 } else {
-                    single(.failure(NSError(domain: "FinalURL", code: -1, userInfo: nil)))
+                    single(.failure(ShareExtensionError.redirectionFailed))
                 }
             }
             task.resume()
@@ -73,7 +73,7 @@ final class ShareExtensionService {
                 } else if let error = error {
                     single(.failure(error))
                 } else {
-                    single(.failure(NSError(domain: "ZigzagFinalURL", code: -1, userInfo: nil)))
+                    single(.failure(ShareExtensionError.htmlParsingFailed))
                 }
             }
             task.resume()
@@ -84,7 +84,7 @@ final class ShareExtensionService {
     // MARK: - Fetch Platform Metadata
     func fetchPlatformMetadata(from sharedText: String) -> Single<(String, ProductMetadataDTO)> {
         guard let originalUrl = ShareExtensionService.extractURL(from: sharedText) else {
-            return Single.error(NSError(domain: "NoURL", code: -1, userInfo: [NSLocalizedDescriptionKey: "No URL found in text"]))
+            return Single.error(ShareExtensionError.invaildURL)
         }
         
         let platform = detectPlatform(from: sharedText)
@@ -109,7 +109,7 @@ final class ShareExtensionService {
                         .map { metadata in (originalUrl.absoluteString, metadata) }
                 }
         case .unknown:
-            return Single.error(NSError(domain: "Platform", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown platform"]))
+            return Single.error(ShareExtensionError.platformDetectionFailed)
         }
     }
 }

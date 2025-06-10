@@ -15,14 +15,15 @@ class MusinsaFetcher: ShareMetadataFetcher {
         return Single<ProductMetadataDTO>.create { single in
             let task = URLSession.shared.dataTask(with: extraUrl) { data, _, error in
                 guard let data, let html = String(data: data, encoding: .utf8) else {
-                    single(.failure(error ?? NSError(domain: "MusinsaFetcher", code: -1)))
+                    single(.failure(error ?? ShareExtensionError.dataLoadingFailed))
                     return
                 }
                 // HTML에서 리디렉션된 상품 URL 확인
                 if let productURLString = html.firstMatch(for: #"link=(https:\/\/www\.musinsa\.com\/products\/\d+)"#),
-                   let productURL = URL(string: productURLString) {
-                    // 리디렉션된 URL에 대한 재귀 호출
-                    _ = self.fetchMetadata(ogUrl: ogUrl, extraUrl: extraUrl).subscribe(single)
+                   let redirectedURL = URL(string: productURLString),
+                   redirectedURL != extraUrl {
+                    // 리디렉션된 URL이 현재 URL과 다를 때만 재귀 호출
+                    _ = self.fetchMetadata(ogUrl: ogUrl, extraUrl: redirectedURL).subscribe(single)
                     return
                 }
                 

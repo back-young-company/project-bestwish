@@ -18,7 +18,7 @@ class ZigzagFetcher: HTMLBasedMetadataFetcher {
             let image = html.slice(from: "property=\"og:image\" content=\"", to: "\"")
             let amountPrice = html.slice(from: "property=\"product:price:amount\" content=\"", to: "\"")
             
-            if let json = html.extractapplicationLdJson() {
+            if let json = html.extractNEXTDataJSON() {
                 let pattern = #""deeplink_url"\s*:\s*"([^"]+)""#
                 if let match = json.firstMatch(for: pattern) {
                     print("정규식으로 추출된 deeplink_url: \(match)")
@@ -42,93 +42,13 @@ class ZigzagFetcher: HTMLBasedMetadataFetcher {
                         extra: nil
                     )
                     single(.success(metadata))
+                } else {
+                    single(.failure(ShareExtensionError.invalidProductData))
                 }
+            } else {
+                single(.failure(ShareExtensionError.jsonScriptParsingFailed))
             }
             return Disposables.create()
         }
     }
-    
-    func extractZigzagDeeplinkFromScript(in html: String) -> URL? {
-        let pattern = #"<script[^>]*id="__NEXT_DATA__"[^>]*>(.*?)</script>"#
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.dotMatchesLineSeparators]),
-              let match = regex.firstMatch(in: html, range: NSRange(html.startIndex..., in: html)),
-              let range = Range(match.range(at: 1), in: html)
-        else {
-            return nil
-        }
-
-        let jsonString = String(html[range])
-
-        guard let data = jsonString.data(using: .utf8),
-              let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let props = jsonObject["props"] as? [String: Any],
-              let pageProps = props["pageProps"] as? [String: Any],
-              let deeplink = pageProps["deeplink_url"] as? String
-        else {
-            return nil
-        }
-
-        return URL(string: deeplink.removingPercentEncoding ?? deeplink)
-    }
-    
-    func extractDeeplinkURL(from html: String) -> URL? {
-        let pattern = #""deeplink_url"\s*:\s*"([^"]+)""#
-        guard let regex = try? NSRegularExpression(pattern: pattern),
-              let match = regex.firstMatch(in: html, range: NSRange(html.startIndex..., in: html)),
-              let range = Range(match.range(at: 1), in: html)
-        else {
-            return nil
-        }
-
-        let raw = String(html[range])
-        let decoded = raw.removingPercentEncoding ?? raw
-        return URL(string: decoded)
-    }
-    
-    func extractEncodedDeeplinkURL(from html: String) -> URL? {
-        let pattern = #"deeplink_url=([^&\\"]+)"#
-        guard let regex = try? NSRegularExpression(pattern: pattern),
-              let match = regex.firstMatch(in: html, range: NSRange(html.startIndex..., in: html)),
-              let range = Range(match.range(at: 1), in: html)
-        else {
-            return nil
-        }
-
-        let encoded = String(html[range])
-        let decoded = encoded.removingPercentEncoding ?? encoded
-        return URL(string: decoded)
-    }
-    
-    func extractZigzagDeeplink(from html: String) -> URL? {
-        return extractZigzagDeeplinkFromScript(in: html) ??
-               extractDeeplinkURL(from: html) ??
-               extractEncodedDeeplinkURL(from: html)
-    }
-    
-    func extractScriptContent(withId id: String, from html: String) -> String? {
-        let pattern = #"<script[^>]*id="\#(id)"[^>]*>(.*?)</script>"#
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.dotMatchesLineSeparators]),
-              let match = regex.firstMatch(in: html, range: NSRange(html.startIndex..., in: html)),
-              let range = Range(match.range(at: 1), in: html)
-        else {
-            return nil
-        }
-
-        return String(html[range])
-    }
-    
-    func extractScriptContents(ofType type: String, from html: String) -> [String] {
-        let pattern = #"<script[^>]*type="\#(type)"[^>]*>(.*?)</script>"#
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.dotMatchesLineSeparators]) else {
-            return []
-        }
-
-        let results = regex.matches(in: html, range: NSRange(html.startIndex..., in: html))
-        return results.compactMap { match in
-            guard let range = Range(match.range(at: 1), in: html) else { return nil }
-            return String(html[range])
-        }
-    }
-    
-    
 }
