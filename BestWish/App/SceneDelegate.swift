@@ -24,8 +24,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let repository = DummyRepositoryImpl(service: service)
         let useCase = DummyUseCaseImpl(repository: repository)
         let vm = DummyViewModel(dummyUseCase: useCase)
-        window?.rootViewController = DummyViewController(viewModel: vm)
+        window?.rootViewController = TabBarViewController(viewControllers: [AVC(), CameraViewController(), CVC()])// DummyViewController(viewModel: vm)
         window?.makeKeyAndVisible()
     }
 }
 
+// 나중에 지울 코드
+//----------------------------------
+final class AVC: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBlue
+    }
+}
+
+final class CVC: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemRed
+    }
+}
+//----------------------------------
