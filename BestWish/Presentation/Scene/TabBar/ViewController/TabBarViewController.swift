@@ -79,7 +79,8 @@ private extension TabBarViewController {
             .disposed(by: disposeBag)
         
         // 카메라 모드일 경우 카메라 헤더의 홈 버튼을 터치했을 때의 이벤트 처리
-        guard let cameraVC = viewControllers[TabBarMode.center.rawValue] as? CameraViewController else { return }
+        guard let nav = viewControllers[TabBarMode.center.rawValue] as? UINavigationController,
+              let cameraVC = nav.viewControllers.first as? CameraViewController else { return }
         cameraVC.getHeaderHomeButton.rx.tap
             .subscribe(with: self) { owner, _ in
                 owner.floatingMode.accept(.home)
@@ -117,14 +118,18 @@ private extension TabBarViewController {
             changeChildView(mode.rawValue)
         case (.center, .camera):                    // 홈 모드에서 카메라 모드로 처음 변경될 시 촬영 기능이 실행됨을 방지하기 위해 Bool 변수 지정
             if hasEnteredCameraMode {
-                (viewControllers[TabBarMode.center.rawValue] as? CameraViewController)?.didTapTakePhoto()
+                guard let nav = viewControllers[TabBarMode.center.rawValue] as? UINavigationController,
+                      let cameraVC = nav.viewControllers.first as? CameraViewController else { return }
+                cameraVC.didTapTakePhoto()
             } else {
                 hasEnteredCameraMode = true
             }
         case (.left, .camera):                      // 사진첩 선택 시
             presentImagePicker()
         case (.right, .camera):                     // 화면 전환 선택 시
-            (viewControllers[TabBarMode.center.rawValue] as? CameraViewController)?.switchCamera()
+            guard let nav = viewControllers[TabBarMode.center.rawValue] as? UINavigationController,
+                  let cameraVC = nav.viewControllers.first as? CameraViewController else { return }
+            cameraVC.switchCamera()
         }
     }
 }
