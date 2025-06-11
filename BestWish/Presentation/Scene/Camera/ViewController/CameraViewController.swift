@@ -110,7 +110,7 @@ extension CameraViewController: CropViewControllerDelegate {
     func presentImageCropper(with image: UIImage) {
         let vc = ImageEditViewController(image: image)
         vc.modalPresentationStyle = .fullScreen
-        vc.cropperView.delegate = self
+        vc.getImageEditView.getCropperVC.delegate = self
         present(vc, animated: true)
     }
     

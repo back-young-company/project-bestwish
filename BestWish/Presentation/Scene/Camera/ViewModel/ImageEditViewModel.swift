@@ -8,7 +8,7 @@
 import RxSwift
 import RxRelay
 
-final class CustomCropImageViewModel: ViewModel {
+final class ImageEditViewModel: ViewModel {
     private let dummyUseCase: DummyUseCase
     private let disposeBag = DisposeBag()
 
