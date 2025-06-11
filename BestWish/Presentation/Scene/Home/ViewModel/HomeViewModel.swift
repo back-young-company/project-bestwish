@@ -16,16 +16,23 @@ final class HomeViewModel: ViewModel {
     }
     
     struct State {
-        let sections = Observable<[HomeSection]>.just([
-            .platform(items: [
-                .platform(Platform(platformName: "무신사", platformImage: "무신사")),
-                .platform(Platform(platformName: "무신사", platformImage: "무신사")),
-                .platform(Platform(platformName: "무신사", platformImage: "무신사"))
+        let sections = Observable<[HomeSectionModel]>.just([
+            HomeSectionModel(header: .platform, items: [
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag)),
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag)),
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag)),
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag)),
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag)),
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag)),
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag)),
+                .platform(Platform(platformName: "무신사", platformImage: PlatformImage.zigzag))
             ]),
-            .wishlist(items: [
-                .wishlist(WishlistProduct(productImageURL: URL(string: "")!, brandName: "나이키", productName: "나이키", productSaleRate: "15%", productPrice: "46,000원")),
-                .wishlist(WishlistProduct(productImageURL: URL(string: "")!, brandName: "나이키", productName: "나이키", productSaleRate: "15%", productPrice: "46,000원")),
-                .wishlist(WishlistProduct(productImageURL: URL(string: "")!, brandName: "나이키", productName: "나이키", productSaleRate: "15%", productPrice: "46,000원"))
+            HomeSectionModel(header: .wishlist, items: [
+                .wishlist(WishlistProduct(productImageURL: URL(string: "https://example.com/image.png") ?? URL(fileURLWithPath: ""), brandName: "나이키", productName: "가을 바람막이", productSaleRate: "15%", productPrice: "46,000원")),
+                .wishlist(WishlistProduct(productImageURL: URL(string: "https://example.com/image.png") ?? URL(fileURLWithPath: ""), brandName: "나이키", productName: "가을 바람막이", productSaleRate: "15%", productPrice: "46,000원")),
+                .wishlist(WishlistProduct(productImageURL: URL(string: "https://example.com/image.png") ?? URL(fileURLWithPath: ""), brandName: "나이키", productName: "가을 바람막이", productSaleRate: "15%", productPrice: "46,000원")),
+                .wishlist(WishlistProduct(productImageURL: URL(string: "https://example.com/image.png") ?? URL(fileURLWithPath: ""), brandName: "나이키", productName: "가을 바람막이", productSaleRate: "15%", productPrice: "46,000원")),
+                .wishlist(WishlistProduct(productImageURL: URL(string: "https://example.com/image.png") ?? URL(fileURLWithPath: ""), brandName: "나이키", productName: "가을 바람막이", productSaleRate: "15%", productPrice: "46,000원"))
             ])
         ])
     }

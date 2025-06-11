@@ -9,9 +9,9 @@ import Foundation
 
 import RxDataSources
 
-enum HomeSection {
-    case platform(items: [HomeItem])
-    case wishlist(items: [HomeItem])
+enum HomeHeader {
+    case platform
+    case wishlist
 }
 
 enum HomeItem {
@@ -19,21 +19,17 @@ enum HomeItem {
     case wishlist(WishlistProduct)
 }
 
-extension HomeSection: SectionModelType {
+struct HomeSectionModel {
+    let header: HomeHeader
+    var items: [HomeItem]
+}
+
+extension HomeSectionModel: SectionModelType {
     typealias Item = HomeItem
 
-    init(original: HomeSection, items: [HomeItem]) {
-        switch original {
-        case .platform: self = .platform(items: items)
-        case .wishlist: self = .wishlist(items: items)
-        }
-    }
-
-    var items: [HomeItem] {
-        switch self {
-        case .platform(let items): return items
-        case .wishlist(let items): return items
-        }
+    init(original: HomeSectionModel, items: [HomeItem]) {
+        self = original
+        self.items = items
     }
 }
 

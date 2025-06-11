@@ -11,11 +11,10 @@ import SnapKit
 
 final class HomeView: UIView {
     
-    let collectionView = UICollectionView()
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         setView()
     }
 
@@ -36,12 +35,12 @@ private extension HomeView {
         
         collectionView.do {
             $0.register(
-                MyPageHeaderView.self,
-                forCellWithReuseIdentifier: MyPageHeaderView.identifier
+                PlatformCell.self,
+                forCellWithReuseIdentifier: PlatformCell.identifier
             )
             $0.register(
-                MyPageCell.self,
-                forCellWithReuseIdentifier: MyPageCell.identifier
+                WishlistCell.self,
+                forCellWithReuseIdentifier: WishlistCell.identifier
             )
         }
     }

@@ -24,10 +24,15 @@ final class PlatformCell: UICollectionViewCell, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        platformImageView.image = nil
+    }
 
     func configure(type: Platform) {
         platformTitleLabel.text = type.platformName
-        platformImageView.kf.setImage(with: URL(string: type.platformImage))
+        platformImageView.image = UIImage(named: type.platformImage)
     }
 }
 
@@ -42,10 +47,13 @@ private extension PlatformCell {
         platformTitleLabel.do {
             $0.textColor = .black
             $0.font = .font(.pretendardMedium, ofSize: 12)
+            $0.textAlignment = .center
         }
 
         platformImageView.do {
             $0.backgroundColor = .black
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 32
         }
     }
 
@@ -67,4 +75,3 @@ private extension PlatformCell {
         }
     }
 }
-

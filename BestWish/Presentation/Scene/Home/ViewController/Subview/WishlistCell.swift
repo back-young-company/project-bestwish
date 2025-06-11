@@ -53,6 +53,8 @@ private extension WishlistCell {
     func setAttributes() {
         productImageView.do {
             $0.backgroundColor = .black
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 12
         }
         
         productSaleRateLabel.do {
