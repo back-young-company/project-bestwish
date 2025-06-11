@@ -29,7 +29,7 @@ final class ProfileUpdateViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setNavigationBar(alignment: .center, title: "프로필 수정")
         bindView()
         bindViewModel()
     }

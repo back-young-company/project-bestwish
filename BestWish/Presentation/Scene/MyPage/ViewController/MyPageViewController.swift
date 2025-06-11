@@ -40,7 +40,7 @@ final class MyPageViewController: UIViewController {
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.setLeftBarItem(with: "마이페이지")
+        self.setNavigationBar(alignment: .left, title: "마이페이지")
     }
 
     required init?(coder: NSCoder) {
