@@ -142,7 +142,7 @@ class ShareViewController: UIViewController {
                 self.productPrice.text = "\(metadata.price ?? "-")원"
                 
                 print("저장되는 상품 url: \(metadata.productURL?.absoluteString)")
-                let sharedDefaults = UserDefaults(suiteName: "group.com.baekyeong.bestwish")
+                let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
                 sharedDefaults?.setValue(metadata.productURL?.absoluteString, forKey: "productURL")
             }, onFailure: { error in
                 print("❌ Metadata fetch error: \(error.localizedDescription)")
