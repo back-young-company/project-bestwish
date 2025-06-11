@@ -10,10 +10,13 @@ import Then
 import SnapKit
 import CropViewController
 
+// MARK: - 이미지 편집 뷰
 final class ImageEditView: UIView {
     
-    private let doneButton = UIButton()
-    private let cancelButton = UIButton()
+    private let doneButton = AppButton(type: .next)
+    private let cancelButton = AppButton(type: .cancel)
+    private let headerLabel = UILabel()
+    private let cropperBackgroundView = UIView()
     private let cropperVC: CropViewController
     
     var cropperView: UIView { cropperVC.view }
@@ -42,7 +45,9 @@ final class ImageEditView: UIView {
     
     // MARK: - 외부 접근 가능
     var getDoneButton: UIButton { doneButton }
+    var getCancelButton: UIButton { cancelButton }
     var getCropperVC: CropViewController { cropperVC }
+    var getCropperBackgroundView: UIView { cropperBackgroundView }
 }
 
 private extension ImageEditView {
@@ -53,57 +58,62 @@ private extension ImageEditView {
         setDelegate()
         setDataSource()
         setBindings()
-        
     }
     
     func setAttributes() {
         backgroundColor = .white
         
 //        cropperVC.toolbar.clampButton.setImage(UIImage(named: "home_de1"), for: .normal)
-        
-        cropperVC.toolbar.do {
-            $0.statusBarHeightInset = 0
-            $0.backgroundViewOutsets = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
+        headerLabel.do {
+            $0.text = "이미지 편집"
+            $0.font = .font(.pretendardBold, ofSize: 18)
         }
         
         doneButton.do {
-            $0.setTitle("완료", for: .normal)
-            $0.setTitleColor(.black, for: .normal)
+            $0.setTitle("분석하기", for: .normal)
+            $0.setTitleColor(.white, for: .normal)
         }
         
         cancelButton.do {
-            $0.setTitle("취소", for: .normal)
-            $0.setTitleColor(.black, for: .normal)
+            $0.setTitle("뒤로", for: .normal)
+            $0.setTitleColor(.gray, for: .normal)
         }
     }
     
     func setHierarchy() {
-        addSubviews(cropperView, cancelButton, doneButton)
+        addSubviews(cropperBackgroundView, cancelButton, doneButton, headerLabel)
+        cropperBackgroundView.addSubview(cropperView)
     }
     
     func setConstraints() {
         
-//        cropperVC.toolbar.snp.makeConstraints {
-//            $0.bottom.equalToSuperview()
-//            $0.height.equalTo(80) // 원하는 높이
-//            $0.horizontalEdges.equalToSuperview()
-//        }
-        
-        cropperView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(doneButton.snp.top)
+        headerLabel.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide).inset(10)
+            $0.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(18)
         }
         
-        doneButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.width.height.equalTo(44)
+        cropperBackgroundView.snp.makeConstraints {
+            $0.top.equalTo(headerLabel.snp.bottom).offset(12)
+            $0.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            $0.bottom.equalTo(doneButton.snp.top).offset(-20)
+        }
+        
+        cropperView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         
         cancelButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
             $0.leading.equalToSuperview().inset(20)
-            $0.width.height.equalTo(44)
+            $0.width.equalTo(80)
+            $0.height.equalTo(60)
+        }
+        
+        doneButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
+            $0.leading.equalTo(cancelButton.snp.trailing).offset(10)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(60)
         }
     }
     
