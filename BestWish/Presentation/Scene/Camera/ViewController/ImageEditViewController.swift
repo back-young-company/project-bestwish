@@ -6,17 +6,14 @@
 //
 
 import UIKit
-import Then
 import RxSwift
 import RxCocoa
-import SnapKit
-import CropViewController
 
+// MARK: - 이미지 편집 뷰 컨트롤러
 final class ImageEditViewController: UIViewController {
     
-    
     private let imageEditView: ImageEditView
-    var d = DisposeBag()
+    var disposeBag = DisposeBag()
     
     init(image: UIImage) {
         imageEditView = ImageEditView(image: image)
@@ -34,14 +31,26 @@ final class ImageEditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindView()
+    }
+    
+    private func bindView() {
+        // 분석하기 버튼 터치
         imageEditView.getDoneButton.rx.tap
             .subscribe(with: self) { owner, _ in
-                print("눌림")
                 let vc = owner.imageEditView.getCropperVC
                 vc.delegate?.cropViewController?(vc, didCropToImage: vc.image, withRect: vc.imageCropFrame, angle: vc.angle)
-                owner.dismiss(animated: true)
             }
-            .disposed(by: d)
+            .disposed(by: disposeBag)
+        
+        // 뒤로가기 버튼 터치
+        imageEditView.getCancelButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+                let vc = owner.imageEditView.getCropperVC
+                vc.delegate?.cropViewController?(vc, didFinishCancelled: true)
+                owner.dismiss(animated: false)
+            }
+            .disposed(by: disposeBag)
     }
     
     // MARK: - 외부 접근
