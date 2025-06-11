@@ -16,7 +16,6 @@ final class OnboardingViewModel: ViewModel {
 
     // MARK: - Actions
     enum Action {
-        case viewDidLoad(Void)
     }
 
     // MARK: - States
@@ -56,8 +55,6 @@ final class OnboardingViewModel: ViewModel {
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
-            case .viewDidLoad:
-                break
             }
         }.disposed(by: disposeBag)
     }
