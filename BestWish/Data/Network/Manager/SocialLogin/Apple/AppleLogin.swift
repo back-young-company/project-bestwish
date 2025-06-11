@@ -35,7 +35,7 @@ extension SupabaseOAuthManager {
         let (code, _) = try await signInApple()
         let clientSecret = try await requestSecret()
         let url = "https://appleid.apple.com/auth/token"
-        let clientID = "com.Yimkeul.KakaoLoginTest"
+        let clientID = Bundle.main.clientID
         let parameters: [String: String] = [
             "grant_type": "authorization_code",
             "code": code,
@@ -88,7 +88,7 @@ extension SupabaseOAuthManager {
 
     func revokeAccount(_ token: String) async throws {
         let url = "https://appleid.apple.com/auth/revoke"
-        let clientID = "kr.ac.indck.hyun.BestWish"
+        let clientID = Bundle.main.clientID
 
         let clientSecret: String
         do {
@@ -159,10 +159,6 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
                         nonce: nonce
                     )
                 )
-                continuation?.resume(returning: (authCodeString, session))
-                continuation = nil
-
-
                 try await client.auth.update(user: UserAttributes(
                     data: ["full_name": .string(name)]))
                 print("auth.users 이름 갱신 성공")
@@ -174,11 +170,13 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
                     .execute()
                 print("public.user 이름 갱신 성공")
                 print("애플 로그인 성공")
+                continuation?.resume(returning: (authCodeString, session))
             } catch {
                 print("Supabase 로그인 오류:", error.localizedDescription)
+                continuation?.resume(throwing: error)
             }
+            continuation = nil
         }
-        continuation = nil
 
     }
 

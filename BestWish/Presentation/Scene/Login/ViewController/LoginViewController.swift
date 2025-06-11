@@ -40,13 +40,22 @@ final class LoginViewController: UIViewController {
     // MARK: - BindViewModel
     private func bindViewModel() {
         bindKakaoButton()
+        bindAppleButton()
     }
 
     private func bindKakaoButton() {
         loginView.kakaoLoginButton.rx.tap
-                 .do(onNext: { print("Kakao 버튼 탭 감지") })
-                 .map { LoginViewModel.Action.signInKakao(()) }
-                 .bind(to: viewModel.action)
-                 .disposed(by: disposeBag)
+            .asDriver()
+            .map { .signInKakao }
+            .drive(viewModel.action)
+            .disposed(by: disposeBag)
+    }
+
+    private func bindAppleButton() {
+        loginView.appleLoginButton.rx.tap
+            .asDriver()
+            .map { .signInApple }
+            .drive(viewModel.action)
+            .disposed(by: disposeBag)
     }
 }

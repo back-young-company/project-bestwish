@@ -15,8 +15,9 @@ final class LoginViewModel: ViewModel {
     private let supabaseOAuthManager = SupabaseOAuthManager.shared
     // MARK: - Actions
     enum Action {
-        case viewDidLoad(Void)
-        case signInKakao(Void)
+        case viewDidLoad
+        case signInKakao
+        case signInApple
     }
 
     // MARK: - States
@@ -58,7 +59,10 @@ final class LoginViewModel: ViewModel {
             case .signInKakao:
                 SupabaseOAuthManager.shared.signIn(type: .kakao)
                 // 화면이동
+            case .signInApple:
+                SupabaseOAuthManager.shared.signIn(type: .apple)
             }
+            
         }.disposed(by: disposeBag)
     }
 

@@ -58,6 +58,7 @@ final class SupabaseOAuthManager: NSObject {
                 do {
                     let(_, session) = try await signInApple()
                     KeyChainManager.shared.saveAllToken(session: session)
+                    gotoOnboardingView()
                 } catch {
                     print("\(error.localizedDescription)")
                 }
@@ -67,12 +68,13 @@ final class SupabaseOAuthManager: NSObject {
                         return
                     }
                     KeyChainManager.shared.saveAllToken(session: session)
+                    gotoOnboardingView()
                 } catch {
                     print("\(error.localizedDescription)")
                 }
             }
         }
-        gotoOnboardingView()
+
     }
 
     func signOut() async throws {

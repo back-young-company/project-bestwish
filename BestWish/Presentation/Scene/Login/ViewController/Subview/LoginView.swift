@@ -14,7 +14,8 @@ final class LoginView: UIView {
 
     // MARK: - Properties
     let kakaoLoginButton = UIButton()
-    let appleLoginButton = ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline)
+    let appleLoginButton = UIButton()
+//    ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline)
 
     // MARK: - UI Components
 
@@ -52,7 +53,11 @@ private extension LoginView {
         }
 
         appleLoginButton.do {
-            $0.cornerRadius = 12
+//            $0.cornerRadius = 12
+            $0.setImage(UIImage(named: "kakaoLogin")?.resize(to: CGSize(width: CGFloat(335).fitWidth, height: CGFloat(56).fitHeight)),
+                        for: .normal)
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 12
         }
     }
     // MARK: - Hierarchy Helper

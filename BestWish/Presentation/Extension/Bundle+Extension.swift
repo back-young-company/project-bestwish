@@ -47,4 +47,11 @@ extension Bundle {
         }
         return value
     }
+
+    var clientID: String {
+        guard let value = infoDictionary?["CLIENT_ID"] as? String else {
+            fatalError("❌ Info.plist에 CLIENT_ID가 없습니다.")
+        }
+        return value
+    }
 }
