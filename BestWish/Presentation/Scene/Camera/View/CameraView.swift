@@ -76,7 +76,7 @@ private extension CameraView {
     func setAttributes() {
         
         homeButton.do {
-            $0.image = UIImage(systemName: "house")
+            $0.image = UIImage(named: "home_button")
             $0.tintColor = .black
         }
         

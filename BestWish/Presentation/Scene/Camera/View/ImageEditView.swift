@@ -63,7 +63,15 @@ private extension ImageEditView {
     func setAttributes() {
         backgroundColor = .white
         
-//        cropperVC.toolbar.clampButton.setImage(UIImage(named: "home_de1"), for: .normal)
+        cropperVC.toolbar.rotateClockwiseButton?.setImage(UIImage(named: "image_right"), for: .normal)
+        cropperVC.toolbar.rotateButton.setImage(UIImage(named: "image_left"), for: .normal)
+        
+        cropperVC.toolbar.resetButton.setImage(UIImage(named: "image_init_de"), for: .normal)
+        cropperVC.toolbar.resetButton.setImage(UIImage(named: "image_init_se"), for: .selected)
+        
+        cropperVC.toolbar.clampButton.setImage(UIImage(named: "image_ratio_de"), for: .normal)
+        cropperVC.toolbar.clampButton.setImage(UIImage(named: "image_ratio_se"), for: .selected)
+        
         headerLabel.do {
             $0.text = "이미지 편집"
             $0.textColor = .black
