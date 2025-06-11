@@ -6,6 +6,7 @@
 //
 
 import RxDataSources
+import Foundation
 
 //MARK: SectionModelType - RxDataSources
 
@@ -73,6 +74,17 @@ enum MyPageCellType {
     case termsOfUse
     case privacyPolicy
     case logout
+
+    init?(indexPath: IndexPath) {
+        switch (indexPath.section, indexPath.row) {
+        case (0, 0): self = .userInfo
+        case (1, 0): self = .question
+        case (1, 1): self = .termsOfUse
+        case (1, 2): self = .privacyPolicy
+        case (2, 0): self = .logout
+        default: return nil
+        }
+    }
 }
 
 extension MyPageCellType {

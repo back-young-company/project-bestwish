@@ -56,6 +56,20 @@ final class MyPageViewController: UIViewController {
 
         bindViewModel()
         setHeaderView()
+        bindView()
+    }
+
+    private func bindView() {
+        myPageView.tableView.rx.itemSelected
+            .bind(with: self) { owner, indexPath in
+                print(indexPath.section, indexPath.item)
+                switch MyPageCellType(indexPath: indexPath) {
+                case .userInfo:
+                    let managementViewController = UserInfoManagementViewController()
+                    owner.navigationController?.pushViewController(managementViewController, animated: true)
+                default: return
+                }
+            }.disposed(by: disposeBag)
     }
 
     private func bindViewModel() {
