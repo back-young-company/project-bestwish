@@ -60,9 +60,11 @@ class DummyViewController: UIViewController {
         dummyView.shortcutButton.rx.tap
             .withUnretained(self)
             .bind { owner, _ in
-                guard let sharedDefaults = UserDefaults(suiteName: "group.com.baekyeong.bestwish"),
-                      let urlString = sharedDefaults.string(forKey: "productURL"),
-                      let url = URL(string: urlString) else {
+                guard let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish") else { return }
+                
+                guard let urlString = sharedDefaults.string(forKey: "productURL") else { return }
+                
+                guard let url = URL(string: urlString) else {
                     print("❌ 저장된 상품 URL이 없습니다.")
                     return
                 }
