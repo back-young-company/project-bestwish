@@ -122,7 +122,7 @@ private extension TabBarViewController {
                 hasEnteredCameraMode = true
             }
         case (.left, .camera):                      // 사진첩 선택 시
-            return
+            presentImagePicker()
         case (.right, .camera):                     // 화면 전환 선택 시
             (viewControllers[TabBarMode.center.rawValue] as? CameraViewController)?.switchCamera()
         }
@@ -154,30 +154,20 @@ private extension TabBarViewController {
     }
 }
 
-// 나중에 지울 코드
-//----------------------------------
-final class AVC: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBlue
+// MARK: - 이미지 피커 관련
+extension TabBarViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    /// 이미지 피커 뷰 열기
+    func presentImagePicker() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = false
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+    /// 이미지 선택 시
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[.originalImage] as? UIImage else { return }
+        (viewControllers[TabBarMode.center.rawValue] as? CameraViewController)?.presentImageCropper(with: image)
     }
 }
-
-final class BVC: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemYellow
-    }
-}
-
-final class CVC: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemRed
-    }
-}
-//----------------------------------
-
