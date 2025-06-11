@@ -74,7 +74,7 @@ final class MyPageViewController: UIViewController {
             x: 0,
             y: 0,
             width: myPageView.frame.width,
-            height: CGFloat(96).fitHeight
+            height: CGFloat(96).fitHeight < 96 ? 96 : CGFloat(96).fitHeight
         )
         let header = MyPageHeaderView(frame: frame)
 
