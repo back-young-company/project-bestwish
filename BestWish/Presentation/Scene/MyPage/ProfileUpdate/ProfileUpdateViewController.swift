@@ -30,12 +30,8 @@ final class ProfileUpdateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        bindView()
         bindViewModel()
-        profileUpdateView.configure(user: AccountDisplay(
-            profileImageName: "person.crop.circle",
-            nickname: "User",
-            email: "user@gmail.com"
-        ))
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -43,8 +39,25 @@ final class ProfileUpdateViewController: UIViewController {
         profileUpdateView.addUnderLine()
     }
 
-    private func bindViewModel() {
+    private func bindView() {
+        let tapGesture = UITapGestureRecognizer()
+        profileUpdateView.profileImageView.addGestureRecognizer(tapGesture)
+        tapGesture.rx.event
+            .withLatestFrom(viewModel.state.userAccount)
+            .bind(with: self) { owner, userAccount in
+                let profileSheetVC = ProfileSheetViewController(selectedIndex: userAccount.profileImageIndex)
+                profileSheetVC.presentProfileSheet()
+                profileSheetVC.onComplete = { [weak self] selectedIndex in
+                    self?.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
+                }
+                owner.present(profileSheetVC, animated: true)
+            }.disposed(by: disposeBag)
+    }
 
+    private func bindViewModel() {
+        viewModel.state.userAccount
+            .bind(with: self) { owner, userAccount in
+                owner.profileUpdateView.configure(user: userAccount)
+            }.disposed(by: disposeBag)
     }
 }
-

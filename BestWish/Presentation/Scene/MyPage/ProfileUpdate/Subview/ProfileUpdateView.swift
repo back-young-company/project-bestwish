@@ -8,7 +8,7 @@
 import UIKit
 
 final class ProfileUpdateView: UIView {
-    private let profileImageView = UIImageView()
+    let profileImageView = UIImageView()
     private let emailStackView = VerticalStackView(spacing: 12)
     private let emailLabel = InfoLabel(title: "이메일")
     private let emailValueLabel = PaddingLabel(top: 0, left: 10, bottom: 0, right: 0)
@@ -30,7 +30,7 @@ final class ProfileUpdateView: UIView {
 
     func configure(user: AccountDisplay) {
         emailValueLabel.text = user.email
-        profileImageView.image = UIImage(systemName: user.profileImageName)!
+        profileImageView.image = UIImage(named: user.profileImageName)
         nicknameTextField.text = user.nickname
     }
 
@@ -51,6 +51,7 @@ private extension ProfileUpdateView {
             $0.contentMode = .scaleAspectFit
             $0.layer.cornerRadius = CGFloat(88).fitWidth / 2
             $0.clipsToBounds = true
+            $0.isUserInteractionEnabled = true
         }
 
         emailValueLabel.do {
@@ -118,4 +119,3 @@ private extension ProfileUpdateView {
         }
     }
 }
-
