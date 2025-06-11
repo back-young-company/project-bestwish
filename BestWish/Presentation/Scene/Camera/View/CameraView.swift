@@ -13,11 +13,9 @@ import Then
 // MARK: - 카메라 뷰
 final class CameraView: UIView {
     
-    private let headerView = UIView()
-    private let headerTitleLabel = UILabel()
-    private let headerHomeButton = UIButton()
-    
-    private let preivewLayer = AVCaptureVideoPreviewLayer()     // 실시간 카메라 프리뷰 화면을 보여주는 레이어
+    private let previewBackGroundView = UIView()
+    private let homeButton = UIBarButtonItem()
+    private let previewLayer = AVCaptureVideoPreviewLayer()     // 실시간 카메라 프리뷰 화면을 보여주는 레이어
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,22 +31,21 @@ final class CameraView: UIView {
     /// 헤더 뷰의 높이를 계산한 후 카메라 레이어 높이 설정
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.addSublayer(preivewLayer)
-        
-        let headerHeight = headerView.frame.height
-        preivewLayer.frame = CGRect(
+        previewBackGroundView.layer.addSublayer(previewLayer)
+        previewLayer.frame = CGRect(
             x: 0,
-            y: headerHeight,
+            y: 0,
             width: bounds.width,
-            height: bounds.height - headerHeight
+            height: previewBackGroundView.bounds.height
         )
     }
     
     func configure() { }
     
     // MARK: - 외부 접근
-    public var getPreviewLayer: AVCaptureVideoPreviewLayer { return preivewLayer }
-    public var getHeaderHomeButton: UIButton { return headerHomeButton }
+    public var getPreviewLayer: AVCaptureVideoPreviewLayer { previewLayer }
+    public var getHomeButton: UIBarButtonItem { homeButton }
+    public var getPreviewBackGroundView: UIView { previewBackGroundView }
 }
 
 private extension CameraView {
@@ -62,41 +59,21 @@ private extension CameraView {
     }
     
     func setAttributes() {
-        headerTitleLabel.do {
-            $0.text = "라이브 캡쳐"
-            $0.textColor = .black
-            $0.font = .systemFont(ofSize: 20, weight: .bold)
-        }
         
-        headerHomeButton.do {
-            $0.setImage(UIImage(systemName: "house"), for: .normal)
-            $0.imageView?.tintColor = .black
-        }
-        
-        headerView.do {
-            $0.backgroundColor = .white
+        homeButton.do {
+            $0.image = UIImage(systemName: "house")
+            $0.tintColor = .black
         }
     }
     
     func setHierarchy() {
-        addSubview(headerView)
-        headerView.addSubviews(headerTitleLabel, headerHomeButton)
+        addSubviews(previewBackGroundView)
     }
     
     func setConstraints() {
-        headerView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(100)
-        }
-        
-        headerTitleLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(10)
-            $0.leading.equalToSuperview().inset(20)
-        }
-        
-        headerHomeButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(10)
-            $0.trailing.equalToSuperview().inset(20)
+        previewBackGroundView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
     }
     
@@ -112,4 +89,3 @@ private extension CameraView {
         
     }
 }
-
