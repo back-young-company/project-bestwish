@@ -12,10 +12,11 @@ import CropViewController
 // MARK: - 카메라 뷰 컨트롤러
 final class CameraViewController: UIViewController {
     
-    private let globalQueue = DispatchQueue(label: "BestWish.globalQueue", qos: .userInteractive)
     private var session: AVCaptureSession?                      // 카메라 입력, 출력을 연결하는 세션 객체
     private let output = AVCapturePhotoOutput()                 // 사진 촬영을 담당하는 출력 객체
     private let cameraView = CameraView()
+    private var currentCameraPosition: AVCaptureDevice.Position = .back
+    private let globalQueue = DispatchQueue(label: "BestWish.globalQueue", qos: .userInteractive)
     
     override func loadView() {
         view = cameraView
@@ -63,6 +64,22 @@ final class CameraViewController: UIViewController {
         } catch {
             print("카메라 설정 에러\(error)")
         }
+    }
+    
+    /// 화면 전환
+    public func switchCamera() {
+        guard let session else { return }
+        session.beginConfiguration()                                                // 세션에 입력/출력 장치를 변경할 준비를 시작
+        if let currentInput = session.inputs.first as? AVCaptureDeviceInput {
+            session.removeInput(currentInput)                                       // 현재 세션에 등록된 입력 장치 중 첫 번째를 가져와 세션에서 제거 → 후면 카메라가 연결되어 있다면 끊는 작업
+            currentCameraPosition = currentCameraPosition == .back ? .front : .back
+            if let newDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: currentCameraPosition),  // 바뀐 카메라 포지션에 맞는 새로운 카메라 장비를 가져옴
+               let newInput = try? AVCaptureDeviceInput(device: newDevice),         // 그 장비로 AVCaptureDeviceInput을 생성
+               session.canAddInput(newInput) {
+                session.addInput(newInput)                                          // 세션에 입력으로 추가 가능한지 확인한 뒤 추가
+            }
+        }
+        session.commitConfiguration()                                               // 시작한 변경 내용을 마무리하고 적용
     }
     
     // MARK: 외부에서 접근 가능
@@ -115,4 +132,3 @@ extension CameraViewController: CropViewControllerDelegate {
         }
     }
 }
-

@@ -117,12 +117,14 @@ private extension TabBarViewController {
             changeChildView(mode.rawValue)
         case (.center, .camera):                    // 홈 모드에서 카메라 모드로 처음 변경될 시 촬영 기능이 실행됨을 방지하기 위해 Bool 변수 지정
             if hasEnteredCameraMode {
-                (viewControllers[mode.rawValue] as? CameraViewController)?.didTapTakePhoto()
+                (viewControllers[TabBarMode.center.rawValue] as? CameraViewController)?.didTapTakePhoto()
             } else {
                 hasEnteredCameraMode = true
             }
-        default:
-            break
+        case (.left, .camera):                      // 사진첩 선택 시
+            return
+        case (.right, .camera):                     // 화면 전환 선택 시
+            (viewControllers[TabBarMode.center.rawValue] as? CameraViewController)?.switchCamera()
         }
     }
 }
