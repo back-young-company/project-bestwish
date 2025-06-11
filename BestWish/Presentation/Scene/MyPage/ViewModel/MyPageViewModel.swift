@@ -33,7 +33,7 @@ final class MyPageViewModel: ViewModel {
         )
         let userInfo: Observable<AccountDisplay> = Observable.just(
             AccountDisplay(
-                profileImageName: "person.crop.circle",
+                profileImageIndex: 0,
                 nickname: "User",
                 email: "user@gmail.com"
             )

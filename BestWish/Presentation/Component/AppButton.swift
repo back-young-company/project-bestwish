@@ -13,9 +13,11 @@ import UIKit
 /// ```
 final class AppButton: UIButton {
     private let type: ButtonType
+    private let fontSize: CGFloat
 
-    init(type: ButtonType) {
+    init(type: ButtonType, fontSize: CGFloat = 18) {
         self.type = type
+        self.fontSize = fontSize
 
         super.init(frame: .zero)
         setView()
@@ -35,7 +37,7 @@ private extension AppButton {
     func setAttributes() {
         self.setTitle(type.title, for: .normal)
         self.setTitleColor(type.titleColor, for: .normal)
-        self.titleLabel?.font = .font(.pretendardBold, ofSize: 18)
+        self.titleLabel?.font = .font(.pretendardBold, ofSize: fontSize)
         self.backgroundColor = type.backgroundColor
         self.layer.cornerRadius = 12
         self.layer.borderWidth = type.borderWidth
