@@ -13,7 +13,7 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
     private let infoStackView = UIStackView()
     private let nicknameLabel = UILabel()
     private let emailLabel = UILabel()
-    private let seeMoreButton = UIButton()
+    let seeMoreButton = UIButton()
     private let separatorView = UIView()
 
     override init(reuseIdentifier: String?) {
@@ -26,10 +26,10 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
         fatalError()
     }
 
-    func configure(profileImage: UIImage, nickname: String, email: String) {
-        profileImageView.image = profileImage
-        nicknameLabel.text = nickname
-        emailLabel.text = email
+    func configure(user: AccountDisplay) {
+        profileImageView.image = .init(named: user.profileImageName)
+        nicknameLabel.text = user.nickname
+        emailLabel.text = user.email
     }
 }
 

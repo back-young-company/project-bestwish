@@ -78,11 +78,14 @@ final class MyPageViewController: UIViewController {
         )
         let header = MyPageHeaderView(frame: frame)
 
-        header.configure(
-            profileImage: UIImage(systemName: userInfo.profileImageName) ?? .add,
-            nickname: userInfo.nickname,
-            email: userInfo.email
-        )
+        header.configure(user: userInfo)
         myPageView.tableView.tableHeaderView = header
+
+        header.seeMoreButton.rx.tap
+            .bind(with: self) { owner, _ in
+                // Coordinator 적용 전 임시 코드
+                let updateVC = ProfileUpdateViewController()
+                owner.navigationController?.pushViewController(updateVC, animated: true)
+            }.disposed(by: disposeBag)
     }
 }

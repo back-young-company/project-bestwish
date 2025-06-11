@@ -47,6 +47,7 @@ private extension ProfileUpdateView {
     }
 
     func setAttributes() {
+        self.backgroundColor = .white
         profileImageView.do {
             $0.contentMode = .scaleAspectFit
             $0.layer.cornerRadius = CGFloat(88).fitWidth / 2
