@@ -39,8 +39,6 @@ private extension OnboardingHeaderView {
         setConstraints()
     }
 
-    // MARK: - Attirbute Helper
-    // View에 대한 속성 설정 메서드
     func setAttributes() {
         infoStackView.do {
             $0.alignment = .leading
@@ -64,12 +62,11 @@ private extension OnboardingHeaderView {
         }
     }
 
-    // MARK: - Hierarchy Helper
-    // subView 추가 메서드
     func setHierarchy() {
         self.addSubview(infoStackView)
         infoStackView.addArrangedSubviews(pageInfoLabel, titleLabel, descLabel)
     }
+
     func setConstraints() {
         infoStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
