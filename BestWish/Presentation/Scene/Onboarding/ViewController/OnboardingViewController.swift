@@ -52,5 +52,41 @@ final class OnboardingViewController: UIViewController {
                   }
               })
               .disposed(by: disposeBag)
+
+        onboardingView.birthSelection.dateButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                guard let self else { return }
+                self.onboardingView.birthSelection.dateButton.layer.borderColor = UIColor.primary300?.cgColor
+                let sheetVC = DatePickerBottomSheetViewController()
+                sheetVC.presentationController?.delegate = self
+                // 선택된 날짜 콜백
+                sheetVC.onDateSelected = { date in
+                    let formatter = DateFormatter()
+                    formatter.locale = Locale(identifier: "ko_KR")
+                    formatter.dateFormat = "yyyy.MM.dd"
+                    let title = formatter.string(from: date)
+                    self.onboardingView.birthSelection.dateButton.setTitle(title, for: .normal)
+
+                    self.dismiss(animated: false) {
+                        self.onboardingView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
+                    }
+                }
+
+                sheetVC.onCancel = {
+                    self.dismiss(animated: false) {
+                        self.onboardingView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
+                    }
+                }
+
+                sheetVC.presentDatePickerSheet()
+                self.present(sheetVC, animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+}
+extension OnboardingViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // 모달이 내려간 시점에 원래 색으로 복구
+        onboardingView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
     }
 }
