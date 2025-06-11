@@ -10,23 +10,17 @@ import RxSwift
 
 final class LoginViewModel: ViewModel {
 
-    // MARK: - Properties
     private let disposeBag = DisposeBag()
     private let supabaseOAuthManager = SupabaseOAuthManager.shared
+
     // MARK: - Actions
     enum Action {
-        case viewDidLoad
         case signInKakao
         case signInApple
     }
 
     // MARK: - States
-    struct State {
-        /// sample
-        let data: Observable<DummyDisplay>
-        let newData: Observable<DummyDisplay>
-        let error: Observable<Error>
-    }
+    struct State { }
 
     // MARK: - Inputs
     private let _action = PublishSubject<Action>()
@@ -34,20 +28,11 @@ final class LoginViewModel: ViewModel {
 
     // MARK: - Outputs
     /// sample
-    private let _data = PublishSubject<DummyDisplay>()
-    private let _newData = PublishSubject<DummyDisplay>()
-    private let _error = PublishSubject<Error>()
-
     let state: State
 
     // MARK: - Initializer, Deinit, requiered
     init() {
-        state = State(
-            data: _data.asObservable(),
-            newData: _newData.asObservable(),
-            error: _error.asObservable()
-        )
-
+        state = State()
         bindAction()
     }
 
@@ -55,14 +40,11 @@ final class LoginViewModel: ViewModel {
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
-            case .viewDidLoad: break
             case .signInKakao:
                 SupabaseOAuthManager.shared.signIn(type: .kakao)
-                // 화면이동
             case .signInApple:
                 SupabaseOAuthManager.shared.signIn(type: .apple)
             }
-            
         }.disposed(by: disposeBag)
     }
 

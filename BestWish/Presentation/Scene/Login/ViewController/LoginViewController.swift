@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 final class LoginViewController: UIViewController {
-    // MARK: - Properties
+
     private let loginView = LoginView()
     private let viewModel: LoginViewModel
     private let disposeBag = DisposeBag()
