@@ -66,6 +66,7 @@ private extension ImageEditView {
 //        cropperVC.toolbar.clampButton.setImage(UIImage(named: "home_de1"), for: .normal)
         headerLabel.do {
             $0.text = "이미지 편집"
+            $0.textColor = .black
             $0.font = .font(.pretendardBold, ofSize: 18)
         }
         
