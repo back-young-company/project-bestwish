@@ -31,7 +31,9 @@ final class HorizontalStackView: UIStackView {
         fatalError()
     }
 
-    func configure() { }
+    func configure(title: String) {
+        titleLabel.text = title
+    }
 }
 
 private extension HorizontalStackView {

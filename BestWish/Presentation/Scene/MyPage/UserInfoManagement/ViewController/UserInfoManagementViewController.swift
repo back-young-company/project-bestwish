@@ -39,7 +39,7 @@ final class UserInfoManagementViewController: UIViewController {
     }
 
     private func bindViewModel() {
-
+        managementView.configure(loginInfo: "애플")
     }
 }
 

@@ -62,7 +62,6 @@ final class MyPageViewController: UIViewController {
     private func bindView() {
         myPageView.tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
-                print(indexPath.section, indexPath.item)
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
                     let managementViewController = UserInfoManagementViewController()
