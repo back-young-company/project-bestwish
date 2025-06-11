@@ -12,6 +12,12 @@ import SnapKit
 final class DummyView: UIView {
     private let titleLabel = UILabel()
     private let priceLabel = UILabel()
+    
+    let shortcutButton = UIButton().then {
+        $0.setTitle("바로가기", for: .normal)
+        $0.setTitleColor(.systemBlue, for: .normal)
+        $0.backgroundColor = .systemGray6
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,7 +65,7 @@ private extension DummyView {
 
     // subView 추가 메서드
     func setHierarchy() {
-        self.addSubviews(titleLabel, priceLabel)
+        self.addSubviews(titleLabel, priceLabel, shortcutButton)
     }
 
     // 오토레이이아웃 설정 메서드
@@ -71,6 +77,13 @@ private extension DummyView {
         priceLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
+        }
+        
+        shortcutButton.snp.makeConstraints { make in
+            make.top.equalTo(priceLabel.snp.bottom).offset(12)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(120)
+            make.height.equalTo(44)
         }
     }
 
