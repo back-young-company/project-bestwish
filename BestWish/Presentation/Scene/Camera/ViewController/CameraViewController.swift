@@ -24,6 +24,8 @@ final class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNavigationBar(alignment: .left, title: "라이브 캡쳐")
+        navigationItem.rightBarButtonItem = cameraView.getHomeButton
         checkCameraPermissions()
     }
     
@@ -83,7 +85,7 @@ final class CameraViewController: UIViewController {
     }
     
     // MARK: 외부에서 접근 가능
-    public var getHeaderHomeButton: UIButton { return cameraView.getHeaderHomeButton }
+    public var getHeaderHomeButton: UIBarButtonItem { return cameraView.getHomeButton }
 }
 
 // MARK: - 사진 촬영 관련
@@ -109,22 +111,17 @@ extension CameraViewController: CropViewControllerDelegate {
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(with image: UIImage) {
         let vc = ImageEditViewController(image: image)
-        vc.modalPresentationStyle = .fullScreen
         vc.getImageEditView.getCropperVC.delegate = self
-        present(vc, animated: true)
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false)
     }
     
     /// 크롭 이미지 뷰 완료  버튼 호출 시
-    func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
-        cropViewController.dismiss(animated: true) {
-            self.globalQueue.async { [weak self] in
-                self?.session?.startRunning()
-            }
-        }
-    }
-    
-    /// 크롭 이미지 뷰 취소 버튼 호출 시
     func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        print(image)
+    }
+    /// 크롭 이미지 뷰 취소 버튼 호출 시
+    func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
         cropViewController.dismiss(animated: true) {
             self.globalQueue.async { [weak self] in
                 self?.session?.startRunning()
