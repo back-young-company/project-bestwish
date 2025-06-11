@@ -35,7 +35,7 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
     }
 
     func configure(type: WishlistProduct) {
-        productImageView.kf.setImage(with: type.productImageURL)
+        productImageView.image = UIImage(named: type.productImageURL)
         productSaleRateLabel.text = type.productSaleRate
         productPriceLabel.text = type.productPrice
         productNameLabel.text = type.productName
@@ -58,7 +58,7 @@ private extension WishlistCell {
         }
         
         productSaleRateLabel.do {
-            $0.textColor = .systemRed
+            $0.textColor = .secondary400
             $0.font = .font(.pretendardBold, ofSize: 16)
         }
         
@@ -70,7 +70,7 @@ private extension WishlistCell {
         hStackView.do {
             $0.axis = .horizontal
             $0.spacing = 4
-            $0.alignment = .leading
+            $0.alignment = .center
         }
         
         productNameLabel.do {
@@ -104,7 +104,7 @@ private extension WishlistCell {
         }
         
         vStackView.snp.makeConstraints {
-            $0.top.equalTo(productImageView.snp.bottom).offset(4)
+            $0.top.equalTo(productImageView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }

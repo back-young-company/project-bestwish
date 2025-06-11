@@ -8,5 +8,14 @@
 import Foundation
 
 enum PlatformImage {
+    static let musinsa = "musinsa"
+    static let ably = "ably"
     static let zigzag = "zigzag"
+}
+
+enum ProductImage {
+    static let product1 = "product1"
+    static let product2 = "product2"
+    static let product3 = "product3"
+    static let product4 = "product4"
 }

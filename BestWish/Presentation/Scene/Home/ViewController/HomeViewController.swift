@@ -23,7 +23,7 @@ final class HomeViewController: UIViewController {
     override func loadView() {
         view = homeView
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,8 +52,30 @@ final class HomeViewController: UIViewController {
                     
                     return cell
                 }
-            }
-        )
+            }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+                let section = dataSource.sectionModels[indexPath.section]
+                
+                switch section.header {
+                case .platform:
+                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        withReuseIdentifier: PlatformHeaderView.identifier,
+                        for: indexPath
+                    ) as? PlatformHeaderView else { return UICollectionReusableView() }
+                    
+                    headerView.configure(title: "플랫폼 바로가기")
+                    return headerView
+                case .wishlist:
+                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        withReuseIdentifier: WishlistHeaderView.identifier,
+                        for: indexPath
+                    ) as? WishlistHeaderView else { return UICollectionReusableView() }
+                    
+                    headerView.configure(title: "쇼핑몰 위시리스트")
+                    return headerView
+                }
+            })
         
         homeViewModel.state.sections
             .do(onNext: { [weak self] sections in
@@ -67,7 +89,6 @@ final class HomeViewController: UIViewController {
         homeViewModel.state.sections
             .bind(to: homeView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-        
     }
 }
 
@@ -111,6 +132,17 @@ private extension HomeViewController {
         section.orthogonalScrollingBehavior = .continuous
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
         
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(44)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        
         return section
     }
 
@@ -130,10 +162,22 @@ private extension HomeViewController {
             layoutSize: groupSize,
             repeatingSubitem: item,
             count: 2)
+        group.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 14, bottom: 6, trailing: 14)
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 14, bottom: 6, trailing: 14)
+        
         section.interGroupSpacing = 12
+        
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(44)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
         
         return section
     }

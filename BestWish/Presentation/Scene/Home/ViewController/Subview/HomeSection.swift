@@ -9,9 +9,9 @@ import Foundation
 
 import RxDataSources
 
-enum HomeHeader {
-    case platform
-    case wishlist
+enum HomeHeader: String {
+    case platform = "플랫폼 바로가기"
+    case wishlist = "쇼핑몰 위시리스트"
 }
 
 enum HomeItem {
@@ -39,7 +39,7 @@ struct Platform {
 }
 
 struct WishlistProduct {
-    let productImageURL: URL
+    let productImageURL: String
     let brandName: String
     let productName: String
     let productSaleRate: String

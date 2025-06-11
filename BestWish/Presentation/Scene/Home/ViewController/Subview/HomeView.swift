@@ -42,6 +42,16 @@ private extension HomeView {
                 WishlistCell.self,
                 forCellWithReuseIdentifier: WishlistCell.identifier
             )
+            $0.register(
+                PlatformHeaderView.self,
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: PlatformHeaderView.identifier
+            )
+            $0.register(
+                WishlistHeaderView.self,
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: WishlistHeaderView.identifier
+            )
         }
     }
 
