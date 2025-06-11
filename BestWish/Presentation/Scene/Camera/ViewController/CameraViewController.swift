@@ -36,10 +36,13 @@ final class CameraViewController: UIViewController {
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in     // 요청 실패 시 아직 어떠한 이벤트도 넣지 않은 상태
                 guard granted else { return }
                 self?.setUpCamera()
+                self?.cameraView.showToast()
             }
         case .restricted, .denied: break                                            // 사용 제한 상태
-        case .authorized: setUpCamera()                                             // 이미 허용된 상태
-        @unknown default: break
+        case .authorized:
+            setUpCamera()
+            cameraView.showToast()
+        @unknown default: break                                                     // 이미 허용된 상태
         }
     }
     
