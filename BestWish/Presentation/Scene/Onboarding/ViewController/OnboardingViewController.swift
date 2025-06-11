@@ -11,7 +11,7 @@ import RxSwift
 
 final class OnboardingViewController: UIViewController {
     // MARK: - Properties
-    private let onboardingView = OnboardingView()
+    private let onboardingView = OnboardingFirstView()
     private let viewModel: OnboardingViewModel
     private let disposeBag = DisposeBag()
 
@@ -38,5 +38,19 @@ final class OnboardingViewController: UIViewController {
 
     // MARK: - BindViewModel
     private func bindViewModel() {
+        onboardingView.genderSelection.selectedGender
+            .subscribe(onNext: { gender in
+                  switch gender {
+                  case .male:
+                      print("남 선택됨")
+                  case .female:
+                      print("여 선택됨")
+                  case .nothing:
+                      print("선택 안 함")
+                  default:
+                      break
+                  }
+              })
+              .disposed(by: disposeBag)
     }
 }
