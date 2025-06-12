@@ -12,11 +12,22 @@ struct OnboardingDisplay {
     var profileImageName: String {
         ProfileType(rawValue: profileImageIndex)?.name ?? ProfileType.profileA.name
     }
-    let nickname: String?
+    var nickname: String?
+    var gender: Int?
+    var birth: Date?
 }
 
 extension OnboardingDisplay {
     mutating func updateProfileImageIndex(to index: Int) {
         profileImageIndex = index
+    }
+    mutating func updateGender(to gender: Int) {
+        self.gender = gender
+    }
+    mutating func updateBirth(to date: Date) {
+        self.birth = date
+    }
+    mutating func updateNickname(to nickname: String) {
+        self.nickname = nickname
     }
 }
