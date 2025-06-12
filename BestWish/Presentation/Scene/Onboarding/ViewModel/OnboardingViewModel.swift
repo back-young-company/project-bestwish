@@ -8,6 +8,8 @@
 import Foundation
 import RxSwift
 import RxRelay
+// 임시
+import UIKit
 
 final class OnboardingViewModel: ViewModel {
 
@@ -26,6 +28,7 @@ final class OnboardingViewModel: ViewModel {
         case inputNickname(String)
         case nextPage
         case prevPage
+        case uploadOnboarding(Onboarding)
     }
 
     struct State {
@@ -77,6 +80,14 @@ final class OnboardingViewModel: ViewModel {
                 owner.updateNickname(with: nickname)
             case .inputNicknameValid(let valid):
                 owner._isValidNickname.accept(valid)
+
+            case .uploadOnboarding(let data):
+                let state = SupabaseOAuthManager.shared.uploadOnboardingInfo(to: data)
+                if state {
+                    // TODO: MainView로 화면전환
+                    self.gotoMainView()
+                }
+
             }
         }.disposed(by: disposeBag)
     }
@@ -103,5 +114,19 @@ final class OnboardingViewModel: ViewModel {
         var userInput = _userInput.value
         userInput.updateNickname(to: index)
         _userInput.accept(userInput)
+    }
+}
+
+
+
+// TODO: 임시용 화면 전환기
+private extension OnboardingViewModel {
+    func gotoMainView() {
+        DispatchQueue.main.async {
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let delegate = scene.delegate as? SceneDelegate {
+                delegate.showAView()
+            }
+        }
     }
 }
