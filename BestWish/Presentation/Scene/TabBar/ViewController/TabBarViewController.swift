@@ -173,6 +173,8 @@ extension TabBarViewController: UIImagePickerControllerDelegate, UINavigationCon
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[.originalImage] as? UIImage else { return }
-        (viewControllers[TabBarMode.center.rawValue] as? CameraViewController)?.presentImageCropper(with: image)
+        guard let nav = viewControllers[TabBarMode.center.rawValue] as? UINavigationController,
+              let cameraVC = nav.viewControllers.first as? CameraViewController else { return }
+        cameraVC.presentImageCropper(with: image)
     }
 }
