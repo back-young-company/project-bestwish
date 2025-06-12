@@ -40,6 +40,12 @@ final class UserInfoManagementViewController: UIViewController {
     }
 
     private func bindView() {
+        managementView.userInfoHorizontalStackView.arrowButton.rx.tap
+            .bind(with: self) { owner, _ in
+                let nextVC = UserInfoUpdateViewController()
+                owner.navigationController?.pushViewController(nextVC, animated: true)
+            }.disposed(by: disposeBag)
+
         managementView.withdrawStackView.arrowButton.rx.tap
             .bind(with: self) { owner, _ in
                 AlertBuilder(baseViewController: self, type: .withdraw) {
@@ -52,4 +58,3 @@ final class UserInfoManagementViewController: UIViewController {
         managementView.configure(loginInfo: "애플")
     }
 }
-

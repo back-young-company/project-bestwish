@@ -15,6 +15,14 @@ struct OnboardingDisplay {
     var nickname: String?
     var gender: Int?
     var birth: Date?
+    var birthString: String? {
+        guard let birth else { return nil }
+        let formatter = DateFormatter()
+        // 현재 한국시간으로만 설정
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy.MM.dd"
+        return formatter.string(from: birth)
+    }
 }
 
 extension OnboardingDisplay {

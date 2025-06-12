@@ -11,8 +11,7 @@ final class UserInfoManagementView: UIView {
     private let stackView = VerticalStackView(spacing: 32)
     private let userInfoManagementStackView = VerticalStackView(spacing: 8)
     private let userInfoManagementTitlelabel = InfoLabel(title: "회원 정보 설정")
-    private let changedButton = UIButton()
-    private let userInfoHorizontalStackView = MyPageRowView(
+    let userInfoHorizontalStackView = MyPageRowView(
         type: .maximum,
         title: "회원 정보",
         subTitle: "변경 하기"
