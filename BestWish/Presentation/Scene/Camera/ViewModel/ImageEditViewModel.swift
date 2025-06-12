@@ -7,8 +7,10 @@
 
 import RxSwift
 import RxRelay
+import CoreML
 
 final class ImageEditViewModel: ViewModel {
+    let model = try? BestWidhClassfication()
     private let dummyUseCase: DummyUseCase
     private let disposeBag = DisposeBag()
 
