@@ -42,10 +42,9 @@ final class UserInfoManagementViewController: UIViewController {
     private func bindView() {
         managementView.withdrawStackView.arrowButton.rx.tap
             .bind(with: self) { owner, _ in
-                let alertVC = AlertViewController(type: .withdraw)
-                alertVC.modalPresentationStyle = .overFullScreen
-                alertVC.modalTransitionStyle = .crossDissolve
-                self.present(alertVC, animated: true)
+                AlertBuilder(baseViewController: self, type: .withdraw) {
+                    print("회원 탈퇴")
+                }.show()
             }.disposed(by: disposeBag)
     }
 

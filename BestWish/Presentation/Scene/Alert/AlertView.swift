@@ -18,7 +18,7 @@ final class AlertView: UIView {
     private let alertView = UIView()
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
-    let cancelButton: AppButton
+    private let cancelButton: AppButton
     let confirmButton: AppButton
 
     init(type: AlertType) {
@@ -110,10 +110,13 @@ private extension AlertView {
         let tapGesture = UITapGestureRecognizer()
         tapGesture.delegate = self
         self.addGestureRecognizer(tapGesture)
-        tapGesture.rx.event
-            .map { _ in }
-            .subscribe(_dismiss)
-            .disposed(by: disposeBag)
+
+        Observable.merge(
+            tapGesture.rx.event.map { _ in },
+            cancelButton.rx.tap.map { }
+        )
+        .subscribe(_dismiss)
+        .disposed(by: disposeBag)
     }
 }
 

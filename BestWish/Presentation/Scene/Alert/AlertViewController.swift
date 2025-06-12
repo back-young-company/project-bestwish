@@ -13,10 +13,12 @@ final class AlertViewController: UIViewController {
     private let type: AlertView.AlertType
     private let alertView: AlertView
     private let disposeBag = DisposeBag()
+    private var confirmAction: (() -> Void)?
 
-    init(type: AlertView.AlertType) {
+    init(type: AlertView.AlertType, action: (() -> Void)? = nil) {
         self.type = type
         alertView = AlertView(type: type)
+        confirmAction = action
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -37,6 +39,12 @@ final class AlertViewController: UIViewController {
     private func bindView() {
         alertView.dismiss
             .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }.disposed(by: disposeBag)
+
+        alertView.confirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.confirmAction?()
                 owner.dismiss(animated: true)
             }.disposed(by: disposeBag)
     }
