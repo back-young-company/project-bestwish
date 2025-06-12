@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+// TODO: 버튼을 선택하고 데이트 피커를 띄었을때 회색 배경처리됨을 확인함. (수정필요)
 class RadioButton: UIButton {
     private let offImage: UIImage?
     private let onImage: UIImage?
@@ -36,10 +36,10 @@ class RadioButton: UIButton {
         config.title = title
         config.baseForegroundColor = .gray900
         config.baseBackgroundColor = .clear
+        config.background = .clear()
         config.image = offImage
         config.imagePadding = 8
         config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
-
         config.titleTextAttributesTransformer =
             UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
@@ -49,11 +49,13 @@ class RadioButton: UIButton {
 
         self.configuration = config
 
+
         self.configurationUpdateHandler = { [weak self] button in
             guard let self = self,
                 var updated = button.configuration
                 else { return }
             updated.image = button.isSelected ? self.onImage : self.offImage
+            updated.baseBackgroundColor = .white
             updated.background = .clear()
             button.configuration = updated
         }

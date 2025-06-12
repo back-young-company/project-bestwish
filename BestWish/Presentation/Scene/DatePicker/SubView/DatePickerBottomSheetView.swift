@@ -11,14 +11,12 @@ import Then
 
 final class DatePickerBottomSheetView: UIView {
 
-    // MARK: - UI Components
     private let stack = VerticalStackView(spacing: 12)
     let datePicker = UIDatePicker()
     private let buttonStack = HorizontalStackView(spacing: 12)
     let cancelButton = AppButton(type: .cancel)
     let completeButton = AppButton(type: .complete)
 
-    // MARK: - Initializer, Deinit, requiered
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -85,9 +83,9 @@ private extension DatePickerBottomSheetView {
         cancelButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
         }
-
-        completeButton.snp.makeConstraints {
-            $0.width.equalTo(CGFloat(243).fitWidth)
-        }
+/// 필요시 사용하기 (제약조건 경고가 발생됨을 확인해서 주석처리함)
+//        completeButton.snp.makeConstraints {
+//            $0.width.equalTo(CGFloat(243).fitWidth)
+//        }
     }
 }

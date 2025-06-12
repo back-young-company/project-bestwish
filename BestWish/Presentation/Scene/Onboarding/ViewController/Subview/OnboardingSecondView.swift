@@ -60,6 +60,7 @@ private extension OnboardingSecondView {
 
     func setAttributes() {
         self.backgroundColor = .gray0
+
         stackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
@@ -69,7 +70,7 @@ private extension OnboardingSecondView {
                 right: 20
             )
         }
-        
+
         profileImageView.do {
             $0.contentMode = .scaleAspectFit
             $0.layer.cornerRadius = CGFloat(152).fitWidth / 2
@@ -106,6 +107,7 @@ private extension OnboardingSecondView {
             $0.top.equalTo(safeAreaLayoutGuide).offset(CGFloat(38).fitHeight)
             $0.leading.trailing.equalToSuperview()
         }
+
         stackView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
@@ -116,15 +118,17 @@ private extension OnboardingSecondView {
         }
 
         buttonStack.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide)
-            $0.height.equalTo(CGFloat(53+24).fitHeight)
         }
 
         prevButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
+
         completeButton.snp.makeConstraints {
-            $0.width.equalTo(CGFloat(243).fitWidth)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
 
     }
