@@ -29,7 +29,7 @@ final class GenderSelectionView: UIView {
     let selectedGender = BehaviorRelay<Gender?>(value: nil)
     private let disposeBag = DisposeBag()
 
-    let titleLabel = UILabel()
+    private let genderLabel = InfoLabel(title: "성별")
     private let maleButton = RadioButton(title: Gender.male.value)
     private let femaleButton = RadioButton(title: Gender.female.value)
     private let nothingButton = RadioButton(title: Gender.nothing.value)
@@ -59,12 +59,6 @@ extension GenderSelectionView {
             $0.alignment = .leading
         }
 
-        titleLabel.do {
-            $0.text = "성별"
-            $0.font = .font(.pretendardBold, ofSize: 14)
-            $0.textColor = .gray300
-        }
-
         radioStackView.do {
             $0.distribution = .fillProportionally
             $0.isLayoutMarginsRelativeArrangement = true
@@ -79,7 +73,7 @@ extension GenderSelectionView {
 
     func setHierarchy() {
         self.addSubview(stackView)
-        self.stackView.addArrangedSubviews(titleLabel, radioStackView)
+        self.stackView.addArrangedSubviews(genderLabel, radioStackView)
         self.radioStackView.addArrangedSubviews(maleButton, femaleButton, nothingButton)
     }
 

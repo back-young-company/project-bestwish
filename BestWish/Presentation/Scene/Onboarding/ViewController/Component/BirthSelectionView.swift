@@ -12,7 +12,7 @@ import Then
 final class BirthSelectionView: UIView {
 
     private let stackView = VerticalStackView(spacing: 8)
-    private let titleLabel = UILabel()
+    private let birthLabel = InfoLabel(title: "생년월일")
     let dateButton = UIButton()
 
     // MARK: - Initializer, Deinit, requiered
@@ -36,12 +36,6 @@ private extension BirthSelectionView {
     }
 
     func setAttributes() {
-        titleLabel.do {
-            $0.text = "생년월일"
-            $0.font = .font(.pretendardBold, ofSize: 14)
-            $0.textColor = .gray300
-        }
-
         dateButton.do {
             let font: UIFont = .font(.pretendardMedium, ofSize: 16)
             $0.contentHorizontalAlignment = .fill
@@ -61,6 +55,8 @@ private extension BirthSelectionView {
                 outgoing.font = font
                 return outgoing
             }
+
+            config.titleLineBreakMode = .byWordWrapping
             config.imagePlacement = .trailing
             config.baseForegroundColor = .gray900
             $0.configuration = config
@@ -69,7 +65,7 @@ private extension BirthSelectionView {
 
     func setHierarchy() {
         self.addSubviews(stackView)
-        stackView.addArrangedSubviews(titleLabel, dateButton)
+        stackView.addArrangedSubviews(birthLabel, dateButton)
 
     }
 
