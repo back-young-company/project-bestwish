@@ -101,8 +101,14 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
     /// 사진 촬영 후 뷰 계층에 추가
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: (any Error)?) {
         guard let data = photo.fileDataRepresentation(),
-              let image = UIImage(data: data)
+              var image = UIImage(data: data)
         else { return }
+        
+        if currentCameraPosition == .front {
+            if let cgImage = image.cgImage {
+                image = UIImage(cgImage: cgImage, scale: image.scale, orientation: .leftMirrored)
+            }
+        }
         
         session?.stopRunning()
         presentImageCropper(with: image)
