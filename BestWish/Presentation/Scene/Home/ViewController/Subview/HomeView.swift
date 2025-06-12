@@ -21,6 +21,8 @@ final class HomeView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    func getCollectionView() -> UICollectionView { collectionView }
 }
 
 private extension HomeView {

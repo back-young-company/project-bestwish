@@ -9,8 +9,16 @@ import Foundation
 
 enum PlatformImage {
     static let musinsa = "musinsa"
-    static let ably = "ably"
     static let zigzag = "zigzag"
+    static let ably = "ably"
+    static let kream = "kream"
+    static let brandy = "brandy"
+    static let tncm = "29cm"
+    static let oco = "oco"
+    static let fnoz = "4910"
+    static let worksout = "worksout"
+    static let eql = "eql"
+    static let hiver = "hiver"
 }
 
 enum ProductImage {

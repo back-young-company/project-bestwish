@@ -1,0 +1,88 @@
+//
+//  PlatformEditViewController.swift
+//  BestWish
+//
+//  Created by 백래훈 on 6/12/25.
+//
+
+import UIKit
+
+import RxCocoa
+import RxDataSources
+import RxSwift
+
+final class PlatformEditViewController: UIViewController {
+    
+    private let platformEditView = PlatformEditView()
+    private let platformEditViewModel = PlatformEditViewModel()
+    
+    private let disposeBag = DisposeBag()
+    
+    override func loadView() {
+        view = platformEditView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .systemBackground
+        
+        setNavigationBar()
+        bindActions()
+        bindViewModel()
+    }
+    
+    private func bindViewModel() {
+        let dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel>(configureCell: { dataSource, tableView, indexPath, item in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
+            cell.configure(type: item)
+            return cell
+        })
+        
+        platformEditViewModel.state.sections
+            .bind(to: platformEditView.getTableView().rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        platformEditViewModel.state.sections
+            .bind(with: self) { owner, sections in
+                let totalItemCount = sections.flatMap { $0.items }.count
+                owner.setupHeaderView(count: totalItemCount)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindActions() {
+        platformEditView.getBackButton().rx.tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func setNavigationBar() {
+        self.title = "플랫폼 편집"
+        self.navigationController?.navigationBar.isHidden = false
+        
+        let backItem = UIBarButtonItem(customView: platformEditView.getBackButton())
+        self.navigationItem.leftBarButtonItem = backItem
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.titleTextAttributes = [
+            .font: UIFont.font(.pretendardBold, ofSize: 18),
+            .foregroundColor: UIColor.black
+        ]
+        appearance.shadowColor = .clear
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+    
+    private func setupHeaderView(count: Int) {
+        platformEditView.getHeaderView().configure(count: count)
+        
+        let targetSize = CGSize(width: view.bounds.width, height: 0)
+        let height = platformEditView.getHeaderView().systemLayoutSizeFitting(targetSize).height
+        platformEditView.getHeaderView().frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
+        platformEditView.getTableView().tableHeaderView = platformEditView.getHeaderView()
+    }
+}

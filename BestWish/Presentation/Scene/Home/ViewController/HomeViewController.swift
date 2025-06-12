@@ -16,8 +16,6 @@ final class HomeViewController: UIViewController {
     private let homeView = HomeView()
     private let homeViewModel = HomeViewModel()
     
-    private let sections = BehaviorRelay<[HomeSectionModel]>(value: [])
-    
     private let disposeBag = DisposeBag()
     
     override func loadView() {
@@ -29,6 +27,12 @@ final class HomeViewController: UIViewController {
         
         bindViewModel()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     private func bindViewModel() {
@@ -48,11 +52,13 @@ final class HomeViewController: UIViewController {
                         withReuseIdentifier: WishlistCell.identifier,
                         for: indexPath
                     ) as? WishlistCell else { return UICollectionViewCell() }
-                    cell.configure(type: product)
+                    cell.configure(type: product, isHidden: true)
                     
                     return cell
                 }
-            }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+            }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
+                guard let self else { return UICollectionReusableView() }
+                
                 let section = dataSource.sectionModels[indexPath.section]
                 
                 switch section.header {
@@ -64,6 +70,12 @@ final class HomeViewController: UIViewController {
                     ) as? PlatformHeaderView else { return UICollectionReusableView() }
                     
                     headerView.configure(title: "플랫폼 바로가기")
+                    headerView.getEditButton().rx.tap
+                        .bind(with: self) { owner, _ in
+                            let vc = PlatformEditViewController()
+                            owner.navigationController?.pushViewController(vc, animated: true)
+                        }.disposed(by: headerView.disposeBag)
+                    
                     return headerView
                 case .wishlist:
                     guard let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -73,112 +85,40 @@ final class HomeViewController: UIViewController {
                     ) as? WishlistHeaderView else { return UICollectionReusableView() }
                     
                     headerView.configure(title: "쇼핑몰 위시리스트")
+                    headerView.getEditButton().rx.tap
+                        .bind(with: self) { owner, _ in
+                            let vc = WishlistEditViewController()
+                            owner.navigationController?.pushViewController(vc, animated: true)
+                        }.disposed(by: headerView.disposeBag)
+                    
                     return headerView
                 }
             })
         
         homeViewModel.state.sections
-            .do(onNext: { [weak self] sections in
-                guard let self else { return }
-                self.sections.accept(sections)
-                self.setCollectionViewLayout()
-            })
-            .bind(to: sections)
+            .bind(with: self) { owner, sections in
+                owner.setCollectionViewLayout(sections)
+            }
             .disposed(by: disposeBag)
         
         homeViewModel.state.sections
-            .bind(to: homeView.collectionView.rx.items(dataSource: dataSource))
+            .bind(to: homeView.getCollectionView().rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
 }
 
 private extension HomeViewController {
-    func setCollectionViewLayout() {
-        homeView.collectionView.collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
-            guard let self else { return nil }
-            
-            let sections = self.sections.value
+    func setCollectionViewLayout(_ sections: [HomeSectionModel]) {
+        homeView.getCollectionView().collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             guard sectionIndex < sections.count else { return nil }
-            
             let section = sections[sectionIndex]
             
             switch section.header {
             case .platform:
-                return self.createPlatformShortcutSection()
+                return NSCollectionLayoutSection.createPlatformShortcutSection()
             case .wishlist:
-                return self.createWishlistSection()
+                return NSCollectionLayoutSection.createWishlistSection()
             }
         }
-    }
-    
-    func createPlatformShortcutSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(80),
-            heightDimension: .absolute(102)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(500),
-            heightDimension: .absolute(102)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            repeatingSubitem: item,
-            count: 8)
-        group.interItemSpacing = .fixed(2)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(44)
-        )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top
-        )
-        section.boundarySupplementaryItems = [header]
-        
-        return section
-    }
-
-    func createWishlistSection() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),
-            heightDimension: .estimated(250)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 12, trailing: 6)
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(250)
-        )
-        let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            repeatingSubitem: item,
-            count: 2)
-        group.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 14, bottom: 6, trailing: 14)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        
-        section.interGroupSpacing = 12
-        
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(44)
-        )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top
-        )
-        section.boundarySupplementaryItems = [header]
-        
-        return section
     }
 }

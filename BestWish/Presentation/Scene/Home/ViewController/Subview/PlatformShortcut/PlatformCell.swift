@@ -51,7 +51,6 @@ private extension PlatformCell {
         }
 
         platformImageView.do {
-            $0.backgroundColor = .black
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 32
         }

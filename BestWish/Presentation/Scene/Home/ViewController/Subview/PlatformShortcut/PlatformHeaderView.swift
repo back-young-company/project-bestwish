@@ -7,6 +7,7 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
@@ -14,6 +15,10 @@ final class PlatformHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     private let bestWishLabel = UILabel()
     private let titleLabel = UILabel()
+    
+    private let editButton = UIButton()
+    
+    var disposeBag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,10 +28,18 @@ final class PlatformHeaderView: UICollectionReusableView, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
 
     func configure(title: String) {
         titleLabel.text = title
     }
+    
+    func getEditButton() -> UIButton { editButton }
 }
 
 private extension PlatformHeaderView {
@@ -47,10 +60,16 @@ private extension PlatformHeaderView {
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 16)
         }
+        
+        editButton.do {
+            $0.setTitle("편집", for: .normal)
+            $0.setTitleColor(.gray200, for: .normal)
+            $0.titleLabel?.font = .font(.pretendardMedium, ofSize: 12)
+        }
     }
 
     func setHierarchy() {
-        self.addSubviews(bestWishLabel, titleLabel)
+        self.addSubviews(bestWishLabel, titleLabel, editButton)
     }
 
     func setConstraints() {
@@ -63,6 +82,11 @@ private extension PlatformHeaderView {
             $0.top.equalTo(bestWishLabel.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(8)
             $0.bottom.equalToSuperview().offset(-10)
+        }
+        
+        editButton.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel)
+            $0.trailing.equalToSuperview().offset(-8)
         }
     }
 }

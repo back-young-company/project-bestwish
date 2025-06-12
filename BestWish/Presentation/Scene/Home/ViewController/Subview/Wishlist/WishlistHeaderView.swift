@@ -26,7 +26,7 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     private let productCountLabel = UILabel()
     private let editButton = UIButton()
     
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,10 +36,18 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
 
     func configure(title: String) {
         titleLabel.text = title
     }
+    
+    func getEditButton() -> UIButton { editButton }
 }
 
 private extension WishlistHeaderView {
@@ -63,16 +71,16 @@ private extension WishlistHeaderView {
         
         linkButton.do {
             var config = UIButton.Configuration.plain()
-            let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
-            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .regular)
+            let titleFont = UIFont.font(.pretendardBold, ofSize: 12)
 
             config.attributedTitle = AttributedString("링크 저장", attributes: AttributeContainer([.font: titleFont]))
             config.baseForegroundColor = .primary200
-            config.image = UIImage(systemName: "plus")?.withConfiguration(symbolConfig)
-            config.imagePlacement = .trailing
-            config.imagePadding = 4
-            config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 6, bottom: 4, trailing: 6)
+            config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 14, bottom: 6, trailing: 14)
             $0.configuration = config
+            $0.layer.cornerRadius = 8
+            $0.layer.borderColor = UIColor.primary200?.cgColor
+            $0.layer.borderWidth = 1.5
+            $0.clipsToBounds = true
         }
         
         searchBar.do {
@@ -83,8 +91,8 @@ private extension WishlistHeaderView {
         
         platformCollectionView.do {
             $0.register(
-                PlatformCollectionViewCell.self,
-                forCellWithReuseIdentifier: PlatformCollectionViewCell.identifier
+                WishlistPlatformCell.self,
+                forCellWithReuseIdentifier: WishlistPlatformCell.identifier
             )
             let layout = UICollectionViewFlowLayout()
             layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
@@ -158,7 +166,7 @@ private extension WishlistHeaderView {
 private extension WishlistHeaderView {
     func setPlatformCollectionView() {
         Observable.just(["전체", "무신사사", "에이블리", "지그재그재그재그", "전체", "무신사", "에이블리", "지그재그재그"])
-            .bind(to: platformCollectionView.rx.items(cellIdentifier: PlatformCollectionViewCell.identifier, cellType: PlatformCollectionViewCell.self)) { row, data, cell in
+            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { row, data, cell in
                 
                 cell.configure(type: data)
             }

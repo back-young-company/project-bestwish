@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        let useCase = DummyUseCaseImpl(repository: repository)
 //        let vm = DummyViewModel(dummyUseCase: useCase)
 //        window?.rootViewController = DummyViewController(viewModel: vm)
-        window?.rootViewController = HomeViewController()
+        window?.rootViewController = UINavigationController(rootViewController: HomeViewController())
         window?.makeKeyAndVisible()
     }
 }

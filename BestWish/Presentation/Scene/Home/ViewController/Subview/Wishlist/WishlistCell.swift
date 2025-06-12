@@ -15,6 +15,8 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
     
     private let productImageView = UIImageView()
     
+    private let editButton = UIButton()
+    
     private let productSaleRateLabel = UILabel()
     private let productPriceLabel = UILabel()
     
@@ -34,12 +36,13 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(type: WishlistProduct) {
+    func configure(type: WishlistProduct, isHidden: Bool) {
         productImageView.image = UIImage(named: type.productImageURL)
         productSaleRateLabel.text = type.productSaleRate
         productPriceLabel.text = type.productPrice
         productNameLabel.text = type.productName
         brandNameLabel.text = type.brandName
+        editButton.isHidden = isHidden
     }
 }
 
@@ -55,6 +58,15 @@ private extension WishlistCell {
             $0.backgroundColor = .black
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
+        }
+        
+        editButton.do {
+            var config = UIButton.Configuration.plain()
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+            
+            config.image = UIImage(named: "edit")?.withConfiguration(symbolConfig)
+            config.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+            $0.configuration = config
         }
         
         productSaleRateLabel.do {
@@ -93,7 +105,7 @@ private extension WishlistCell {
     func setHierarchy() {
         hStackView.addArrangedSubviews(productSaleRateLabel, productPriceLabel)
         vStackView.addArrangedSubviews(hStackView, productNameLabel, brandNameLabel)
-        self.contentView.addSubviews(productImageView, vStackView)
+        self.contentView.addSubviews(productImageView, editButton, vStackView)
     }
 
     func setConstraints() {
@@ -101,6 +113,11 @@ private extension WishlistCell {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(productImageView.snp.width)
+        }
+        
+        editButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
         }
         
         vStackView.snp.makeConstraints {
