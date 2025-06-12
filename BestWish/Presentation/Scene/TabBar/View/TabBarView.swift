@@ -98,24 +98,28 @@ private extension TabBarView {
             $0.height.equalTo(UIScreen.main.bounds.height < 700 ? 84 : 120)
         }
         
+        let screenHeight = UIScreen.main.bounds.height
+        let baseHeight: CGFloat = 844 // iPhone 14 height for baseline
+        let scaleFactor = screenHeight / baseHeight
+
         leftItemButton.snp.makeConstraints {
             $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -16)
             $0.leading.equalToSuperview().inset(48)
-            $0.width.equalTo(64)
-            $0.height.equalTo(80)
+            $0.width.equalTo(64 * scaleFactor)
+            $0.height.equalTo(80 * scaleFactor)
         }
-        
+
         centerItemButton.snp.makeConstraints {
             $0.centerX.equalTo(tabBar.snp.centerX)
-            $0.centerY.equalTo(tabBar.snp.top).offset(8)
-            $0.width.height.equalTo(84)
+            $0.centerY.equalTo(tabBar.snp.top).offset(8 * scaleFactor)
+            $0.width.height.equalTo(84 * scaleFactor)
         }
-        
+
         rightItemButton.snp.makeConstraints {
             $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -16)
             $0.trailing.equalToSuperview().inset(48)
-            $0.width.equalTo(64)
-            $0.height.equalTo(80)
+            $0.width.equalTo(64 * scaleFactor)
+            $0.height.equalTo(80 * scaleFactor)
         }
     }
     
@@ -131,4 +135,3 @@ private extension TabBarView {
         
     }
 }
-
