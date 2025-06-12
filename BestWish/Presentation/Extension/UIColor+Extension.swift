@@ -60,4 +60,6 @@ extension UIColor {
     static let gray100 = UIColor(hex: "#CFCFCF")
     static let gray50 = UIColor(hex: "#E8E8E8")
     static let gray0 = UIColor(hex: "#FFFFFF") // == white
+
+    static let red0 = UIColor(hex: "FF2C2C") // cautionReed
 }
