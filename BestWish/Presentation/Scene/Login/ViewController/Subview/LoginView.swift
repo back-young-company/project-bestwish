@@ -16,9 +16,6 @@ final class LoginView: UIView {
     let kakaoLoginButton = UIButton()
     let appleLoginButton = UIButton()
 
-    // MARK: - UI Components
-
-    // MARK: - Initializer, Deinit, requiered
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -41,8 +38,6 @@ private extension LoginView {
         setBindings()
     }
 
-    // MARK: - Attirbute Helper
-    // View에 대한 속성 설정 메서드
     func setAttributes() {
         self.backgroundColor = .primary300
 
@@ -65,14 +60,10 @@ private extension LoginView {
         }
     }
     
-    // MARK: - Hierarchy Helper
-    // subView 추가 메서드
     func setHierarchy() {
         self.addSubviews(loginLogoImageView, kakaoLoginButton, appleLoginButton)
     }
 
-    // MARK: - Layout Helper
-    // 오토레이이아웃 설정 메서드
     func setConstraints() {
         loginLogoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -89,17 +80,12 @@ private extension LoginView {
         }
     }
 
-    // MARK: - Delegate Helper
-    // 딜리게이트 설정
     func setDelegate() {
     }
 
-    // MARK: - DataSource Helper
-    // 데이터 소스 설정
     func setDataSource() {
     }
 
-    // MARK: - Binding Helper
     func setBindings() {
 
     }

@@ -16,7 +16,6 @@ final class LoginViewController: UIViewController {
     private let viewModel: LoginViewModel
     private let disposeBag = DisposeBag()
 
-    // MARK: - Initializer, Deinit, requiered
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -26,7 +25,6 @@ final class LoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Life Cycle
     override func loadView() {
         view = loginView
     }
@@ -37,7 +35,6 @@ final class LoginViewController: UIViewController {
         bindViewModel()
     }
 
-    // MARK: - BindViewModel
     private func bindViewModel() {
         bindKakaoButton()
         bindAppleButton()

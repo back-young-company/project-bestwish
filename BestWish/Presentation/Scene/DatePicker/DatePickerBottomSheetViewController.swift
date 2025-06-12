@@ -24,7 +24,6 @@ final class DatePickerBottomSheetViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Lifecycle
     override func loadView() {
         view = datePickerBottomSheetView
     }
@@ -38,7 +37,6 @@ final class DatePickerBottomSheetViewController: UIViewController {
         presentDatePickerSheet()
     }
 
-    // MARK: - Actions
     @objc private func didTapConfirm() {
         let selected = datePickerBottomSheetView.datePicker.date
         onDateSelected?(selected)
@@ -48,7 +46,6 @@ final class DatePickerBottomSheetViewController: UIViewController {
         onCancel?()
     }
 
-    // MARK: - Sheet Configuration
     func presentDatePickerSheet() {
         modalPresentationStyle = .pageSheet
         if let sheet = sheetPresentationController {

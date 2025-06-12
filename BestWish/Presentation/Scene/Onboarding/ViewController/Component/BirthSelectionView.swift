@@ -15,7 +15,6 @@ final class BirthSelectionView: UIView {
     private let birthLabel = InfoLabel(title: "생년월일")
     let dateButton = UIButton()
 
-    // MARK: - Initializer, Deinit, requiered
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()

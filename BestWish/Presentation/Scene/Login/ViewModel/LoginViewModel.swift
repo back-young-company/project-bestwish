@@ -13,30 +13,23 @@ final class LoginViewModel: ViewModel {
     private let disposeBag = DisposeBag()
     private let supabaseOAuthManager = SupabaseOAuthManager.shared
 
-    // MARK: - Actions
     enum Action {
         case signInKakao
         case signInApple
     }
 
-    // MARK: - States
     struct State { }
 
-    // MARK: - Inputs
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    // MARK: - Outputs
-    /// sample
     let state: State
 
-    // MARK: - Initializer, Deinit, requiered
     init() {
         state = State()
         bindAction()
     }
 
-    // MARK: - Bind
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
@@ -47,7 +40,4 @@ final class LoginViewModel: ViewModel {
             }
         }.disposed(by: disposeBag)
     }
-
-    // MARK: Methods
-
 }

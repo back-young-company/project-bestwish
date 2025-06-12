@@ -20,7 +20,6 @@ final class NicknameInputView: UIView {
     let textField = PaddingTextField(top: 14.5, left: 12, bottom: 14.5, right: 12)
     let cautionLabel = UILabel()
 
-    // MARK: - Initializer, Deinit, requiered
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()

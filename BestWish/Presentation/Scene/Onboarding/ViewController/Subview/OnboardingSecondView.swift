@@ -12,7 +12,6 @@ import Then
 
 final class OnboardingSecondView: UIView {
 
-    // MARK: - UI Components
     private let header = OnboardingHeaderView(current: 2, total: 2,
                                               title: OnboardingText.secondTitle.value,
                                               desc: OnboardingText.secondDesc.value)
@@ -24,9 +23,6 @@ final class OnboardingSecondView: UIView {
     let prevButton = AppButton(type: .before)
     let completeButton = AppButton(type: .complete)
 
-
-
-    // MARK: - Initializer, Deinit, requiered
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
