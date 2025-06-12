@@ -7,7 +7,7 @@
 
 import UIKit
 // TODO: 버튼을 선택하고 데이트 피커를 띄었을때 회색 배경처리됨을 확인함. (수정필요)
-class RadioButton: UIButton {
+final class RadioButton: UIButton {
     private let offImage: UIImage?
     private let onImage: UIImage?
 

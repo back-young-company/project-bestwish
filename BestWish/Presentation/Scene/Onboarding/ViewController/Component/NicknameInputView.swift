@@ -75,9 +75,9 @@ private extension NicknameInputView {
     func setBindings() {
         // 편집 시작
         textField.rx.controlEvent(.editingDidBegin)
-            .subscribe(onNext: { [weak self] in
-            self?.textField.layer.borderColor = UIColor.primary300?.cgColor
-        })
+            .subscribe(with:self) {owner, _ in
+                owner.textField.layer.borderColor = UIColor.primary300?.cgColor
+            }
             .disposed(by: disposeBag)
 
         // 텍스트가 바뀔 때마다 유효성 검사

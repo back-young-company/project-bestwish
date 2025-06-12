@@ -10,9 +10,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-enum Gender:Int, CaseIterable {
+enum Gender: Int, CaseIterable {
     case male, female, nothing
-    var value:String {
+    var value: String {
         switch self {
         case .male: return "남자"
         case .female: return "여자"
@@ -100,13 +100,11 @@ extension GenderSelectionView {
 
         // selectedGender 구독 → 각 버튼 isSelected 업데이트
         selectedGender
-        .subscribe(onNext: { [weak self] gender in
-            guard let self = self else { return }
-            self.maleButton.isSelected = (gender == .male)
-            self.femaleButton.isSelected = (gender == .female)
-            self.nothingButton.isSelected = (gender == .nothing)
-        })
-
+            .subscribe(with: self) { owner, gender in
+            owner.maleButton.isSelected = (gender == .male)
+            owner.femaleButton.isSelected = (gender == .female)
+            owner.nothingButton.isSelected = (gender == .nothing)
+        }
             .disposed(by: disposeBag)
     }
 }
