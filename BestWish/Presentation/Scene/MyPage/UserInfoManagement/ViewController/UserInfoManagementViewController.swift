@@ -29,6 +29,7 @@ final class UserInfoManagementViewController: UIViewController {
         super.viewDidLoad()
 
         setNavigationBar(alignment: .center, title: "회원 정보 관리")
+        bindView()
         bindViewModel()
     }
 
@@ -36,6 +37,15 @@ final class UserInfoManagementViewController: UIViewController {
         super.viewDidAppear(animated)
 
         managementView.addUnderLine()
+    }
+
+    private func bindView() {
+        managementView.withdrawStackView.arrowButton.rx.tap
+            .bind(with: self) { owner, _ in
+                AlertBuilder(baseViewController: self, type: .withdraw) {
+                    print("회원 탈퇴")
+                }.show()
+            }.disposed(by: disposeBag)
     }
 
     private func bindViewModel() {
