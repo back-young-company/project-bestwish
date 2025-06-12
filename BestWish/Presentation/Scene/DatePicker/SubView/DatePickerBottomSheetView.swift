@@ -12,8 +12,8 @@ import Then
 final class DatePickerBottomSheetView: UIView {
 
     // MARK: - UI Components
-    let datePicker = UIDatePicker()
     private let stack = VerticalStackView(spacing: 12)
+    let datePicker = UIDatePicker()
     private let buttonStack = HorizontalStackView(spacing: 12)
     let cancelButton = AppButton(type: .cancel)
     let completeButton = AppButton(type: .complete)
