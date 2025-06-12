@@ -12,7 +12,7 @@ import UIKit
 /// private let button = AppButton(type: .analyze)
 /// ```
 final class AppButton: UIButton {
-    private let type: ButtonType
+    private var type: ButtonType
     private let fontSize: CGFloat
 
     init(type: ButtonType, fontSize: CGFloat = 18) {
@@ -26,6 +26,10 @@ final class AppButton: UIButton {
     required
     init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    func updateStyle(_ newType: ButtonType) {
+        self.type = newType
+        setAttributes()
     }
 }
 
@@ -50,7 +54,9 @@ private extension AppButton {
 extension AppButton {
     enum ButtonType {
         case complete
+        case incomplete
         case next
+        case nextUnable
         case shortcut
         case analyze
         case viewProduct
@@ -69,8 +75,8 @@ extension AppButton {
 extension AppButton.ButtonType {
     var title: String {
         switch self {
-        case .complete: "완료"
-        case .next: "다음"
+        case .complete, .incomplete: "완료"
+        case .next, .nextUnable: "다음"
         case .shortcut: "바로가기"
         case .analyze: "분석하기"
         case .viewProduct: "상품 보기"
@@ -93,7 +99,7 @@ extension AppButton.ButtonType {
             return .gray0
         case .back, .reset, .cancel:
             return .gray200
-        case .before, .withdraw:
+        case .before, .withdraw, .nextUnable, .incomplete:
             return .gray300
         }
     }
@@ -107,6 +113,8 @@ extension AppButton.ButtonType {
             return .gray600
         case .cancel, .before, .withdraw:
             return .gray0
+        case .nextUnable, .incomplete:
+            return .gray50
         }
     }
 
