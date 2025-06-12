@@ -12,7 +12,7 @@ import Then
 import RxSwift
 import RxCocoa
 
-enum Gender {
+enum Gender:Int, CaseIterable {
     case male, female, nothing
     var value:String {
         switch self {
@@ -102,7 +102,6 @@ extension GenderSelectionView {
 
         // selectedGender 구독 → 각 버튼 isSelected 업데이트
         selectedGender
-//            .skip(1)
         .subscribe(onNext: { [weak self] gender in
             guard let self = self else { return }
             self.maleButton.isSelected = (gender == .male)

@@ -81,25 +81,26 @@ private extension NicknameInputView {
             .disposed(by: disposeBag)
 
         // 텍스트가 바뀔 때마다 유효성 검사
-        textField.rx.text.orEmpty
-            .skip(2) // 앱 화면 load : 1 + textField 터치 : 1 == 2
-        .map { text in
-            // 한글·영문·숫자만, 길이는 2~10자
-            NSPredicate(format: "SELF MATCHES %@", "^[가-힣A-Za-z0-9]{2,10}$")
-                .evaluate(with: text)
-        }
-            .distinctUntilChanged() // 중복값 무시
-        .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, isValid in
-            owner.textField.layer.borderColor = isValid
-                ? UIColor.primary300?.cgColor // 허용 값
-            : UIColor.red0?.cgColor // 불허 값
-
-            owner.cautionLabel.textColor = isValid
-                ? .gray200
-            : .red0?
-        }
-            .disposed(by: disposeBag)
+        // TODO: 여기서 이벤트를 넘겨줘서 ViewController에서 처리하도록 수정해보기
+//        textField.rx.text.orEmpty
+//            .skip(2) // 앱 화면 load : 1 + textField 터치 : 1 == 2
+//        .map { text in
+//            // 한글·영문·숫자만, 길이는 2~10자
+//            NSPredicate(format: "SELF MATCHES %@", "^[가-힣A-Za-z0-9]{2,10}$")
+//                .evaluate(with: text)
+//        }
+//            .distinctUntilChanged() // 중복값 무시
+//        .observe(on: MainScheduler.instance)
+//            .subscribe(with: self) { owner, isValid in
+//            owner.textField.layer.borderColor = isValid
+//                ? UIColor.primary300?.cgColor // 허용 값
+//            : UIColor.red0?.cgColor // 불허 값
+//
+//            owner.cautionLabel.textColor = isValid
+//                ? .gray200
+//            : .red0?
+//        }
+//            .disposed(by: disposeBag)
     }
 }
 
