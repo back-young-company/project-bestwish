@@ -12,7 +12,7 @@ final class UserInfoManagementView: UIView {
     private let userInfoManagementStackView = VerticalStackView(spacing: 8)
     private let userInfoManagementTitlelabel = InfoLabel(title: "회원 정보 설정")
     private let changedButton = UIButton()
-    private let userInfoHorizontalStackView = HorizontalStackView(
+    private let userInfoHorizontalStackView = MyPageRowView(
         type: .maximum,
         title: "회원 정보",
         subTitle: "변경 하기"
@@ -20,13 +20,17 @@ final class UserInfoManagementView: UIView {
 
     private let snsInfoStackView = VerticalStackView(spacing: 8)
     private let snsInfoTitleLabel = InfoLabel(title: "SNS 연결 정보")
-    private let snsInfoHorizontalStackView = HorizontalStackView(
+    private let snsInfoHorizontalStackView = MyPageRowView(
         type: .subTitle,
         title: "카카오 계정",
         subTitle: "연결완료"
     )
 
-    let logoutStackView = HorizontalStackView(type: .logout, title: "회원 정보를 삭제하시겠어요?", subTitle: "회원탈퇴")
+    let withdrawStackView = MyPageRowView(
+        type: .logout,
+        title: "회원 정보를 삭제하시겠어요?",
+        subTitle: "회원탈퇴"
+    )
     let confirmChangeButton = AppButton(type: .confirmChange)
 
     override init(frame: CGRect) {
@@ -63,8 +67,15 @@ private extension UserInfoManagementView {
     func setHierarchy() {
         self.addSubviews(stackView, confirmChangeButton)
         stackView.addArrangedSubviews(userInfoManagementStackView, snsInfoStackView)
-        userInfoManagementStackView.addArrangedSubviews(userInfoManagementTitlelabel, userInfoHorizontalStackView)
-        snsInfoStackView.addArrangedSubviews(snsInfoTitleLabel, snsInfoHorizontalStackView, logoutStackView)
+        userInfoManagementStackView.addArrangedSubviews(
+            userInfoManagementTitlelabel,
+            userInfoHorizontalStackView
+        )
+        snsInfoStackView.addArrangedSubviews(
+            snsInfoTitleLabel,
+            snsInfoHorizontalStackView,
+            withdrawStackView
+        )
     }
 
     func setConstraints() {
@@ -80,4 +91,3 @@ private extension UserInfoManagementView {
         }
     }
 }
-

@@ -1,5 +1,5 @@
 //
-//  HorizontalStackView.swift
+//  MyPageRowView.swift
 //  BestWish
 //
 //  Created by 이수현 on 6/11/25.
@@ -7,14 +7,13 @@
 
 import UIKit
 
-final class HorizontalStackView: UIStackView {
+final class MyPageRowView: UIStackView {
     private let type: StackViewType
     private let title: String
     private let subTitle: String
 
     private let titleLabel = UILabel()
-    private let subTitleLabel = UILabel()
-    private let arrowButton = UIButton()
+    let arrowButton = UIButton()
 
     init(type: StackViewType, title: String, subTitle: String = "") {
         self.type = type
@@ -36,7 +35,7 @@ final class HorizontalStackView: UIStackView {
     }
 }
 
-private extension HorizontalStackView {
+private extension MyPageRowView {
     func setView() {
         setAttributes()
         setHierarchy()
@@ -57,11 +56,9 @@ private extension HorizontalStackView {
         arrowButton.do {
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .gray200
-            config.title = subTitle
             config.attributedTitle = AttributedString(subTitle, attributes: AttributeContainer([
                 .font: UIFont.font(.pretendardMedium, ofSize: 14)
             ]))
-
             let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10)
             config.preferredSymbolConfigurationForImage = symbolConfig
             let image: UIImage? = .init(systemName: "chevron.right")
@@ -87,7 +84,7 @@ private extension HorizontalStackView {
     }
 }
 
-extension HorizontalStackView {
+extension MyPageRowView {
 
     enum StackViewType {
         case minimal    // title만
@@ -98,7 +95,7 @@ extension HorizontalStackView {
     }
 }
 
-extension HorizontalStackView.StackViewType {
+extension MyPageRowView.StackViewType {
     var isHiddenSubTitle: Bool {
         switch self {
         case .minimal, .button: true
