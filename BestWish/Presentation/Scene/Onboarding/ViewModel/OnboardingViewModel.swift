@@ -7,58 +7,50 @@
 
 import Foundation
 import RxSwift
+import RxRelay
 
 final class OnboardingViewModel: ViewModel {
 
-    // MARK: - Properties
     private let dummyUseCase: DummyUseCase
     private let disposeBag = DisposeBag()
 
-    // MARK: - Actions
     enum Action {
+        case selectedProfileIndex(Int)
     }
 
-    // MARK: - States
     struct State {
-        /// sample
-        let data: Observable<DummyDisplay>
-        let newData: Observable<DummyDisplay>
-        let error: Observable<Error>
+        let userInput: Observable<OnboardingDisplay>
     }
 
-    // MARK: - Inputs
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    // MARK: - Outputs
-    /// sample
-    private let _data = PublishSubject<DummyDisplay>()
-    private let _newData = PublishSubject<DummyDisplay>()
-    private let _error = PublishSubject<Error>()
-
+    private let _userInput = BehaviorRelay<OnboardingDisplay> (value:
+        OnboardingDisplay(
+        profileImageIndex: 0,
+        nickname: nil)
+    )
     let state: State
 
-    // MARK: - Initializer, Deinit, requiered
     init(dummyUseCase: DummyUseCase) {
-        /// sample
         self.dummyUseCase = dummyUseCase
         state = State(
-            data: _data.asObservable(),
-            newData: _newData.asObservable(),
-            error: _error.asObservable()
-        )
+            userInput: _userInput.asObservable())
 
         bindAction()
     }
 
-    // MARK: - Bind
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
+            case .selectedProfileIndex(let index):
+                owner.updateProfileImage(with: index)
             }
         }.disposed(by: disposeBag)
     }
-
-    // MARK: Methods
-
+    private func updateProfileImage(with index: Int) {
+        var userInput = _userInput.value
+        userInput.updateProfileImageIndex(to: index)
+        _userInput.accept(userInput)
+    }
 }
