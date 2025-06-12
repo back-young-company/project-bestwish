@@ -20,6 +20,10 @@ final class OnboardingSecondView: UIView {
     let profileImageView = UIImageView()
     let nicknameStackView = NicknameInputView()
 
+    private let buttonStack = HorizontalStackView(spacing: 12)
+    let prevButton = AppButton(type: .before)
+    let completeButton = AppButton(type: .complete)
+
 
 
     // MARK: - Initializer, Deinit, requiered
@@ -36,6 +40,10 @@ final class OnboardingSecondView: UIView {
     func configure(input: OnboardingDisplay) {
         profileImageView.image = UIImage(named: input.profileImageName)?.resize(to: CGSize(width: CGFloat(152).fitWidth, height: CGFloat(152).fitHeight))
 
+    }
+
+    func configure(_ isValid: Bool) {
+        completeButton.updateStyle(isValid ? .complete : .incomplete)
     }
 
 }
@@ -69,13 +77,27 @@ private extension OnboardingSecondView {
             $0.isUserInteractionEnabled = true
         }
 
+        buttonStack.do {
+            $0.isLayoutMarginsRelativeArrangement = true
+            $0.layoutMargins = UIEdgeInsets(
+                top: 12,
+                left: 20,
+                bottom: 12,
+                right: 20
+            )
+        }
+
+        completeButton.do {
+            $0.isEnabled = false
+        }
 
 
     }
 
     func setHierarchy() {
-        self.addSubviews(header, stackView)
+        self.addSubviews(header, stackView, buttonStack)
         stackView.addArrangedSubviews(profileImageView, nicknameStackView)
+        buttonStack.addArrangedSubviews(prevButton, completeButton)
 
     }
 
@@ -91,6 +113,18 @@ private extension OnboardingSecondView {
 
         profileImageView.snp.makeConstraints {
             $0.centerX.equalTo(stackView)
+        }
+
+        buttonStack.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide)
+            $0.height.equalTo(CGFloat(53+24).fitHeight)
+        }
+
+        prevButton.snp.makeConstraints {
+            $0.width.equalTo(CGFloat(80).fitWidth)
+        }
+        completeButton.snp.makeConstraints {
+            $0.width.equalTo(CGFloat(243).fitWidth)
         }
 
     }

@@ -16,6 +16,7 @@ final class OnboardingFirstView: UIView {
     private let stackView = VerticalStackView(spacing: 32)
     let genderSelection = GenderSelectionView()
     let birthSelection = BirthSelectionView()
+    let nextPageButton = AppButton(type: .nextUnable)
 
 
     // MARK: - Initializer, Deinit, requiered
@@ -27,6 +28,10 @@ final class OnboardingFirstView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
+    }
+
+    func configure(_ isValid: Bool) {
+        nextPageButton.updateStyle(isValid ? .next : .nextUnable)
     }
 
 }
@@ -51,10 +56,14 @@ private extension OnboardingFirstView {
                 right: 20
             )
         }
+
+        nextPageButton.do {
+            $0.isEnabled = false
+        }
     }
 
     func setHierarchy() {
-        self.addSubviews(header,stackView)
+        self.addSubviews(header, stackView, nextPageButton)
         stackView.addArrangedSubviews(genderSelection, birthSelection)
     }
 
@@ -67,7 +76,12 @@ private extension OnboardingFirstView {
         stackView.snp.makeConstraints {
             $0.top.equalTo(header.snp.bottom).offset(22)
             $0.leading.trailing.equalToSuperview()
+        }
 
+        nextPageButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
     }
 }
