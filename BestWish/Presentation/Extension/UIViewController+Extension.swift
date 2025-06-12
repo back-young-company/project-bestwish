@@ -21,6 +21,7 @@ extension UIViewController {
         case .left:
             let label = UILabel()
             label.text = title
+            label.textColor = .black
             label.font = .font(.pretendardBold, ofSize: 18)
             let leftBarItem = UIBarButtonItem(customView: label)
             self.navigationItem.setLeftBarButton(leftBarItem, animated: true)

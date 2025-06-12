@@ -157,7 +157,7 @@ extension SupabaseOAuthManager {
         DispatchQueue.main.async {
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                 let delegate = scene.delegate as? SceneDelegate {
-                delegate.showOnboardingView()
+//                delegate.showOnboardingView()
             }
         }
     }
@@ -166,7 +166,7 @@ extension SupabaseOAuthManager {
         DispatchQueue.main.async {
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                 let delegate = scene.delegate as? SceneDelegate {
-                delegate.showLoginView()
+//                delegate.showLoginView()
             }
         }
     }
