@@ -119,10 +119,13 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
 extension CameraViewController: CropViewControllerDelegate {
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(with image: UIImage) {
+//        let vc = UINavigationController(rootViewController: ImageEditViewController(image: image))
+//        (vc.viewControllers.first as? ImageEditViewController)?.getImageEditView.getCropperVC.delegate = self
         let vc = ImageEditViewController(image: image)
-        vc.getImageEditView.getCropperVC.delegate = self
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: false)
+        vc.getCropperVC.delegate = self
+        let navVc = UINavigationController(rootViewController: vc)
+        navVc.modalPresentationStyle = .fullScreen
+        present(navVc, animated: false)
     }
     
     /// 크롭 이미지 뷰 완료  버튼 호출 시

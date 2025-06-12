@@ -9,6 +9,7 @@ import UIKit
 import Then
 import SnapKit
 import CropViewController
+import TOCropViewController
 
 // MARK: - 이미지 편집 뷰
 final class ImageEditView: UIView {
@@ -17,16 +18,19 @@ final class ImageEditView: UIView {
     private let cancelButton = AppButton(type: .cancel)
     private let headerLabel = UILabel()
     private let cropperBackgroundView = UIView()
-    private let cropperVC: CropViewController
+    private let cropView: UIView
+    private let toolbar: TOCropToolbar
     
-    var cropperView: UIView { cropperVC.view }
-    
-    init(image: UIImage) {
-        cropperVC = CropViewController(image: image)
+    init(cropView: UIView, toolbar: TOCropToolbar) {
+        self.toolbar = toolbar
+        self.cropView = cropView
         super.init(frame: .zero)
         
         setView()
-        configure()
+    }
+    
+    override func layoutSubviews() {
+        setConstraints()
     }
     
     @available(*, unavailable)
@@ -34,19 +38,9 @@ final class ImageEditView: UIView {
         fatalError()
     }
     
-    /// 크롭 뷰 필요 데이터 설정
-    func configure() {
-        cropperVC.doneButtonHidden = true
-        cropperVC.cancelButtonHidden = true
-        cropperVC.aspectRatioLockEnabled = true
-        cropperVC.resetButtonHidden = false
-        cropperVC.aspectRatioPickerButtonHidden = false
-    }
-    
     // MARK: - 외부 접근 가능
     var getDoneButton: UIButton { doneButton }
     var getCancelButton: UIButton { cancelButton }
-    var getCropperVC: CropViewController { cropperVC }
     var getCropperBackgroundView: UIView { cropperBackgroundView }
 }
 
@@ -54,7 +48,6 @@ private extension ImageEditView {
     func setView() {
         setAttributes()
         setHierarchy()
-        setConstraints()
         setDelegate()
         setDataSource()
         setBindings()
@@ -63,18 +56,22 @@ private extension ImageEditView {
     func setAttributes() {
         backgroundColor = .white
         
-        cropperVC.toolbar.rotateClockwiseButton?.setImage(UIImage(named: "image_right"), for: .normal)
-        cropperVC.toolbar.rotateButton.setImage(UIImage(named: "image_left"), for: .normal)
+        toolbar.rotateClockwiseButton?.setImage(UIImage(named: "image_right"), for: .normal)
+        toolbar.rotateButton.setImage(UIImage(named: "image_left"), for: .normal)
         
-        cropperVC.toolbar.resetButton.setImage(UIImage(named: "image_init_de"), for: .normal)
-        cropperVC.toolbar.resetButton.setImage(UIImage(named: "image_init_se"), for: .selected)
+        toolbar.resetButton.setImage(UIImage(named: "image_init_de"), for: .normal)
+        toolbar.resetButton.setImage(UIImage(named: "image_init_se"), for: .selected)
         
-        cropperVC.toolbar.clampButton.setImage(UIImage(named: "image_ratio_de"), for: .normal)
-        cropperVC.toolbar.clampButton.setImage(UIImage(named: "image_ratio_se"), for: .selected)
+        toolbar.clampButton.setImage(UIImage(named: "image_ratio_de"), for: .normal)
+        toolbar.clampButton.setImage(UIImage(named: "image_ratio_se"), for: .selected)
+        
+        cropperBackgroundView.do {
+            $0.backgroundColor = .black.withAlphaComponent(0.9)
+        }
         
         headerLabel.do {
             $0.text = "이미지 편집"
-            $0.textColor = .black
+            $0.textColor = .init(hex: "#201D20")
             $0.font = .font(.pretendardBold, ofSize: 18)
         }
         
@@ -91,7 +88,6 @@ private extension ImageEditView {
     
     func setHierarchy() {
         addSubviews(cropperBackgroundView, cancelButton, doneButton, headerLabel)
-        cropperBackgroundView.addSubview(cropperView)
     }
     
     func setConstraints() {
@@ -107,8 +103,9 @@ private extension ImageEditView {
             $0.bottom.equalTo(doneButton.snp.top).offset(-20)
         }
         
-        cropperView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        cropView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(10)
         }
         
         cancelButton.snp.makeConstraints {
