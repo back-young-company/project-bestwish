@@ -25,32 +25,12 @@ final class PlatformCollectionViewCell: UICollectionViewCell, ReuseIdentifier {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-    }
-    
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        setNeedsLayout()
-        layoutIfNeeded()
-
-        let size = contentView.systemLayoutSizeFitting(
-            UIView.layoutFittingCompressedSize,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-
-        var newAttributes = layoutAttributes
-        newAttributes.frame.size = size
-        return newAttributes
+//        platformButton.configuration = nil
     }
 
     func configure(type: String) {
-        var config = UIButton.Configuration.filled()
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
-        config.cornerStyle = .capsule
-        config.attributedTitle = AttributedString(type, attributes: AttributeContainer([.font: titleFont]))
-        config.baseForegroundColor = .white
-        config.baseBackgroundColor = .primary200
-        platformButton.configuration = config
+        platformButton.configuration?.attributedTitle = AttributedString(type, attributes: AttributeContainer([.font: titleFont]))
     }
 }
 
@@ -62,15 +42,15 @@ private extension PlatformCollectionViewCell {
     }
 
     func setAttributes() {
-//        platformButton.do {
-//            var config = UIButton.Configuration.filled()
+        platformButton.do {
+            var config = UIButton.Configuration.filled()
 //            let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
-//            config.cornerStyle = .capsule
+            config.cornerStyle = .capsule
 //            config.attributedTitle = AttributedString("전체", attributes: AttributeContainer([.font: titleFont]))
-//            config.baseForegroundColor = .white
-//            config.baseBackgroundColor = .primary200
-//            $0.configuration = config
-//        }
+            config.baseForegroundColor = .white
+            config.baseBackgroundColor = .primary300
+            $0.configuration = config
+        }
     }
 
     func setHierarchy() {
@@ -80,7 +60,9 @@ private extension PlatformCollectionViewCell {
     func setConstraints() {
         platformButton.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview().inset(8)
-            $0.width.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+//            $0.leading.equalToSuperview()
+//            $0.trailing.lessThanOrEqualToSuperview()
             $0.height.equalTo(33)
         }
     }

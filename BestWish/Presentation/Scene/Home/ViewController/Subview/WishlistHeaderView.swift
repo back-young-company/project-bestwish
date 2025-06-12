@@ -87,11 +87,13 @@ private extension WishlistHeaderView {
                 forCellWithReuseIdentifier: PlatformCollectionViewCell.identifier
             )
             let layout = UICollectionViewFlowLayout()
-//            layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+            layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
             layout.scrollDirection = .horizontal
             layout.minimumInteritemSpacing = 9
+            layout.minimumLineSpacing = 5
             layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
             $0.collectionViewLayout = layout
+            $0.showsHorizontalScrollIndicator = false
         }
         
         productCountLabel.do {
@@ -155,7 +157,7 @@ private extension WishlistHeaderView {
 
 private extension WishlistHeaderView {
     func setPlatformCollectionView() {
-        Observable.just(["전체", "무신사", "에이블리", "지그재그", "전체", "무신사", "에이블리", "지그재그"])
+        Observable.just(["전체", "무신사", "에이블리", "지그재그재그재그", "전체", "무신사", "에이블리", "지그재그재그"])
             .bind(to: platformCollectionView.rx.items(cellIdentifier: PlatformCollectionViewCell.identifier, cellType: PlatformCollectionViewCell.self)) { row, data, cell in
                 
                 cell.configure(type: data)
