@@ -17,11 +17,11 @@ extension AlertView.AlertType {
     var title: String {
         switch self {
         case .withdraw: "회원 탈퇴"
-        case .logout: "로그아웃"
+        case .logout: "로그아웃 하시겠어요?"
         }
     }
 
-    var subTitle: String {
+    var subTitle: String? {
         switch self {
         case .withdraw: 
             """
@@ -29,21 +29,28 @@ extension AlertView.AlertType {
             삭제된 데이터는 복구가 불가능합니다.
             탈퇴를 진행할까요?
             """
-        case .logout: ""
+        case .logout: nil
         }
     }
 
     var cancelButtonType: AppButton.ButtonType {
         switch self {
         case .withdraw: .cancelWithdraw
-        case .logout: .cancelWithdraw
+        case .logout: .cancel
         }
     }
 
     var confirmButtonType: AppButton.ButtonType {
         switch self {
         case .withdraw: .withdraw
-        case .logout: .withdraw
+        case .logout: .logout
+        }
+    }
+
+    var titleTopPadding: CGFloat {
+        switch self {
+        case .withdraw: 12
+        case .logout: 20
         }
     }
 }

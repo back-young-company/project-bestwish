@@ -62,6 +62,7 @@ extension AppButton {
         case before
         case cancelWithdraw
         case withdraw
+        case logout
     }
 }
 
@@ -79,15 +80,16 @@ extension AppButton.ButtonType {
         case .reset: "초기화"
         case .cancel: "취소"
         case .before: "이전"
-        case .cancelWithdraw: "탈퇴 안 할래요"
+        case .cancelWithdraw: "유지하기"
         case .withdraw: "탈퇴하기"
+        case .logout: "로그아웃"
         }
     }
 
     var titleColor: UIColor? {
         switch self {
         case .complete, .next, .shortcut, .analyze,
-                .viewProduct, .confirmChange, .save, .cancelWithdraw:
+                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .gray0
         case .back, .reset, .cancel:
             return .gray200
@@ -99,7 +101,7 @@ extension AppButton.ButtonType {
     var backgroundColor: UIColor? {
         switch self {
         case .complete, .next, .shortcut, .analyze,
-                .viewProduct, .confirmChange, .save, .cancelWithdraw:
+                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary300
         case .back, .reset:
             return .gray600

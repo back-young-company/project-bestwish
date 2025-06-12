@@ -66,6 +66,10 @@ final class MyPageViewController: UIViewController {
                 case .userInfo:
                     let managementViewController = UserInfoManagementViewController()
                     owner.navigationController?.pushViewController(managementViewController, animated: true)
+                case .logout:
+                    AlertBuilder(baseViewController: self, type: .logout) {
+                        print("로그아웃")
+                    }.show()
                 default: return
                 }
             }.disposed(by: disposeBag)

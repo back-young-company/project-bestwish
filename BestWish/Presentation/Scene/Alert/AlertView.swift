@@ -18,6 +18,7 @@ final class AlertView: UIView {
     private let alertView = UIView()
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
+    private let buttonStackView = UIStackView()
     private let cancelButton: AppButton
     let confirmButton: AppButton
 
@@ -68,11 +69,18 @@ private extension AlertView {
             $0.textAlignment = .center
             $0.numberOfLines = 0
         }
+
+        buttonStackView.do {
+            $0.axis = .horizontal
+            $0.spacing = 12
+            $0.distribution = .fillEqually
+        }
     }
 
     func setHierarchy() {
         self.addSubviews(alertView)
-        alertView.addSubviews(titleLabel, subTitleLabel, cancelButton, confirmButton)
+        alertView.addSubviews(titleLabel, subTitleLabel, buttonStackView)
+        buttonStackView.addArrangedSubviews(cancelButton, confirmButton)
     }
 
     func setConstraints() {
@@ -82,7 +90,7 @@ private extension AlertView {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(type.titleTopPadding)
             make.directionalHorizontalEdges.equalToSuperview()
             make.height.equalTo(35)
         }
@@ -92,14 +100,8 @@ private extension AlertView {
             make.directionalHorizontalEdges.equalToSuperview()
         }
 
-        cancelButton.snp.makeConstraints { make in
+        buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(subTitleLabel.snp.bottom).offset(24)
-            make.directionalHorizontalEdges.equalToSuperview().inset(16)
-            make.height.equalTo(CGFloat(43).fitHeight)
-        }
-
-        confirmButton.snp.makeConstraints { make in
-            make.top.equalTo(cancelButton.snp.bottom).offset(6)
             make.directionalHorizontalEdges.equalToSuperview().inset(16)
             make.height.equalTo(CGFloat(43).fitHeight)
             make.bottom.equalToSuperview().inset(20)
