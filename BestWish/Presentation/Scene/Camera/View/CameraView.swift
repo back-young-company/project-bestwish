@@ -13,10 +13,6 @@ import Then
 // MARK: - 카메라 뷰
 final class CameraView: UIView {
     
-    let screenHeight = UIScreen.main.bounds.height
-    let baseHeight: CGFloat = 844
-    lazy var scaleFactor = screenHeight / baseHeight
-    
     private let onboardingImageView = UIImageView()
     private let onboardingBackgroundView = UIView()
     private let previewBackGroundView = UIView()
@@ -80,7 +76,7 @@ private extension CameraView {
     func setAttributes() {
         
         homeButton.do {
-            $0.image = UIImage(named: "home_button")?.resize(to: CGSize(width: 20 * scaleFactor, height: 20 * scaleFactor))
+            $0.image = UIImage(named: "home_button")?.resize(to: CGSize(width: CGFloat(20).fitWidth, height: CGFloat(20).fitHeight))
             $0.tintColor = .black
         }
         
@@ -113,8 +109,8 @@ private extension CameraView {
 
         onboardingImageView.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.width.equalTo(250 * scaleFactor)
-            $0.height.equalTo(300 * scaleFactor)
+            $0.width.equalTo(CGFloat(250).fitWidth)
+            $0.height.equalTo(CGFloat(300).fitWidth)
         }
     }
     
