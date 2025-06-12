@@ -25,12 +25,13 @@ final class PlatformCollectionViewCell: UICollectionViewCell, ReuseIdentifier {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-//        platformButton.configuration = nil
+        
     }
 
     func configure(type: String) {
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
         platformButton.configuration?.attributedTitle = AttributedString(type, attributes: AttributeContainer([.font: titleFont]))
+        platformButton.sizeToFit()
     }
 }
 
@@ -44,11 +45,10 @@ private extension PlatformCollectionViewCell {
     func setAttributes() {
         platformButton.do {
             var config = UIButton.Configuration.filled()
-//            let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
             config.cornerStyle = .capsule
-//            config.attributedTitle = AttributedString("전체", attributes: AttributeContainer([.font: titleFont]))
             config.baseForegroundColor = .white
             config.baseBackgroundColor = .primary300
+            config.titleLineBreakMode = .byTruncatingTail
             $0.configuration = config
         }
     }
@@ -59,10 +59,8 @@ private extension PlatformCollectionViewCell {
 
     func setConstraints() {
         platformButton.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview().inset(8)
+            $0.centerY.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
-//            $0.leading.equalToSuperview()
-//            $0.trailing.lessThanOrEqualToSuperview()
             $0.height.equalTo(33)
         }
     }

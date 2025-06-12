@@ -157,11 +157,10 @@ private extension WishlistHeaderView {
 
 private extension WishlistHeaderView {
     func setPlatformCollectionView() {
-        Observable.just(["전체", "무신사", "에이블리", "지그재그재그재그", "전체", "무신사", "에이블리", "지그재그재그"])
+        Observable.just(["전체", "무신사사", "에이블리", "지그재그재그재그", "전체", "무신사", "에이블리", "지그재그재그"])
             .bind(to: platformCollectionView.rx.items(cellIdentifier: PlatformCollectionViewCell.identifier, cellType: PlatformCollectionViewCell.self)) { row, data, cell in
                 
                 cell.configure(type: data)
-                
             }
             .disposed(by: disposeBag)
     }
