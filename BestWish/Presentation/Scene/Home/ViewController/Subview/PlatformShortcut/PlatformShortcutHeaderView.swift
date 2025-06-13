@@ -1,5 +1,5 @@
 //
-//  PlatformHeaderView.swift
+//  PlatformShortcutHeaderView.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/11/25.
@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class PlatformHeaderView: UICollectionReusableView, ReuseIdentifier {
+final class PlatformShortcutHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     private let bestWishLabel = UILabel()
     private let titleLabel = UILabel()
@@ -42,7 +42,7 @@ final class PlatformHeaderView: UICollectionReusableView, ReuseIdentifier {
     func getEditButton() -> UIButton { editButton }
 }
 
-private extension PlatformHeaderView {
+private extension PlatformShortcutHeaderView {
     func setView() {
         setAttributes()
         setHierarchy()

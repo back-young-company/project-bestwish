@@ -37,8 +37,8 @@ private extension HomeView {
         
         collectionView.do {
             $0.register(
-                PlatformCell.self,
-                forCellWithReuseIdentifier: PlatformCell.identifier
+                PlatformShortcutCell.self,
+                forCellWithReuseIdentifier: PlatformShortcutCell.identifier
             )
             $0.register(
                 WishlistCell.self,
@@ -49,9 +49,9 @@ private extension HomeView {
                 forCellWithReuseIdentifier: WishlistEmptyCell.identifier
             )
             $0.register(
-                PlatformHeaderView.self,
+                PlatformShortcutHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: PlatformHeaderView.identifier
+                withReuseIdentifier: PlatformShortcutHeaderView.identifier
             )
             $0.register(
                 WishlistHeaderView.self,

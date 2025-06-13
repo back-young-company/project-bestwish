@@ -7,12 +7,15 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
 final class WishlistPlatformCell: UICollectionViewCell, ReuseIdentifier {
     
     private let platformButton = UIButton()
+    
+    var disposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,13 +29,28 @@ final class WishlistPlatformCell: UICollectionViewCell, ReuseIdentifier {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        disposeBag = DisposeBag()
     }
 
-    func configure(type: String) {
+    func configure(type: String, isSelected: Bool) {
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
-        platformButton.configuration?.attributedTitle = AttributedString(type, attributes: AttributeContainer([.font: titleFont]))
+
+        var config = platformButton.configuration ?? UIButton.Configuration.filled()
+        config.cornerStyle = .capsule
+        config.titleLineBreakMode = .byTruncatingTail
+        config.attributedTitle = AttributedString(type, attributes: AttributeContainer([.font: titleFont]))
+        
+        config.baseForegroundColor = isSelected ? .gray0 : .gray500
+        config.baseBackgroundColor = isSelected ? .primary300 : .gray0
+        platformButton.configuration = config
+
+        platformButton.layer.borderWidth = isSelected ? 0 : 1.5
+        platformButton.layer.borderColor = isSelected ? nil : UIColor.gray100?.cgColor
+        platformButton.layer.cornerRadius = isSelected ? 0 : 16.5
         platformButton.sizeToFit()
     }
+    
+    func getPlatformButton() -> UIButton { platformButton }
 }
 
 private extension WishlistPlatformCell {
@@ -43,14 +61,9 @@ private extension WishlistPlatformCell {
     }
 
     func setAttributes() {
-        platformButton.do {
-            var config = UIButton.Configuration.filled()
-            config.cornerStyle = .capsule
-            config.baseForegroundColor = .white
-            config.baseBackgroundColor = .primary300
-            config.titleLineBreakMode = .byTruncatingTail
-            $0.configuration = config
-        }
+//        platformButton.do {
+//            $0.clipsToBounds = true
+//        }
     }
 
     func setHierarchy() {

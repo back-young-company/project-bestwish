@@ -41,9 +41,9 @@ final class HomeViewController: UIViewController {
                 switch item {
                 case .platform(let platform):
                     guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: PlatformCell.identifier,
+                        withReuseIdentifier: PlatformShortcutCell.identifier,
                         for: indexPath
-                    ) as? PlatformCell else { return UICollectionViewCell() }
+                    ) as? PlatformShortcutCell else { return UICollectionViewCell() }
                     cell.configure(type: platform)
                     
                     return cell
@@ -52,7 +52,16 @@ final class HomeViewController: UIViewController {
                         withReuseIdentifier: WishlistCell.identifier,
                         for: indexPath
                     ) as? WishlistCell else { return UICollectionViewCell() }
-                    cell.configure(type: product, isHidden: true)
+                    
+                    let itemCount = collectionView.numberOfItems(inSection: indexPath.section)
+                        let isLastRow = {
+                            let itemsPerRow = 2 // 레이아웃 기준
+                            let rowCount = Int(ceil(Double(itemCount) / Double(itemsPerRow)))
+                            let currentRow = indexPath.item / itemsPerRow
+                            return currentRow == rowCount - 1
+                        }()
+
+                        cell.configure(type: product, isHidden: true, isLastRow: isLastRow)
                     
                     return cell
                 case .wishlistEmpty:
@@ -72,9 +81,9 @@ final class HomeViewController: UIViewController {
                 case .platform:
                     guard let headerView = collectionView.dequeueReusableSupplementaryView(
                         ofKind: kind,
-                        withReuseIdentifier: PlatformHeaderView.identifier,
+                        withReuseIdentifier: PlatformShortcutHeaderView.identifier,
                         for: indexPath
-                    ) as? PlatformHeaderView else { return UICollectionReusableView() }
+                    ) as? PlatformShortcutHeaderView else { return UICollectionReusableView() }
                     
                     headerView.configure(title: "플랫폼 바로가기")
                     headerView.getEditButton().rx.tap
@@ -102,6 +111,8 @@ final class HomeViewController: UIViewController {
                         let totalItemCount = dataSource.sectionModels[1].items.map { $0 }.count
                         headerView.configure(title: "쇼핑몰 위시리스트")
                         headerView.configure(productCount: totalItemCount)
+                        headerView.configure(platforms: self.homeViewModel.state.platformFilter)
+                        
                         headerView.getEditButton().rx.tap
                             .bind(with: self) { owner, _ in
                                 let vc = WishlistEditViewController()
@@ -110,7 +121,6 @@ final class HomeViewController: UIViewController {
                         
                         return headerView
                     }
-                    
                 }
             })
         

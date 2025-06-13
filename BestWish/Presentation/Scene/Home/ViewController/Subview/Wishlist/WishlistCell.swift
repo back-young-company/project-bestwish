@@ -36,13 +36,19 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(type: WishlistProduct, isHidden: Bool) {
+    func configure(type: WishlistProduct, isHidden: Bool, isLastRow: Bool? = nil) {
         productImageView.image = UIImage(named: type.productImageURL)
         productSaleRateLabel.text = type.productSaleRate
         productPriceLabel.text = type.productPrice
         productNameLabel.text = type.productName
         brandNameLabel.text = type.brandName
         editButton.isHidden = isHidden
+        
+        vStackView.snp.remakeConstraints {
+            $0.top.equalTo(productImageView.snp.bottom).offset(8)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(isLastRow ?? false ? -80 : 0)
+        }
     }
 }
 

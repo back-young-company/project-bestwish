@@ -37,6 +37,7 @@ private extension WishlistEmptyCell {
     func setAttributes() {
         emptyImageView.do {
             $0.image = UIImage(named: "no_product")
+            $0.contentMode = .scaleAspectFit
         }
         
         titleLabel.do {
@@ -46,9 +47,10 @@ private extension WishlistEmptyCell {
         }
         
         secondaryLabel.do {
-            $0.text = "위시리스트가 텅 비었어요!"
+            $0.text = "위시리스트를 추가해\n상품을 모아보세요!"
             $0.textColor = .gray400
             $0.font = .font(.pretendardMedium, ofSize: 16)
+            $0.numberOfLines = 0
         }
         
         linkButton.do {
@@ -90,7 +92,7 @@ private extension WishlistEmptyCell {
         linkButton.snp.makeConstraints {
             $0.top.equalTo(secondaryLabel.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(-20)
+            $0.bottom.equalTo(-100)
         }
     }
 }

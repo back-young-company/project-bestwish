@@ -26,6 +26,8 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     private let productCountLabel = UILabel()
     private let editButton = UIButton()
     
+    private var selectedPlatform: String = "전체"
+    
     var disposeBag = DisposeBag()
 
     override init(frame: CGRect) {
@@ -51,6 +53,22 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
         productCountLabel.text = "\(productCount)개"
     }
     
+    func configure(platforms: Observable<[String]>) {
+        platforms
+            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { row, data, cell in
+                let isSelected = (data == self.selectedPlatform)
+                cell.configure(type: data, isSelected: isSelected)
+                
+                cell.getPlatformButton().rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.selectedPlatform = data
+                        owner.platformCollectionView.reloadData()
+                    }
+                    .disposed(by: cell.disposeBag)
+            }
+            .disposed(by: disposeBag)
+    }
+    
     func getEditButton() -> UIButton { editButton }
 }
 
@@ -59,7 +77,6 @@ private extension WishlistHeaderView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setPlatformCollectionView()
     }
 
     func setAttributes() {
@@ -163,16 +180,5 @@ private extension WishlistHeaderView {
             $0.trailing.equalToSuperview().offset(-20)
             $0.bottom.equalToSuperview().offset(-10)
         }
-    }
-}
-
-private extension WishlistHeaderView {
-    func setPlatformCollectionView() {
-        Observable.just(["전체", "무신사사", "에이블리", "지그재그재그재그", "전체", "무신사", "에이블리", "지그재그재그"])
-            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { row, data, cell in
-                
-                cell.configure(type: data)
-            }
-            .disposed(by: disposeBag)
     }
 }

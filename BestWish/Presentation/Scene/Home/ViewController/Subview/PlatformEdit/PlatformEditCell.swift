@@ -42,8 +42,11 @@ private extension PlatformEditCell {
 
     func setAttributes() {
         platformImageView.do {
-            $0.clipsToBounds = true
             $0.layer.cornerRadius = 32
+            $0.layer.shadowColor = UIColor.gray900?.cgColor
+            $0.layer.shadowOpacity = 0.1
+            $0.layer.shadowOffset = CGSize(width: 0, height: 0.5)
+            $0.layer.shadowRadius = 4
         }
         
         platformTitleLabel.do {

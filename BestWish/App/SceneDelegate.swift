@@ -80,7 +80,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let useCase = DummyUseCaseImpl(repository: repository)
         let vm = DummyViewModel(dummyUseCase: useCase)
         let vc = TabBarViewController(viewControllers: [
-            UINavigationController(rootViewController: AVC()),
+            UINavigationController(rootViewController: HomeViewController()),
             UINavigationController(rootViewController: CameraViewController()),
             UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
         ])
@@ -89,7 +89,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.backgroundColor = .gray0
     }
 }
-
 
 final class AVC: UIViewController {
     override func viewDidLoad() {
