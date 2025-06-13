@@ -42,6 +42,11 @@ final class GenderSelectionView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func configure(genderIndex: Int?) {
+        guard let genderIndex else { return }
+        selectedGender.accept(Gender(rawValue: genderIndex))
+    }
 }
 extension GenderSelectionView {
 

@@ -29,7 +29,7 @@ final class OnboardingViewModel: ViewModel {
     }
 
     struct State {
-        let userInput: Observable<OnboardingDisplay>
+        let userInfo: Observable<OnboardingDisplay>
         let isValidNickname: Observable<Bool>
         let currentPage: Observable<Int>
     }
@@ -51,11 +51,10 @@ final class OnboardingViewModel: ViewModel {
     init(dummyUseCase: DummyUseCase) {
         self.dummyUseCase = dummyUseCase
         state = State(
-            userInput: _userInput.asObservable(),
+            userInfo: _userInput.asObservable(),
             isValidNickname: _isValidNickname.asObservable(),
             currentPage: _currentPage.asObservable()
         )
-
         bindAction()
     }
 
@@ -74,7 +73,6 @@ final class OnboardingViewModel: ViewModel {
             case .prevPage:
                 let prev = max(self._currentPage.value - 1, OnboardingViewModel.onboardingStartPage)
                 self._currentPage.accept(prev)
-
             case .inputNickname(let nickname):
                 owner.updateNickname(with: nickname)
             case .inputNicknameValid(let valid):

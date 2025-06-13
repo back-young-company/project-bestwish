@@ -25,6 +25,9 @@ final class BirthSelectionView: UIView {
         fatalError()
     }
 
+    func configure(title: String?) {
+        dateButton.setTitle(title, for: .normal)
+    }
 }
 
 private extension BirthSelectionView {
