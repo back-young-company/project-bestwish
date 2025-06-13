@@ -106,7 +106,7 @@ private extension TabBarViewController {
         isHiddenTabBar
             .distinctUntilChanged()
             .bind(with: self) { owner, isHidden in
-                guard let childVC = self.children.first else { return }
+                guard let childVC = owner.children.first else { return }
                 owner.tabBarView.setTabBarHidden(isHidden)
                 childVC.view.frame = owner.childrenFrame
             }.disposed(by: disposeBag)
