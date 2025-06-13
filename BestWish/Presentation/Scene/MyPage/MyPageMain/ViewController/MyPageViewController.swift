@@ -59,11 +59,18 @@ final class MyPageViewController: UIViewController {
         bindView()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        showTabBar()
+    }
+
     private func bindView() {
         myPageView.tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
+                    owner.hidesTabBar()
                     let managementViewController = UserInfoManagementViewController()
                     owner.navigationController?.pushViewController(managementViewController, animated: true)
                 case .logout:
@@ -101,6 +108,7 @@ final class MyPageViewController: UIViewController {
         header.seeMoreButton.rx.tap
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
+                owner.hidesTabBar()
                 let updateVC = ProfileUpdateViewController()
                 owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)

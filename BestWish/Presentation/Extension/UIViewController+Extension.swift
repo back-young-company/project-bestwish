@@ -29,4 +29,22 @@ extension UIViewController {
             self.title = title
         }
     }
+
+    func hidesTabBar() {
+        guard let navigationController,
+              let tabBarController = navigationController.parent
+                as? TabBarViewController else {
+            return
+        }
+        tabBarController.setTabBarHidden(true)
+    }
+
+    func showTabBar() {
+        guard let navigationController,
+              let tabBarController = navigationController.parent
+                as? TabBarViewController else {
+            return
+        }
+        tabBarController.setTabBarHidden(false)
+    }
 }
