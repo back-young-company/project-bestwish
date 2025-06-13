@@ -18,8 +18,63 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
+        /// 서비스 이용순서
+        /// 1. 소셜 로그인 성공 유무 판단 -> checkLoginState (기기 내의 supabase의 연결할 토큰확인 (키체인으로 저장)
+        ///     a. 로그인 성공시 -> checkOnboardingState (supabase public.UserInfo 테이블에서 role 값 확인하기 ( GUEST = 온보딩 실패 / USER = 온보딩 성공)
+        ///         i. 온보딩 성공유무 판단
+        ///     b. 로그인 실패시
+        ///         i. 로그인 재시도
+        ///
+        /// a. 로그인 성공시
+        ///     i. 온보딩 성공시
+        ///         1. 홈화면 실행
+        ///     ii.온보딩 실패시
+        ///         1. 온보딩부터 실행
+        ///
+        /// Task 구현이 안전하지 않을시 다른 방법 고려 가능
+        Task {
+            let isLogin = await SupabaseOAuthManager.shared.checkLoginState()
+            if isLogin {
+                do {
+                    let isOnboarding = try await SupabaseOAuthManager.shared.checkOnboardingState()
+                    await MainActor.run {
+                        if isOnboarding {
+                            self.showMainView()
+                        } else {
+                            self.showOnboardingView()
+                        }
+                    }
+                } catch {
+                    self.showLoginView()
+                }
+            } else {
+                await MainActor.run {
+                    self.showLoginView()
+                }
+            }
+        }
+    }
 
+    // 나중에 지울 코드
+    //----------------------------------
+    func showOnboardingView() {
+        let service = DummyServiceImpl()
+        let repo = DummyRepositoryImpl(service: service)
+        let uc = DummyUseCaseImpl(repository: repo)
+        let vm = OnboardingViewModel(dummyUseCase: uc)
+        let nav = UINavigationController(rootViewController: OnboardingViewController(viewModel: vm))
+        nav.setNavigationBarHidden(true, animated: true)
+        self.window?.rootViewController = nav
+        self.window?.makeKeyAndVisible()
+    }
 
+    func showLoginView() {
+        let vm = LoginViewModel()
+        self.window?.rootViewController = LoginViewController(viewModel: vm)
+        self.window?.makeKeyAndVisible()
+    }
+
+    func showMainView() {
         let service = DummyServiceImpl()
         let repository = DummyRepositoryImpl(service: service)
         let useCase = DummyUseCaseImpl(repository: repository)
@@ -29,29 +84,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             UINavigationController(rootViewController: CameraViewController()),
             UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
         ])
-        window?.rootViewController = vc// DummyViewController(viewModel: vm)
+        window?.rootViewController = vc // DummyViewController(viewModel: vm)
         window?.makeKeyAndVisible()
-        window?.backgroundColor = .white
+        window?.backgroundColor = .gray0
     }
 }
 
-// 나중에 지울 코드
-//----------------------------------
+
 final class AVC: UIViewController {
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBlue
         setNavigationBar(alignment: .left, title: "메인")
-    }
-}
-
-final class CVC: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setNavigationBar(alignment: .left, title: "마이 페이지")
-        view.backgroundColor = .systemRed
     }
 }
 //----------------------------------

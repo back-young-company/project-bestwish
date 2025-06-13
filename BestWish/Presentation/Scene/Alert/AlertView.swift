@@ -50,7 +50,7 @@ private extension AlertView {
         self.backgroundColor = .black.withAlphaComponent(0.5)
 
         alertView.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = .gray0
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
         }

@@ -36,7 +36,7 @@ private extension ProfileSheetView {
     }
 
     func setAttributes() {
-        self.backgroundColor = .white
+        self.backgroundColor = .gray0
         titleLabel.do {
             $0.text = "프로필 이미지"
             $0.textColor = .gray900

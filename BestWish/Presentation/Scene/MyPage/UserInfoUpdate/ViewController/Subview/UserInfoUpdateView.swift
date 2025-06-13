@@ -38,7 +38,7 @@ private extension UserInfoUpdateView {
     }
 
     func setAttributes() {
-        self.backgroundColor = .white
+        self.backgroundColor = .gray0
 
         stackView.do {
             $0.isLayoutMarginsRelativeArrangement = true

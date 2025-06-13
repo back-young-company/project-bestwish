@@ -54,8 +54,8 @@ private extension ImageEditView {
     }
     
     func setAttributes() {
-        backgroundColor = .white
-        
+        backgroundColor = .gray0
+
         toolbar.rotateClockwiseButton?.setImage(UIImage(named: "image_right"), for: .normal)
         toolbar.rotateButton.setImage(UIImage(named: "image_left"), for: .normal)
         
@@ -77,7 +77,7 @@ private extension ImageEditView {
         
         doneButton.do {
             $0.setTitle("분석하기", for: .normal)
-            $0.setTitleColor(.white, for: .normal)
+            $0.setTitleColor(.gray0, for: .normal)
         }
         
         cancelButton.do {

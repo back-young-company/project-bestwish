@@ -47,7 +47,7 @@ final class OnboardingViewController: UIViewController {
         viewModel.state.userInfo
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, userInfo in
-                owner.firstView.birthSelection.configure(title: userInfo.birthString)
+            owner.firstView.birthSelection.configure(title: userInfo.birthString)
         }
             .disposed(by: disposeBag)
 
@@ -182,7 +182,7 @@ private extension OnboardingViewController {
             owner.secondView.nicknameStackView.cautionLabel.textColor =
                 isValid ? .gray200 : .red0
 
-                // 닉네임 유효성 검사 성공시 전달
+            // 닉네임 유효성 검사 성공시 전달
             owner.viewModel.action.onNext(.inputNicknameValid(isValid))
 
             if isValid {
@@ -210,14 +210,10 @@ private extension OnboardingViewController {
         // TODO: 메인화면으로 이동해야함.
         secondView.completeButton.rx.tap
             .withLatestFrom(viewModel.state.userInfo)
-            .subscribe(onNext: { display in
-            print("Display:", display)
-            print("성별:", display.gender ?? "없음")
-            print("생일:", display.birth ?? "없음")
-            print("사진:", display.profileImageIndex)
-            print("닉네임:", display.nickname ?? "없음")
-
-        })
+            .subscribe(with: self) { owner, display in
+            let onboarding = display.toOnboarding()
+            owner.viewModel.action.onNext(.uploadOnboarding(onboarding))
+        }
             .disposed(by: disposeBag)
     }
 }
