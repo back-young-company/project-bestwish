@@ -34,26 +34,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// Task 구현이 안전하지 않을시 다른 방법 고려 가능
         Task {
             let isLogin = await SupabaseOAuthManager.shared.checkLoginState()
-            DispatchQueue.main.async {
-                if isLogin {
-                    Task {
-                        do {
-                            let isOnboarding = try await SupabaseOAuthManager.shared.checkOnboardingState()
-                            if isOnboarding {
-                                self.showMainView()
-                            } else {
-                                self.showOnboardingView()
-                            }
-                        } catch {
-                            self.showLoginView()
+            if isLogin {
+                do {
+                    let isOnboarding = try await SupabaseOAuthManager.shared.checkOnboardingState()
+                    await MainActor.run {
+                        if isOnboarding {
+                            self.showMainView()
+                        } else {
+                            self.showOnboardingView()
                         }
                     }
-                } else {
+                } catch {
+                    self.showLoginView()
+                }
+            } else {
+                await MainActor.run {
                     self.showLoginView()
                 }
             }
         }
-
     }
 
     // 나중에 지울 코드
