@@ -45,6 +45,10 @@ private extension HomeView {
                 forCellWithReuseIdentifier: WishlistCell.identifier
             )
             $0.register(
+                WishlistEmptyCell.self,
+                forCellWithReuseIdentifier: WishlistEmptyCell.identifier
+            )
+            $0.register(
                 PlatformHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: PlatformHeaderView.identifier
@@ -53,6 +57,11 @@ private extension HomeView {
                 WishlistHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: WishlistHeaderView.identifier
+            )
+            $0.register(
+                WishlistEmptyHeaderView.self,
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: WishlistEmptyHeaderView.identifier
             )
         }
     }

@@ -14,9 +14,10 @@ enum HomeHeader: String {
     case wishlist = "쇼핑몰 위시리스트"
 }
 
-enum HomeItem {
+enum HomeItem: Equatable {
     case platform(Platform)
     case wishlist(WishlistProduct)
+    case wishlistEmpty
 }
 
 struct HomeSectionModel {
@@ -33,12 +34,12 @@ extension HomeSectionModel: SectionModelType {
     }
 }
 
-struct Platform {
+struct Platform: Equatable {
     let platformName: String
     let platformImage: String
 }
 
-struct WishlistProduct {
+struct WishlistProduct: Equatable {
     let productImageURL: String
     let brandName: String
     let productName: String

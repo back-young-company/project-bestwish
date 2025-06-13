@@ -47,6 +47,10 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
         titleLabel.text = title
     }
     
+    func configure(productCount: Int) {
+        productCountLabel.text = "\(productCount)개"
+    }
+    
     func getEditButton() -> UIButton { editButton }
 }
 
@@ -105,7 +109,6 @@ private extension WishlistHeaderView {
         }
         
         productCountLabel.do {
-            $0.text = "5개"
             $0.textColor = .gray200
             $0.font = .font(.pretendardMedium, ofSize: 12)
         }
