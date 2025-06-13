@@ -156,6 +156,13 @@ private extension TabBarViewController {
     }
 }
 
+// MARK: 탭바 숨기기
+extension TabBarViewController {
+    func setTabBarHidden(_ hidden: Bool) {
+        isHiddenTabBar.accept(hidden)
+    }
+}
+
 // MARK: - 자식 VC 관리
 private extension TabBarViewController {
     func changeChildView(_ index: Int) {
@@ -196,12 +203,5 @@ extension TabBarViewController: UIImagePickerControllerDelegate, UINavigationCon
         guard let nav = viewControllers[TabBarMode.center.rawValue] as? UINavigationController,
               let cameraVC = nav.viewControllers.first as? CameraViewController else { return }
         cameraVC.presentImageCropper(with: image)
-    }
-}
-
-// MARK: 탭바 숨기기
-extension TabBarViewController {
-    func setTabBarHidden(_ hidden: Bool) {
-        isHiddenTabBar.accept(hidden)
     }
 }
