@@ -59,7 +59,7 @@ private extension TabBarView {
     func setAttributes() {
         
         tabBar.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = .gray0
             $0.layer.cornerRadius = 24
             $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             $0.layer.shadowColor = UIColor.black.cgColor

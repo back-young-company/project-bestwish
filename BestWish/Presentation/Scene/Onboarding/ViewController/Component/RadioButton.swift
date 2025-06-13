@@ -55,7 +55,7 @@ final class RadioButton: UIButton {
                 var updated = button.configuration
                 else { return }
             updated.image = button.isSelected ? self.onImage : self.offImage
-            updated.baseBackgroundColor = .white
+            updated.baseBackgroundColor = .gray0
             updated.background = .clear()
             button.configuration = updated
         }
