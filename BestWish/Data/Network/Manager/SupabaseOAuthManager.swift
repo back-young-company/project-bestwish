@@ -26,13 +26,13 @@ final class SupabaseOAuthManager: NSObject {
         supabaseKey: Bundle.main.apiKey
     )
 
-    // MARK: – 세션 복원
-    func restoreSessionIfNeeded() async -> Bool {
+    // MARK: – Supabase 토근 확인 및 세션 연결
+    func checkLoginState() async -> Bool {
         // nonisolated read 이므로 await 없이 즉시 반환
         guard
             let accessToken = keychain.read(token: .init(service: .access)),
             let refreshToken = keychain.read(token: .init(service: .refresh))
-        else {
+            else {
             return false
         }
 
@@ -57,6 +57,24 @@ final class SupabaseOAuthManager: NSObject {
         }
     }
 
+    func checkOnboardingState() async throws -> Bool {
+        struct Role: Codable { let role: String }
+
+        let roles: [Role] = try await client
+            .from("UserInfo")
+            .select("role")
+            .execute()
+            .value // [Role]
+
+        guard let role = roles.map(\.role).first else {
+            return false
+        }
+        
+        print("roles:", roles.map(\.role)) // ["USER"]
+
+        return role == "USER"
+    }
+
     // MARK: – 로그인
     func signIn(type: SocialType) {
         Task {
@@ -65,7 +83,7 @@ final class SupabaseOAuthManager: NSObject {
                 do {
                     let (_, session) = try await signInApple()
                     await keychain.saveAllToken(session: session)
-                    gotoOnboardingView()
+                    SampleViewChangeManager.shared.goOnboardingView()
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -74,7 +92,7 @@ final class SupabaseOAuthManager: NSObject {
                 do {
                     guard let session = try await signInKakao() else { return }
                     await keychain.saveAllToken(session: session)
-                    gotoOnboardingView()
+                    SampleViewChangeManager.shared.goOnboardingView()
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -96,7 +114,7 @@ final class SupabaseOAuthManager: NSObject {
             await self.keychain.deleteAllToken()
         }
 
-        gotoLoginView()
+        SampleViewChangeManager.shared.goLoginView()
     }
 
     // MARK: – 회원 탈퇴
@@ -105,7 +123,7 @@ final class SupabaseOAuthManager: NSObject {
         guard
             let rawProvider = session.user.appMetadata["provider"]?.rawValue,
             let socialProvider = Provider(rawValue: rawProvider)
-        else {
+            else {
             print("지원하지 않는 로그인 방식이거나 provider 정보가 없습니다.")
             return
         }
@@ -113,8 +131,8 @@ final class SupabaseOAuthManager: NSObject {
         switch socialProvider {
         case .kakao:
             guard let session = try await signInKakao(),
-                  let providerToken = session.providerToken
-            else { return }
+                let providerToken = session.providerToken
+                else { return }
 
             do {
                 try await unlinkKakaoAccount(providerToken)
@@ -157,26 +175,5 @@ extension SupabaseOAuthManager {
     enum SocialType {
         case kakao
         case apple
-    }
-}
-
-// 화면 전환 (Coordinator 적용 전 임시)
-extension SupabaseOAuthManager {
-    func gotoOnboardingView() {
-        DispatchQueue.main.async {
-            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let delegate = scene.delegate as? SceneDelegate {
-                delegate.showOnboardingView()
-            }
-        }
-    }
-
-    private func gotoLoginView() {
-        DispatchQueue.main.async {
-            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let delegate = scene.delegate as? SceneDelegate {
-                delegate.showLoginView()
-            }
-        }
     }
 }
