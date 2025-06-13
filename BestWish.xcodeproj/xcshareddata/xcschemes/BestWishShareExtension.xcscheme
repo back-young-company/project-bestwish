@@ -57,8 +57,12 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "0"
+         BundleIdentifier = "com.grab.musinsa"
+         RemotePath = "/var/containers/Bundle/Application/F3640B7C-B2BC-4233-B41D-21709D266AF7/Musinsa.app">
+      </RemoteRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CBD6BA102DEF1B39003242CA"
@@ -66,7 +70,7 @@
             BlueprintName = "BestWish"
             ReferencedContainer = "container:BestWish.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
