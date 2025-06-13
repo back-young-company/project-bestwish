@@ -8,8 +8,6 @@
 import Foundation
 import RxSwift
 import RxRelay
-// 임시
-import UIKit
 
 final class OnboardingViewModel: ViewModel {
 
