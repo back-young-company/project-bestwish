@@ -82,7 +82,7 @@ final class OnboardingViewModel: ViewModel {
                 owner._isValidNickname.accept(valid)
 
             case .uploadOnboarding(let data):
-                let state = SupabaseOAuthManager.shared.uploadOnboardingInfo(to: data)
+                let state = SupabaseOAuthManager.shared.uploadUserInfo(to: data)
                 if state {
                     // TODO: MainView로 화면전환
                     SampleViewChangeManager.shared.goMainView()

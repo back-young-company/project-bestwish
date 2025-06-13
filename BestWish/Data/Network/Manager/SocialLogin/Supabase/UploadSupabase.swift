@@ -25,7 +25,7 @@ struct Onboarding: Encodable {
 
 
 extension SupabaseOAuthManager {
-    func uploadOnboardingInfo(to data: Onboarding) -> Bool {
+    func uploadUserInfo(to data: Onboarding) -> Bool {
         guard let userId = client.auth.currentSession?.user.id else { return false }
 
         let updates: Onboarding = Onboarding(profileImageIndex: data.profileImageIndex,
