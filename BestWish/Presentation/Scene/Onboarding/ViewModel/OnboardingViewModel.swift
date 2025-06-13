@@ -7,61 +7,101 @@
 
 import Foundation
 import RxSwift
+import RxRelay
 
 final class OnboardingViewModel: ViewModel {
 
-    // MARK: - Properties
     private let dummyUseCase: DummyUseCase
     private let disposeBag = DisposeBag()
 
-    // MARK: - Actions
+    // 총 페이지수
+    static private let onboardingStartPage = 0
+    static private let onboardingFinishPage = 1
+
     enum Action {
-        case viewDidLoad(Void)
+        case selectedProfileIndex(Int)
+        case selectedGender(Gender)
+        case selectedBirth(Date)
+        case inputNicknameValid(Bool)
+        case inputNickname(String)
+        case nextPage
+        case prevPage
     }
 
-    // MARK: - States
     struct State {
-        /// sample
-        let data: Observable<DummyDisplay>
-        let newData: Observable<DummyDisplay>
-        let error: Observable<Error>
+        let userInfo: Observable<OnboardingDisplay>
+        let isValidNickname: Observable<Bool>
+        let currentPage: Observable<Int>
     }
 
-    // MARK: - Inputs
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    // MARK: - Outputs
-    /// sample
-    private let _data = PublishSubject<DummyDisplay>()
-    private let _newData = PublishSubject<DummyDisplay>()
-    private let _error = PublishSubject<Error>()
+    private let _userInput = BehaviorRelay<OnboardingDisplay> (value:
+        OnboardingDisplay(
+        profileImageIndex: 0)
+    )
+
+    private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
+
+    private let _isValidNickname = BehaviorRelay<Bool>(value: false)
 
     let state: State
 
-    // MARK: - Initializer, Deinit, requiered
     init(dummyUseCase: DummyUseCase) {
-        /// sample
         self.dummyUseCase = dummyUseCase
         state = State(
-            data: _data.asObservable(),
-            newData: _newData.asObservable(),
-            error: _error.asObservable()
+            userInfo: _userInput.asObservable(),
+            isValidNickname: _isValidNickname.asObservable(),
+            currentPage: _currentPage.asObservable()
         )
-
         bindAction()
     }
 
-    // MARK: - Bind
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
-            case .viewDidLoad:
-                break
+            case .selectedProfileIndex(let index):
+                owner.updateProfileImage(with: index)
+            case .selectedGender(let gender):
+                owner.updateGender(with: gender)
+            case .selectedBirth(let date):
+                owner.updateBirth(with: date)
+            case .nextPage:
+                let next = min(self._currentPage.value + 1, OnboardingViewModel.onboardingFinishPage)
+                self._currentPage.accept(next)
+            case .prevPage:
+                let prev = max(self._currentPage.value - 1, OnboardingViewModel.onboardingStartPage)
+                self._currentPage.accept(prev)
+            case .inputNickname(let nickname):
+                owner.updateNickname(with: nickname)
+            case .inputNicknameValid(let valid):
+                owner._isValidNickname.accept(valid)
             }
         }.disposed(by: disposeBag)
     }
 
-    // MARK: Methods
+    private func updateGender(with index: Gender) {
+        var userInput = _userInput.value
+        userInput.updateGender(to: index.rawValue)
+        _userInput.accept(userInput)
+    }
 
+    private func updateBirth(with index: Date) {
+        var userInput = _userInput.value
+        userInput.updateBirth(to: index)
+        _userInput.accept(userInput)
+    }
+
+    private func updateProfileImage(with index: Int) {
+        var userInput = _userInput.value
+        userInput.updateProfileImageIndex(to: index)
+        _userInput.accept(userInput)
+    }
+
+    private func updateNickname(with index: String) {
+        var userInput = _userInput.value
+        userInput.updateNickname(to: index)
+        _userInput.accept(userInput)
+    }
 }

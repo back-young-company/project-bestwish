@@ -47,8 +47,8 @@ final class ProfileUpdateViewController: UIViewController {
             .bind(with: self) { owner, userAccount in
                 let profileSheetVC = ProfileSheetViewController(selectedIndex: userAccount.profileImageIndex)
                 profileSheetVC.presentProfileSheet()
-                profileSheetVC.onComplete = { [weak self] selectedIndex in
-                    self?.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
+                profileSheetVC.onComplete = { selectedIndex in
+                    owner.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
                 }
                 owner.present(profileSheetVC, animated: true)
             }.disposed(by: disposeBag)

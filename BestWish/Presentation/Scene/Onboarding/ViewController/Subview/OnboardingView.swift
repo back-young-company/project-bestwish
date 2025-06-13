@@ -14,13 +14,6 @@ final class OnboardingView: UIView {
     // MARK: - Properties
 
     // MARK: - UI Components
-    private let logoutButton = UIButton().then {
-        $0.setTitle("로그아웃", for: .normal)
-    }
-
-    private let leaveButton = UIButton().then {
-        $0.setTitle("회원탈퇴", for: .normal)
-    }
 
     // MARK: - Initializer, Deinit, requiered
     override init(frame: CGRect) {
@@ -52,19 +45,11 @@ private extension OnboardingView {
     // MARK: - Hierarchy Helper
     // subView 추가 메서드
     func setHierarchy() {
-        self.addSubviews(logoutButton, leaveButton)
     }
 
     // MARK: - Layout Helper
     // 오토레이이아웃 설정 메서드
     func setConstraints() {
-        logoutButton.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-        }
-        leaveButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(logoutButton.snp.bottom).offset(12)
-        }
     }
 
     // MARK: - Delegate Helper
@@ -79,23 +64,7 @@ private extension OnboardingView {
 
     // MARK: - Binding Helper
     func setBindings() {
-        logoutButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
-        leaveButton.addTarget(self, action: #selector(leave), for: .touchUpInside)
     }
 
-
-    @objc
-    private func logout() {
-        Task {
-            try await SupabaseOAuthManager.shared.signOut()
-        }
-    }
-
-    @objc
-    private func leave() {
-        Task {
-            try await SupabaseOAuthManager.shared.leaveService()
-        }
-    }
 }
 

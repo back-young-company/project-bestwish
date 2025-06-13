@@ -35,6 +35,8 @@ private extension MyPageCell {
     }
 
     func setAttributes() {
+        self.selectionStyle = .none
+
         titleLabel.do {
             $0.textColor = .black
             $0.font = .font(.pretendardMedium, ofSize: 16)
@@ -64,4 +66,3 @@ private extension MyPageCell {
         }
     }
 }
-

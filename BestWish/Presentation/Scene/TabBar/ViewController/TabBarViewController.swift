@@ -16,29 +16,42 @@ import RxCocoa
 /// ```
 // MARK: - 메인 탭바 컨트롤러
 final class TabBarViewController: UIViewController {
-    
+
     private let viewControllers:[UIViewController]
     private let disposeBag = DisposeBag()
     private let tabBarView = TabBarView()
     private let tabBarMode = BehaviorRelay<TabBarMode>(value: .left)
     private let floatingMode = BehaviorRelay<FloatingMode>(value: .home)
-    
+    private let isHiddenTabBar = BehaviorRelay<Bool>(value: false)
+
     private var hasEnteredCameraMode = false
-    
+    private var childrenFrame: CGRect {
+        var height = UIScreen.main.bounds.height
+        if !isHiddenTabBar.value {
+            height -= height < 700 ? 60 : 90
+        }
+        return CGRect(
+            x: 0,
+            y: 0,
+            width: UIScreen.main.bounds.width,
+            height: height
+        )
+    }
+
     init(viewControllers: [UIViewController]) {
         self.viewControllers = Array(viewControllers.prefix(3))
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
     }
-    
+
     override func loadView() {
         view = tabBarView
     }
@@ -68,7 +81,7 @@ private extension TabBarViewController {
                 owner.changedTabBarItem(tabBarMode, floatingMode)
             }
             .disposed(by: disposeBag)
-        
+
         // 카메라 모드일 경우 카메라 헤더의 홈 버튼을 터치했을 때의 이벤트 처리
         guard let nav = viewControllers[TabBarMode.center.rawValue] as? UINavigationController,
               let cameraVC = nav.viewControllers.first as? CameraViewController else { return }
@@ -79,12 +92,21 @@ private extension TabBarViewController {
                 owner.hasEnteredCameraMode = false
             }
             .disposed(by: disposeBag)
+
+        // 탭바 On / Off
+        isHiddenTabBar
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isHidden in
+                guard let childVC = self.children.first else { return }
+                owner.tabBarView.setTabBarHidden(isHidden)
+                childVC.view.frame = owner.childrenFrame
+            }.disposed(by: disposeBag)
     }
 }
 
 // MARK: - UI 업데이트
 private extension TabBarViewController {
-    
+
     /// 모드에 따른 탭바 이미지 업데이트
     private func updateTabBarImages(for mode: TabBarMode, using floating: FloatingMode) {
         let imageSet = TabBarImageSet(mode: mode, floating: floating)
@@ -96,7 +118,7 @@ private extension TabBarViewController {
         tabBarView.getCenterItemButton.setImage(imageSet.center.highlight, for: .highlighted)
         tabBarView.getRightItemButton.setImage(imageSet.right.highlight, for: .highlighted)
     }
-    
+
     /// 탭바 아이템 / 플로팅 버튼 선택 시 이벤트
     private func changedTabBarItem(_ mode: TabBarMode, _ floating: FloatingMode) {
         updateTabBarImages(for: mode, using: floating)
@@ -125,6 +147,13 @@ private extension TabBarViewController {
     }
 }
 
+// MARK: 탭바 숨기기
+extension TabBarViewController {
+    func setTabBarHidden(_ hidden: Bool) {
+        isHiddenTabBar.accept(hidden)
+    }
+}
+
 // MARK: - 자식 VC 관리
 private extension TabBarViewController {
     func changeChildView(_ index: Int) {
@@ -140,9 +169,7 @@ private extension TabBarViewController {
         }
 
         let childVC = viewControllers[index]
-        let width = UIScreen.main.bounds.width
-        let height = UIScreen.main.bounds.height - (UIScreen.main.bounds.height < 700 ? 60 : 90)
-        childVC.view.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        childVC.view.frame = childrenFrame
 
         addChild(childVC)
         view.insertSubview(childVC.view, at: 0)

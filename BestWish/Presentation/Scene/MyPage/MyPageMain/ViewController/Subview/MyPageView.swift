@@ -40,7 +40,6 @@ private extension MyPageView {
                 forCellReuseIdentifier: MyPageCell.identifier
             )
             $0.separatorStyle = .none
-            $0.allowsSelection = false
             $0.rowHeight = CGFloat(43).fitHeight
             $0.sectionHeaderTopPadding = 16
             $0.sectionFooterHeight = 16

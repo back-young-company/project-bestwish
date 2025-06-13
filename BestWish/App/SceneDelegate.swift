@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let vc = TabBarViewController(viewControllers: [
             UINavigationController(rootViewController: AVC()),
             UINavigationController(rootViewController: CameraViewController()),
-            UINavigationController(rootViewController: CVC())
+            UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
         ])
         window?.rootViewController = vc// DummyViewController(viewModel: vm)
         window?.makeKeyAndVisible()
