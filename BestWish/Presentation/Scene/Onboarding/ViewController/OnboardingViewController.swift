@@ -34,7 +34,6 @@ final class OnboardingViewController: UIViewController {
         super.viewDidLoad()
         bindView()
         bindViewModel()
-        bindPageButton()
     }
 
 
@@ -45,6 +44,13 @@ final class OnboardingViewController: UIViewController {
     }
 
     private func bindViewModel() {
+        viewModel.state.userInfo
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, userInfo in
+                owner.firstView.birthSelection.configure(title: userInfo.birthString)
+        }
+            .disposed(by: disposeBag)
+
         viewModel.state.currentPage
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, page in
@@ -52,13 +58,13 @@ final class OnboardingViewController: UIViewController {
         }
             .disposed(by: disposeBag)
 
-        viewModel.state.userInput
+        viewModel.state.userInfo
             .bind(with: self) { owner, userInput in
             owner.secondView.configure(input: userInput)
         }
             .disposed(by: disposeBag)
 
-        viewModel.state.userInput
+        viewModel.state.userInfo
             .map { input in
             return input.gender != nil && input.birth != nil
         }
@@ -72,7 +78,7 @@ final class OnboardingViewController: UIViewController {
 
         Observable
             .combineLatest(
-            viewModel.state.userInput.map { $0.nickname != nil },
+            viewModel.state.userInfo.map { $0.nickname != nil },
             viewModel.state.isValidNickname
         ) { hasNick, isValid in
             hasNick && isValid
@@ -112,17 +118,8 @@ private extension OnboardingViewController {
             sheetVC.presentationController?.delegate = self
             // 선택된 날짜 콜백
             sheetVC.onDateSelected = { date in
-                let formatter = DateFormatter()
-                // 현재 한국시간으로만 설정
-                formatter.locale = Locale(identifier: "ko_KR")
-                formatter.dateFormat = "yyyy.MM.dd"
-                let title = formatter.string(from: date)
-                self.firstView.birthSelection.dateButton.setTitle(title, for: .normal)
-
-
                 self.dismiss(animated: true) {
                     self.firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
-
                 }
                 owner.viewModel.action.onNext(.selectedBirth(date))
             }
@@ -145,7 +142,7 @@ private extension OnboardingViewController {
         secondView.profileImageView.addGestureRecognizer(tapGesture)
 
         tapGesture.rx.event
-            .withLatestFrom(viewModel.state.userInput)
+            .withLatestFrom(viewModel.state.userInfo)
             .bind(with: self) { owner, userAccount in
             let profileSheetVC = ProfileSheetViewController(selectedIndex: userAccount.profileImageIndex)
             profileSheetVC.presentProfileSheet()
@@ -183,7 +180,7 @@ private extension OnboardingViewController {
             : UIColor.red0?.cgColor // 불허 값
 
             owner.secondView.nicknameStackView.cautionLabel.textColor =
-                isValid ? .gray200 : .red0?
+                isValid ? .gray200 : .red0
 
                 // 닉네임 유효성 검사 성공시 전달
             owner.viewModel.action.onNext(.inputNicknameValid(isValid))
@@ -212,7 +209,7 @@ private extension OnboardingViewController {
 
         // TODO: 메인화면으로 이동해야함.
         secondView.completeButton.rx.tap
-            .withLatestFrom(viewModel.state.userInput)
+            .withLatestFrom(viewModel.state.userInfo)
             .subscribe(onNext: { display in
             print("Display:", display)
             print("성별:", display.gender ?? "없음")
