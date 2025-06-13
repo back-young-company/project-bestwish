@@ -1,0 +1,101 @@
+//
+//  WishlistEditViewController.swift
+//  BestWish
+//
+//  Created by 백래훈 on 6/12/25.
+//
+
+import UIKit
+
+import RxDataSources
+import RxSwift
+import RxRelay
+
+final class WishlistEditViewController: UIViewController {
+    
+    private let wishEditView = WishlistEditView()
+    private let wishEditViewModel = WishEditViewModel()
+    
+    private let disposeBag = DisposeBag()
+    
+    override func loadView() {
+        view = wishEditView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setNavigationBar()
+        bindActions()
+        bindViewModel()
+        
+    }
+    
+    private func bindViewModel() {
+        let dataSource = RxCollectionViewSectionedReloadDataSource<WishlistEditSectionModel>(
+            configureCell: { dataSource, collectionView, indexPath, item in
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: WishlistCell.identifier,
+                    for: indexPath
+                ) as? WishlistCell else { return UICollectionViewCell() }
+                cell.configure(type: item, isHidden: false)
+                
+                return cell
+            }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+                guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: WishlistEditHeaderView.identifier,
+                    for: indexPath
+                ) as? WishlistEditHeaderView else { return UICollectionReusableView() }
+                let totalItemCount = dataSource.sectionModels.flatMap { $0.items }.count
+                headerView.configure(count: totalItemCount)
+                
+                return headerView
+            })
+        
+        wishEditViewModel.state.sections
+            .bind(to: wishEditView.getCollectionView().rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        wishEditViewModel.state.sections
+            .bind(with: self) { owner, sections in
+                owner.setCollectionViewLayout(sections)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindActions() {
+        wishEditView.getBackButton().rx.tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func setNavigationBar() {
+        self.title = "편집"
+        self.navigationController?.navigationBar.isHidden = false
+        
+        let backItem = UIBarButtonItem(customView: wishEditView.getBackButton())
+        self.navigationItem.leftBarButtonItem = backItem
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.titleTextAttributes = [
+            .font: UIFont.font(.pretendardBold, ofSize: 18),
+            .foregroundColor: UIColor.black
+        ]
+        appearance.shadowColor = .clear
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    }
+    
+}
+
+private extension WishlistEditViewController {
+    func setCollectionViewLayout(_ sections: [WishlistEditSectionModel]) {
+        wishEditView.getCollectionView().collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
+            return NSCollectionLayoutSection.createWishlistSection()
+        }
+    }
+}

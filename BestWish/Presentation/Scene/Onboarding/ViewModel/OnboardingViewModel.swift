@@ -26,6 +26,7 @@ final class OnboardingViewModel: ViewModel {
         case inputNickname(String)
         case nextPage
         case prevPage
+        case uploadOnboarding(Onboarding)
     }
 
     struct State {
@@ -77,6 +78,14 @@ final class OnboardingViewModel: ViewModel {
                 owner.updateNickname(with: nickname)
             case .inputNicknameValid(let valid):
                 owner._isValidNickname.accept(valid)
+
+            case .uploadOnboarding(let data):
+                let state = SupabaseOAuthManager.shared.uploadUserInfo(to: data)
+                if state {
+                    // TODO: MainView로 화면전환
+                    SampleViewChangeManager.shared.goMainView()
+                }
+
             }
         }.disposed(by: disposeBag)
     }

@@ -60,7 +60,7 @@ private extension UserInfoManagementView {
     }
 
     func setAttributes() {
-        self.backgroundColor = .white
+        self.backgroundColor = .gray0
     }
 
     func setHierarchy() {

@@ -24,8 +24,8 @@ final class AlertView: UIView {
 
     init(type: AlertType) {
         self.type = type
-        cancelButton = AppButton(type: type.cancelButtonType)
-        confirmButton = AppButton(type: type.confirmButtonType)
+        cancelButton = AppButton(type: type.cancelButtonType, fontSize: 16)
+        confirmButton = AppButton(type: type.confirmButtonType, fontSize: 16)
 
         super.init(frame: .zero)
 
@@ -50,7 +50,7 @@ private extension AlertView {
         self.backgroundColor = .black.withAlphaComponent(0.5)
 
         alertView.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = .gray0
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
         }
@@ -58,7 +58,7 @@ private extension AlertView {
         titleLabel.do {
             $0.text = type.title
             $0.textColor = .gray800
-            $0.font = .font(.pretendardBold, ofSize: 16)
+            $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textAlignment = .center
         }
 

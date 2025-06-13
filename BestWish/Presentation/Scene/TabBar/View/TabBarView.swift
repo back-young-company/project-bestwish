@@ -39,15 +39,16 @@ final class TabBarView: UIView {
     func configure() { }
 
     func setTabBarHidden(_ hidden: Bool) {
+        print(#function, hidden)
         if hidden {
-            UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            UIView.animate(withDuration: 0.15, animations: { [weak self] in
                 self?.tabBar.alpha = 0
             }, completion: { [weak self] _ in
                 self?.tabBar.isHidden = hidden
             })
         } else {
             tabBar.isHidden = hidden
-            UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            UIView.animate(withDuration: 0.15, animations: { [weak self] in
                 self?.tabBar.alpha = 1
             })
         }
@@ -74,7 +75,7 @@ private extension TabBarView {
     func setAttributes() {
         
         tabBar.do {
-            $0.backgroundColor = .white
+            $0.backgroundColor = .gray0
             $0.layer.cornerRadius = 24
             $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             $0.layer.shadowColor = UIColor.black.cgColor

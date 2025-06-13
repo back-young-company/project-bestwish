@@ -6,14 +6,27 @@
 //
 
 import UIKit
+import RxSwift
+
 /// 커스텀 버튼 클래스
 ///
 /// ```swift
 /// private let button = AppButton(type: .analyze)
 /// ```
 final class AppButton: UIButton {
+    private let disposeBag = DisposeBag()
     private var type: ButtonType
     private let fontSize: CGFloat
+
+    override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted {
+                backgroundColor = type.highlightedBackgroundColor
+            } else {
+                backgroundColor = type.backgroundColor
+            }
+        }
+    }
 
     init(type: ButtonType, fontSize: CGFloat = 18) {
         self.type = type
@@ -41,6 +54,7 @@ private extension AppButton {
     func setAttributes() {
         self.setTitle(type.title, for: .normal)
         self.setTitleColor(type.titleColor, for: .normal)
+        self.setTitleColor(type.highlightedTitleColor, for: .highlighted)
         self.titleLabel?.font = .font(.pretendardBold, ofSize: fontSize)
         self.backgroundColor = type.backgroundColor
         self.layer.cornerRadius = 12
@@ -97,9 +111,7 @@ extension AppButton.ButtonType {
         case .complete, .next, .shortcut, .analyze,
                 .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .gray0
-        case .back, .reset, .cancel:
-            return .gray200
-        case .before, .withdraw, .nextUnable, .incomplete:
+        case .before, .withdraw, .nextUnable, .incomplete, .back, .reset, .cancel:
             return .gray300
         }
     }
@@ -109,9 +121,7 @@ extension AppButton.ButtonType {
         case .complete, .next, .shortcut, .analyze,
                 .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary300
-        case .back, .reset:
-            return .gray600
-        case .cancel, .before, .withdraw:
+        case .cancel, .before, .withdraw, .reset, .back:
             return .gray0
         case .nextUnable, .incomplete:
             return .gray50
@@ -120,7 +130,7 @@ extension AppButton.ButtonType {
 
     var borderColor: UIColor? {
         switch self {
-        case .cancel, .before, .withdraw:
+        case .cancel, .before, .withdraw, .reset, .back:
             return .gray100
         default:
             return nil
@@ -129,10 +139,32 @@ extension AppButton.ButtonType {
 
     var borderWidth: CGFloat {
         switch self {
-        case .cancel, .before, .withdraw:
+        case .cancel, .before, .withdraw, .reset, .back:
             return 1.5
         default:
             return 0
+        }
+    }
+
+    var highlightedBackgroundColor: UIColor? {
+        switch self {
+        case .complete, .next, .shortcut, .analyze,
+                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
+            return .primary200
+        case .cancel, .before, .withdraw, .reset, .back:
+            return .gray50
+        case .nextUnable, .incomplete:
+            return .gray100
+        }
+    }
+
+    var highlightedTitleColor: UIColor? {
+        switch self {
+        case .complete, .next, .shortcut, .analyze,
+                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
+            return .primary50
+        case .cancel, .before, .withdraw, .reset, .back, .nextUnable, .incomplete:
+            return .gray300
         }
     }
 }

@@ -20,11 +20,12 @@ extension SupabaseOAuthManager {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
-        request.nonce = nonceHash // 해시된 nonce를 요청에 설정
+        request.nonce = nonceHash
 
         let authController = ASAuthorizationController(authorizationRequests: [request])
         authController.delegate = self
         authController.presentationContextProvider = self
+
         return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(String, Supabase.Session), Error>) in
             self.continuation = continuation
             authController.performRequests()
@@ -50,17 +51,17 @@ extension SupabaseOAuthManager {
             encoder: URLEncodedFormParameterEncoder.default,
             headers: ["Content-Type": "application/x-www-form-urlencoded"]
         )
-            .validate()
-            .serializingData()
-            .value
+        .validate()
+        .serializingData()
+        .value
 
         let jsonAny = try JSONSerialization.jsonObject(with: data, options: [])
         guard
             let json = jsonAny as? [String: Any],
             let accessToken = json["access_token"] as? String
-            else {
+        else {
             throw NSError(
-                domain: "SignInWithAppleManager",
+                domain: "AppleLogin",
                 code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "access_token을 찾을 수 없습니다"]
             )
@@ -70,15 +71,23 @@ extension SupabaseOAuthManager {
     }
 
     private func requestSecret() async throws -> String {
+        // nonisolated read 메서드를 통해 동기적으로 즉시 읽기
+        guard let token = keychain.read(token: .init(service: .access)) else {
+            throw NSError(
+                domain: "AppleLogin",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "키체인에서 액세스 토큰을 찾을 수 없습니다"]
+            )
+        }
+
+        let endPoint = "swift-api/generate-client-secret"
         struct SecretResponse: Codable {
             let client_secret: String
         }
-        guard let token = KeyChainManager.shared.read(token: Token(service: .access)) else { return "" }
-        let endPoint = "swift-api/generate-client-secret"
 
         let response: SecretResponse = try await client.functions.invoke(
             endPoint,
-            options: FunctionInvokeOptions(
+            options: .init(
                 method: .get,
                 headers: ["Authorization": "Bearer \(token)"]
             )
@@ -89,8 +98,8 @@ extension SupabaseOAuthManager {
     func revokeAccount(_ token: String) async throws {
         let url = "https://appleid.apple.com/auth/revoke"
         let clientID = Bundle.main.clientID
-
         let clientSecret: String
+
         do {
             clientSecret = try await requestSecret()
         } catch {
@@ -113,8 +122,8 @@ extension SupabaseOAuthManager {
                 encoder: URLEncodedFormParameterEncoder.default,
                 headers: ["Content-Type": "application/x-www-form-urlencoded"]
             )
-                .validate()
-                .response { response in
+            .validate()
+            .response { response in
                 switch response.result {
                 case .success:
                     print("리프레시 토큰 리보크 성공. 상태 코드:", response.response?.statusCode ?? -1)
@@ -123,7 +132,6 @@ extension SupabaseOAuthManager {
                     print("리프레시 토큰 리보크 실패. HTTP \(response.response?.statusCode ?? -1) 오류: \(error.localizedDescription)")
                     continuation.resume(throwing: error)
                 }
-
             }
         }
     }
@@ -139,7 +147,7 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
             let idTokenData = appleIDCredential.identityToken,
             let idTokenString = String(data: idTokenData, encoding: .utf8),
             let nonce = currentNonce
-            else {
+        else {
             continuation?.resume(throwing: NSError(domain: "", code: -1, userInfo: nil))
             continuation = nil
             print("Apple ID Credential에서 identityToken 또는 nonce를 가져올 수 없음")
@@ -153,23 +161,24 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
         Task {
             do {
                 let session = try await client.auth.signInWithIdToken(
-                    credentials: OpenIDConnectCredentials(
+                    credentials: .init(
                         provider: .apple,
                         idToken: idTokenString,
                         nonce: nonce
                     )
                 )
-                try await client.auth.update(user: UserAttributes(
-                    data: ["full_name": .string(name)]))
-                print("auth.users 이름 갱신 성공")
+                if name != "" {
+                    try await client.auth.update(user: .init(data: ["full_name": .string(name)]))
+                    print("auth.users 이름 갱신 성공")
 
-                try await client
-                    .from("user")
-                    .update(["name": name])
-                    .eq("id", value: session.user.id)
-                    .execute()
-                print("public.user 이름 갱신 성공")
-                print("애플 로그인 성공")
+                    try await client
+                        .from("UserInfo")
+                        .update(["name": name])
+                        .eq("id", value: session.user.id)
+                        .execute()
+                    print("public.user 이름 갱신 성공")
+                    print("애플 로그인 성공")
+                }
                 continuation?.resume(returning: (authCodeString, session))
             } catch {
                 print("Supabase 로그인 오류:", error.localizedDescription)
@@ -177,10 +186,9 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
             }
             continuation = nil
         }
-
     }
 
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: any Error) {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         continuation?.resume(throwing: error)
         print("Apple 인증 실패", error.localizedDescription)
         continuation = nil
@@ -188,10 +196,7 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
 }
 
 extension SupabaseOAuthManager: ASAuthorizationControllerPresentationContextProviding {
-    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return presentationWindow ?? UIWindow()
     }
 }
-
-
-

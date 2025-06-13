@@ -47,7 +47,7 @@ private extension ProfileUpdateView {
     }
 
     func setAttributes() {
-        self.backgroundColor = .white
+        self.backgroundColor = .gray0
         profileImageView.do {
             $0.contentMode = .scaleAspectFit
             $0.layer.cornerRadius = CGFloat(88).fitWidth / 2
@@ -66,6 +66,7 @@ private extension ProfileUpdateView {
         nicknameTextField.do {
             $0.placeholder = "닉네임을 입력해주세요."
             $0.textColor = .gray900
+            $0.font = .font(.pretendardBold, ofSize: 16)
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
             $0.leftViewMode = .always
         }
