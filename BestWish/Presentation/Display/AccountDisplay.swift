@@ -8,7 +8,16 @@
 import Foundation
 
 struct AccountDisplay {
-    let profileImageName: String
+    var profileImageIndex: Int
+    var profileImageName: String {
+        ProfileType(rawValue: profileImageIndex)?.name ?? ProfileType.profileA.name
+    }
     let nickname: String
     let email: String
+}
+
+extension AccountDisplay {
+    mutating func updateProfileImageIndex(to index: Int) {
+        profileImageIndex = index
+    }
 }

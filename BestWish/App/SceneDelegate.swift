@@ -24,8 +24,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let repository = DummyRepositoryImpl(service: service)
         let useCase = DummyUseCaseImpl(repository: repository)
         let vm = DummyViewModel(dummyUseCase: useCase)
-        window?.rootViewController = DummyViewController(viewModel: vm)
+        let vc = TabBarViewController(viewControllers: [
+            UINavigationController(rootViewController: AVC()),
+            UINavigationController(rootViewController: CameraViewController()),
+            UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
+        ])
+        window?.rootViewController = vc// DummyViewController(viewModel: vm)
         window?.makeKeyAndVisible()
+        window?.backgroundColor = .white
     }
 }
 
+// 나중에 지울 코드
+//----------------------------------
+final class AVC: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBlue
+        setNavigationBar(alignment: .left, title: "메인")
+    }
+}
+
+final class CVC: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setNavigationBar(alignment: .left, title: "마이 페이지")
+        view.backgroundColor = .systemRed
+    }
+}
+//----------------------------------
