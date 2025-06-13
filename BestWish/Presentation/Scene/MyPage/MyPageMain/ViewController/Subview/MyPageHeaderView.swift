@@ -86,7 +86,7 @@ private extension MyPageHeaderView {
 
         infoStackView.snp.makeConstraints { make in
             make.leading.equalTo(profileImageView.snp.trailing).offset(18)
-            make.verticalEdges.equalTo(profileImageView)
+            make.centerY.equalTo(profileImageView)
         }
 
         seeMoreButton.snp.makeConstraints { make in
