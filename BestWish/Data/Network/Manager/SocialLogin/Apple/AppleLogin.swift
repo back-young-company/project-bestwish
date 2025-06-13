@@ -167,17 +167,18 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
                         nonce: nonce
                     )
                 )
-                try await client.auth.update(user: .init(data: ["full_name": .string(name)]))
-                print("auth.users 이름 갱신 성공")
+                if name != "" {
+                    try await client.auth.update(user: .init(data: ["full_name": .string(name)]))
+                    print("auth.users 이름 갱신 성공")
 
-                try await client
-                    .from("UserInfo")
-                    .update(["name": name])
-                    .eq("id", value: session.user.id)
-                    .execute()
-                print("public.user 이름 갱신 성공")
-                print("애플 로그인 성공")
-
+                    try await client
+                        .from("UserInfo")
+                        .update(["name": name])
+                        .eq("id", value: session.user.id)
+                        .execute()
+                    print("public.user 이름 갱신 성공")
+                    print("애플 로그인 성공")
+                }
                 continuation?.resume(returning: (authCodeString, session))
             } catch {
                 print("Supabase 로그인 오류:", error.localizedDescription)
