@@ -15,7 +15,15 @@ extension UIViewController {
 
     func setNavigationBar(alignment: UIViewController.Alignment, title: String) {
         self.navigationController?.navigationBar.tintColor = .gray900
-        self.navigationItem.backButtonTitle = ""
+        self.navigationItem.backButtonDisplayMode = .minimal
+        let backImage = UIImage(systemName: "chevron.backward")?
+            .withAlignmentRectInsets(.init(top: 0, left: -8, bottom: 0, right: 0))
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
+
+        navigationController?.navigationBar.standardAppearance = appearance
 
         switch alignment {
         case .left:
