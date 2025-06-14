@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RxSwift
+import IQKeyboardReturnManager
 
 final class OnboardingViewController: UIViewController {
     private let firstView = OnboardingFirstView()
@@ -15,6 +16,7 @@ final class OnboardingViewController: UIViewController {
     private let viewModel: OnboardingViewModel
     private let disposeBag = DisposeBag()
     private let onboardingViews: [UIView]
+    private let returnManager: IQKeyboardReturnManager = .init()
 
     init(viewModel: OnboardingViewModel) {
         self.viewModel = viewModel
@@ -32,6 +34,7 @@ final class OnboardingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        returnManager.lastTextInputViewReturnKeyType = .done
         bindView()
         bindViewModel()
     }
