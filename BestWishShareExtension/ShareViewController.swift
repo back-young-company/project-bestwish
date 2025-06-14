@@ -58,29 +58,19 @@ class ShareViewController: UIViewController {
         $0.spacing = 4
     }
     
+    private let containerView = UIView().then {
+        $0.backgroundColor = .white
+    }
+    
+    private let shareView = ShareView()
+    
     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureView()
-        setConstraints()
-        
-        extractSharedContent()
-        
-        self.view.backgroundColor = .clear
-        
-        let modalView = UIViewController()
-        modalView.view.backgroundColor = .white
-        
-        if let sheet = modalView.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.prefersGrabberVisible = true
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
-        }
-        modalView.modalPresentationStyle = .pageSheet
-        
-        self.present(modalView, animated: true)
+        setView()
+//        extractSharedContent()
     }
     
     private func configureView() {
@@ -97,22 +87,40 @@ class ShareViewController: UIViewController {
         [productDiscount, productPrice].forEach {
             self.hStackView.addArrangedSubview($0)
         }
-        
     }
     
-    private func setConstraints() {
-        productImage.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            $0.centerX.equalToSuperview()
-            $0.size.equalTo(150)
+    private func configureView2() {
+        self.view.addSubview(containerView)
+        containerView.addSubview(productImage)
+    }
+    
+    private func setConstraints2() {
+        containerView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(300)
         }
         
-        vStackView.snp.makeConstraints {
-            $0.top.equalTo(productImage.snp.bottom).offset(4)
-            $0.centerX.equalTo(productImage.snp.centerX)
-            $0.width.equalTo(productImage.snp.width)
+        productImage.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
+    
+//    private func setConstraints() {
+//        productImage.snp.makeConstraints {
+//            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+//            $0.centerX.equalToSuperview()
+//            $0.size.equalTo(150)
+//        }
+//        
+//        vStackView.snp.makeConstraints {
+//            $0.top.equalTo(productImage.snp.bottom).offset(4)
+//            $0.centerX.equalTo(productImage.snp.centerX)
+//            $0.width.equalTo(productImage.snp.width)
+//        }
+//    }
     
     // MARK: - 아래의 메서드들은 ViewModel로 이전
     // 📥 공유된 콘텐츠를 추출하여 각 provider에 대해 처리
@@ -162,5 +170,31 @@ class ShareViewController: UIViewController {
                 print("❌ Metadata fetch error: \(error.localizedDescription)")
             })
             .disposed(by: disposeBag)
+    }
+}
+
+private extension ShareViewController {
+    func setView() {
+        setAttributes()
+        setHierarchy()
+        setConstraints()
+    }
+
+    func setAttributes() {
+        shareView.do {
+            $0.backgroundColor = .white
+        }
+    }
+
+    func setHierarchy() {
+        self.view.addSubview(shareView)
+    }
+
+    func setConstraints() {
+        shareView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(300)
+        }
     }
 }
