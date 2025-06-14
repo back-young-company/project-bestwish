@@ -17,7 +17,7 @@ final class NicknameInputView: UIView {
 
     private let nicknameStackView = VerticalStackView(spacing: 12)
     private let nicknameLabel = InfoLabel(title: "닉네임")
-    let textField = PaddingTextField(top: 14.5, left: 12, bottom: 14.5, right: 12)
+    let textField = UITextField()
     let cautionLabel = UILabel()
 
     override init(frame: CGRect) {
@@ -47,6 +47,8 @@ private extension NicknameInputView {
             $0.layer.borderWidth = 1.5
             $0.layer.borderColor = UIColor.gray200?.cgColor
             $0.layer.cornerRadius = 8
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
+            $0.leftViewMode = .always
         }
 
         cautionLabel.do {
