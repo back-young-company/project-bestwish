@@ -16,8 +16,11 @@ final class OnboardingSecondView: UIView {
     private let stackView = VerticalStackView(spacing: 40)
     private let profileContainer = UIView()
     let profileImageView = UIImageView()
-    let nicknameStackView = NicknameInputView()
 
+
+
+    private let nickName2ButtonStackView = VerticalStackView(spacing: CGFloat(160).fitHeight)
+    let nicknameStackView = NicknameInputView()
     private let buttonStack = HorizontalStackView(spacing: 12)
     let prevButton = AppButton(type: .before)
     let completeButton = AppButton(type: .complete)
@@ -33,7 +36,7 @@ final class OnboardingSecondView: UIView {
     }
 
     func configure(input: OnboardingDisplay) {
-        profileImageView.image = UIImage(named: input.profileImageName)?.resize(to: CGSize(width: CGFloat(152).fitWidth, height: CGFloat(152).fitHeight))
+        profileImageView.image = UIImage(named: input.profileImageName)?.resize(to: CGSize(width: CGFloat(152).fitWidth, height: CGFloat(152).fitWidth))
 
     }
 
@@ -48,9 +51,6 @@ private extension OnboardingSecondView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setDelegate()
-        setDataSource()
-        setBindings()
     }
 
     func setAttributes() {
@@ -77,9 +77,9 @@ private extension OnboardingSecondView {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 12,
-                left: 20,
+                left: 0,
                 bottom: 12,
-                right: 20
+                right: 0
             )
         }
 
@@ -89,38 +89,34 @@ private extension OnboardingSecondView {
     }
 
     func setHierarchy() {
-        self.addSubviews(header, stackView, buttonStack)
-        stackView.addArrangedSubviews(profileContainer, nicknameStackView)
-        profileContainer.addSubview(profileImageView)
+
+        self.addSubviews(header,profileImageView, nickName2ButtonStackView)
+        nickName2ButtonStackView.addArrangedSubviews(nicknameStackView, buttonStack)
         buttonStack.addArrangedSubviews(prevButton, completeButton)
     }
 
     func setConstraints() {
-         header.snp.makeConstraints {
-             $0.top.equalTo(safeAreaLayoutGuide).offset(38)
-             $0.leading.trailing.equalToSuperview()
-         }
-
-         stackView.snp.makeConstraints {
-             $0.top.equalTo(header.snp.bottom).offset(24)
-             $0.leading.trailing.equalToSuperview()
-         }
-
-        profileContainer.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(152).fitWidth)
+        header.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide).offset(CGFloat(38).fitHeight)
+            $0.leading.trailing.equalToSuperview()
         }
 
         profileImageView.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(152).fitWidth)
-            $0.centerX.equalTo(stackView)
-            $0.centerY.equalTo(profileContainer)
+            $0.top.equalTo(header.snp.bottom).offset(24)
+            $0.size.equalTo(CGFloat(152).fitWidth)
+            $0.centerX.equalToSuperview()
         }
 
-         buttonStack.snp.makeConstraints {
-             $0.top.equalTo(stackView.snp.bottom).offset(40)
-             $0.leading.trailing.equalToSuperview()
-             $0.bottom.equalTo(safeAreaLayoutGuide)
-         }
+        nickName2ButtonStackView.snp.makeConstraints {
+            $0.top.equalTo(profileImageView.snp.bottom).offset(40)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.bottom.equalTo(keyboardLayoutGuide.snp.top)
+        }
+
+
+        buttonStack.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+        }
 
         prevButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
@@ -131,15 +127,6 @@ private extension OnboardingSecondView {
             $0.height.equalTo(CGFloat(53).fitHeight)
         }
 
-    }
-
-    func setDelegate() {
-    }
-
-    func setDataSource() {
-    }
-
-    func setBindings() {
     }
 
 }

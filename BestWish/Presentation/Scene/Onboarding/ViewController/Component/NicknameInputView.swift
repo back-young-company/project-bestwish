@@ -68,6 +68,14 @@ private extension NicknameInputView {
             $0.edges.equalToSuperview()
         }
 
+        nicknameLabel.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(17).fitHeight)
+        }
+
+        cautionLabel.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(14).fitHeight)
+        }
+
         textField.snp.makeConstraints {
             $0.height.equalTo(CGFloat(48).fitHeight)
         }

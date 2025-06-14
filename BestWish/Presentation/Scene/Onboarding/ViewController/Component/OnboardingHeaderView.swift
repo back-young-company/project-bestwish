@@ -52,7 +52,8 @@ private extension OnboardingHeaderView {
 
         }
         titleLabel.do {
-            $0.numberOfLines = 0     
+            $0.numberOfLines = 0
+            $0.lineBreakMode = .byWordWrapping
             $0.font = .font(.pretendardBold, ofSize: 24)
             $0.textColor = .gray900
         }
@@ -70,6 +71,18 @@ private extension OnboardingHeaderView {
     func setConstraints() {
         infoStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+
+        pageInfoLabel.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(19).fitHeight)
+        }
+
+        titleLabel.snp.makeConstraints {
+            $0.height.greaterThanOrEqualTo(CGFloat(29).fitHeight)
+        }
+
+        descLabel.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(19).fitHeight)
         }
 
     }
