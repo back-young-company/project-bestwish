@@ -37,7 +37,9 @@ final class HomeViewController: UIViewController {
     
     private func bindViewModel() {
         let dataSource = RxCollectionViewSectionedReloadDataSource<HomeSectionModel>(
-            configureCell: { dataSource, collectionView, indexPath, item in
+            configureCell: { [weak self] dataSource, collectionView, indexPath, item in
+                guard let self else { return UICollectionViewCell() }
+                
                 switch item {
                 case .platform(let platform):
                     guard let cell = collectionView.dequeueReusableCell(
@@ -69,6 +71,15 @@ final class HomeViewController: UIViewController {
                         withReuseIdentifier: WishlistEmptyCell.identifier,
                         for: indexPath
                     ) as? WishlistEmptyCell else { return UICollectionViewCell() }
+                    
+                    cell.getLinkButton.rx.tap
+                        .bind(with: self) { owner, _ in
+                            AlertLinkBuilder(baseViewController: owner) {
+                                print("로그아웃")
+                            }.show()
+                        }
+                        .disposed(by: disposeBag)
+                    
                     return cell
                 }
             }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in

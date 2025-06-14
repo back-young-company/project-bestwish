@@ -7,6 +7,7 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
@@ -16,6 +17,8 @@ final class WishlistEmptyCell: UICollectionViewCell, ReuseIdentifier {
     private let titleLabel = UILabel()
     private let secondaryLabel = UILabel()
     private let linkButton = UIButton()
+    
+    var disposeBag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +28,14 @@ final class WishlistEmptyCell: UICollectionViewCell, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
+    
+    var getLinkButton: UIButton { linkButton }
 }
 
 private extension WishlistEmptyCell {

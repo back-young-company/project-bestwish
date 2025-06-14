@@ -160,8 +160,13 @@ private extension WishlistHeaderView {
         
         searchBar.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.horizontalEdges.equalToSuperview().inset(10)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(40)
+        }
+        
+        searchBar.searchTextField.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalToSuperview()
         }
         
         platformCollectionView.snp.makeConstraints {

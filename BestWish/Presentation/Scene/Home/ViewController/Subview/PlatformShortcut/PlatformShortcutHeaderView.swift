@@ -74,12 +74,12 @@ private extension PlatformShortcutHeaderView {
 
     func setConstraints() {
         bestWishLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
+            $0.top.equalToSuperview().offset(9)
             $0.leading.equalToSuperview().offset(8)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(bestWishLabel.snp.bottom).offset(20)
+            $0.top.equalTo(bestWishLabel.snp.bottom).offset(26.5)
             $0.leading.equalToSuperview().offset(8)
             $0.bottom.equalToSuperview().offset(-10)
         }
