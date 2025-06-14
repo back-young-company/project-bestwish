@@ -33,6 +33,7 @@ final class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.navigationBar.isHidden = true
+        showTabBar()
     }
     
     private func bindViewModel() {
@@ -74,9 +75,7 @@ final class HomeViewController: UIViewController {
                     
                     cell.getLinkButton.rx.tap
                         .bind(with: self) { owner, _ in
-                            AlertLinkBuilder(baseViewController: owner) {
-                                print("로그아웃")
-                            }.show()
+                            AlertLinkBuilder(baseViewController: owner).show()
                         }
                         .disposed(by: disposeBag)
                     
@@ -100,6 +99,7 @@ final class HomeViewController: UIViewController {
                     headerView.getEditButton().rx.tap
                         .bind(with: self) { owner, _ in
                             let vc = PlatformEditViewController()
+                            owner.hidesTabBar()
                             owner.navigationController?.pushViewController(vc, animated: true)
                         }.disposed(by: headerView.disposeBag)
                     
@@ -124,8 +124,14 @@ final class HomeViewController: UIViewController {
                         headerView.configure(productCount: totalItemCount)
                         headerView.configure(platforms: self.homeViewModel.state.platformFilter)
                         
-                        headerView.getEditButton().rx.tap
+                        headerView.getLinkButton.rx.tap
                             .bind(with: self) { owner, _ in
+                                AlertLinkBuilder(baseViewController: owner).show()
+                            }.disposed(by: headerView.disposeBag)
+                        
+                        headerView.getEditButton.rx.tap
+                            .bind(with: self) { owner, _ in
+                                owner.hidesTabBar()
                                 let vc = WishlistEditViewController()
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             }.disposed(by: headerView.disposeBag)

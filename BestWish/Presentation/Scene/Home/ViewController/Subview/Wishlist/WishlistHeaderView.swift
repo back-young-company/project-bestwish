@@ -69,7 +69,8 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
             .disposed(by: disposeBag)
     }
     
-    func getEditButton() -> UIButton { editButton }
+    var getLinkButton: UIButton { linkButton }
+    var getEditButton: UIButton { editButton }
 }
 
 private extension WishlistHeaderView {

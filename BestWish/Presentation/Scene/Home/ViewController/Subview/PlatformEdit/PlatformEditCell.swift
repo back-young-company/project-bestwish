@@ -19,6 +19,8 @@ final class PlatformEditCell: UITableViewCell, ReuseIdentifier {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
+        self.separatorInset = .zero
+        
         setView()
     }
     

@@ -67,6 +67,20 @@ class ShareViewController: UIViewController {
         setConstraints()
         
         extractSharedContent()
+        
+        self.view.backgroundColor = .clear
+        
+        let modalView = UIViewController()
+        modalView.view.backgroundColor = .white
+        
+        if let sheet = modalView.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = true
+        }
+        modalView.modalPresentationStyle = .pageSheet
+        
+        self.present(modalView, animated: true)
     }
     
     private func configureView() {
