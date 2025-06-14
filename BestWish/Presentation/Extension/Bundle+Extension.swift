@@ -41,11 +41,12 @@ extension Bundle {
         return value
     }
 
-    var supabaseURL: String {
-        guard let value = infoDictionary?["SUPABASE_URL"] as? String else {
+    var supabaseURL: URL {
+        guard let value = infoDictionary?["SUPABASE_URL"] as? String,
+              let url = URL(string: "https://\(value)") else {
             fatalError("❌ Info.plist에 SUPABASE_URL이 없습니다.")
         }
-        return value
+        return url
     }
 
     var clientID: String {
