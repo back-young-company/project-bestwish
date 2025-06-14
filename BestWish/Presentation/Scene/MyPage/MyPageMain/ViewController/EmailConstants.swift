@@ -25,7 +25,7 @@ extension EmailConstants {
             "[문의하기] [제목]"
         case .body:
             """
-            안녕하세요, 아래에 문의하실 내용을 작성해주세요.
+            안녕하세요, BestWish입니다. 아래에 문의하실 내용을 작성해주세요.
             
             --------------------
             앱 버전: \(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "알 수 없음")
