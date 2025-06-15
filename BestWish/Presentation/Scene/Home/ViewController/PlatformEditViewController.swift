@@ -31,7 +31,7 @@ final class PlatformEditViewController: UIViewController {
         bindActions()
         bindViewModel()
         
-        platformEditView.getTableView().isEditing = true
+        platformEditView.getTableView.isEditing = true
     }
     
     private func bindViewModel() {
@@ -47,7 +47,7 @@ final class PlatformEditViewController: UIViewController {
         })
         
         platformEditViewModel.state.sections
-            .bind(to: platformEditView.getTableView().rx.items(dataSource: dataSource))
+            .bind(to: platformEditView.getTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         platformEditViewModel.state.sections
@@ -59,13 +59,13 @@ final class PlatformEditViewController: UIViewController {
     }
     
     private func bindActions() {
-        platformEditView.getBackButton().rx.tap
+        platformEditView.getBackButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
         
-        platformEditView.getTableView().rx.itemMoved
+        platformEditView.getTableView.rx.itemMoved
             .subscribe(with: self) { owner, indexPath in
                 let sourceIndexPath = indexPath.sourceIndex
                 let destinationIndexPath = indexPath.destinationIndex
@@ -78,7 +78,7 @@ final class PlatformEditViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        platformEditView.getTableView().rx.setDelegate(self)
+        platformEditView.getTableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
         
     }
@@ -87,7 +87,7 @@ final class PlatformEditViewController: UIViewController {
         self.title = "플랫폼 편집"
         self.navigationController?.navigationBar.isHidden = false
         
-        let backItem = UIBarButtonItem(customView: platformEditView.getBackButton())
+        let backItem = UIBarButtonItem(customView: platformEditView.getBackButton)
         self.navigationItem.leftBarButtonItem = backItem
         
         let appearance = UINavigationBarAppearance()
@@ -102,12 +102,12 @@ final class PlatformEditViewController: UIViewController {
     }
     
     private func setupHeaderView(count: Int) {
-        platformEditView.getHeaderView().configure(count: count)
+        platformEditView.getHeaderView.configure(count: count)
         
         let targetSize = CGSize(width: view.bounds.width, height: 0)
-        let height = platformEditView.getHeaderView().systemLayoutSizeFitting(targetSize).height
-        platformEditView.getHeaderView().frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
-        platformEditView.getTableView().tableHeaderView = platformEditView.getHeaderView()
+        let height = platformEditView.getHeaderView.systemLayoutSizeFitting(targetSize).height
+        platformEditView.getHeaderView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
+        platformEditView.getTableView.tableHeaderView = platformEditView.getHeaderView
     }
 }
 

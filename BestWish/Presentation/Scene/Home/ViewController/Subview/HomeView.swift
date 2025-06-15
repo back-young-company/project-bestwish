@@ -22,7 +22,7 @@ final class HomeView: UIView {
         fatalError()
     }
     
-    func getCollectionView() -> UICollectionView { collectionView }
+    var getCollectionView: UICollectionView { collectionView }
 }
 
 private extension HomeView {

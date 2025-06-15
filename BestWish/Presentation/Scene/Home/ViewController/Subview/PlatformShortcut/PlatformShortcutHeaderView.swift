@@ -39,7 +39,7 @@ final class PlatformShortcutHeaderView: UICollectionReusableView, ReuseIdentifie
         titleLabel.text = title
     }
     
-    func getEditButton() -> UIButton { editButton }
+    var getEditButton: UIButton { editButton }
 }
 
 private extension PlatformShortcutHeaderView {
@@ -53,7 +53,7 @@ private extension PlatformShortcutHeaderView {
         bestWishLabel.do {
             $0.text = "BESTWISH"
             $0.textColor = .gray900
-            $0.font = .font(.pretendardExtraBold, ofSize: 20)
+            $0.font = .font(.antonRegular, ofSize: 20)
         }
         
         titleLabel.do {

@@ -55,11 +55,12 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     func configure(platforms: Observable<[String]>) {
         platforms
-            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { row, data, cell in
+            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { [weak self] row, data, cell in
+                guard let self else { return }
                 let isSelected = (data == self.selectedPlatform)
-                cell.configure(type: data, isSelected: isSelected)
                 
-                cell.getPlatformButton().rx.tap
+                cell.configure(type: data, isSelected: isSelected)
+                cell.getPlatformButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.selectedPlatform = data
                         owner.platformCollectionView.reloadData()

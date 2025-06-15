@@ -50,7 +50,7 @@ final class WishlistPlatformCell: UICollectionViewCell, ReuseIdentifier {
         platformButton.sizeToFit()
     }
     
-    func getPlatformButton() -> UIButton { platformButton }
+    var getPlatformButton: UIButton { platformButton }
 }
 
 private extension WishlistPlatformCell {

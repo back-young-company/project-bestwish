@@ -96,7 +96,7 @@ final class HomeViewController: UIViewController {
                     ) as? PlatformShortcutHeaderView else { return UICollectionReusableView() }
                     
                     headerView.configure(title: "플랫폼 바로가기")
-                    headerView.getEditButton().rx.tap
+                    headerView.getEditButton.rx.tap
                         .bind(with: self) { owner, _ in
                             let vc = PlatformEditViewController()
                             owner.hidesTabBar()
@@ -148,14 +148,14 @@ final class HomeViewController: UIViewController {
             .disposed(by: disposeBag)
         
         homeViewModel.state.sections
-            .bind(to: homeView.getCollectionView().rx.items(dataSource: dataSource))
+            .bind(to: homeView.getCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
 }
 
 private extension HomeViewController {
     func setCollectionViewLayout(_ sections: [HomeSectionModel]) {
-        homeView.getCollectionView().collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
+        homeView.getCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             guard sectionIndex < sections.count else { return nil }
             let section = sections[sectionIndex]
             

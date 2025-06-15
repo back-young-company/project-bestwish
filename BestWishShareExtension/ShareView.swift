@@ -10,8 +10,6 @@ import UIKit
 import SnapKit
 import Then
 
-//import BestWish
-
 final class ShareView: UIView {
     
     private let grabBar = UIView()
@@ -49,7 +47,7 @@ private extension ShareView {
         
         completeLabel.do {
             $0.text = "저장 완료!"
-            $0.font = .systemFont(ofSize: 18, weight: .bold)
+            $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textColor = .black
         }
         
@@ -57,15 +55,13 @@ private extension ShareView {
             var config = UIButton.Configuration.plain()
             config.imagePadding = 4
             config.imagePlacement = .trailing
-            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 14, weight: .regular)
-            let titleFont = UIFont.systemFont(ofSize: 18, weight: .bold)
+            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
+            let titleFont = UIFont.font(.pretendardBold, ofSize: 12)
             
             config.image = UIImage(systemName: "chevron.right")?.withConfiguration(symbolConfig)
-//            config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-            
             config.attributedTitle = AttributedString("바로가기", attributes: AttributeContainer([.font: titleFont]))
-            config.baseForegroundColor = .brown
-//            config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 14, bottom: 6, trailing: 14)
+            config.baseForegroundColor = .primary200
+            config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
             $0.configuration = config
         }
     }
@@ -121,5 +117,24 @@ extension UIColor {
         let blue = CGFloat(rgb & 0x0000FF) / 255.0
         
         self.init(red: red, green: green, blue: blue, alpha: alpha)
+    }
+    
+    static let primary200 = UIColor(hex: "#9986F1")
+    
+    static let gray100 = UIColor(hex: "#CFCFCF")
+    static let gray900 = UIColor(hex: "#030303")
+}
+
+extension UIFont {
+    enum FontName: String, CaseIterable {
+        case pretendardBold = "Pretendard-Bold"
+    }
+
+    static func font(_ style: FontName, ofSize size: CGFloat) -> UIFont {
+        guard let customFont = UIFont(name: style.rawValue, size: size) else {
+            print("\(style.rawValue) font가 등록되지 않았습니다.")
+            return UIFont.systemFont(ofSize: size)
+        }
+        return customFont
     }
 }

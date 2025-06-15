@@ -58,10 +58,6 @@ class ShareViewController: UIViewController {
         $0.spacing = 4
     }
     
-    private let containerView = UIView().then {
-        $0.backgroundColor = .white
-    }
-    
     private let shareView = ShareView()
     
     let disposeBag = DisposeBag()
@@ -86,25 +82,6 @@ class ShareViewController: UIViewController {
         
         [productDiscount, productPrice].forEach {
             self.hStackView.addArrangedSubview($0)
-        }
-    }
-    
-    private func configureView2() {
-        self.view.addSubview(containerView)
-        containerView.addSubview(productImage)
-    }
-    
-    private func setConstraints2() {
-        containerView.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(300)
-        }
-        
-        productImage.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -183,6 +160,8 @@ private extension ShareViewController {
     func setAttributes() {
         shareView.do {
             $0.backgroundColor = .white
+            $0.layer.cornerRadius = 15
+            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         }
     }
 
