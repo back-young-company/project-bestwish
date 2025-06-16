@@ -15,6 +15,7 @@ final class CameraViewController: UIViewController {
     private var session: AVCaptureSession?                      // 카메라 입력, 출력을 연결하는 세션 객체
     private let output = AVCapturePhotoOutput()                 // 사진 촬영을 담당하는 출력 객체
     private let cameraView = CameraView()
+    private var imageEditVC: ImageEditViewController?
     private var currentCameraPosition: AVCaptureDevice.Position = .back
     private let globalQueue = DispatchQueue(label: "BestWish.globalQueue", qos: .userInteractive)
     
@@ -112,32 +113,26 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         
         session?.stopRunning()
         presentImageCropper(with: image)
+        
     }
-}
-
-// MARK: - 이미지 가공 관련
-extension CameraViewController: CropViewControllerDelegate {
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(with image: UIImage) {
-//        let vc = UINavigationController(rootViewController: ImageEditViewController(image: image))
-//        (vc.viewControllers.first as? ImageEditViewController)?.getImageEditView.getCropperVC.delegate = self
-        let vc = ImageEditViewController(image: image)
-        vc.getCropperVC.delegate = self
-        let navVc = UINavigationController(rootViewController: vc)
+        let service = DummyServiceImpl()
+        let repo = DummyRepositoryImpl(service: service)
+        let vm = ImageEditViewModel(dummyUseCase: DummyUseCaseImpl(repository: repo))
+        imageEditVC = ImageEditViewController(image: image, viewModel: vm)
+        
+        guard let imageEditVC else { return }
+        imageEditVC.onDismiss = { [weak self] in
+            guard let self else { return }
+            self.globalQueue.async {
+                self.session?.startRunning()
+            }
+        }
+        let navVc = UINavigationController(rootViewController: imageEditVC)
         navVc.modalPresentationStyle = .fullScreen
         present(navVc, animated: false)
     }
-    
-    /// 크롭 이미지 뷰 완료  버튼 호출 시
-    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
-        print(image)
-    }
-    /// 크롭 이미지 뷰 취소 버튼 호출 시
-    func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
-        cropViewController.dismiss(animated: true) {
-            self.globalQueue.async { [weak self] in
-                self?.session?.startRunning()
-            }
-        }
-    }
 }
+
+

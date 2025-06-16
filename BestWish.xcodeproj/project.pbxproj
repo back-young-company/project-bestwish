@@ -13,6 +13,7 @@
 		14B8B6712DF691B300B7F5F8 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6702DF691B300B7F5F8 /* SnapKit */; };
 		14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
 		14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
+		81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */; };
 		81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 81E50BB32DF93B0E005954F4 /* CropViewController */; };
 		861BAD572DFD2B960043B83E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */; };
 		86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
@@ -96,7 +97,7 @@
 			);
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
 		};
-		CBD6BA392DEF1B3B003242CA /* Exceptions for "BestWish" folder in "BestWish" target */ = {
+		81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resource/Info.plist,
@@ -117,7 +118,7 @@
 		CBD6BA132DEF1B39003242CA /* BestWish */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CBD6BA392DEF1B3B003242CA /* Exceptions for "BestWish" folder in "BestWish" target */,
+				81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */,
 				14B8B6632DF68EEF00B7F5F8 /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */,
 			);
 			path = BestWish;
@@ -157,6 +158,7 @@
 				81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */,
 				CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */,
 				CBD6BB0B2DEFD165003242CA /* Supabase in Frameworks */,
+				81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */,
 				CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */,
 				CB4FBCEE2DF6B66B00149D86 /* RxDataSources in Frameworks */,
 				CBD6BA732DEF3656003242CA /* Then in Frameworks */,
@@ -262,7 +264,7 @@
 				86F6FD002DF66C8B00CAF678 /* Alamofire */,
 				CB4FBCED2DF6B66B00149D86 /* RxDataSources */,
 				81E50BB32DF93B0E005954F4 /* CropViewController */,
-				861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */,
+        81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -359,7 +361,7 @@
 				86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
-				861BAD552DFD2B960043B83E /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+        81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -833,6 +835,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.1;
+			};
+		};
 		81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/TOCropViewController";
@@ -932,6 +942,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
+		};
+		81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 		81E50BB32DF93B0E005954F4 /* CropViewController */ = {
 			isa = XCSwiftPackageProductDependency;
