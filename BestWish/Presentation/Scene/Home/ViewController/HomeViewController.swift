@@ -141,6 +141,30 @@ final class HomeViewController: UIViewController {
                 }
             })
         
+        homeView.getCollectionView.rx.modelSelected(HomeItem.self)
+            .compactMap { item -> Platform? in
+                if case let .platform(platform) = item {
+                    return platform
+                }
+                return nil
+            }
+            .bind(with: self) { owner, platform in
+                // 플랫폼 셀 클릭 시 원하는 동작 실행
+                guard let url = URL(string: platform.platformDeepLink) else {
+                    print("url 생성 실패")
+                    return
+                }
+                UIApplication.shared.open(url) { success in
+                    if success {
+                        print("✅ 앱 전환 성공: \(url.absoluteString)")
+                    } else {
+                        print("❌ 앱 전환 실패: \(url.absoluteString)")
+                        owner.showBasicAlert(title: "미지원 플랫폼", message: "해당 플랫폼은 추후 엡데이트될 예정입니다.\n감사합니다.")
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+        
         homeViewModel.state.sections
             .bind(with: self) { owner, sections in
                 owner.setCollectionViewLayout(sections)

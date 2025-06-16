@@ -1,5 +1,5 @@
 //
-//  HomeSection.swift
+//  HomeSectionModel.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/10/25.
@@ -37,6 +37,7 @@ extension HomeSectionModel: SectionModelType {
 struct Platform: Equatable {
     let platformName: String
     let platformImage: String
+    let platformDeepLink: String
 }
 
 struct WishlistProduct: Equatable {
