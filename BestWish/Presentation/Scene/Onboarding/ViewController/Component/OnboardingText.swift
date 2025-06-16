@@ -24,3 +24,30 @@ enum OnboardingText {
         }
     }
 }
+
+
+enum PolicyText {
+    case title
+    case desc
+    case privacy
+    case service
+    case allAgree
+    case showPDF
+
+    var value: String {
+        switch self {
+        case .title:
+            return "약관 동의"
+        case .desc:
+            return "가입을 위해서는 다음 정책들의 동의가 필요합니다."
+        case .privacy:
+            return "[필수] 개인정보 수집 및 이용에 동의합니다."
+        case .service:
+            return "[필수] 이용약관에 동의합니다."
+        case .allAgree:
+            return "모두 동의합니다."
+        case .showPDF:
+            return "보기"
+        }
+    }
+}
