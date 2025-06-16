@@ -8,38 +8,32 @@
 import RxSwift
 import RxRelay
 import CoreML
+import UIKit
 
+// MARK: - 이미지 편집 뷰 모델
 final class ImageEditViewModel: ViewModel {
+    
     let model = try? BestWidhClassfication()
     private let dummyUseCase: DummyUseCase
     private let disposeBag = DisposeBag()
 
     enum Action {
-        case viewDidLoad(Void)
+        case didTapDoneButton(UIImage)
     }
 
     struct State {
-        let data: Observable<DummyDisplay>
-        let newData: Observable<DummyDisplay>
-        let error: Observable<Error>
+        let labelData: Observable<[LabelDataDisplay]>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _data = PublishSubject<DummyDisplay>()
-    private let _newData = PublishSubject<DummyDisplay>()
-    private let _error = PublishSubject<Error>()
+    private let _labelData = PublishSubject<[LabelDataDisplay]>()
     let state: State
 
     init(dummyUseCase: DummyUseCase) {
         self.dummyUseCase = dummyUseCase
-
-        state = State(
-            data: _data.asObservable(),
-            newData: _newData.asObservable(),
-            error: _error.asObservable()
-        )
+        state = State(labelData: _labelData.asObservable())
 
         bindAction()
     }
@@ -47,21 +41,30 @@ final class ImageEditViewModel: ViewModel {
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
-            case .viewDidLoad:
-                owner.fetchDummyData()
+            case let .didTapDoneButton(image):
+                owner.imageAnalaysis(image: image)
             }
         }.disposed(by: disposeBag)
     }
+}
 
-    private func fetchDummyData() {
-        Task {
-            do {
-                let result = try await dummyUseCase.fetchDummy()
-                let display = DummyDisplay.convertToDisplay(from: result)
-                _data.onNext(display)
-            } catch {
-                _error.onNext(error)
-            }
+private extension ImageEditViewModel {
+    /// 이미지 분석 후 라벨 데이터 추출
+    func imageAnalaysis(image: UIImage) {
+        guard let model = model,
+              let buffer = image.toCVPixelBuffer() else { return }
+
+        do {
+            let output = try model.prediction(image: buffer)
+            let labels = output.targetProbability
+                .sorted(by: { $0.value > $1.value })
+                .map {
+                    let label = LabelData(label: $0.key, probability: Int($0.value * 100))
+                    return LabelDataDisplay.convertToDisplay(from: label)
+                }
+            _labelData.onNext(labels)
+        } catch {
+            print("예측 실패:", error)
         }
     }
 }

@@ -15,11 +15,13 @@ final class ImageEditViewController: UIViewController {
     
     private let imageEditView: ImageEditView
     private let cropperVC: CropViewController
+    private let viewModel: ImageEditViewModel
     
     var onDismiss: (()-> Void)?
     var disposeBag = DisposeBag()
     
-    init(image: UIImage) {
+    init(image: UIImage, viewModel: ImageEditViewModel) {
+        self.viewModel = viewModel
         cropperVC = CropViewController(image: image)
         imageEditView = ImageEditView(cropView: cropperVC.view, toolbar: cropperVC.toolbar)
         super.init(nibName: nil, bundle: nil)
@@ -75,6 +77,28 @@ final class ImageEditViewController: UIViewController {
                 owner.dismiss(animated: false)
             }
             .disposed(by: disposeBag)
+        
+        viewModel.state.labelData
+            .subscribe(with: self) { owner, labelData in
+                let service = DummyServiceImpl()
+                let repo = DummyRepositoryImpl(service: service)
+                let vm = AnalysisViewModel(dummyUseCase: DummyUseCaseImpl(repository: repo), labelData: labelData)
+                let vc = AnalaysisViewController(viewModel: vm)
+                if let sheet = vc.sheetPresentationController {
+                    sheet.detents = [
+                        .medium(),
+                        .custom(identifier: .init("mini")) { context in
+                            return context.maximumDetentValue * 0.15
+                        }
+                    ]
+                    sheet.selectedDetentIdentifier = .medium
+                    sheet.prefersGrabberVisible = true
+                    sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+                }
+                vc.modalPresentationStyle = .pageSheet
+                owner.present(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -83,7 +107,7 @@ extension ImageEditViewController: CropViewControllerDelegate {
     
     /// 크롭 이미지 뷰 완료  버튼 호출 시
     func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
-        
+        viewModel.action.onNext(.didTapDoneButton(image))
     }
     /// 크롭 이미지 뷰 취소 버튼 호출 시
     func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {
