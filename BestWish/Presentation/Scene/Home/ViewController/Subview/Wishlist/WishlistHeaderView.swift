@@ -153,6 +153,7 @@ private extension WishlistHeaderView {
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(separatorView.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
+            $0.height.equalTo(16)
         }
         
         linkButton.snp.makeConstraints {
@@ -167,8 +168,7 @@ private extension WishlistHeaderView {
         }
         
         searchBar.searchTextField.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
         
         platformCollectionView.snp.makeConstraints {
@@ -180,12 +180,12 @@ private extension WishlistHeaderView {
         productCountLabel.snp.makeConstraints {
             $0.top.equalTo(platformCollectionView.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
+            $0.bottom.equalToSuperview().offset(-10)
         }
         
         editButton.snp.makeConstraints {
             $0.centerY.equalTo(productCountLabel)
             $0.trailing.equalToSuperview().offset(-20)
-            $0.bottom.equalToSuperview().offset(-10)
         }
     }
 }

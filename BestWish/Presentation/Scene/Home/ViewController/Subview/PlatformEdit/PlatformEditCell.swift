@@ -28,10 +28,17 @@ final class PlatformEditCell: UITableViewCell, ReuseIdentifier {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+    }
+    
     func configure(type: PlatformEdit) {
         platformTitleLabel.text = type.platformName
         platformImageView.image = UIImage(named: type.platformImage)
         platformCountLabel.text = "\(type.platformCount)"
+        
+        platformImageView.updateShadowPath()
     }
 }
 
@@ -44,6 +51,7 @@ private extension PlatformEditCell {
 
     func setAttributes() {
         platformImageView.do {
+            $0.layer.masksToBounds = false  // ✅ 꼭 필요
             $0.layer.cornerRadius = 32
             $0.layer.shadowColor = UIColor.gray900?.cgColor
             $0.layer.shadowOpacity = 0.1

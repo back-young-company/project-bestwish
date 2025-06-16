@@ -87,12 +87,13 @@ private extension WishlistEmptyCell {
         emptyImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(159)
+            $0.size.equalToSuperview().multipliedBy(0.4)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(emptyImageView.snp.bottom).offset(12)
             $0.centerX.equalToSuperview()
+            $0.height.equalTo(20)
         }
         
         secondaryLabel.snp.makeConstraints {
@@ -103,6 +104,8 @@ private extension WishlistEmptyCell {
         linkButton.snp.makeConstraints {
             $0.top.equalTo(secondaryLabel.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
+            $0.width.equalTo(108)
+            $0.height.equalTo(33)
             $0.bottom.equalTo(-100)
         }
     }

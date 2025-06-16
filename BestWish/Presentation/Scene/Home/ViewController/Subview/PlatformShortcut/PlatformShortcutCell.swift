@@ -29,10 +29,17 @@ final class PlatformShortcutCell: UICollectionViewCell, ReuseIdentifier {
         super.prepareForReuse()
         platformImageView.image = nil
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+    }
 
     func configure(type: Platform) {
         platformTitleLabel.text = type.platformName
         platformImageView.image = UIImage(named: type.platformImage)
+        
+        platformImageView.updateShadowPath()
     }
 }
 
