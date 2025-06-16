@@ -32,3 +32,11 @@ struct UserDTO: Codable {
         case authProvieder = "auth_provider"
     }
 }
+
+struct PlatformSequenceDTO: Codable {
+    let platformSequence: [Int16]
+
+    enum CodingKeys: String, CodingKey {
+        case platformSequence = "platform_sequence"
+    }
+}

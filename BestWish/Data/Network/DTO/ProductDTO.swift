@@ -9,7 +9,7 @@ import Foundation
 
 struct ProductDTO: Codable {
     let id: UUID
-    let userID: UUID
+    let userID: UUID?
     let platform: Int?
     let title: String?
     let price: Int?
@@ -17,7 +17,7 @@ struct ProductDTO: Codable {
     let brand: String?
     let imagePathURL: String?
     let productURL: String?
-    let createdAt: Date
+    let createdAt: Date? = nil
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -31,4 +31,8 @@ struct ProductDTO: Codable {
         case productURL = "product_url"
         case createdAt = "created_at"
     }
+}
+
+struct PlatformDTO: Codable {
+    let platform: Int16
 }
