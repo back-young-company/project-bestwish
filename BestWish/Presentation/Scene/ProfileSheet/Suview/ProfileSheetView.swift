@@ -58,6 +58,7 @@ private extension ProfileSheetView {
             $0.showsVerticalScrollIndicator = false
             $0.showsHorizontalScrollIndicator = false
             $0.allowsMultipleSelection = false
+            $0.alwaysBounceHorizontal = false
         }
     }
 
