@@ -14,12 +14,14 @@ final class OnboardingViewController: UIViewController {
     private let firstView = OnboardingFirstView()
     private let secondView = OnboardingSecondView()
     private let viewModel: OnboardingViewModel
+    private let policyViewModel: PolicyViewModel
     private let disposeBag = DisposeBag()
     private let onboardingViews: [UIView]
     private let returnManager: IQKeyboardReturnManager = .init()
 
-    init(viewModel: OnboardingViewModel) {
+    init(viewModel: OnboardingViewModel, policyViewModel: PolicyViewModel) {
         self.viewModel = viewModel
+        self.policyViewModel = policyViewModel
         self.onboardingViews = [firstView, secondView]
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,6 +29,12 @@ final class OnboardingViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.action.onNext(.viewDidAppear)
+    }
+
 
     override func loadView() {
         view = firstView
@@ -39,8 +47,8 @@ final class OnboardingViewController: UIViewController {
         bindViewModel()
     }
 
-
     private func bindView() {
+        bindPolicySheet()
         bindFirstView()
         bindSecondView()
         bindPageButton()
@@ -96,15 +104,19 @@ final class OnboardingViewController: UIViewController {
     }
 }
 
-extension OnboardingViewController: UIAdaptivePresentationControllerDelegate {
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        // 모달이 내려간 시점에 원래 색으로 복구
-        firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
-    }
-}
 
 private extension OnboardingViewController {
-    private func bindFirstView() {
+    func bindPolicySheet() {
+        viewModel.state.showPolicySheet
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, _ in
+                let policyVC = PolicyViewController(viewModel: self.policyViewModel)
+            owner.present(policyVC, animated: true)
+        }
+            .disposed(by: disposeBag)
+    }
+
+    func bindFirstView() {
         // 성별 바인딩
         firstView.genderSelection.selectedGender
             .skip(1)
@@ -139,7 +151,7 @@ private extension OnboardingViewController {
             .disposed(by: disposeBag)
     }
 
-    private func bindSecondView() {
+    func bindSecondView() {
         // 프로필 사진 바인딩
         let tapGesture = UITapGestureRecognizer()
         secondView.profileImageView.addGestureRecognizer(tapGesture)
@@ -197,7 +209,7 @@ private extension OnboardingViewController {
 
     }
 
-    private func bindPageButton() {
+    func bindPageButton() {
         firstView.nextPageButton.rx.tap
             .asDriver()
             .map { .nextPage }
@@ -218,5 +230,13 @@ private extension OnboardingViewController {
             owner.viewModel.action.onNext(.uploadOnboarding(onboarding))
         }
             .disposed(by: disposeBag)
+    }
+}
+
+
+extension OnboardingViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // 모달이 내려간 시점에 원래 색으로 복구
+        firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
     }
 }
