@@ -22,6 +22,24 @@ final class UserInfoRepositoryImpl: UserInfoRepository {
             throw AppError.supabaseError(error)
         }
     }
+
+    func updateUserInfo(
+        profileImageCode: Int?,
+        nickname: String?,
+        gender: Int?,
+        birth: Date?
+    ) async throws {
+        do {
+            try await manager.updateUserInfo(
+                profileImageCode: profileImageCode,
+                nickname: nickname,
+                gender: gender,
+                birth: birth
+            )
+        } catch let error as SupabaseError {
+            throw AppError.supabaseError(error)
+        }
+    }
 }
 
 extension UserInfoRepositoryImpl {
