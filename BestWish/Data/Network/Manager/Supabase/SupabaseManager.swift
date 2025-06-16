@@ -19,17 +19,18 @@ final class SupabaseManager {
     }
 
     // 플랫폼 순서 조회
-    func getPlatformSequence() async throws -> [Int] {
-        try await supabase
+    func getPlatformSequence() async throws -> PlatformSequenceDTO {
+        return try await supabase
             .from(SupabaseTable.userInfo.rawValue)
             .select(UserInfoAttributes.platform_sequence.rawValue)
             .eq(UserInfoAttributes.id.rawValue, value: supabase.auth.session.user.id)
+            .single()
             .execute()
             .value
     }
 
     // 플랫폼 순서 편집
-    func updatePlatformSequence(to sequence: [Int]) async throws {
+    func updatePlatformSequence(to sequence: [Int16]) async throws {
         try await supabase
             .from(SupabaseTable.userInfo.rawValue)
             .update([UserInfoAttributes.platform_sequence.rawValue: sequence])
@@ -38,15 +39,13 @@ final class SupabaseManager {
     }
 
     // 위시 리스트에 포함된 플랫폼 조회
-    func getPlatformsInWishList() async throws -> [Int] {
-        let result: [Int] = try await supabase
+    func getPlatformsInWishList() async throws -> [PlatformDTO] {
+        return try await supabase
             .from(SupabaseTable.product.rawValue)
             .select(ProductAttributes.platform.rawValue)
             .eq(ProductAttributes.user_id.rawValue, value: supabase.auth.session.user.id)
             .execute()
             .value
-
-        return Array(Set(result))
     }
 
     // 위시 아이템 검색
@@ -80,10 +79,26 @@ final class SupabaseManager {
 
     // 위시 아이템 등록
     func addProductToWishList(product: ProductDTO) async throws {
-        try await supabase
-            .from(SupabaseTable.product.rawValue)
-            .insert(product)
-            .execute()
-        return
+        let userID = try await supabase.auth.session.user.id
+        let product = ProductDTO(
+            id: product.id,
+            userID: userID,
+            platform: product.platform,
+            title: product.title,
+            price: product.price,
+            discountRate: product.discountRate,
+            brand: product.brand,
+            imagePathURL: product.imagePathURL,
+            productURL: product.productURL
+        )
+
+        do {
+            try await supabase
+                .from(SupabaseTable.product.rawValue)
+                .insert(product)
+                .execute()
+        } catch {
+            print(error)
+        }
     }
 }
