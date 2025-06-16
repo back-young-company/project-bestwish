@@ -11,9 +11,15 @@ protocol WishListUseCase {
     func getPlatformSequence() async throws -> [Int]
     func updatePlatformSequence(to sequence: [Int]) async throws
     func getPlatformsInWishList() async throws -> [Int]
-    func searchWishListItems(query: String, platform: Int?) async throws -> [Product]
+    func searchWishListItems(query: String?, platform: Int?) async throws -> [Product]
     func deleteWishListItem(id: UUID) async throws
     func addProductToWishList(product: ProductMetadata) async throws
+}
+
+extension WishListUseCase {
+    func searchWishListItems(query: String? = nil, platform: Int? = nil) async throws -> [Product] {
+        try await searchWishListItems(query: nil, platform: nil)
+    }
 }
 
 final class WishListUseCaseImpl: WishListUseCase {
@@ -35,7 +41,7 @@ final class WishListUseCaseImpl: WishListUseCase {
          try await repository.getPlatformsInWishList()
     }
 
-    func searchWishListItems(query: String, platform: Int?) async throws -> [Product] {
+    func searchWishListItems(query: String? = nil, platform: Int? = nil) async throws -> [Product] {
         try await repository.searchWishListItems(query: query, platform: platform)
     }
 
@@ -43,7 +49,6 @@ final class WishListUseCaseImpl: WishListUseCase {
         try await repository.deleteWishListItem(id: id)
     }
 
-    // TODO: Entity -> DTO
     func addProductToWishList(product: ProductMetadata) async throws {
         try await repository.addProductToWishList(product: product)
     }

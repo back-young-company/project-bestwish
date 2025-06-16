@@ -16,36 +16,60 @@ final class WishListRepositoryImpl: WishListRepositroy {
     }
 
     func getPlatformSequence() async throws -> [Int] {
-        try await manager.getPlatformSequence()
-            .platformSequence
-            .map { Int($0) }
+        do {
+            return try await manager.getPlatformSequence()
+                .platformSequence
+                .map { Int($0) }
+        } catch let error as SupabaseError {
+            throw AppError.supabaseError(error)
+        }
     }
 
     func updatePlatformSequence(to sequence: [Int]) async throws {
-        try await manager.updatePlatformSequence(to: sequence.map { Int16($0) })
+        do {
+            try await manager.updatePlatformSequence(to: sequence.map { Int16($0) })
+        } catch let error as SupabaseError {
+            throw AppError.supabaseError(error)
+        }
     }
 
     func getPlatformsInWishList() async throws -> [Int] {
-        let result = try await manager.getPlatformsInWishList()
-        return Array(Set(result.map { Int($0.platform) }))
+        do {
+            let result = try await manager.getPlatformsInWishList()
+            return Array(Set(result.map { Int($0.platform) }))
+        } catch let error as SupabaseError {
+            throw AppError.supabaseError(error)
+        }
     }
 
     // TODO: Error Handling
-    func searchWishListItems(query: String, platform: Int?) async throws -> [Product] {
-        let result = try await manager.searchWishListItems(query: query, platform: platform)
-        print(result)
-        return try result.map { try convertToProduct(from: $0) }
+    func searchWishListItems(query: String?, platform: Int?) async throws -> [Product] {
+        do {
+            let result = try await manager.searchWishListItems(query: query, platform: platform)
+            return try result.map { try convertToProduct(from: $0) }
+        } catch let error as SupabaseError {
+            throw AppError.supabaseError(error)
+        } catch let error as MappingError {
+            throw AppError.mappingError(error)
+        }
     }
 
     func deleteWishListItem(id: UUID) async throws {
-        try await manager.deleteWishListItem(id: id)
+        do {
+            try await manager.deleteWishListItem(id: id)
+        } catch let error as SupabaseError {
+            throw AppError.supabaseError(error)
+        }
     }
 
-    // TODO: Entity -> DTO
     func addProductToWishList(product: ProductMetadata) async throws {
-        try await manager.addProductToWishList(
-            product: convertToProductDTO(from: product)
-        )
+        do {
+            try await manager.addProductToWishList(
+                product: convertToProductDTO(from: product)
+            )
+        } catch let error as SupabaseError {
+            throw AppError.supabaseError(error)
+        }
     }
 }
 
@@ -59,8 +83,7 @@ extension WishListRepositoryImpl {
               let brand = dto.brand,
               let imagePathURL = dto.imagePathURL
         else {
-            // TODO: 매핑 에러 처리
-            throw DummyNetworkError.invalidURL
+            throw MappingError.productDTOToProduct
         }
 
         return Product(
