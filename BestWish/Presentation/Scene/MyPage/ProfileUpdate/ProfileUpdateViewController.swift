@@ -14,7 +14,7 @@ final class ProfileUpdateViewController: UIViewController {
     private let viewModel: ProfileUpdateViewModel
     private let disposeBag = DisposeBag()
 
-    init(viewModel: ProfileUpdateViewModel = ProfileUpdateViewModel()) {
+    init(viewModel: ProfileUpdateViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -32,6 +32,7 @@ final class ProfileUpdateViewController: UIViewController {
         setNavigationBar(alignment: .center, title: "프로필 수정")
         bindView()
         bindViewModel()
+        viewModel.action.onNext(.getUserInfo)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -45,6 +46,7 @@ final class ProfileUpdateViewController: UIViewController {
         tapGesture.rx.event
             .withLatestFrom(viewModel.state.userInfo)
             .bind(with: self) { owner, userInfo in
+                guard let userInfo else { return }
                 let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
                 profileSheetVC.presentProfileSheet()
                 profileSheetVC.onComplete = { selectedIndex in
@@ -56,7 +58,9 @@ final class ProfileUpdateViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.userInfo
+            .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, userInfo in
+                guard let userInfo else { return }
                 owner.profileUpdateView.configure(user: userInfo)
             }.disposed(by: disposeBag)
     }

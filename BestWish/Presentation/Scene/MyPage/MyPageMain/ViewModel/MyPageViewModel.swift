@@ -58,8 +58,8 @@ final class MyPageViewModel: ViewModel {
     private func getUserInfo() {
         Task {
             let user = try await useCase.getUserInfo()
-            let UserInfoDisplay = convertUserInfoDisplay(from: user)
-            _userInfo.onNext(UserInfoDisplay)
+            let userInfoDisplay = convertUserInfoDisplay(from: user)
+            _userInfo.onNext(userInfoDisplay)
         }
     }
 

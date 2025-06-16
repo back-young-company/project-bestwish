@@ -8,29 +8,29 @@
 import RxSwift
 import RxRelay
 
+// 프로필 업데이트 저장, 프로필 불러오기, 프로필 선택
 final class ProfileUpdateViewModel: ViewModel {
     private let disposeBag = DisposeBag()
+    private let useCase: UserInfoUseCase
 
     enum Action {
+        case getUserInfo
         case selectedProfileIndex(Int)
     }
 
     struct State {
-        let userInfo: Observable<UserInfoDisplay>
+        let userInfo: Observable<UserInfoDisplay?>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _userInfo = BehaviorRelay<UserInfoDisplay>(value: UserInfoDisplay(
-        profileImageCode: 0,
-        email: "user@gmail.com", nickname: "User"
-        )
-    )
+    private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
 
     let state: State
 
-    init() {
+    init(useCase: UserInfoUseCase) {
+        self.useCase = useCase
         state = State(userInfo: _userInfo.asObservable())
 
         bindAction()
@@ -39,6 +39,8 @@ final class ProfileUpdateViewModel: ViewModel {
     private func bindAction() {
         _action.bind(with: self) { owner, action in
             switch action {
+            case .getUserInfo:
+                owner.getUserInfo()
             case .selectedProfileIndex(let index):
                 owner.updateProfileImage(with: index)
             }
@@ -47,7 +49,23 @@ final class ProfileUpdateViewModel: ViewModel {
 
     private func updateProfileImage(with index: Int) {
         var userInfo = _userInfo.value
-        userInfo.updateprofileImageCode(to: index)
+        userInfo?.updateprofileImageCode(to: index)
         _userInfo.accept(userInfo)
+    }
+
+    private func getUserInfo() {
+        Task {
+            let user = try await useCase.getUserInfo()
+            let userInfoDisplay = convertUserInfoDisplay(from: user)
+            _userInfo.accept(userInfoDisplay)
+        }
+    }
+
+    private func convertUserInfoDisplay(from user: User) -> UserInfoDisplay {
+        UserInfoDisplay(
+            profileImageCode: user.profileImageCode,
+            email: user.email,
+            nickname: user.nickname
+        )
     }
 }
