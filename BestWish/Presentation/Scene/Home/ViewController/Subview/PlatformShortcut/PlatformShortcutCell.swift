@@ -35,14 +35,13 @@ final class PlatformShortcutCell: UICollectionViewCell, ReuseIdentifier {
         
     }
 
-    func configure(type: Platform, isSelected: Bool = false) {
+  func configure(type: Platform, isSelected: Bool = false) {
         platformTitleLabel.text = type.platformName
         platformImageView.image = UIImage(named: type.platformImage)
         
         backgroundColor = isSelected ? .primary50 : .clear
         layer.cornerRadius = 8
         clipsToBounds = true
-        
         platformImageView.updateShadowPath()
     }
 }
