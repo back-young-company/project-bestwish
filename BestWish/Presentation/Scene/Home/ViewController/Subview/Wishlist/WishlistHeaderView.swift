@@ -26,7 +26,7 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     private let productCountLabel = UILabel()
     private let editButton = UIButton()
     
-    private var selectedPlatform: String = "전체"
+    private var selectedPlatform: Int = 0
     
     var disposeBag = DisposeBag()
 
@@ -53,7 +53,7 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
         productCountLabel.text = "\(productCount)개"
     }
     
-    func configure(platforms: Observable<[String]>) {
+    func configure(platforms: Observable<[Int]>) {
         platforms
             .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { [weak self] row, data, cell in
                 guard let self else { return }

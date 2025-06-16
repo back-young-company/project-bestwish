@@ -7,21 +7,24 @@
 
 import Foundation
 
-enum ShopPlatform {
-    case musinsa
-    case zigzag
-    case ably
-    case kream
-    case brandy
-    case tncm
-    case oco
-    case fnoz
-    case worksout
-    case eql
-    case hiver
+enum ShopPlatform: String, CaseIterable {
+    case all = "all"
+    case musinsa = "musinsa"
+    case zigzag = "zigzag"
+    case ably = "ably"
+    case kream = "kream"
+    case brandy = "brandy"
+    case tncm = "29cm"
+    case oco = "oco"
+    case fnoz = "4910"
+    case worksout = "worksout"
+    case eql = "eql"
+    case hiver = "hiver"
     
     var platformName: String {
         switch self {
+        case .all:
+            return "전체"
         case .musinsa:
             return "무신사"
         case .zigzag:
@@ -55,7 +58,7 @@ enum ShopPlatform {
             return "zigzag://"
         case .ably:
             return "ably://main"
-        case .kream, .brandy, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
+        case .all, .kream, .brandy, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
             return "notFound"
         }
     }

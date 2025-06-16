@@ -37,7 +37,7 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
     }
 
     func configure(type: WishlistProduct, isHidden: Bool, isLastRow: Bool? = nil) {
-        productImageView.image = UIImage(named: type.productImageURL)
+        productImageView.kf.setImage(with: URL(string: type.productImageURL)!)
         productSaleRateLabel.text = type.productSaleRate
         productPriceLabel.text = type.productPrice
         productNameLabel.text = type.productName
@@ -61,7 +61,6 @@ private extension WishlistCell {
 
     func setAttributes() {
         productImageView.do {
-            $0.backgroundColor = .black
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
         }

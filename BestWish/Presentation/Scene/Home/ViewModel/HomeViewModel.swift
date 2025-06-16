@@ -8,111 +8,110 @@
 import Foundation
 
 import RxSwift
-import RxRelay
+import RxCocoa
 
 final class HomeViewModel: ViewModel {
     
-    let platformSection: HomeSectionModel =
-    HomeSectionModel(header: .platform, items: [
-        .platform(Platform(
-            platformName: ShopPlatform.musinsa.platformName,
-            platformImage: PlatformImage.musinsa,
-            platformDeepLink: ShopPlatform.musinsa.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.zigzag.platformName,
-            platformImage: PlatformImage.zigzag,
-            platformDeepLink: ShopPlatform.zigzag.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.ably.platformName,
-            platformImage: PlatformImage.ably,
-            platformDeepLink: ShopPlatform.ably.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.kream.platformName,
-            platformImage: PlatformImage.kream,
-            platformDeepLink: ShopPlatform.kream.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.brandy.platformName,
-            platformImage: PlatformImage.brandy,
-            platformDeepLink: ShopPlatform.brandy.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.tncm.platformName,
-            platformImage: PlatformImage.tncm,
-            platformDeepLink: ShopPlatform.tncm.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.oco.platformName,
-            platformImage: PlatformImage.oco,
-            platformDeepLink: ShopPlatform.oco.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.fnoz.platformName,
-            platformImage: PlatformImage.fnoz,
-            platformDeepLink: ShopPlatform.fnoz.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.worksout.platformName,
-            platformImage: PlatformImage.worksout,
-            platformDeepLink: ShopPlatform.worksout.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.eql.platformName,
-            platformImage: PlatformImage.eql,
-            platformDeepLink: ShopPlatform.eql.platformDeepLink
-        )),
-        .platform(Platform(
-            platformName: ShopPlatform.hiver.platformName,
-            platformImage: PlatformImage.hiver,
-            platformDeepLink: ShopPlatform.hiver.platformDeepLink
-        ))
-    ])
-    
     enum Action {
-        
+        case viewDidload
     }
     
     struct State {
         let sections: Observable<[HomeSectionModel]>
-        let platformFilter: Observable<[String]>
+        let platformFilter: Observable<[Int]>
+        let platformSequence: Observable<[Int]>
+        let error: Observable<Error>
     }
     
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
     
+    private let useCase: WishListUseCase
+    
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
-    private let _platformFilter = BehaviorRelay<[String]>(value: [])
+    private let _platformFilter = BehaviorRelay<[Int]>(value: [])
+    private let _platformSequence = BehaviorRelay<[Int]>(value: [])
+    private let _error = PublishRelay<Error>()
     
     let state: State
     
     private let disposeBag = DisposeBag()
     
-    init() {
-        let wishlistProducts: [WishlistProduct] = [
-//            WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-//            WishlistProduct(productImageURL: ProductImage.product2, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-//            WishlistProduct(productImageURL: ProductImage.product3, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-//            WishlistProduct(productImageURL: ProductImage.product4, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-//            WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원")
-        ]
-
-        let wishlistItems: [HomeItem] = wishlistProducts.isEmpty
-        ? [.wishlistEmpty]
-            : wishlistProducts.map { .wishlist($0) }
-
-        let wishlistSection = HomeSectionModel(header: .wishlist, items: wishlistItems)
-        
-        let platformFilter = ["전체", "무신사", "에이블리", "지그재그", "KREAM", "브랜디", "29CM", "OCO", "4910", "웍스아웃", "EQL", "하이버"]
-
-        _sections.accept([platformSection, wishlistSection])
-        _platformFilter.accept(platformFilter)
+    init(useCase: WishListUseCase) {
+        self.useCase = useCase
         
         state = State(
             sections: _sections.asObservable(),
-            platformFilter: _platformFilter.asObservable()
+            platformFilter: _platformFilter.asObservable(),
+            platformSequence: _platformSequence.asObservable(),
+            error: _error.asObservable()
         )
+        
+        self.bind()
     }
+    
+    private func bind() {
+        _action
+            .subscribe(with: self) { owner, action in
+                switch action {
+                case .viewDidload:
+                    Task {
+                        do {
+                            let platformFilters = try await owner.getPlatformInWishList()
+                            let platforms = try await owner.getPlatformSequence()
+                            let wishLists = try await owner.getWishLists()
+                            
+                            owner._platformFilter.accept(platformFilters)
+                            owner.setDataSources(platforms: platforms, wishLists: wishLists)
+                        } catch {
+                            owner._error.accept(error)
+                        }
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func getPlatformSequence() async throws -> [Platform] {
+        let result = try await self.useCase.getPlatformSequence()
+        return result.map { platform in
+            let shopPlatform = ShopPlatform.allCases[platform]
+            return Platform(
+                platformName: shopPlatform.platformName,
+                platformImage: shopPlatform.rawValue,
+                platformDeepLink: shopPlatform.platformDeepLink
+            )
+        }
+    }
+    
+    private func getWishLists() async throws -> [WishlistProduct] {
+        let result = try await self.useCase.searchWishListItems()
+        return result.map { item in
+            WishlistProduct(
+                productImageURL: item.imagePathURL,
+                brandName: item.brand,
+                productName: item.title,
+                productSaleRate: "\(item.discountRate)%",
+                productPrice: "\(String(item.price))원",
+                productDeepLink: item.productURL ?? ""
+            )
+        }
+    }
+    
+    private func getPlatformInWishList() async throws -> [Int] {
+        var result = try await self.useCase.getPlatformsInWishList()
+        result.insert(0, at: 0)
+        print(result)
+        return result
+    }
+    
+    private func setDataSources(platforms: [Platform], wishLists: [WishlistProduct]) {
+        let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
+        
+        let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
+        let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists)
+
+        _sections.accept([platformsSection, wishlistSection])
+    }
+    
 }

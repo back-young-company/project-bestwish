@@ -14,9 +14,18 @@ import RxRelay
 final class HomeViewController: UIViewController {
     
     private let homeView = HomeView()
-    private let homeViewModel = HomeViewModel()
+    private let homeViewModel: HomeViewModel
     
     private let disposeBag = DisposeBag()
+    
+    init(homeViewModel: HomeViewModel) {
+        self.homeViewModel = homeViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = homeView
@@ -25,6 +34,7 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        bindActions()
         bindViewModel()
         
     }
@@ -58,7 +68,7 @@ final class HomeViewController: UIViewController {
                     
                     let itemCount = collectionView.numberOfItems(inSection: indexPath.section)
                         let isLastRow = {
-                            let itemsPerRow = 2 // 레이아웃 기준
+                            let itemsPerRow = 2
                             let rowCount = Int(ceil(Double(itemCount) / Double(itemsPerRow)))
                             let currentRow = indexPath.item / itemsPerRow
                             return currentRow == rowCount - 1
@@ -141,19 +151,29 @@ final class HomeViewController: UIViewController {
                 }
             })
         
-        homeView.getCollectionView.rx.modelSelected(HomeItem.self)
-            .compactMap { item -> Platform? in
-                if case let .platform(platform) = item {
-                    return platform
-                }
-                return nil
+        homeView.getCollectionView.rx.itemSelected
+            .withLatestFrom(homeViewModel.state.sections) { indexPath, sections in
+                return (indexPath, sections)
             }
-            .bind(with: self) { owner, platform in
-                owner.switchDeeplink(platform.platformDeepLink)
+            .compactMap { indexPath, sections -> HomeItem? in
+                guard indexPath.section < sections.count else { return nil }
+                let item = sections[indexPath.section].items[indexPath.item]
+                return item
+            }
+            .bind(with: self) { owner, item in
+                switch item {
+                case .platform(let platform):
+                    return owner.switchDeeplink(platform.platformDeepLink)
+                case .wishlist(let product):
+                    return owner.switchDeeplink(product.productDeepLink)
+                case .wishlistEmpty:
+                    return
+                }
             }
             .disposed(by: disposeBag)
         
         homeViewModel.state.sections
+            .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, sections in
                 owner.setCollectionViewLayout(sections)
             }
@@ -162,6 +182,10 @@ final class HomeViewController: UIViewController {
         homeViewModel.state.sections
             .bind(to: homeView.getCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+    }
+    
+    private func bindActions() {
+        homeViewModel.action.onNext(.viewDidload)
     }
 }
 
@@ -176,9 +200,7 @@ private extension HomeViewController {
                 return NSCollectionLayoutSection.createPlatformShortcutSection()
             case .wishlist:
                 let isEmptyState = section.items.count == 1 && section.items.first == .wishlistEmpty
-                            return isEmptyState
-                                ? NSCollectionLayoutSection.createWishlistEmptySection()
-                                : NSCollectionLayoutSection.createWishlistSection()
+                return isEmptyState ? NSCollectionLayoutSection.createWishlistEmptySection() : NSCollectionLayoutSection.createWishlistSection()
             }
         }
     }

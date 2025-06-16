@@ -46,4 +46,5 @@ struct WishlistProduct: Equatable {
     let productName: String
     let productSaleRate: String
     let productPrice: String
+    let productDeepLink: String
 }

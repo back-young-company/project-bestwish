@@ -32,13 +32,13 @@ final class WishlistPlatformCell: UICollectionViewCell, ReuseIdentifier {
         disposeBag = DisposeBag()
     }
 
-    func configure(type: String, isSelected: Bool) {
+    func configure(type: Int, isSelected: Bool) {
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
 
         var config = platformButton.configuration ?? UIButton.Configuration.filled()
         config.cornerStyle = .capsule
         config.titleLineBreakMode = .byTruncatingTail
-        config.attributedTitle = AttributedString(type, attributes: AttributeContainer([.font: titleFont]))
+        config.attributedTitle = AttributedString(ShopPlatform.allCases[type].platformName, attributes: AttributeContainer([.font: titleFont]))
         
         config.baseForegroundColor = isSelected ? .gray0 : .gray500
         config.baseBackgroundColor = isSelected ? .primary300 : .gray0

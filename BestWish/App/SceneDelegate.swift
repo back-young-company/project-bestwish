@@ -77,11 +77,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func showMainView() {
         let service = DummyServiceImpl()
+        let supabaseManger = SupabaseManager()
+        
         let repository = DummyRepositoryImpl(service: service)
+        let wishListRepository = WishListRepositoryImpl(manager: supabaseManger)
+        
         let useCase = DummyUseCaseImpl(repository: repository)
+        let wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
+        
         let vm = DummyViewModel(dummyUseCase: useCase)
+        let homeViewModel = HomeViewModel(useCase: wishListUseCase)
+        
         let vc = TabBarViewController(viewControllers: [
-            UINavigationController(rootViewController: HomeViewController()),
+            UINavigationController(rootViewController: HomeViewController(homeViewModel: homeViewModel)),
             UINavigationController(rootViewController: CameraViewController()),
             UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
         ])
