@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import MessageUI
 
 final class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
@@ -73,6 +74,8 @@ final class MyPageViewController: UIViewController {
                     owner.hidesTabBar()
                     let managementViewController = UserInfoManagementViewController()
                     owner.navigationController?.pushViewController(managementViewController, animated: true)
+                case .question:
+                    owner.sendQuestion()
                 case .logout:
                     AlertBuilder(baseViewController: self, type: .logout) {
                         print("로그아웃")
@@ -112,5 +115,45 @@ final class MyPageViewController: UIViewController {
                 let updateVC = ProfileUpdateViewController()
                 owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)
+    }
+}
+
+//MARK: 문의사항 (메일 띄우기)
+
+extension MyPageViewController: MFMailComposeViewControllerDelegate {
+    // 메일 띄우기
+    private func sendQuestion() {
+        // 메일 계정 설정 여부 확인
+        guard MFMailComposeViewController.canSendMail() else {
+            showBasicAlert(
+                title: EmailConstants.mailUnavailableAlertTitle.value,
+                message: EmailConstants.mailUnavailableAlertMessage.value
+            )
+            return
+        }
+
+        let mailComposer = MFMailComposeViewController()
+        mailComposer.mailComposeDelegate = self
+
+        // 수신자
+        mailComposer.setToRecipients([EmailConstants.recipients.value])
+
+        // 제목
+        mailComposer.setSubject(EmailConstants.subject.value)
+
+        // 본문
+        let body = EmailConstants.body.value
+        mailComposer.setMessageBody(body, isHTML: false)
+
+        // 메일 작성 화면 띄우기
+        present(mailComposer, animated: true)
+    }
+
+    func mailComposeController(
+        _ controller: MFMailComposeViewController,
+        didFinishWith result: MFMailComposeResult,
+        error: (any Error)?
+    ) {
+        controller.dismiss(animated: true)
     }
 }

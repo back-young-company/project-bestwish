@@ -16,8 +16,8 @@ struct UserDTO: Codable {
     let birth: Date?
     let profileImageCode: Int?
     let role: String
-    let platformSequence: [Int]
-    let authProvieder: String
+    let platformSequence: [Int]?
+    let authProvieder: String?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -30,5 +30,13 @@ struct UserDTO: Codable {
         case role
         case platformSequence = "platform_sequence"
         case authProvieder = "auth_provider"
+    }
+}
+
+struct PlatformSequenceDTO: Codable {
+    let platformSequence: [Int16]
+
+    enum CodingKeys: String, CodingKey {
+        case platformSequence = "platform_sequence"
     }
 }

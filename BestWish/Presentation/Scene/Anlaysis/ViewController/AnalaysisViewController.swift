@@ -43,10 +43,10 @@ final class AnalaysisViewController: UIViewController {
                     
                 case let .platform(platform, isSelected):
                     guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: PlatformCell.identifier,
+                        withReuseIdentifier: WishlistPlatformCell.identifier,
                         for: indexPath
-                    ) as? PlatformCell else { return UICollectionViewCell() }
-                    cell.configure(type: platform, isSelected: isSelected)
+                    ) as? WishlistPlatformCell else { return UICollectionViewCell() }
+                    cell.configure(type: platform.platformName, isSelected: isSelected)
                     return cell
                 }
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -126,7 +126,7 @@ final class AnalaysisViewController: UIViewController {
     private func setDelegate() {
         analysisView.getCollectionView.register(KeywordCell.self, forCellWithReuseIdentifier: KeywordCell.identifier)
         analysisView.getCollectionView.register(AttributeCell.self, forCellWithReuseIdentifier: AttributeCell.identifier)
-        analysisView.getCollectionView.register(PlatformCell.self, forCellWithReuseIdentifier: PlatformCell.identifier)
+        analysisView.getCollectionView.register(PlatformShortcutCell.self, forCellWithReuseIdentifier: PlatformShortcutCell.identifier)
         analysisView.getCollectionView.register(SegmentControlHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SegmentControlHeaderView.identifier)
     }
 }

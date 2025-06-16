@@ -22,7 +22,7 @@ final class SupabaseOAuthManager: NSObject {
     public var currentNonce: String?
 
     let client = SupabaseClient(
-        supabaseURL: URL(string: "https://\(Bundle.main.supabaseURL)")!,
+        supabaseURL: Bundle.main.supabaseURL,
         supabaseKey: Bundle.main.apiKey
     )
 

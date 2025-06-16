@@ -25,9 +25,9 @@ final class PlatformEditView: UIView {
         fatalError()
     }
     
-    func getBackButton() -> UIButton { backButton }
-    func getHeaderView() -> PlatformEditHeaderView { headerView }
-    func getTableView() -> UITableView { tableView }
+    var getBackButton: UIButton { backButton }
+    var getHeaderView: PlatformEditHeaderView { headerView }
+    var getTableView: UITableView { tableView }
 }
 
 private extension PlatformEditView {

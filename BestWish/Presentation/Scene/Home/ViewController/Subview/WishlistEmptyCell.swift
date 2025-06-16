@@ -7,6 +7,7 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
@@ -16,6 +17,8 @@ final class WishlistEmptyCell: UICollectionViewCell, ReuseIdentifier {
     private let titleLabel = UILabel()
     private let secondaryLabel = UILabel()
     private let linkButton = UIButton()
+    
+    var disposeBag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +28,14 @@ final class WishlistEmptyCell: UICollectionViewCell, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
+    
+    var getLinkButton: UIButton { linkButton }
 }
 
 private extension WishlistEmptyCell {
@@ -37,6 +48,7 @@ private extension WishlistEmptyCell {
     func setAttributes() {
         emptyImageView.do {
             $0.image = UIImage(named: "no_product")
+            $0.contentMode = .scaleAspectFit
         }
         
         titleLabel.do {
@@ -46,9 +58,10 @@ private extension WishlistEmptyCell {
         }
         
         secondaryLabel.do {
-            $0.text = "위시리스트가 텅 비었어요!"
+            $0.text = "위시리스트를 추가해\n상품을 모아보세요!"
             $0.textColor = .gray400
             $0.font = .font(.pretendardMedium, ofSize: 16)
+            $0.numberOfLines = 0
         }
         
         linkButton.do {
@@ -74,12 +87,13 @@ private extension WishlistEmptyCell {
         emptyImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
-            $0.size.equalTo(159)
+            $0.size.equalToSuperview().multipliedBy(0.4)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(emptyImageView.snp.bottom).offset(12)
             $0.centerX.equalToSuperview()
+            $0.height.equalTo(20)
         }
         
         secondaryLabel.snp.makeConstraints {
@@ -90,7 +104,9 @@ private extension WishlistEmptyCell {
         linkButton.snp.makeConstraints {
             $0.top.equalTo(secondaryLabel.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(-20)
+            $0.width.equalTo(108)
+            $0.height.equalTo(33)
+            $0.bottom.equalTo(-100)
         }
     }
 }

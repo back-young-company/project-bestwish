@@ -14,17 +14,61 @@ final class HomeViewModel: ViewModel {
     
     let platformSection: HomeSectionModel =
     HomeSectionModel(header: .platform, items: [
-        .platform(Platform(platformName: "무신사", platformImage: PlatformImage.musinsa)),
-        .platform(Platform(platformName: "지그재그", platformImage: PlatformImage.zigzag)),
-        .platform(Platform(platformName: "에이블리", platformImage: PlatformImage.ably)),
-        .platform(Platform(platformName: "KREAM", platformImage: PlatformImage.kream)),
-        .platform(Platform(platformName: "브랜디", platformImage: PlatformImage.brandy)),
-        .platform(Platform(platformName: "29CM", platformImage: PlatformImage.tncm)),
-        .platform(Platform(platformName: "OCO", platformImage: PlatformImage.oco)),
-        .platform(Platform(platformName: "4910", platformImage: PlatformImage.fnoz)),
-        .platform(Platform(platformName: "웍스아웃", platformImage: PlatformImage.worksout)),
-        .platform(Platform(platformName: "EQL", platformImage: PlatformImage.eql)),
-        .platform(Platform(platformName: "하이버", platformImage: PlatformImage.hiver))
+        .platform(Platform(
+            platformName: ShopPlatform.musinsa.platformName,
+            platformImage: PlatformImage.musinsa,
+            platformDeepLink: ShopPlatform.musinsa.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.zigzag.platformName,
+            platformImage: PlatformImage.zigzag,
+            platformDeepLink: ShopPlatform.zigzag.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.ably.platformName,
+            platformImage: PlatformImage.ably,
+            platformDeepLink: ShopPlatform.ably.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.kream.platformName,
+            platformImage: PlatformImage.kream,
+            platformDeepLink: ShopPlatform.kream.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.brandy.platformName,
+            platformImage: PlatformImage.brandy,
+            platformDeepLink: ShopPlatform.brandy.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.tncm.platformName,
+            platformImage: PlatformImage.tncm,
+            platformDeepLink: ShopPlatform.tncm.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.oco.platformName,
+            platformImage: PlatformImage.oco,
+            platformDeepLink: ShopPlatform.oco.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.fnoz.platformName,
+            platformImage: PlatformImage.fnoz,
+            platformDeepLink: ShopPlatform.fnoz.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.worksout.platformName,
+            platformImage: PlatformImage.worksout,
+            platformDeepLink: ShopPlatform.worksout.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.eql.platformName,
+            platformImage: PlatformImage.eql,
+            platformDeepLink: ShopPlatform.eql.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.hiver.platformName,
+            platformImage: PlatformImage.hiver,
+            platformDeepLink: ShopPlatform.hiver.platformDeepLink
+        ))
     ])
     
     enum Action {
@@ -33,12 +77,14 @@ final class HomeViewModel: ViewModel {
     
     struct State {
         let sections: Observable<[HomeSectionModel]>
+        let platformFilter: Observable<[String]>
     }
     
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
     
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
+    private let _platformFilter = BehaviorRelay<[String]>(value: [])
     
     let state: State
     
@@ -46,11 +92,11 @@ final class HomeViewModel: ViewModel {
     
     init() {
         let wishlistProducts: [WishlistProduct] = [
-            WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-            WishlistProduct(productImageURL: ProductImage.product2, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-            WishlistProduct(productImageURL: ProductImage.product3, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-            WishlistProduct(productImageURL: ProductImage.product4, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
-            WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원")
+//            WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
+//            WishlistProduct(productImageURL: ProductImage.product2, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
+//            WishlistProduct(productImageURL: ProductImage.product3, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
+//            WishlistProduct(productImageURL: ProductImage.product4, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원"),
+//            WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원")
         ]
 
         let wishlistItems: [HomeItem] = wishlistProducts.isEmpty
@@ -58,8 +104,15 @@ final class HomeViewModel: ViewModel {
             : wishlistProducts.map { .wishlist($0) }
 
         let wishlistSection = HomeSectionModel(header: .wishlist, items: wishlistItems)
+        
+        let platformFilter = ["전체", "무신사", "에이블리", "지그재그", "KREAM", "브랜디", "29CM", "OCO", "4910", "웍스아웃", "EQL", "하이버"]
 
         _sections.accept([platformSection, wishlistSection])
-        state = State(sections: _sections.asObservable())
+        _platformFilter.accept(platformFilter)
+        
+        state = State(
+            sections: _sections.asObservable(),
+            platformFilter: _platformFilter.asObservable()
+        )
     }
 }

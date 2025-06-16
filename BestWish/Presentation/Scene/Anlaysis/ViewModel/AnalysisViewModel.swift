@@ -57,10 +57,10 @@ final class AnalysisViewModel: ViewModel {
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
             AnalysisSectionModel(header: nil, type: .platform, items: [
-                .platform(platform: Platform(platformName: "무신사", platformImage: PlatformImage.musinsa)),
-                .platform(platform: Platform(platformName: "지그재그", platformImage: PlatformImage.zigzag)),
-                .platform(platform: Platform(platformName: "에이블리", platformImage: PlatformImage.ably)),
-                .platform(platform: Platform(platformName: "브랜디", platformImage: PlatformImage.brandy))
+                .platform(platform: Platform(platformName: "무신사", platformImage: PlatformImage.musinsa, platformDeepLink: "")),
+                .platform(platform: Platform(platformName: "지그재그", platformImage: PlatformImage.zigzag, platformDeepLink: "")),
+                .platform(platform: Platform(platformName: "에이블리", platformImage: PlatformImage.ably, platformDeepLink: "")),
+                .platform(platform: Platform(platformName: "브랜디", platformImage: PlatformImage.brandy, platformDeepLink: ""))
             ])
         ])
         

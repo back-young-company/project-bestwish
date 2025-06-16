@@ -30,17 +30,24 @@ final class PlatformEditViewController: UIViewController {
         setNavigationBar()
         bindActions()
         bindViewModel()
+        
+        platformEditView.getTableView.isEditing = true
     }
     
     private func bindViewModel() {
         let dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel>(configureCell: { dataSource, tableView, indexPath, item in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
             cell.configure(type: item)
+            
             return cell
+        }, canEditRowAtIndexPath: { dataSource, indexPath in
+            return true
+        }, canMoveRowAtIndexPath: { dataSource, indexPath in
+            return true
         })
         
         platformEditViewModel.state.sections
-            .bind(to: platformEditView.getTableView().rx.items(dataSource: dataSource))
+            .bind(to: platformEditView.getTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         platformEditViewModel.state.sections
@@ -52,18 +59,35 @@ final class PlatformEditViewController: UIViewController {
     }
     
     private func bindActions() {
-        platformEditView.getBackButton().rx.tap
+        platformEditView.getBackButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
+        
+        platformEditView.getTableView.rx.itemMoved
+            .subscribe(with: self) { owner, indexPath in
+                let sourceIndexPath = indexPath.sourceIndex
+                let destinationIndexPath = indexPath.destinationIndex
+//                var currentItems = self.platformItems.value
+//
+//                let movedItem = currentItems.remove(at: sourceIndexPath.row)
+//                currentItems.insert(movedItem, at: destinationIndexPath.row)
+//
+//                self.platformItems.accept(currentItems)
+            }
+            .disposed(by: disposeBag)
+        
+        platformEditView.getTableView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
+        
     }
     
     private func setNavigationBar() {
         self.title = "플랫폼 편집"
         self.navigationController?.navigationBar.isHidden = false
         
-        let backItem = UIBarButtonItem(customView: platformEditView.getBackButton())
+        let backItem = UIBarButtonItem(customView: platformEditView.getBackButton)
         self.navigationItem.leftBarButtonItem = backItem
         
         let appearance = UINavigationBarAppearance()
@@ -78,11 +102,22 @@ final class PlatformEditViewController: UIViewController {
     }
     
     private func setupHeaderView(count: Int) {
-        platformEditView.getHeaderView().configure(count: count)
+        platformEditView.getHeaderView.configure(count: count)
         
         let targetSize = CGSize(width: view.bounds.width, height: 0)
-        let height = platformEditView.getHeaderView().systemLayoutSizeFitting(targetSize).height
-        platformEditView.getHeaderView().frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
-        platformEditView.getTableView().tableHeaderView = platformEditView.getHeaderView()
+        let height = platformEditView.getHeaderView.systemLayoutSizeFitting(targetSize).height
+        platformEditView.getHeaderView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
+        platformEditView.getTableView.tableHeaderView = platformEditView.getHeaderView
+    }
+}
+
+extension PlatformEditViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+    
+    // 재정렬 시 들여쓰기를 하지 않도록 설정 (선택사항이지만 권장)
+    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
 }
