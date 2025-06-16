@@ -1,5 +1,5 @@
 //
-//  WishListRepositroy.swift
+//  WishListRepository.swift
 //  BestWish
 //
 //  Created by 이수현 on 6/14/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol WishListRepositroy {
+protocol WishListRepository {
     func getPlatformSequence() async throws -> [Int]
     func updatePlatformSequence(to sequence: [Int]) async throws
     func getPlatformsInWishList() async throws -> [Int]

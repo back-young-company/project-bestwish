@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class WishListRepositoryImpl: WishListRepositroy {
+final class WishListRepositoryImpl: WishListRepository {
 
     private let manager: SupabaseManager
 

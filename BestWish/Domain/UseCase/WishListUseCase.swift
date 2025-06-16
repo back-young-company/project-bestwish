@@ -23,9 +23,9 @@ extension WishListUseCase {
 }
 
 final class WishListUseCaseImpl: WishListUseCase {
-    private let repository: WishListRepositroy
+    private let repository: WishListRepository
 
-    init(repository: WishListRepositroy) {
+    init(repository: WishListRepository) {
         self.repository = repository
     }
 
