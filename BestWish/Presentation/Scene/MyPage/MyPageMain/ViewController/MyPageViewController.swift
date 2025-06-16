@@ -113,7 +113,7 @@ final class MyPageViewController: UIViewController {
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()
-                let updateVC = ProfileUpdateViewController()
+                let updateVC = DIContainer.shared.makeProfileUpdateViewController()
                 owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)
     }
