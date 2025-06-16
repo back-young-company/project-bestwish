@@ -12,14 +12,14 @@ struct LabelDataDisplay {
     let topCategory: String
     let subCategory: String
     let attributes: String
-    let probability: String
+    let probability: Int
 }
 
 // MARK: - 데이터 매핑
 extension LabelDataDisplay {
     static func convertToDisplay(from model: LabelData) -> LabelDataDisplay {
         let labelArray = model.label.split(separator: ":").map { String($0) }
-        let (top, sub, attributes) = (labelArray[0], labelArray[1], labelArray[2])
+        let (top, sub, attributes) = labelArray.count == 3 ? (labelArray[0], labelArray[1], labelArray[2]) : (labelArray[0], "", labelArray[1])
         return LabelDataDisplay(topCategory: top, subCategory: sub, attributes: attributes, probability: model.probability)
     }
 }
