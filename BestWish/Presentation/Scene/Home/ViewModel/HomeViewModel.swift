@@ -14,17 +14,61 @@ final class HomeViewModel: ViewModel {
     
     let platformSection: HomeSectionModel =
     HomeSectionModel(header: .platform, items: [
-        .platform(Platform(platformName: "무신사", platformImage: PlatformImage.musinsa)),
-        .platform(Platform(platformName: "지그재그", platformImage: PlatformImage.zigzag)),
-        .platform(Platform(platformName: "에이블리", platformImage: PlatformImage.ably)),
-        .platform(Platform(platformName: "KREAM", platformImage: PlatformImage.kream)),
-        .platform(Platform(platformName: "브랜디", platformImage: PlatformImage.brandy)),
-        .platform(Platform(platformName: "29CM", platformImage: PlatformImage.tncm)),
-        .platform(Platform(platformName: "OCO", platformImage: PlatformImage.oco)),
-        .platform(Platform(platformName: "4910", platformImage: PlatformImage.fnoz)),
-        .platform(Platform(platformName: "웍스아웃", platformImage: PlatformImage.worksout)),
-        .platform(Platform(platformName: "EQL", platformImage: PlatformImage.eql)),
-        .platform(Platform(platformName: "하이버", platformImage: PlatformImage.hiver))
+        .platform(Platform(
+            platformName: ShopPlatform.musinsa.platformName,
+            platformImage: PlatformImage.musinsa,
+            platformDeepLink: ShopPlatform.musinsa.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.zigzag.platformName,
+            platformImage: PlatformImage.zigzag,
+            platformDeepLink: ShopPlatform.zigzag.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.ably.platformName,
+            platformImage: PlatformImage.ably,
+            platformDeepLink: ShopPlatform.ably.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.kream.platformName,
+            platformImage: PlatformImage.kream,
+            platformDeepLink: ShopPlatform.kream.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.brandy.platformName,
+            platformImage: PlatformImage.brandy,
+            platformDeepLink: ShopPlatform.brandy.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.tncm.platformName,
+            platformImage: PlatformImage.tncm,
+            platformDeepLink: ShopPlatform.tncm.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.oco.platformName,
+            platformImage: PlatformImage.oco,
+            platformDeepLink: ShopPlatform.oco.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.fnoz.platformName,
+            platformImage: PlatformImage.fnoz,
+            platformDeepLink: ShopPlatform.fnoz.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.worksout.platformName,
+            platformImage: PlatformImage.worksout,
+            platformDeepLink: ShopPlatform.worksout.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.eql.platformName,
+            platformImage: PlatformImage.eql,
+            platformDeepLink: ShopPlatform.eql.platformDeepLink
+        )),
+        .platform(Platform(
+            platformName: ShopPlatform.hiver.platformName,
+            platformImage: PlatformImage.hiver,
+            platformDeepLink: ShopPlatform.hiver.platformDeepLink
+        ))
     ])
     
     enum Action {
