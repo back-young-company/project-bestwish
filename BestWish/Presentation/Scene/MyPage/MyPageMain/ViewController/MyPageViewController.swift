@@ -15,7 +15,6 @@ final class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
     private let viewModel: MyPageViewModel
     private let disposeBag = DisposeBag()
-    private let userInfo = BehaviorRelay<AccountDisplay?>(value: nil)
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<MyPageSection>(
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {
@@ -56,8 +55,8 @@ final class MyPageViewController: UIViewController {
         super.viewDidLoad()
 
         bindViewModel()
-        setHeaderView()
         bindView()
+        viewModel.action.onNext(.viewDidLoad)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -91,12 +90,14 @@ final class MyPageViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.state.userInfo
-            .bind(to: userInfo)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self, onNext: { owner, accountDisplay in
+                owner.setHeaderView(userInfo: accountDisplay)
+            })
             .disposed(by: disposeBag)
     }
 
-    private func setHeaderView() {
-        guard let userInfo = userInfo.value else { return }
+    private func setHeaderView(userInfo: AccountDisplay) {
         let frame = CGRect(
             x: 0,
             y: 0,
