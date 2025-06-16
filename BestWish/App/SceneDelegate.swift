@@ -62,7 +62,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let repo = DummyRepositoryImpl(service: service)
         let uc = DummyUseCaseImpl(repository: repo)
         let vm = OnboardingViewModel(dummyUseCase: uc)
-        let nav = UINavigationController(rootViewController: OnboardingViewController(viewModel: vm))
+        let vm2 = PolicyViewModel()
+        let nav = UINavigationController(rootViewController: OnboardingViewController(viewModel: vm, policyViewModel: vm2))
         nav.setNavigationBarHidden(true, animated: true)
         self.window?.rootViewController = nav
         self.window?.makeKeyAndVisible()
@@ -80,7 +81,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let useCase = DummyUseCaseImpl(repository: repository)
         let vm = DummyViewModel(dummyUseCase: useCase)
         let vc = TabBarViewController(viewControllers: [
-            UINavigationController(rootViewController: AVC()),
+            UINavigationController(rootViewController: HomeViewController()),
             UINavigationController(rootViewController: CameraViewController()),
             UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
         ])
@@ -89,7 +90,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.backgroundColor = .gray0
     }
 }
-
 
 final class AVC: UIViewController {
     override func viewDidLoad() {

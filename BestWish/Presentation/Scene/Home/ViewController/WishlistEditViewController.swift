@@ -54,7 +54,7 @@ final class WishlistEditViewController: UIViewController {
             })
         
         wishEditViewModel.state.sections
-            .bind(to: wishEditView.getCollectionView().rx.items(dataSource: dataSource))
+            .bind(to: wishEditView.getCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         wishEditViewModel.state.sections
@@ -65,7 +65,7 @@ final class WishlistEditViewController: UIViewController {
     }
     
     private func bindActions() {
-        wishEditView.getBackButton().rx.tap
+        wishEditView.getBackButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
@@ -76,7 +76,7 @@ final class WishlistEditViewController: UIViewController {
         self.title = "편집"
         self.navigationController?.navigationBar.isHidden = false
         
-        let backItem = UIBarButtonItem(customView: wishEditView.getBackButton())
+        let backItem = UIBarButtonItem(customView: wishEditView.getBackButton)
         self.navigationItem.leftBarButtonItem = backItem
         
         let appearance = UINavigationBarAppearance()
@@ -94,7 +94,7 @@ final class WishlistEditViewController: UIViewController {
 
 private extension WishlistEditViewController {
     func setCollectionViewLayout(_ sections: [WishlistEditSectionModel]) {
-        wishEditView.getCollectionView().collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
+        wishEditView.getCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             return NSCollectionLayoutSection.createWishlistSection()
         }
     }

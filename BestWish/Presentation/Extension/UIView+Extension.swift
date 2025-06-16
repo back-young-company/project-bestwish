@@ -33,4 +33,11 @@ extension UIView {
         border.borderWidth = height
         self.layer.addSublayer(border)
     }
+    
+    func updateShadowPath() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
+        }
+    }
 }

@@ -25,9 +25,9 @@ final class WishlistEditView: UIView {
         fatalError()
     }
     
-    func getBackButton() -> UIButton { backButton }
-    func getHeaderView() -> PlatformEditHeaderView { headerView }
-    func getCollectionView() -> UICollectionView { collectionView }
+    var getBackButton: UIButton { backButton }
+    var getHeaderView: PlatformEditHeaderView { headerView }
+    var getCollectionView: UICollectionView { collectionView }
 }
 
 private extension WishlistEditView {

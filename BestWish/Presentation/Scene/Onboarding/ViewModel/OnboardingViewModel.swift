@@ -19,6 +19,7 @@ final class OnboardingViewModel: ViewModel {
     static private let onboardingFinishPage = 1
 
     enum Action {
+        case viewDidAppear
         case selectedProfileIndex(Int)
         case selectedGender(Gender)
         case selectedBirth(Date)
@@ -33,6 +34,7 @@ final class OnboardingViewModel: ViewModel {
         let userInfo: Observable<OnboardingDisplay>
         let isValidNickname: Observable<Bool>
         let currentPage: Observable<Int>
+        let showPolicySheet: Observable<Void>
     }
 
     private let _action = PublishSubject<Action>()
@@ -46,15 +48,33 @@ final class OnboardingViewModel: ViewModel {
     private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
 
     private let _isValidNickname = BehaviorRelay<Bool>(value: false)
+    private let _showPolicySheet = PublishRelay<Void>()
 
     let state: State
 
     init(dummyUseCase: DummyUseCase) {
         self.dummyUseCase = dummyUseCase
+
+        let showPolicy = _action
+            .filter { action in
+            if case .viewDidAppear = action { return true }
+            return false
+        }
+            .withLatestFrom(_currentPage.asObservable())
+            .filter { $0 == Self.onboardingStartPage }
+            .take(1)
+            .map { _ in () }
+
+        // bindAction() 에서 이 이벤트를 Relay로 다시 전달
+        showPolicy
+            .bind(to: _showPolicySheet)
+            .disposed(by: disposeBag)
+
         state = State(
             userInfo: _userInput.asObservable(),
             isValidNickname: _isValidNickname.asObservable(),
-            currentPage: _currentPage.asObservable()
+            currentPage: _currentPage.asObservable(),
+            showPolicySheet: _showPolicySheet.asObservable()
         )
         bindAction()
     }
@@ -62,6 +82,8 @@ final class OnboardingViewModel: ViewModel {
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
+            case .viewDidAppear:
+                break
             case .selectedProfileIndex(let index):
                 owner.updateProfileImage(with: index)
             case .selectedGender(let gender):
@@ -85,7 +107,6 @@ final class OnboardingViewModel: ViewModel {
                     // TODO: MainView로 화면전환
                     SampleViewChangeManager.shared.goMainView()
                 }
-
             }
         }.disposed(by: disposeBag)
     }

@@ -8,11 +8,14 @@
 import UIKit
 
 extension UIViewController {
+
+    /// 내비게이션 바 위치
     enum Alignment {
         case left
         case center
     }
 
+    /// 내비게이션 바 설정
     func setNavigationBar(alignment: UIViewController.Alignment, title: String) {
         self.navigationController?.navigationBar.tintColor = .gray900
         self.navigationItem.backButtonDisplayMode = .minimal
@@ -38,6 +41,7 @@ extension UIViewController {
         }
     }
 
+    /// 탭 바 숨기기
     func hidesTabBar() {
         guard let navigationController,
               let tabBarController = navigationController.parent
@@ -47,6 +51,7 @@ extension UIViewController {
         tabBarController.setTabBarHidden(true)
     }
 
+    /// 탭 바 나타내기
     func showTabBar() {
         guard let navigationController,
               let tabBarController = navigationController.parent
@@ -54,5 +59,18 @@ extension UIViewController {
             return
         }
         tabBarController.setTabBarHidden(false)
+    }
+
+    /// 얼럿 띄우기
+    func showBasicAlert(title: String, message: String?) {
+        let alertController = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+
+        let confirmAction = UIAlertAction(title: "확인", style: .default)
+        alertController.addAction(confirmAction)
+        present(alertController, animated: true)
     }
 }

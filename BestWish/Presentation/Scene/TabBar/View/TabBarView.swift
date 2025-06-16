@@ -36,6 +36,12 @@ final class TabBarView: UIView {
         fatalError()
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        tabBar.updateShadowPath()
+    }
+    
     func configure() { }
 
     func setTabBarHidden(_ hidden: Bool) {
