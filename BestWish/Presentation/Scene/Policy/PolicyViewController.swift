@@ -17,12 +17,7 @@ final class PolicyViewController: UIViewController {
     init(viewModel: PolicyViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .pageSheet
-        if let sheet = sheetPresentationController {
-            sheet.detents = [.large()]
-            sheet.prefersGrabberVisible = false
-        }
-        isModalInPresentation = true
+        modalPresentationStyle = .fullScreen
     }
 
     required init?(coder: NSCoder) {
