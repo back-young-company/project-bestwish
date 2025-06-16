@@ -82,7 +82,7 @@ private extension KeywordCell {
             $0.edges.equalToSuperview()
         }
         iconImageView.snp.makeConstraints {
-            $0.width.height.equalTo(20)
+            $0.size.equalTo(20)
         }
     }
 }
