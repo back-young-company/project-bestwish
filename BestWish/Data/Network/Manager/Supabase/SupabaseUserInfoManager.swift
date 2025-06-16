@@ -34,4 +34,36 @@ final class SupabaseUserInfoManager {
             throw SupabaseError.selectError(error)
         }
     }
+
+    /// 유저 정보 업데이트
+    func updateUserInfo(
+        profileImageCode: Int?,
+        nickname: String?,
+        gender: Int?,
+        birth: Date?
+    ) async throws {
+        let userInfo = try await getUserInfo()
+        let updateUserInfo = UserDTO(
+            id: userInfo.id,
+            email: userInfo.email,
+            name: userInfo.name,
+            nickname: nickname ?? userInfo.nickname,
+            gender: gender ?? userInfo.gender,
+            birth: birth ?? userInfo.birth,
+            profileImageCode: profileImageCode ?? userInfo.profileImageCode,
+            role: userInfo.role,
+            platformSequence: userInfo.platformSequence,
+            authProvider: userInfo.authProvider
+        )
+
+        do {
+            try await supabase
+                .from(SupabaseTable.userInfo.rawValue)
+                .update(updateUserInfo)
+                .eq(UserInfoAttributes.id.rawValue, value: supabase.auth.session.user.id)
+                .execute()
+        } catch {
+            throw SupabaseError.updateError(error)
+        }
+    }
 }
