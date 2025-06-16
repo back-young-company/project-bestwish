@@ -42,8 +42,8 @@ final class AttributeCell: UICollectionViewCell, ReuseIdentifier {
         
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
         attributeLabel.font = titleFont
-        attributeLabel.backgroundColor = isSelected ? .primary300 : .white
-        attributeLabel.textColor = isSelected ? .white : .black
+        attributeLabel.backgroundColor = isSelected ? .primary300 : .gray0
+        attributeLabel.textColor = isSelected ? .gray0 : .gray900
     }
 }
 
@@ -57,8 +57,8 @@ private extension AttributeCell {
     func setAttributes() {
         attributeLabel.do {
             $0.font = UIFont.font(.pretendardBold, ofSize: 14)
-            $0.textColor = .black
-            $0.backgroundColor = .white
+            $0.textColor = .gray900
+            $0.backgroundColor = .gray0
             $0.textAlignment = .center
             $0.layer.cornerRadius = 15
             $0.layer.masksToBounds = true

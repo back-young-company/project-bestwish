@@ -51,20 +51,20 @@ private extension KeywordCell {
     func setAttributes() {
         keywordLabel.do {
             $0.font = UIFont.font(.pretendardBold, ofSize: 14)
-            $0.textColor = .white
+            $0.textColor = .gray0
             $0.textAlignment = .center
             $0.lineBreakMode = .byTruncatingTail
         }
         iconImageView.do {
             $0.image = UIImage(systemName: "xmark.circle.fill")
-            $0.tintColor = .white
+            $0.tintColor = .gray0
             $0.contentMode = .scaleAspectFit
         }
         horizontalStackView.do {
             $0.axis = .horizontal
             $0.spacing = 8
             $0.alignment = .center
-            $0.backgroundColor = .black
+            $0.backgroundColor = .gray900
             $0.layer.cornerRadius = 15
             $0.layer.masksToBounds = true
             $0.isLayoutMarginsRelativeArrangement = true

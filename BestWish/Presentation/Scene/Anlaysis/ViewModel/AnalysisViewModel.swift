@@ -46,7 +46,7 @@ final class AnalysisViewModel: ViewModel {
             "원피스": mapping("원피스"),
         ]
         
-        // 모델 데이터 정제 (일치율 40% 이상만)
+        // 모델 데이터 정제 (일치율 40% 보다 큰 경우)
         func mapping(_ category: String) -> [String]{
             let att = labelData.filter { $0.topCategory == category && $0.probability > 40 }.map { $0.attributes }
             return att.isEmpty ? [emptyKeyword] : att
@@ -93,7 +93,7 @@ private extension AnalysisViewModel {
     /// 이미지 분석 후 카테고리에 따라 데이터 방출
     private func setItems(category: String) {
         // 이전 카테고리와 비교해서 같은 값이 방출되면 무시
-        // RxDataSource에서 이벤트를 무하능로 방출하는 문제를 해결하기 위함
+        // RxDataSource에서 이벤트를 무한으로 방출하는 문제를 해결하기 위함
         if category != previousCategory {
             previousCategory = category
             let values = topClassFilter[category] ?? []

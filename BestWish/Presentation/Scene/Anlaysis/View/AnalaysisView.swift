@@ -145,16 +145,16 @@ private extension AnalysisView {
     
     func setAttributes() {
         overrideUserInterfaceStyle = .light
-        backgroundColor = .white
+        backgroundColor = .gray0
         
         titleLabel.do {
             $0.text = "키워드로 검색어를 만들어보세요."
-            $0.textColor = .black
+            $0.textColor = .gray900
             $0.font = .systemFont(ofSize: 17, weight: .bold)
         }
         
         searchBar.do {
-            $0.tintColor = .black
+            $0.tintColor = .gray900
             $0.backgroundImage = UIImage()
         }
         
