@@ -30,9 +30,13 @@ final class PlatformCell: UICollectionViewCell, ReuseIdentifier {
         platformImageView.image = nil
     }
 
-    func configure(type: Platform) {
+    func configure(type: Platform, isSelected: Bool = false) {
         platformTitleLabel.text = type.platformName
         platformImageView.image = UIImage(named: type.platformImage)
+        
+        backgroundColor = isSelected ? .primary50 : .clear
+        layer.cornerRadius = 8
+        clipsToBounds = true
     }
 }
 
