@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Then
+
 // TODO: 버튼을 선택하고 데이트 피커를 띄었을때 회색 배경처리됨을 확인함. (수정필요)
 final class RadioButton: UIButton {
     private let offImage: UIImage?
@@ -14,14 +16,14 @@ final class RadioButton: UIButton {
     init(
         title: String,
         offImage: UIImage? = UIImage(named: "radioOff"),
-        onImage: UIImage? = UIImage(named: "radioOn"),
+        onImage: UIImage? = UIImage(named: "radioOn")
     ) {
         self.offImage = offImage
         self.onImage = onImage
         super.init(frame: .zero)
-
         setAttributes(title: title)
     }
+
 
 
     required init?(coder: NSCoder) {
@@ -29,35 +31,24 @@ final class RadioButton: UIButton {
     }
 
     private func setAttributes(title: String) {
+        self.do {
+            var config = UIButton.Configuration.plain()
+            config.title = title
+            config.baseForegroundColor = .gray900
+            config.background.backgroundColor = .clear
+            config.imagePadding = 8
+            config.contentInsets = .zero
 
-        let font: UIFont = .font(.pretendardMedium, ofSize: 18)
-        // plain configuration
-        var config = UIButton.Configuration.plain()
-        config.title = title
-        config.baseForegroundColor = .gray900
-        config.baseBackgroundColor = .clear
-        config.background = .clear()
-        config.image = offImage
-        config.imagePadding = 8
-        config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
-        config.titleTextAttributesTransformer =
-            UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = font
-            return outgoing
-        }
-
-        self.configuration = config
-
-
-        self.configurationUpdateHandler = { [weak self] button in
-            guard let self = self,
-                var updated = button.configuration
-                else { return }
-            updated.image = button.isSelected ? self.onImage : self.offImage
-            updated.baseBackgroundColor = .gray0
-            updated.background = .clear()
-            button.configuration = updated
+            config.titleTextAttributesTransformer =
+                UIConfigurationTextAttributesTransformer { incoming in
+                var outgoing = incoming
+                outgoing.font = .font(.pretendardMedium, ofSize: 18)
+                return outgoing
+            }
+            $0.configuration = config
+            
+            $0.setImage(offImage, for: .normal)
+            $0.setImage(onImage, for: .selected)
         }
     }
 }
