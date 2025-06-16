@@ -31,4 +31,9 @@ final class DIContainer {
         let viewModel = ProfileUpdateViewModel(useCase: userInfoUseCase)
         return ProfileUpdateViewController(viewModel: viewModel)
     }
+
+    func makeUserInfoUpdateViewController() -> UserInfoUpdateViewController {
+        let viewModel = UserInfoUpdateViewModel(useCase: userInfoUseCase)
+        return UserInfoUpdateViewController(viewModel: viewModel)
+    }
 }
