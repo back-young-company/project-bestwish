@@ -16,22 +16,27 @@ final class ProfileUpdateViewModel: ViewModel {
     enum Action {
         case getUserInfo
         case selectedProfileIndex(Int)
+        case saveUserInfo(nickname: String)
     }
 
     struct State {
         let userInfo: Observable<UserInfoDisplay?>
+        let completedSave: Observable<Void>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
     private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
-
+    private let _completedSave = PublishSubject<Void>()
     let state: State
 
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
-        state = State(userInfo: _userInfo.asObservable())
+        state = State(
+            userInfo: _userInfo.asObservable(),
+            completedSave: _completedSave.asObservable()
+        )
 
         bindAction()
     }
@@ -43,6 +48,8 @@ final class ProfileUpdateViewModel: ViewModel {
                 owner.getUserInfo()
             case .selectedProfileIndex(let index):
                 owner.updateProfileImage(with: index)
+            case .saveUserInfo(let nickname):
+                owner.saveUserInfo(nickname: nickname)
             }
         }.disposed(by: disposeBag)
     }
@@ -58,6 +65,23 @@ final class ProfileUpdateViewModel: ViewModel {
             let user = try await useCase.getUserInfo()
             let userInfoDisplay = convertUserInfoDisplay(from: user)
             _userInfo.accept(userInfoDisplay)
+        }
+    }
+
+    private func saveUserInfo(nickname: String) {
+        Task {
+            guard let userInfo = _userInfo.value else { return }
+            do {
+                try await useCase.updateUserInfo(
+                    profileImageCode: userInfo.profileImageCode,
+                    nickname: nickname,
+                    gender: nil,
+                    birth: nil
+                )
+                _completedSave.onNext(())
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
 

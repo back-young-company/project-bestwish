@@ -8,7 +8,7 @@
 import UIKit
 
 final class ProfileUpdateView: UIView {
-    let profileImageView = UIImageView()
+    private let profileImageView = UIImageView()
     private let emailStackView = VerticalStackView(spacing: 12)
     private let emailLabel = InfoLabel(title: "이메일")
     private let emailValueLabel = PaddingLabel(top: 0, left: 10, bottom: 0, right: 0)
@@ -37,6 +37,10 @@ final class ProfileUpdateView: UIView {
     func addUnderLine() {
         nicknameTextField.addUnderLine()
     }
+
+    var getProfileImageView: UIImageView { profileImageView }
+    var getConfirmButton: AppButton { confirmChangeButton }
+    var getNicknameTextField: UITextField { nicknameTextField }
 }
 
 private extension ProfileUpdateView {

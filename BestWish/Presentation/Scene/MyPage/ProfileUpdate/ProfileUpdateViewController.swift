@@ -42,9 +42,12 @@ final class ProfileUpdateViewController: UIViewController {
 
     private func bindView() {
         let tapGesture = UITapGestureRecognizer()
-        profileUpdateView.profileImageView.addGestureRecognizer(tapGesture)
+        profileUpdateView.getProfileImageView.addGestureRecognizer(tapGesture)
+
+        // 프로필 이미지 뷰 선택 로직
         tapGesture.rx.event
             .withLatestFrom(viewModel.state.userInfo)
+            .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, userInfo in
                 guard let userInfo else { return }
                 let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
@@ -54,6 +57,14 @@ final class ProfileUpdateViewController: UIViewController {
                 }
                 owner.present(profileSheetVC, animated: true)
             }.disposed(by: disposeBag)
+
+        // 저장 버튼 탭 로직
+        profileUpdateView.getConfirmButton.rx.tap
+            .withLatestFrom(profileUpdateView.getNicknameTextField.rx.text)
+            .bind(with: self) { owner, nickname in
+                guard let nickname else { return }
+                owner.viewModel.action.onNext(.saveUserInfo(nickname: nickname))
+            }.disposed(by: disposeBag)
     }
 
     private func bindViewModel() {
@@ -62,6 +73,12 @@ final class ProfileUpdateViewController: UIViewController {
             .bind(with: self) { owner, userInfo in
                 guard let userInfo else { return }
                 owner.profileUpdateView.configure(user: userInfo)
+            }.disposed(by: disposeBag)
+
+        viewModel.state.completedSave
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
     }
 }
