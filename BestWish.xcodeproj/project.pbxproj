@@ -93,6 +93,7 @@
 				Domain/Entity/Product.swift,
 				Domain/Entity/ProductMetaData.swift,
 				Domain/Entity/SharePlatform.swift,
+				Domain/Entity/User.swift,
 				Domain/Interface/MetadataFetcherRepository.swift,
 			);
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
