@@ -17,7 +17,7 @@ struct UserDTO: Codable {
     let profileImageCode: Int?
     let role: String
     let platformSequence: [Int]?
-    let authProvieder: String?
+    let authProvider: String?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -29,7 +29,28 @@ struct UserDTO: Codable {
         case profileImageCode = "profile_image_code"
         case role
         case platformSequence = "platform_sequence"
-        case authProvieder = "auth_provider"
+        case authProvider = "auth_provider"
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.email = try container.decode(String.self, forKey: .email)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.nickname = try container.decodeIfPresent(String.self, forKey: .nickname)
+        self.gender = try container.decodeIfPresent(Int.self, forKey: .gender)
+        if let birth = try container.decodeIfPresent(String.self, forKey: .birth) {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            self.birth = dateFormatter.date(from: birth)
+        } else {
+            self.birth = nil
+        }
+
+        self.profileImageCode = try container.decodeIfPresent(Int.self, forKey: .profileImageCode)
+        self.role = try container.decode(String.self, forKey: .role)
+        self.platformSequence = try container.decodeIfPresent([Int].self, forKey: .platformSequence)
+        self.authProvider = try container.decodeIfPresent(String.self, forKey: .authProvider)
     }
 }
 
