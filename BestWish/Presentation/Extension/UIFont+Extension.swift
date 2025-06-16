@@ -9,6 +9,8 @@ import UIKit
 
 extension UIFont {
     enum FontName: String, CaseIterable {
+        case antonRegular = "Anton-Regular"
+        
         case pretendardBlack = "Pretendard-Black"
         case pretendardBold = "Pretendard-Bold"
         case pretendardExtraBold = "Pretendard-ExtraBold"

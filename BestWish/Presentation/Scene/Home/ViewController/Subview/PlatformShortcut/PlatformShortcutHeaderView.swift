@@ -1,5 +1,5 @@
 //
-//  PlatformHeaderView.swift
+//  PlatformShortcutHeaderView.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/11/25.
@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class PlatformHeaderView: UICollectionReusableView, ReuseIdentifier {
+final class PlatformShortcutHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     private let bestWishLabel = UILabel()
     private let titleLabel = UILabel()
@@ -39,10 +39,10 @@ final class PlatformHeaderView: UICollectionReusableView, ReuseIdentifier {
         titleLabel.text = title
     }
     
-    func getEditButton() -> UIButton { editButton }
+    var getEditButton: UIButton { editButton }
 }
 
-private extension PlatformHeaderView {
+private extension PlatformShortcutHeaderView {
     func setView() {
         setAttributes()
         setHierarchy()
@@ -53,12 +53,14 @@ private extension PlatformHeaderView {
         bestWishLabel.do {
             $0.text = "BESTWISH"
             $0.textColor = .gray900
-            $0.font = .font(.pretendardExtraBold, ofSize: 20)
+            $0.font = .font(.antonRegular, ofSize: 20)
+            $0.numberOfLines = 1
         }
         
         titleLabel.do {
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 16)
+            $0.numberOfLines = 1
         }
         
         editButton.do {
@@ -74,13 +76,15 @@ private extension PlatformHeaderView {
 
     func setConstraints() {
         bestWishLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
+            $0.top.equalToSuperview().offset(9)
             $0.leading.equalToSuperview().offset(8)
+            $0.height.equalTo(20)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(bestWishLabel.snp.bottom).offset(20)
+            $0.top.equalTo(bestWishLabel.snp.bottom).offset(26.5)
             $0.leading.equalToSuperview().offset(8)
+            $0.height.equalTo(16)
             $0.bottom.equalToSuperview().offset(-10)
         }
         
