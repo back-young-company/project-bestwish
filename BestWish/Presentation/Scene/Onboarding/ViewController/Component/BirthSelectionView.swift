@@ -39,29 +39,26 @@ private extension BirthSelectionView {
 
     func setAttributes() {
         dateButton.do {
-            let font: UIFont = .font(.pretendardMedium, ofSize: 16)
-            $0.contentHorizontalAlignment = .fill
-            $0.setTitle(" ", for: .normal)
-            $0.setImage(UIImage(named: "calendar"), for: .normal)
-            $0.setTitleColor(.gray900, for: .normal)
-            $0.backgroundColor = .gray0
-            $0.layer.cornerRadius = 8
-            $0.layer.borderWidth = 1.5
-            $0.layer.borderColor = UIColor.gray200?.cgColor
-
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 0, leading: 12, bottom: 0, trailing: 12)
             config.titleTextAttributesTransformer =
                 UIConfigurationTextAttributesTransformer { incoming in
                 var outgoing = incoming
-                outgoing.font = font
+                outgoing.font = .font(.pretendardMedium, ofSize: 16)
                 return outgoing
             }
-
             config.titleLineBreakMode = .byWordWrapping
             config.imagePlacement = .trailing
             config.baseForegroundColor = .gray900
+            config.baseBackgroundColor = .gray0
             $0.configuration = config
+
+            $0.contentHorizontalAlignment = .fill
+            $0.setTitle(" ", for: .normal)
+            $0.setImage(UIImage(named: "calendar"), for: .normal)
+            $0.layer.cornerRadius = 8
+            $0.layer.borderWidth = 1.5
+            $0.layer.borderColor = UIColor.gray200?.cgColor
         }
     }
 
