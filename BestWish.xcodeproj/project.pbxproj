@@ -97,7 +97,7 @@
 		81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resource/Info.plist,
 			);
 			target = CBD6BA102DEF1B39003242CA /* BestWish */;
 		};
@@ -519,7 +519,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BestWish/Info.plist;
+				INFOPLIST_FILE = BestWish/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한에 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -551,7 +551,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BestWish/Info.plist;
+				INFOPLIST_FILE = BestWish/Resource/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "카메라 접근 권한에 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

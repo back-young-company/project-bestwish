@@ -43,10 +43,10 @@ final class AnalaysisViewController: UIViewController {
                     
                 case let .platform(platform, isSelected):
                     guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: WishlistPlatformCell.identifier,
+                        withReuseIdentifier: PlatformShortcutCell.identifier,
                         for: indexPath
-                    ) as? WishlistPlatformCell else { return UICollectionViewCell() }
-                    cell.configure(type: platform.platformName, isSelected: isSelected)
+                    ) as? PlatformShortcutCell else { return UICollectionViewCell() }
+                    cell.configure(type: platform, isSelected: isSelected)
                     return cell
                 }
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in

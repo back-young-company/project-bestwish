@@ -71,8 +71,7 @@ private extension AttributeCell {
     
     func setConstraints() {
         attributeLabel.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
     }
 }
