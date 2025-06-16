@@ -31,7 +31,7 @@ final class OnboardingViewModel: ViewModel {
     }
 
     struct State {
-        let userInfo: Observable<OnboardingDisplay>
+        let userInfo: Observable<UserInfoDisplay>
         let isValidNickname: Observable<Bool>
         let currentPage: Observable<Int>
         let showPolicySheet: Observable<Void>
@@ -40,9 +40,9 @@ final class OnboardingViewModel: ViewModel {
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _userInput = BehaviorRelay<OnboardingDisplay> (value:
-        OnboardingDisplay(
-        profileImageIndex: 0)
+    private let _userInput = BehaviorRelay<UserInfoDisplay> (value:
+        UserInfoDisplay(
+        profileImageCode: 0)
     )
 
     private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
@@ -125,7 +125,7 @@ final class OnboardingViewModel: ViewModel {
 
     private func updateProfileImage(with index: Int) {
         var userInput = _userInput.value
-        userInput.updateProfileImageIndex(to: index)
+        userInput.updateprofileImageCode(to: index)
         _userInput.accept(userInput)
     }
 

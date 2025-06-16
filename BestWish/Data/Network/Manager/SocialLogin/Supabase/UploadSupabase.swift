@@ -8,7 +8,7 @@
 import Foundation
 
 struct Onboarding: Encodable {
-    let profileImageIndex: Int
+    let profileImageCode: Int
     let nickname: String
     let gender: Int
     let birth: Date
@@ -17,7 +17,7 @@ struct Onboarding: Encodable {
 //    let platformSequence: [Int]
 
     enum CodingKeys: String, CodingKey {
-        case profileImageIndex = "profile_image_code"
+        case profileImageCode = "profile_image_code"
         case nickname, gender, birth, role
 //        case platformSequence = "platform_sequence"
     }
@@ -28,7 +28,7 @@ extension SupabaseOAuthManager {
     func uploadUserInfo(to data: Onboarding) -> Bool {
         guard let userId = client.auth.currentSession?.user.id else { return false }
 
-        let updates: Onboarding = Onboarding(profileImageIndex: data.profileImageIndex,
+        let updates: Onboarding = Onboarding(profileImageCode: data.profileImageCode,
                                              nickname: data.nickname,
                                              gender: data.gender,
                                              birth: data.birth,

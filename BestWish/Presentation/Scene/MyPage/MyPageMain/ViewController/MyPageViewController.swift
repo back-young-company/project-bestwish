@@ -56,13 +56,13 @@ final class MyPageViewController: UIViewController {
 
         bindViewModel()
         bindView()
-        viewModel.action.onNext(.viewDidLoad)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         showTabBar()
+        viewModel.action.onNext(.getUserInfo)
     }
 
     private func bindView() {
@@ -91,13 +91,13 @@ final class MyPageViewController: UIViewController {
 
         viewModel.state.userInfo
             .observe(on: MainScheduler.instance)
-            .bind(with: self, onNext: { owner, accountDisplay in
-                owner.setHeaderView(userInfo: accountDisplay)
+            .bind(with: self, onNext: { owner, UserInfoDisplay in
+                owner.setHeaderView(userInfo: UserInfoDisplay)
             })
             .disposed(by: disposeBag)
     }
 
-    private func setHeaderView(userInfo: AccountDisplay) {
+    private func setHeaderView(userInfo: UserInfoDisplay) {
         let frame = CGRect(
             x: 0,
             y: 0,

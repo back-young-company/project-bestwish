@@ -9,13 +9,12 @@ import Foundation
 
 enum MappingError: AppErrorProtocol {
     case productDTOToProduct
-    case userDTOToUser
 }
 
 extension MappingError {
     var errorDescription: String? {
         switch self {
-        case .productDTOToProduct, .userDTOToUser:
+        case .productDTOToProduct:
             "데이터를 불러오는 중 에러가 발생했습니다."
         }
     }
@@ -24,8 +23,6 @@ extension MappingError {
         switch self {
         case .productDTOToProduct:
             "productDTOToProduct Error"
-        case .userDTOToUser:
-            "userDTOToUser Error"
         }
     }
 }

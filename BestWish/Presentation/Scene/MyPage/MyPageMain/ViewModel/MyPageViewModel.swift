@@ -13,7 +13,7 @@ final class MyPageViewModel: ViewModel {
     private let disposeBag = DisposeBag()
 
     enum Action {
-        case viewDidLoad
+        case getUserInfo
     }
 
     struct State {
@@ -31,13 +31,13 @@ final class MyPageViewModel: ViewModel {
                 }
             }
         )
-        let userInfo: Observable<AccountDisplay>
+        let userInfo: Observable<UserInfoDisplay>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _userInfo = PublishSubject<AccountDisplay>()
+    private let _userInfo = PublishSubject<UserInfoDisplay>()
     let state: State
 
     init(useCase: UserInfoUseCase) {
@@ -49,7 +49,7 @@ final class MyPageViewModel: ViewModel {
     private func bindAction() {
         _action.bind(with: self) { owner, action in
             switch action {
-            case .viewDidLoad:
+            case .getUserInfo:
                 owner.getUserInfo()
             }
         }.disposed(by: disposeBag)
@@ -58,16 +58,16 @@ final class MyPageViewModel: ViewModel {
     private func getUserInfo() {
         Task {
             let user = try await useCase.getUserInfo()
-            let accountDisplay = convertAccountDisplay(from: user)
-            _userInfo.onNext(accountDisplay)
+            let UserInfoDisplay = convertUserInfoDisplay(from: user)
+            _userInfo.onNext(UserInfoDisplay)
         }
     }
 
-    private func convertAccountDisplay(from user: User) -> AccountDisplay {
-        AccountDisplay(
-            profileImageIndex: user.profileImageCode,
-            nickname: user.nickname,
-            email: user.email
+    private func convertUserInfoDisplay(from user: User) -> UserInfoDisplay {
+        UserInfoDisplay(
+            profileImageCode: user.profileImageCode,
+            email: user.email,
+            nickname: user.nickname
         )
     }
 }

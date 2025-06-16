@@ -16,23 +16,22 @@ final class ProfileUpdateViewModel: ViewModel {
     }
 
     struct State {
-        let userAccount: Observable<AccountDisplay>
+        let userInfo: Observable<UserInfoDisplay>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _userAccount = BehaviorRelay<AccountDisplay>(value: AccountDisplay(
-        profileImageIndex: 0,
-        nickname: "User",
-        email: "user@gmail.com"
+    private let _userInfo = BehaviorRelay<UserInfoDisplay>(value: UserInfoDisplay(
+        profileImageCode: 0,
+        email: "user@gmail.com", nickname: "User"
         )
     )
 
     let state: State
 
     init() {
-        state = State(userAccount: _userAccount.asObservable())
+        state = State(userInfo: _userInfo.asObservable())
 
         bindAction()
     }
@@ -47,8 +46,8 @@ final class ProfileUpdateViewModel: ViewModel {
     }
 
     private func updateProfileImage(with index: Int) {
-        var userAccount = _userAccount.value
-        userAccount.updateProfileImageIndex(to: index)
-        _userAccount.accept(userAccount)
+        var userInfo = _userInfo.value
+        userInfo.updateprofileImageCode(to: index)
+        _userInfo.accept(userInfo)
     }
 }

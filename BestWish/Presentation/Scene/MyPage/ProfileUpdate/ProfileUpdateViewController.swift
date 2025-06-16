@@ -43,9 +43,9 @@ final class ProfileUpdateViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer()
         profileUpdateView.profileImageView.addGestureRecognizer(tapGesture)
         tapGesture.rx.event
-            .withLatestFrom(viewModel.state.userAccount)
-            .bind(with: self) { owner, userAccount in
-                let profileSheetVC = ProfileSheetViewController(selectedIndex: userAccount.profileImageIndex)
+            .withLatestFrom(viewModel.state.userInfo)
+            .bind(with: self) { owner, userInfo in
+                let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
                 profileSheetVC.presentProfileSheet()
                 profileSheetVC.onComplete = { selectedIndex in
                     owner.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
@@ -55,9 +55,9 @@ final class ProfileUpdateViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        viewModel.state.userAccount
-            .bind(with: self) { owner, userAccount in
-                owner.profileUpdateView.configure(user: userAccount)
+        viewModel.state.userInfo
+            .bind(with: self) { owner, userInfo in
+                owner.profileUpdateView.configure(user: userInfo)
             }.disposed(by: disposeBag)
     }
 }

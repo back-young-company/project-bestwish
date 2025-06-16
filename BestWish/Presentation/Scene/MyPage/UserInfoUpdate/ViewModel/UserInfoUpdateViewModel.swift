@@ -19,14 +19,14 @@ final class UserInfoUpdateViewModel: ViewModel {
     }
 
     struct State {
-        let userInfo: Observable<OnboardingDisplay>
+        let userInfo: Observable<UserInfoDisplay>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _userInfo = BehaviorRelay(value: OnboardingDisplay(
-        profileImageIndex: 0,
+    private let _userInfo = BehaviorRelay(value: UserInfoDisplay(
+        profileImageCode: 0, email: "",
         nickname: "123",
         gender: 1,
         birth: Date(timeIntervalSince1970: 31536000)

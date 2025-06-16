@@ -8,11 +8,11 @@
 import Foundation
 
 struct User {
-    let name: String
+    let name: String?
     let email: String
-    let nickname: String
-    let gender: Int
-    let birth: Date
+    let nickname: String?
+    let gender: Int?
+    let birth: Date?
     let profileImageCode: Int
-    let authProvider: String
+    let authProvider: String?
 }

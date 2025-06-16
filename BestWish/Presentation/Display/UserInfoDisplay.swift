@@ -1,5 +1,5 @@
 //
-//  OnboardingDisplay.swift
+//  UserInfoDisplay.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/12/25.
@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct OnboardingDisplay {
-    var profileImageIndex: Int
+struct UserInfoDisplay {
+    var profileImageCode: Int
     var profileImageName: String {
-        ProfileType(rawValue: profileImageIndex)?.name ?? ProfileType.profileA.name
+        ProfileType(rawValue: profileImageCode)?.name ?? ProfileType.profileA.name
     }
+    var email: String?
     var nickname: String?
     var gender: Int?
     var birth: Date?
@@ -27,7 +28,7 @@ struct OnboardingDisplay {
     func toOnboarding() -> Onboarding {
         let randomNickname = String(UUID().uuidString.prefix(8))
         return Onboarding(
-            profileImageIndex: profileImageIndex,
+            profileImageCode: profileImageCode,
             nickname: nickname ?? randomNickname,
             gender: gender ?? 2,
             birth: birth ?? Date(),
@@ -36,9 +37,9 @@ struct OnboardingDisplay {
     }
 }
 
-extension OnboardingDisplay {
-    mutating func updateProfileImageIndex(to index: Int) {
-        profileImageIndex = index
+extension UserInfoDisplay {
+    mutating func updateprofileImageCode(to index: Int) {
+        profileImageCode = index
     }
     mutating func updateGender(to gender: Int) {
         self.gender = gender

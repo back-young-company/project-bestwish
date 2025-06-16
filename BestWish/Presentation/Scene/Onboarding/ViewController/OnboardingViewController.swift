@@ -158,8 +158,8 @@ private extension OnboardingViewController {
 
         tapGesture.rx.event
             .withLatestFrom(viewModel.state.userInfo)
-            .bind(with: self) { owner, userAccount in
-            let profileSheetVC = ProfileSheetViewController(selectedIndex: userAccount.profileImageIndex)
+            .bind(with: self) { owner, userInfo in
+            let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
             profileSheetVC.presentProfileSheet()
             profileSheetVC.onComplete = { [weak self] selectedIndex in
                 self?.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
