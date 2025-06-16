@@ -53,17 +53,25 @@ final class ProfileUpdateViewController: UIViewController {
                 let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
                 profileSheetVC.presentProfileSheet()
                 profileSheetVC.onComplete = { selectedIndex in
-                    owner.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
+                    owner.viewModel.action.onNext(.updateProfileImageCode(selectedIndex))
                 }
                 owner.present(profileSheetVC, animated: true)
             }.disposed(by: disposeBag)
 
+        // 프로필 닉네임 변경 로직
+        profileUpdateView.getNicknameTextField.rx.text
+            .orEmpty
+            .filter { !$0.isEmpty }
+            .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, nickname in
+                owner.viewModel.action.onNext(.updateNickname(nickname))
+            }.disposed(by: disposeBag)
+
         // 저장 버튼 탭 로직
         profileUpdateView.getConfirmButton.rx.tap
-            .withLatestFrom(profileUpdateView.getNicknameTextField.rx.text)
-            .bind(with: self) { owner, nickname in
-                guard let nickname else { return }
-                owner.viewModel.action.onNext(.saveUserInfo(nickname: nickname))
+            .bind(with: self) { owner, _ in
+                owner.viewModel.action.onNext(.saveUserInfo)
             }.disposed(by: disposeBag)
     }
 

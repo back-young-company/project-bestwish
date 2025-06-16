@@ -15,8 +15,9 @@ final class ProfileUpdateViewModel: ViewModel {
 
     enum Action {
         case getUserInfo
-        case selectedProfileIndex(Int)
-        case saveUserInfo(nickname: String)
+        case updateProfileImageCode(Int)
+        case updateNickname(String)
+        case saveUserInfo
     }
 
     struct State {
@@ -46,18 +47,14 @@ final class ProfileUpdateViewModel: ViewModel {
             switch action {
             case .getUserInfo:
                 owner.getUserInfo()
-            case .selectedProfileIndex(let index):
+            case .updateProfileImageCode(let index):
                 owner.updateProfileImage(with: index)
-            case .saveUserInfo(let nickname):
-                owner.saveUserInfo(nickname: nickname)
+            case .updateNickname(let nickname):
+                owner.updateNickname(to: nickname)
+            case .saveUserInfo:
+                owner.saveUserInfo()
             }
         }.disposed(by: disposeBag)
-    }
-
-    private func updateProfileImage(with index: Int) {
-        var userInfo = _userInfo.value
-        userInfo?.updateprofileImageCode(to: index)
-        _userInfo.accept(userInfo)
     }
 
     private func getUserInfo() {
@@ -68,13 +65,25 @@ final class ProfileUpdateViewModel: ViewModel {
         }
     }
 
-    private func saveUserInfo(nickname: String) {
+    private func updateProfileImage(with index: Int) {
+        var userInfo = _userInfo.value
+        userInfo?.updateprofileImageCode(to: index)
+        _userInfo.accept(userInfo)
+    }
+
+    private func updateNickname(to nickname: String) {
+        var userInfo = _userInfo.value
+        userInfo?.updateNickname(to: nickname)
+        _userInfo.accept(userInfo)
+    }
+
+    private func saveUserInfo() {
         Task {
             guard let userInfo = _userInfo.value else { return }
             do {
                 try await useCase.updateUserInfo(
                     profileImageCode: userInfo.profileImageCode,
-                    nickname: nickname,
+                    nickname: userInfo.nickname,
                     gender: nil,
                     birth: nil
                 )
