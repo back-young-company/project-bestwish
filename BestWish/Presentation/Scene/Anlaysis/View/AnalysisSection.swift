@@ -9,16 +9,16 @@ import RxDataSources
 
 // MARK: - 각 섹션 아이템 케이스 저의
 enum AnalysisItem: Equatable {
-    case keyword(String)
+    case keyword(keyword: String)
     case attribute(attribute: String, isSelected: Bool)
     case platform(platform: Platform, isSelected: Bool = false)
 }
 
 // MARK: - AnalysisItem과 동일하지만 파라미터 없이 구분만을 위한 케이스
-enum AnalysisSectionType {
-    case keyword
-    case attribute
-    case platform
+enum AnalysisSectionType: Int {
+    case keyword = 0
+    case attribute = 1
+    case platform = 2
 }
 
 // MARK: - 실제로 사용한 섹션 모델
