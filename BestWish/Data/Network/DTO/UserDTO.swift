@@ -32,6 +32,30 @@ struct UserDTO: Codable {
         case authProvider = "auth_provider"
     }
 
+    init(
+        id: UUID,
+        email: String,
+        name: String?,
+        nickname: String?,
+        gender: Int?,
+        birth: Date?,
+        profileImageCode: Int?,
+        role: String,
+        platformSequence: [Int]?,
+        authProvider: String?
+    ) {
+        self.id = id
+        self.email = email
+        self.name = name
+        self.nickname = nickname
+        self.gender = gender
+        self.birth = birth
+        self.profileImageCode = profileImageCode
+        self.role = role
+        self.platformSequence = platformSequence
+        self.authProvider = authProvider
+    }
+
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(UUID.self, forKey: .id)
