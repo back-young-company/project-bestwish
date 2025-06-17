@@ -35,7 +35,7 @@ final class OnboardingSecondView: UIView {
         fatalError()
     }
 
-    func configure(input: OnboardingDisplay) {
+    func configure(input: UserInfoDisplay) {
         profileImageView.image = UIImage(named: input.profileImageName)?.resize(to: CGSize(width: CGFloat(152).fitWidth, height: CGFloat(152).fitWidth))
 
     }

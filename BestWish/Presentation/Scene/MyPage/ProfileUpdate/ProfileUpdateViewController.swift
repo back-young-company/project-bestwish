@@ -14,7 +14,7 @@ final class ProfileUpdateViewController: UIViewController {
     private let viewModel: ProfileUpdateViewModel
     private let disposeBag = DisposeBag()
 
-    init(viewModel: ProfileUpdateViewModel = ProfileUpdateViewModel()) {
+    init(viewModel: ProfileUpdateViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -32,6 +32,7 @@ final class ProfileUpdateViewController: UIViewController {
         setNavigationBar(alignment: .center, title: "프로필 수정")
         bindView()
         bindViewModel()
+        viewModel.action.onNext(.getUserInfo)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -41,23 +42,51 @@ final class ProfileUpdateViewController: UIViewController {
 
     private func bindView() {
         let tapGesture = UITapGestureRecognizer()
-        profileUpdateView.profileImageView.addGestureRecognizer(tapGesture)
+        profileUpdateView.getProfileImageView.addGestureRecognizer(tapGesture)
+
+        // 프로필 이미지 뷰 선택 로직
         tapGesture.rx.event
-            .withLatestFrom(viewModel.state.userAccount)
-            .bind(with: self) { owner, userAccount in
-                let profileSheetVC = ProfileSheetViewController(selectedIndex: userAccount.profileImageIndex)
+            .withLatestFrom(viewModel.state.userInfo)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, userInfo in
+                guard let userInfo else { return }
+                let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
                 profileSheetVC.presentProfileSheet()
                 profileSheetVC.onComplete = { selectedIndex in
-                    owner.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
+                    owner.viewModel.action.onNext(.updateProfileImageCode(selectedIndex))
                 }
                 owner.present(profileSheetVC, animated: true)
+            }.disposed(by: disposeBag)
+
+        // 프로필 닉네임 변경 로직
+        profileUpdateView.getNicknameTextField.rx.text
+            .orEmpty
+            .filter { !$0.isEmpty }
+            .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, nickname in
+                owner.viewModel.action.onNext(.updateNickname(nickname))
+            }.disposed(by: disposeBag)
+
+        // 저장 버튼 탭 로직
+        profileUpdateView.getConfirmButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.viewModel.action.onNext(.saveUserInfo)
             }.disposed(by: disposeBag)
     }
 
     private func bindViewModel() {
-        viewModel.state.userAccount
-            .bind(with: self) { owner, userAccount in
-                owner.profileUpdateView.configure(user: userAccount)
+        viewModel.state.userInfo
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, userInfo in
+                guard let userInfo else { return }
+                owner.profileUpdateView.configure(user: userInfo)
+            }.disposed(by: disposeBag)
+
+        viewModel.state.completedSave
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
     }
 }

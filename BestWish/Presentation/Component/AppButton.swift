@@ -151,10 +151,8 @@ extension AppButton.ButtonType {
         case .complete, .next, .shortcut, .analyze,
                 .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary200
-        case .cancel, .before, .withdraw, .reset, .back:
+        case .cancel, .before, .withdraw, .reset, .back, .nextUnable, .incomplete:
             return .gray50
-        case .nextUnable, .incomplete:
-            return .gray100
         }
     }
 
