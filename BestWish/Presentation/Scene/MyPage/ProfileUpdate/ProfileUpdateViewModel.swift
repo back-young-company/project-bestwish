@@ -22,6 +22,7 @@ final class ProfileUpdateViewModel: ViewModel {
 
     struct State {
         let userInfo: Observable<UserInfoDisplay?>
+        let isValidNickname: Observable<Bool>
         let completedSave: Observable<Void>
     }
 
@@ -29,6 +30,7 @@ final class ProfileUpdateViewModel: ViewModel {
     var action: AnyObserver<Action> { _action.asObserver() }
 
     private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
+    private let _isVaildNickname = BehaviorRelay<Bool>(value: true)
     private let _completedSave = PublishSubject<Void>()
     let state: State
 
@@ -36,6 +38,7 @@ final class ProfileUpdateViewModel: ViewModel {
         self.useCase = useCase
         state = State(
             userInfo: _userInfo.asObservable(),
+            isValidNickname: _isVaildNickname.asObservable(),
             completedSave: _completedSave.asObservable()
         )
 
@@ -72,9 +75,14 @@ final class ProfileUpdateViewModel: ViewModel {
     }
 
     private func updateNickname(to nickname: String) {
-        var userInfo = _userInfo.value
-        userInfo?.updateNickname(to: nickname)
-        _userInfo.accept(userInfo)
+        let isValid = useCase.isValidNickname(nickname)
+        _isVaildNickname.accept(isValid)
+
+        if isValid {
+            var userInfo = _userInfo.value
+            userInfo?.updateNickname(to: nickname)
+            _userInfo.accept(userInfo)
+        }
     }
 
     private func saveUserInfo() {

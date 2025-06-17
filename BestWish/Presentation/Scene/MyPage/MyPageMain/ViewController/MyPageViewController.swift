@@ -71,13 +71,19 @@ final class MyPageViewController: UIViewController {
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
                     owner.hidesTabBar()
-                    let managementViewController = UserInfoManagementViewController()
+                    let managementViewController = DIContainer.shared.makeUserInfoManagementViewController()
                     owner.navigationController?.pushViewController(managementViewController, animated: true)
                 case .question:
                     owner.sendQuestion()
+                case .termsOfUse:
+                    let nextVC = PDFViewController(type: .service)
+                    self.present(nextVC, animated: true)
+                case .privacyPolicy:
+                    let nextVC = PDFViewController(type: .privacy)
+                    self.present(nextVC, animated: true)
                 case .logout:
                     AlertBuilder(baseViewController: self, type: .logout) {
-                        print("로그아웃")
+                        owner.viewModel.action.onNext(.logout)
                     }.show()
                 default: return
                 }
