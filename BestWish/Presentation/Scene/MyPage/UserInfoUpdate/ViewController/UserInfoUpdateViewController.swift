@@ -79,5 +79,11 @@ final class UserInfoUpdateViewController: UIViewController {
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+            }.disposed(by: disposeBag)
     }
 }
