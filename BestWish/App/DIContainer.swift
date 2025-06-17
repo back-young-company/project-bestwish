@@ -36,4 +36,10 @@ final class DIContainer {
         let viewModel = UserInfoUpdateViewModel(useCase: userInfoUseCase)
         return UserInfoUpdateViewController(viewModel: viewModel)
     }
+
+    func makeOnboardingViewController() -> OnboardingViewController {
+        let onboardingViewModel = OnboardingViewModel(useCase: userInfoUseCase)
+        let policyViewModel = PolicyViewModel()
+        return OnboardingViewController(viewModel: onboardingViewModel, policyViewModel: policyViewModel)
+    }
 }

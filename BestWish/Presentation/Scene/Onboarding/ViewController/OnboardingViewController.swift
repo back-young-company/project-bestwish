@@ -110,7 +110,7 @@ private extension OnboardingViewController {
         viewModel.state.showPolicySheet
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, _ in
-                let policyVC = PolicyViewController(viewModel: self.policyViewModel)
+            let policyVC = PolicyViewController(viewModel: self.policyViewModel)
             owner.present(policyVC, animated: true)
         }
             .disposed(by: disposeBag)
@@ -225,9 +225,8 @@ private extension OnboardingViewController {
         // TODO: 메인화면으로 이동해야함.
         secondView.completeButton.rx.tap
             .withLatestFrom(viewModel.state.userInfo)
-            .subscribe(with: self) { owner, display in
-            let onboarding = display.toOnboarding()
-            owner.viewModel.action.onNext(.uploadOnboarding(onboarding))
+            .subscribe(with: self) { owner, userInfoDisplay in
+            owner.viewModel.action.onNext(.uploadUserInfo(userInfoDisplay))
         }
             .disposed(by: disposeBag)
     }

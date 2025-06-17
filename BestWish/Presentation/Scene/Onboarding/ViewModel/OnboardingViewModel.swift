@@ -11,7 +11,7 @@ import RxRelay
 
 final class OnboardingViewModel: ViewModel {
 
-    private let dummyUseCase: DummyUseCase
+    private let useCase: UserInfoUseCase
     private let disposeBag = DisposeBag()
 
     // 총 페이지수
@@ -27,7 +27,7 @@ final class OnboardingViewModel: ViewModel {
         case inputNickname(String)
         case nextPage
         case prevPage
-        case uploadOnboarding(Onboarding)
+        case uploadUserInfo(UserInfoDisplay)
     }
 
     struct State {
@@ -52,8 +52,8 @@ final class OnboardingViewModel: ViewModel {
 
     let state: State
 
-    init(dummyUseCase: DummyUseCase) {
-        self.dummyUseCase = dummyUseCase
+    init(useCase: UserInfoUseCase) {
+        self.useCase = useCase
 
         let showPolicy = _action
             .filter { action in
@@ -101,14 +101,26 @@ final class OnboardingViewModel: ViewModel {
             case .inputNicknameValid(let valid):
                 owner._isValidNickname.accept(valid)
 
-            case .uploadOnboarding(let data):
-                let state = SupabaseOAuthManager.shared.uploadUserInfo(to: data)
-                if state {
+            case .uploadUserInfo(let userInfo):
+                Task {
+                    await self.updateUserInfo(with: userInfo)
                     // TODO: MainView로 화면전환
                     SampleViewChangeManager.shared.goMainView()
                 }
             }
         }.disposed(by: disposeBag)
+    }
+
+    private func updateUserInfo(with index: UserInfoDisplay) async {
+        do {
+            try await self.useCase.updateUserInfo(
+                profileImageCode: index.profileImageCode,
+                nickname: index.nickname,
+                gender: index.gender,
+                birth: index.birth)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
     private func updateGender(with index: Gender) {

@@ -43,6 +43,7 @@ final class SupabaseUserInfoManager {
         birth: Date?
     ) async throws {
         let userInfo = try await getUserInfo()
+        let role = userInfo.role == "GUEST" ? "USER" : userInfo.role
         let updateUserInfo = UserDTO(
             id: userInfo.id,
             email: userInfo.email,
@@ -51,7 +52,7 @@ final class SupabaseUserInfoManager {
             gender: gender ?? userInfo.gender,
             birth: birth ?? userInfo.birth,
             profileImageCode: profileImageCode ?? userInfo.profileImageCode,
-            role: userInfo.role,
+            role: role,
             platformSequence: userInfo.platformSequence,
             authProvider: userInfo.authProvider
         )

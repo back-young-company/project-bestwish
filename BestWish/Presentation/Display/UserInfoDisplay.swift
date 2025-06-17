@@ -24,17 +24,6 @@ struct UserInfoDisplay {
         formatter.dateFormat = "yyyy.MM.dd"
         return formatter.string(from: birth)
     }
-
-    func toOnboarding() -> Onboarding {
-        let randomNickname = String(UUID().uuidString.prefix(8))
-        return Onboarding(
-            profileImageCode: profileImageCode,
-            nickname: nickname ?? randomNickname,
-            gender: gender ?? 2,
-            birth: birth ?? Date(),
-            role: "GUEST"
-        )
-    }
 }
 
 extension UserInfoDisplay {

@@ -58,12 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // 나중에 지울 코드
     //----------------------------------
     func showOnboardingView() {
-        let service = DummyServiceImpl()
-        let repo = DummyRepositoryImpl(service: service)
-        let uc = DummyUseCaseImpl(repository: repo)
-        let vm = OnboardingViewModel(dummyUseCase: uc)
-        let vm2 = PolicyViewModel()
-        let nav = UINavigationController(rootViewController: OnboardingViewController(viewModel: vm, policyViewModel: vm2))
+        let nav = UINavigationController(rootViewController: DIContainer.shared.makeOnboardingViewController())
         nav.setNavigationBarHidden(true, animated: true)
         self.window?.rootViewController = nav
         self.window?.makeKeyAndVisible()
