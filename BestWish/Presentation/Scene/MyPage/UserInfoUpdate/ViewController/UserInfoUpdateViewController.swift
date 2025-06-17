@@ -14,7 +14,7 @@ final class UserInfoUpdateViewController: UIViewController {
     private let viewModel: UserInfoUpdateViewModel
     private let disposeBag = DisposeBag()
 
-    init(viewModel: UserInfoUpdateViewModel = UserInfoUpdateViewModel()) {
+    init(viewModel: UserInfoUpdateViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -33,6 +33,8 @@ final class UserInfoUpdateViewController: UIViewController {
         setNavigationBar(alignment: .center, title: "회원 정보 수정")
         bindView()
         bindViewModel()
+
+        viewModel.action.onNext(.getUserInfo)
     }
 
     private func bindView() {
@@ -68,7 +70,14 @@ final class UserInfoUpdateViewController: UIViewController {
         viewModel.state.userInfo
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, userInfo in
+                guard let userInfo else { return }
                 owner.updateView.configure(userInfo: userInfo)
+            }.disposed(by: disposeBag)
+
+        viewModel.state.completedSave
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
     }
 }

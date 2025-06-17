@@ -15,7 +15,6 @@ final class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
     private let viewModel: MyPageViewModel
     private let disposeBag = DisposeBag()
-    private let userInfo = BehaviorRelay<AccountDisplay?>(value: nil)
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<MyPageSection>(
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {
@@ -56,7 +55,6 @@ final class MyPageViewController: UIViewController {
         super.viewDidLoad()
 
         bindViewModel()
-        setHeaderView()
         bindView()
     }
 
@@ -64,6 +62,7 @@ final class MyPageViewController: UIViewController {
         super.viewWillAppear(animated)
 
         showTabBar()
+        viewModel.action.onNext(.getUserInfo)
     }
 
     private func bindView() {
@@ -91,12 +90,14 @@ final class MyPageViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.state.userInfo
-            .bind(to: userInfo)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self, onNext: { owner, UserInfoDisplay in
+                owner.setHeaderView(userInfo: UserInfoDisplay)
+            })
             .disposed(by: disposeBag)
     }
 
-    private func setHeaderView() {
-        guard let userInfo = userInfo.value else { return }
+    private func setHeaderView(userInfo: UserInfoDisplay) {
         let frame = CGRect(
             x: 0,
             y: 0,
@@ -112,7 +113,7 @@ final class MyPageViewController: UIViewController {
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()
-                let updateVC = ProfileUpdateViewController()
+                let updateVC = DIContainer.shared.makeProfileUpdateViewController()
                 owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)
     }

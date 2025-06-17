@@ -17,7 +17,7 @@ struct ProductDTO: Codable {
     let brand: String?
     let imagePathURL: String?
     let productURL: String?
-    let createdAt: Date? = nil
+    let createdAt: Date?
 
     enum CodingKeys: String, CodingKey {
         case id

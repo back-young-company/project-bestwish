@@ -32,39 +32,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ///         1. 온보딩부터 실행
         ///
         /// Task 구현이 안전하지 않을시 다른 방법 고려 가능
-//        Task {
-//            let isLogin = await SupabaseOAuthManager.shared.checkLoginState()
-//            if isLogin {
-//                do {
-//                    let isOnboarding = try await SupabaseOAuthManager.shared.checkOnboardingState()
-//                    await MainActor.run {
-//                        if isOnboarding {
-//                            self.showMainView()
-//                        } else {
-//                            self.showOnboardingView()
-//                        }
-//                    }
-//                } catch {
-//                    self.showLoginView()
-//                }
-//            } else {
-//                await MainActor.run {
-//                    self.showLoginView()
-//                }
-//            }
-//        }
-        showMainView()
+        Task {
+            let isLogin = await SupabaseOAuthManager.shared.checkLoginState()
+            if isLogin {
+                do {
+                    let isOnboarding = try await SupabaseOAuthManager.shared.checkOnboardingState()
+                    await MainActor.run {
+                        if isOnboarding {
+                            self.showMainView()
+                        } else {
+                            self.showOnboardingView()
+                        }
+                    }
+                } catch {
+                    self.showLoginView()
+                }
+            } else {
+                await MainActor.run {
+                    self.showLoginView()
+                }
+            }
+        }
     }
 
     // 나중에 지울 코드
     //----------------------------------
     func showOnboardingView() {
-        let service = DummyServiceImpl()
-        let repo = DummyRepositoryImpl(service: service)
-        let uc = DummyUseCaseImpl(repository: repo)
-        let vm = OnboardingViewModel(dummyUseCase: uc)
-        let vm2 = PolicyViewModel()
-        let nav = UINavigationController(rootViewController: OnboardingViewController(viewModel: vm, policyViewModel: vm2))
+        let nav = UINavigationController(rootViewController: DIContainer.shared.makeOnboardingViewController())
         nav.setNavigationBarHidden(true, animated: true)
         self.window?.rootViewController = nav
         self.window?.makeKeyAndVisible()
@@ -77,14 +71,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func showMainView() {
-        let service = DummyServiceImpl()
-        let repository = DummyRepositoryImpl(service: service)
-        let useCase = DummyUseCaseImpl(repository: repository)
-        let vm = DummyViewModel(dummyUseCase: useCase)
         let vc = TabBarViewController(viewControllers: [
             UINavigationController(rootViewController: HomeViewController()),
             UINavigationController(rootViewController: CameraViewController()),
-            UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
+            UINavigationController(rootViewController: DIContainer.shared.makeMyPageViewController())
         ])
         window?.rootViewController = vc // DummyViewController(viewModel: vm)
         window?.makeKeyAndVisible()
