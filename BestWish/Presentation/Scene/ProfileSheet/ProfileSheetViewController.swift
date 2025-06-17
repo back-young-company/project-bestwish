@@ -46,10 +46,11 @@ final class ProfileSheetViewController: UIViewController {
                 // 이미지 선택 표시
                 if type.rawValue == selectedIndex.value {
                     let indexPath = IndexPath(row: index, section: 0)
-                    profileSheetView.collectionView.selectItem(
+
+                    profileSheetView.getCollectionView.selectItem(
                         at: indexPath,
-                        animated: true,
-                        scrollPosition: .centeredHorizontally
+                        animated: false,
+                        scrollPosition: [] // 자동 스크롤 제거
                     )
                 }
                 cell.configure(imageName: type.name)
