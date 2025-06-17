@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         IQKeyboardManager.shared.isEnabled = true
         IQKeyboardManager.shared.resignOnTouchOutside = true
+        IQKeyboardManager.shared.layoutIfNeededOnUpdate = true
         
         sleep(1)
         return true
