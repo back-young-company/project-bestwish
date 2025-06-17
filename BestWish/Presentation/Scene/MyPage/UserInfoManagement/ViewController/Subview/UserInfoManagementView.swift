@@ -43,8 +43,8 @@ final class UserInfoManagementView: UIView {
         fatalError()
     }
 
-    func configure(loginInfo: String) {
-        snsInfoHorizontalStackView.configure(title: "\(loginInfo) 계정")
+    func configure(authProvider: String?) {
+        snsInfoHorizontalStackView.configure(title: "\(String(describing: authProvider)) 계정")
     }
 
     func addUnderLine() {

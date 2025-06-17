@@ -20,11 +20,13 @@ final class AppButton: UIButton {
 
     override var isHighlighted: Bool {
         didSet {
-            if isHighlighted {
-                backgroundColor = type.highlightedBackgroundColor
-            } else {
-                backgroundColor = type.backgroundColor
-            }
+            backgroundColor = isHighlighted ? type.highlightedBackgroundColor : type.backgroundColor
+        }
+    }
+
+    override var isEnabled: Bool {
+        didSet {
+            backgroundColor = isEnabled ? type.backgroundColor : type.disabledBackgroundColor
         }
     }
 
@@ -163,6 +165,15 @@ extension AppButton.ButtonType {
             return .primary50
         case .cancel, .before, .withdraw, .reset, .back, .nextUnable, .incomplete:
             return .gray300
+        }
+    }
+
+    var disabledBackgroundColor: UIColor? {
+        switch self {
+        case .confirmChange:
+            return .gray50
+        default:
+            return backgroundColor
         }
     }
 }
