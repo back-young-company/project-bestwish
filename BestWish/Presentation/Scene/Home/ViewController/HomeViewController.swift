@@ -165,8 +165,7 @@ final class HomeViewController: UIViewController {
                         headerView.getEditButton.rx.tap
                             .bind(with: self) { owner, _ in
                                 owner.hidesTabBar()
-                                let vc = WishlistEditViewController()
-                                owner.navigationController?.pushViewController(vc, animated: true)
+                                owner.navigationController?.pushViewController(DIContainer.shared.makeWishlistEditViewController(), animated: true)
                             }.disposed(by: headerView.disposeBag)
                         
                         return headerView

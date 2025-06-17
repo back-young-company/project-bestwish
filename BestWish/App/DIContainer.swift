@@ -41,6 +41,11 @@ final class DIContainer {
         let viewModel = PlatformEditViewModel(useCase: wishListUseCase)
         return PlatformEditViewController(platformEditViewModel: viewModel)
     }
+    
+    func makeWishlistEditViewController() -> WishlistEditViewController {
+        let viewModel = WishEditViewModel(useCase: wishListUseCase)
+        return WishlistEditViewController(wishEditViewModel: viewModel)
+    }
 
     func makeMyPageViewController() -> MyPageViewController {
         let viewModel = MyPageViewModel(useCase: userInfoUseCase)

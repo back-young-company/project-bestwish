@@ -8,24 +8,21 @@
 import Foundation
 
 import RxSwift
+import RxRelay
 
 final class WishEditViewModel: ViewModel {
     
     enum Action {
-        
+        case viewDidLoad
     }
     
     struct State {
-        let sections = Observable<[WishlistEditSectionModel]>.just([
-            WishlistEditSectionModel(header: "섹션", items: [
-                WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원", productDeepLink: ""),
-                WishlistProduct(productImageURL: ProductImage.product2, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원", productDeepLink: ""),
-                WishlistProduct(productImageURL: ProductImage.product3, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원", productDeepLink: ""),
-                WishlistProduct(productImageURL: ProductImage.product4, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원", productDeepLink: ""),
-                WishlistProduct(productImageURL: ProductImage.product1, brandName: "나이키", productName: "반팔 세트 후드 썸머룩 운동복 아노락 오버핏 반바지", productSaleRate: "23%", productPrice: "55,640원", productDeepLink: "")
-            ])
-        ])
+        let sections: Observable<[WishlistEditSectionModel]>
     }
+    
+    private let _sections = BehaviorRelay<[WishlistEditSectionModel]>(value: [])
+    
+    private let useCase: WishListUseCase
     
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
@@ -34,7 +31,40 @@ final class WishEditViewModel: ViewModel {
     
     private let disposeBag = DisposeBag()
     
-    init() {
-        state = State()
+    init(useCase: WishListUseCase) {
+        self.useCase = useCase
+        
+        state = State(sections: _sections.asObservable())
+        
+        self.bind()
+    }
+    
+    private func bind() {
+        _action
+            .subscribe(with: self) { owner, action in
+                switch action {
+                case .viewDidLoad:
+                    Task {
+                        let wishlists = try await owner.getWishLists()
+                        let section = WishlistEditSectionModel(header: "섹션", items: wishlists)
+                        owner._sections.accept([section])
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func getWishLists() async throws -> [WishlistProduct] {
+        let result = try await self.useCase.searchWishListItems()
+        return result.map { item in
+            WishlistProduct(
+                productImageURL: item.imagePathURL,
+                brandName: item.brand,
+                productName: item.title,
+                productSaleRate: "\(item.discountRate)%",
+                productPrice: "\(String(item.price))원",
+                productDeepLink: item.productURL ?? ""
+            )
+        }
     }
 }

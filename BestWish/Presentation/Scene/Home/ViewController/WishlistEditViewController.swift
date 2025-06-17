@@ -14,9 +14,18 @@ import RxRelay
 final class WishlistEditViewController: UIViewController {
     
     private let wishEditView = WishlistEditView()
-    private let wishEditViewModel = WishEditViewModel()
+    private let wishEditViewModel: WishEditViewModel
     
     private let disposeBag = DisposeBag()
+    
+    init(wishEditViewModel: WishEditViewModel) {
+        self.wishEditViewModel = wishEditViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = wishEditView
@@ -26,9 +35,8 @@ final class WishlistEditViewController: UIViewController {
         super.viewDidLoad()
         
         setNavigationBar()
-        bindActions()
         bindViewModel()
-        
+        bindActions()
     }
     
     private func bindViewModel() {
@@ -58,6 +66,8 @@ final class WishlistEditViewController: UIViewController {
             .disposed(by: disposeBag)
         
         wishEditViewModel.state.sections
+            .take(1)
+            .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, sections in
                 owner.setCollectionViewLayout(sections)
             }
@@ -65,6 +75,8 @@ final class WishlistEditViewController: UIViewController {
     }
     
     private func bindActions() {
+        wishEditViewModel.action.onNext(.viewDidLoad)
+        
         wishEditView.getBackButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)

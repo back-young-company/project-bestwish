@@ -39,6 +39,7 @@ private extension WishlistEditHeaderView {
     
     func setAttributes() {
         platformCountLabel.do {
+            $0.text = "0개"
             $0.textColor = .gray200
             $0.font = .font(.pretendardMedium, ofSize: 12)
         }
@@ -62,6 +63,7 @@ private extension WishlistEditHeaderView {
         platformCountLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(14)
             $0.leading.equalToSuperview().offset(20)
+            $0.height.equalTo(12)
             $0.bottom.equalToSuperview().offset(-26)
         }
         
