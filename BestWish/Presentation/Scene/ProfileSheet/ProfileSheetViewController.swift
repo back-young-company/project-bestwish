@@ -37,7 +37,7 @@ final class ProfileSheetViewController: UIViewController {
     private func bindView() {
         // 전체 프로필 이미지 띄우기
         Observable.just(ProfileType.allCases)
-            .bind(to: profileSheetView.collectionView.rx.items(
+            .bind(to: profileSheetView.getCollectionView.rx.items(
                     cellIdentifier: ProfileSheetCell.identifier,
                     cellType: ProfileSheetCell.self
                 )
@@ -56,13 +56,13 @@ final class ProfileSheetViewController: UIViewController {
             }.disposed(by: disposeBag)
 
         // 프로필 선택
-        profileSheetView.collectionView.rx.itemSelected
+        profileSheetView.getCollectionView.rx.itemSelected
             .map { $0.item }
             .bind(to: selectedIndex)
             .disposed(by: disposeBag)
 
         // 완료 버튼
-        profileSheetView.completeButton.rx.tap
+        profileSheetView.getCompleteButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.onComplete?(owner.selectedIndex.value)
                 owner.dismiss(animated: true)

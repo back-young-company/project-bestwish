@@ -13,7 +13,7 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
     private let infoStackView = UIStackView()
     private let nicknameLabel = UILabel()
     private let emailLabel = UILabel()
-    let seeMoreButton = UIButton()
+    private let seeMoreButton = UIButton()
     private let separatorView = UIView()
 
     override init(reuseIdentifier: String?) {
@@ -31,6 +31,8 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
         nicknameLabel.text = user.nickname
         emailLabel.text = user.email
     }
+
+    var _getSeeMoreButton: UIButton { seeMoreButton }
 }
 
 private extension MyPageHeaderView {

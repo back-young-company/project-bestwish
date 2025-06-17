@@ -42,13 +42,13 @@ final class UserInfoManagementViewController: UIViewController {
     }
 
     private func bindView() {
-        managementView.userInfoHorizontalStackView.arrowButton.rx.tap
+        managementView.getUserInfoArrowButton.rx.tap
             .bind(with: self) { owner, _ in
                 let nextVC = DIContainer.shared.makeUserInfoUpdateViewController()
                 owner.navigationController?.pushViewController(nextVC, animated: true)
             }.disposed(by: disposeBag)
 
-        managementView.withdrawStackView.arrowButton.rx.tap
+        managementView.getWithdrawButton.rx.tap
             .bind(with: self) { owner, _ in
                 AlertBuilder(baseViewController: self, type: .withdraw) {
                     owner.viewModel.action.onNext(.withdraw)

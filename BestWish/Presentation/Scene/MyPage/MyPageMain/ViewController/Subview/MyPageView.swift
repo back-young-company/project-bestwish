@@ -8,7 +8,7 @@
 import UIKit
 
 final class MyPageView: UIView {
-    let tableView = UITableView()
+    private let tableView = UITableView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,6 +20,8 @@ final class MyPageView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+
+    var getTableView: UITableView { tableView }
 }
 
 private extension MyPageView {
