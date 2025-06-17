@@ -169,7 +169,7 @@ private extension OnboardingViewController {
 
         // 닉네임 바인딩
         /// 1) 텍스트 스트림
-        let textStream = secondView.nicknameStackView.textField.rx.text.orEmpty
+        let textStream = secondView.nicknameVStackView.textField.rx.text.orEmpty
             .skip(2)
 
         /// 2) 텍스트+유효성 스트림
@@ -190,11 +190,11 @@ private extension OnboardingViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, data in
             let (text, isValid) = data
-            owner.secondView.nicknameStackView.textField.layer.borderColor =
+            owner.secondView.nicknameVStackView.textField.layer.borderColor =
                 isValid ? UIColor.primary300?.cgColor // 허용 값
             : UIColor.red0?.cgColor // 불허 값
 
-            owner.secondView.nicknameStackView.cautionLabel.textColor =
+            owner.secondView.nicknameVStackView.cautionLabel.textColor =
                 isValid ? .gray200 : .red0
 
             // 닉네임 유효성 검사 성공시 전달

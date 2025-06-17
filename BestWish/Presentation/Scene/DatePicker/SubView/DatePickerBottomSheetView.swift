@@ -13,7 +13,7 @@ final class DatePickerBottomSheetView: UIView {
 
     private let stack = VerticalStackView(spacing: 12)
     let datePicker = UIDatePicker()
-    private let buttonStack = HorizontalStackView(spacing: 12)
+    private let buttonHStackView = HorizontalStackView(spacing: CGFloat(12).fitWidth)
     let cancelButton = AppButton(type: .cancel)
     let completeButton = AppButton(type: .complete)
 
@@ -54,7 +54,7 @@ private extension DatePickerBottomSheetView {
             $0.preferredDatePickerStyle = .wheels
         }
 
-        buttonStack.do {
+        buttonHStackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 12,
@@ -67,8 +67,8 @@ private extension DatePickerBottomSheetView {
 
     func setHierarchy() {
         self.addSubviews(stack)
-        stack.addArrangedSubviews(datePicker, buttonStack)
-        buttonStack.addArrangedSubviews(cancelButton, completeButton)
+        stack.addArrangedSubviews(datePicker, buttonHStackView)
+        buttonHStackView.addArrangedSubviews(cancelButton, completeButton)
     }
 
     func setConstraints() {
@@ -76,16 +76,13 @@ private extension DatePickerBottomSheetView {
             $0.edges.equalToSuperview()
         }
 
-        buttonStack.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(53+24).fitHeight)
-        }
-
         cancelButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
+            $0.height.equalTo(54)
         }
-/// 필요시 사용하기 (제약조건 경고가 발생됨을 확인해서 주석처리함)
-//        completeButton.snp.makeConstraints {
-//            $0.width.equalTo(CGFloat(243).fitWidth)
-//        }
+
+        completeButton.snp.makeConstraints {
+            $0.height.equalTo(54)
+        }
     }
 }

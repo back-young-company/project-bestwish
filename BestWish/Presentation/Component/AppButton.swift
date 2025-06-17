@@ -37,7 +37,7 @@ final class AppButton: UIButton {
         super.init(frame: .zero)
         setView()
     }
-    
+
     required
     init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -70,9 +70,7 @@ private extension AppButton {
 extension AppButton {
     enum ButtonType {
         case complete
-//        case incomplete
         case next
-//        case nextUnable
         case shortcut
         case analyze
         case viewProduct
@@ -91,8 +89,8 @@ extension AppButton {
 extension AppButton.ButtonType {
     var title: String {
         switch self {
-        case .complete/*, .incomplete*/: "완료"
-        case .next/*, .nextUnable*/: "다음"
+        case .complete: "완료"
+        case .next: "다음"
         case .shortcut: "바로가기"
         case .analyze: "분석하기"
         case .viewProduct: "상품 보기"
@@ -111,9 +109,9 @@ extension AppButton.ButtonType {
     var titleColor: UIColor? {
         switch self {
         case .complete, .next, .shortcut, .analyze,
-                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
+             .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .gray0
-        case .before, .withdraw, /*.nextUnable, .incomplete, */.back, .reset, .cancel:
+        case .before, .withdraw, .reset, .back, .cancel:
             return .gray300
         }
     }
@@ -121,12 +119,10 @@ extension AppButton.ButtonType {
     var backgroundColor: UIColor? {
         switch self {
         case .complete, .next, .shortcut, .analyze,
-                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
+             .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary300
         case .cancel, .before, .withdraw, .reset, .back:
             return .gray0
-//        case .nextUnable, .incomplete:
-//            return .gray50
         }
     }
 
@@ -151,9 +147,9 @@ extension AppButton.ButtonType {
     var highlightedBackgroundColor: UIColor? {
         switch self {
         case .complete, .next, .shortcut, .analyze,
-                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
+             .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary200
-        case .cancel, .before, .withdraw, .reset, .back/*, .nextUnable, .incomplete*/:
+        case .cancel, .before, .withdraw, .reset, .back:
             return .gray50
         }
     }
@@ -161,9 +157,10 @@ extension AppButton.ButtonType {
     var highlightedTitleColor: UIColor? {
         switch self {
         case .complete, .next, .shortcut, .analyze,
-                .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
+             .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary50
-        case .cancel, .before, .withdraw, .reset,.back/*, .nextUnable, .incomplete*/:            return .gray300
+        case .cancel, .before, .withdraw, .reset, .back:
+            return .gray300
         }
     }
 

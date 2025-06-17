@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 final class PolicyBottomSheetView: UIView {
-    private let infoStackView: InfoStackView
+    private let infoStackView: IntroTextStackView
     private let separator = UIView()
     /// 모두 동의합니다
     private let selectAllHStack = HorizontalStackView(spacing: 8)
@@ -33,7 +33,7 @@ final class PolicyBottomSheetView: UIView {
 
     // MARK: - Init
     init(title: String, desc: String) {
-        self.infoStackView = InfoStackView(title: title, desc: desc)
+        self.infoStackView = IntroTextStackView(title: title, desc: desc)
         super.init(frame: .zero)
         setView()
     }
