@@ -90,6 +90,7 @@
 				Data/Network/Service/ShareExtension/ShareExtensionService.swift,
 				Data/Network/Service/ShareExtension/ZigzagFetcher.swift,
 				"Data/Util/String+Util.swift",
+				"Data/Util/UIImage+Util.swift",
 				Domain/Entity/Product.swift,
 				Domain/Entity/ProductMetaData.swift,
 				Domain/Entity/SharePlatform.swift,
