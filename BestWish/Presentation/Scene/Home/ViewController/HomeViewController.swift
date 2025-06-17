@@ -35,14 +35,16 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         bindViewModel()
+        
+        homeViewModel.action.onNext(.viewDidload)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        bindActions()
         showTabBar()
         self.navigationController?.navigationBar.isHidden = true
+        
     }
     
     private func bindViewModel() {
@@ -108,7 +110,9 @@ final class HomeViewController: UIViewController {
                     headerView.getEditButton.rx.tap
                         .bind(with: self) { owner, _ in
                             owner.hidesTabBar()
-                            owner.navigationController?.pushViewController(DIContainer.shared.makePlatformEditViewController(), animated: true)
+                            let vc = DIContainer.shared.makePlatformEditViewController()
+                            vc.delegate = owner
+                            owner.navigationController?.pushViewController(vc, animated: true)
                         }.disposed(by: headerView.disposeBag)
                     
                     return headerView
@@ -181,10 +185,6 @@ final class HomeViewController: UIViewController {
             .bind(to: homeView.getCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
-    
-    private func bindActions() {
-        homeViewModel.action.onNext(.viewDidload)
-    }
 }
 
 private extension HomeViewController {
@@ -216,5 +216,11 @@ private extension HomeViewController {
                 self.showBasicAlert(title: "미지원 플랫폼", message: "해당 플랫폼은 추후 엡데이트될 예정입니다.\n감사합니다.")
             }
         }
+    }
+}
+
+extension HomeViewController: PlatformSequenceUpdate {
+    func update() {
+        self.homeViewModel.action.onNext(.platformUpdate)
     }
 }

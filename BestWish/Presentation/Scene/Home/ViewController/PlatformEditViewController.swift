@@ -17,6 +17,7 @@ final class PlatformEditViewController: UIViewController {
     private let platformEditViewModel: PlatformEditViewModel
     
     private var updatedIndices: [Int] = []
+    weak var delegate: PlatformSequenceUpdate?
     
     private let disposeBag = DisposeBag()
     
@@ -99,6 +100,20 @@ final class PlatformEditViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        platformEditView.getHeaderView.getCompleteButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
+            }
+            .disposed(by: disposeBag)
+        
+        platformEditViewModel.state.sendDelegate
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, _ in
+                owner.delegate?.update()
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         platformEditView.getTableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
         
@@ -129,13 +144,6 @@ final class PlatformEditViewController: UIViewController {
         let height = platformEditView.getHeaderView.systemLayoutSizeFitting(targetSize).height
         platformEditView.getHeaderView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
         platformEditView.getTableView.tableHeaderView = platformEditView.getHeaderView
-        
-        platformEditView.getHeaderView.getCompleteButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
-                owner.navigationController?.popViewController(animated: true)
-            }
-            .disposed(by: disposeBag)
     }
 }
 
@@ -148,4 +156,8 @@ extension PlatformEditViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
+}
+
+protocol PlatformSequenceUpdate: AnyObject {
+    func update()
 }

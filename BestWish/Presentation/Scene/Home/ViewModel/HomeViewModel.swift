@@ -14,6 +14,7 @@ final class HomeViewModel: ViewModel {
     
     enum Action {
         case viewDidload
+        case platformUpdate
     }
     
     struct State {
@@ -63,6 +64,20 @@ final class HomeViewModel: ViewModel {
                             
                             owner._platformFilter.accept(platformFilters)
                             owner.setDataSources(platforms: platforms, wishLists: wishLists)
+                        } catch {
+                            owner._error.accept(error)
+                        }
+                    }
+                case .platformUpdate:
+                    Task {
+                        do {
+                            let platforms = try await owner.getPlatformSequence()
+                            let currentSections = owner._sections.value
+                            guard currentSections.count == 2 else { return }
+                            let wishlistSection = currentSections[1]
+                            
+                            let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
+                            owner._sections.accept([platformsSection, wishlistSection])
                         } catch {
                             owner._error.accept(error)
                         }

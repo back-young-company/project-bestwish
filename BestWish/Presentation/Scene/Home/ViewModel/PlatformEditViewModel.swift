@@ -19,12 +19,14 @@ final class PlatformEditViewModel: ViewModel {
     
     struct State {
         let sections: Observable<[PlatformEditSectionModel]>
+        let sendDelegate: Observable<Void>
         let error: Observable<Error>
     }
     
     private let _action = PublishSubject<Action>()
     
     private let _sections = BehaviorRelay<[PlatformEditSectionModel]>(value: [])
+    private let _sendDelegate = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
     
     private let useCase: WishListUseCase
@@ -39,6 +41,7 @@ final class PlatformEditViewModel: ViewModel {
         
         state = State(
             sections: _sections.asObservable(),
+            sendDelegate: _sendDelegate.asObservable(),
             error: _error.asObservable()
         )
         
@@ -64,6 +67,7 @@ final class PlatformEditViewModel: ViewModel {
                             try await owner.updatePlatformSequence(indices)
                             let items = try await owner.getPlatformSequence(isEdit: true)
                             owner.setDataSources(items: items)
+                            owner._sendDelegate.accept(())
                         } catch {
                             owner._error.accept(error)
                         }
