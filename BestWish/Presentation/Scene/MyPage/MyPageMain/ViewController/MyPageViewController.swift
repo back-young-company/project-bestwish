@@ -75,6 +75,12 @@ final class MyPageViewController: UIViewController {
                     owner.navigationController?.pushViewController(managementViewController, animated: true)
                 case .question:
                     owner.sendQuestion()
+                case .termsOfUse:
+                    let nextVC = PDFViewController(type: .service)
+                    self.present(nextVC, animated: true)
+                case .privacyPolicy:
+                    let nextVC = PDFViewController(type: .privacy)
+                    self.present(nextVC, animated: true)
                 case .logout:
                     AlertBuilder(baseViewController: self, type: .logout) {
                         print("로그아웃")
