@@ -108,7 +108,11 @@ final class HomeViewController: UIViewController {
                     headerView.configure(title: "플랫폼 바로가기")
                     headerView.getEditButton.rx.tap
                         .bind(with: self) { owner, _ in
-                            let vc = PlatformEditViewController()
+                            let supabaseManger = SupabaseManager()
+                            let wishListRepository = WishListRepositoryImpl(manager: supabaseManger)
+                            let wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
+                            let platformEditViewModel = PlatformEditViewModel(useCase: wishListUseCase)
+                            let vc = PlatformEditViewController(platformEditViewModel: platformEditViewModel)
                             owner.hidesTabBar()
                             owner.navigationController?.pushViewController(vc, animated: true)
                         }.disposed(by: headerView.disposeBag)

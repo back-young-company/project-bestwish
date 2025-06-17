@@ -8,7 +8,7 @@
 import Foundation
 
 import RxSwift
-import RxCocoa
+import RxRelay
 
 final class HomeViewModel: ViewModel {
     
@@ -24,15 +24,15 @@ final class HomeViewModel: ViewModel {
     }
     
     private let _action = PublishSubject<Action>()
-    var action: AnyObserver<Action> { _action.asObserver() }
-    
-    private let useCase: WishListUseCase
     
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
     private let _platformFilter = BehaviorRelay<[Int]>(value: [])
     private let _platformSequence = BehaviorRelay<[Int]>(value: [])
     private let _error = PublishRelay<Error>()
     
+    private let useCase: WishListUseCase
+    
+    var action: AnyObserver<Action> { _action.asObserver() }
     let state: State
     
     private let disposeBag = DisposeBag()
@@ -101,7 +101,6 @@ final class HomeViewModel: ViewModel {
     private func getPlatformInWishList() async throws -> [Int] {
         var result = try await self.useCase.getPlatformsInWishList()
         result.insert(0, at: 0)
-        print(result)
         return result
     }
     
