@@ -14,6 +14,7 @@ final class PlatformEditViewModel: ViewModel {
     
     enum Action {
         case viewDidLoad
+        case itemMoved([PlatformEdit])
         case updatePlatformEdit([Int])
     }
     
@@ -61,6 +62,11 @@ final class PlatformEditViewModel: ViewModel {
                             owner._error.accept(error)
                         }
                     }
+                case .itemMoved(let platforms):
+                    var section = owner._sections.value
+                    section[0] = PlatformEditSectionModel(header: "헤더", items: platforms)
+                    owner._sections.accept(section)
+                    
                 case .updatePlatformEdit(let indices):
                     Task {
                         do {

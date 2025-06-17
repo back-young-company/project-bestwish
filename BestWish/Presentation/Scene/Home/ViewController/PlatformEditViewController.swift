@@ -17,6 +17,7 @@ final class PlatformEditViewController: UIViewController {
     private let platformEditViewModel: PlatformEditViewModel
     
     private var updatedIndices: [Int] = []
+    
     weak var delegate: HomeViewControllerUpdate?
     
     private let disposeBag = DisposeBag()
@@ -94,6 +95,7 @@ final class PlatformEditViewController: UIViewController {
                 let movedItem = currentItems.remove(at: sourceIndexPath.row)
                 currentItems.insert(movedItem, at: destinationIndexPath.row)
                 
+                owner.platformEditViewModel.action.onNext(.itemMoved(currentItems))
                 owner.updatedIndices = currentItems.compactMap { item in
                     ShopPlatform.allCases.firstIndex(where: { $0.platformName == item.platformName })
                 }
