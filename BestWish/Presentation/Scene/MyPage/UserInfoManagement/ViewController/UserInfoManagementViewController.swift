@@ -62,5 +62,11 @@ final class UserInfoManagementViewController: UIViewController {
             .bind(with: self) { owner, authProvider in
                 owner.managementView.configure(authProvider: authProvider)
             }.disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+            }.disposed(by: disposeBag)
     }
 }
