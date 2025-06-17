@@ -65,7 +65,10 @@ private extension MyPageHeaderView {
         }
 
         seeMoreButton.do {
-            $0.setImage(.init(systemName: "chevron.right"), for: .normal)
+            var config = UIButton.Configuration.plain()
+            config.contentInsets = .init(top: 12, leading: 12, bottom: 12, trailing: 12)
+            config.image = .init(systemName: "chevron.right")
+            $0.configuration = config
             $0.tintColor = .gray900
         }
 
@@ -93,8 +96,8 @@ private extension MyPageHeaderView {
 
         seeMoreButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.size.equalTo(24)
-            make.trailing.equalToSuperview().inset(CGFloat(16).fitWidth)
+            make.size.equalTo(48)
+            make.trailing.equalToSuperview().inset(8)
         }
 
         separatorView.snp.makeConstraints { make in
