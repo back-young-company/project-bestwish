@@ -44,7 +44,8 @@ final class UserInfoManagementView: UIView {
     }
 
     func configure(authProvider: String?) {
-        snsInfoHorizontalStackView.configure(title: "\(String(describing: authProvider)) 계정")
+        guard let provider = authProvider else { return }
+        snsInfoHorizontalStackView.configure(title: "\(String(describing: provider)) 계정")
     }
 
     func addUnderLine() {
