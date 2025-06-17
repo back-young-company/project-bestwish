@@ -15,6 +15,8 @@ protocol UserInfoUseCase {
         gender: Int?,
         birth: Date?
     ) async throws
+
+    func isValidNickname(_ nickname: String) -> Bool
 }
 
 extension UserInfoUseCase {
@@ -56,5 +58,13 @@ final class UserInfoUseCaseImpl: UserInfoUseCase {
             gender: gender,
             birth: birth
         )
+    }
+
+    /// 닉네임 유효성 검사
+    func isValidNickname(_ nickname: String) -> Bool {
+        let nicknameRegex =  "^[가-힣A-Za-z0-9]{2,10}$"
+        let isValid = NSPredicate(format: "SELF MATCHES %@", nicknameRegex)
+            .evaluate(with: nickname)
+        return isValid
     }
 }
