@@ -119,10 +119,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
     }
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(with image: UIImage) {
-        let service = DummyServiceImpl()
-        let repo = DummyRepositoryImpl(service: service)
-        let vm = ImageEditViewModel(dummyUseCase: DummyUseCaseImpl(repository: repo))
-        imageEditVC = ImageEditViewController(image: image, viewModel: vm)
+        imageEditVC = DIContainer.shared.makeImageEditController(image: image)
         
         guard let imageEditVC else { return }
         imageEditVC.onDismiss = { [weak self] in
