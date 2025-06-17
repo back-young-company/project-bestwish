@@ -83,6 +83,13 @@ final class ProfileUpdateViewController: UIViewController {
                 owner.profileUpdateView.configure(user: userInfo)
             }.disposed(by: disposeBag)
 
+        viewModel.state.isValidNickname
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, isValid in
+                owner.profileUpdateView.configure(isValidNickname: isValid)
+            }
+            .disposed(by: disposeBag)
+
         viewModel.state.completedSave
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, _ in
