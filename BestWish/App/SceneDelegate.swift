@@ -58,12 +58,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // 나중에 지울 코드
     //----------------------------------
     func showOnboardingView() {
-        let service = DummyServiceImpl()
-        let repo = DummyRepositoryImpl(service: service)
-        let uc = DummyUseCaseImpl(repository: repo)
-        let vm = OnboardingViewModel(dummyUseCase: uc)
-        let vm2 = PolicyViewModel()
-        let nav = UINavigationController(rootViewController: OnboardingViewController(viewModel: vm, policyViewModel: vm2))
+        let nav = UINavigationController(rootViewController: DIContainer.shared.makeOnboardingViewController())
         nav.setNavigationBarHidden(true, animated: true)
         self.window?.rootViewController = nav
         self.window?.makeKeyAndVisible()
@@ -76,22 +71,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func showMainView() {
-        let service = DummyServiceImpl()
-        let supabaseManger = SupabaseManager()
-        
-        let repository = DummyRepositoryImpl(service: service)
-        let wishListRepository = WishListRepositoryImpl(manager: supabaseManger)
-        
-        let useCase = DummyUseCaseImpl(repository: repository)
-        let wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
-        
-        let vm = DummyViewModel(dummyUseCase: useCase)
-        let homeViewModel = HomeViewModel(useCase: wishListUseCase)
-        
         let vc = TabBarViewController(viewControllers: [
-            UINavigationController(rootViewController: HomeViewController(homeViewModel: homeViewModel)),
+            UINavigationController(rootViewController: DIContainer.shared.makeHomeViewController()),
             UINavigationController(rootViewController: CameraViewController()),
-            UINavigationController(rootViewController: MyPageViewController(viewModel: MyPageViewModel()))
+            UINavigationController(rootViewController: DIContainer.shared.makeMyPageViewController())
         ])
         window?.rootViewController = vc // DummyViewController(viewModel: vm)
         window?.makeKeyAndVisible()

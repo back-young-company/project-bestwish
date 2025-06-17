@@ -48,9 +48,6 @@ private extension ImageEditView {
     func setView() {
         setAttributes()
         setHierarchy()
-        setDelegate()
-        setDataSource()
-        setBindings()
     }
     
     func setAttributes() {
@@ -112,26 +109,14 @@ private extension ImageEditView {
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
             $0.leading.equalToSuperview().inset(20)
             $0.width.equalTo(80)
-            $0.height.equalTo(60)
+            $0.height.equalTo(53)
         }
         
         doneButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(20)
             $0.leading.equalTo(cancelButton.snp.trailing).offset(10)
             $0.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(60)
+            $0.height.equalTo(53)
         }
-    }
-    
-    func setDelegate() {
-        
-    }
-    
-    func setDataSource() {
-        
-    }
-    
-    func setBindings() {
-        
     }
 }

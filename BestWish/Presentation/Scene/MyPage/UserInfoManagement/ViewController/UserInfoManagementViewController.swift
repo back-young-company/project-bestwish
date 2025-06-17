@@ -42,7 +42,7 @@ final class UserInfoManagementViewController: UIViewController {
     private func bindView() {
         managementView.userInfoHorizontalStackView.arrowButton.rx.tap
             .bind(with: self) { owner, _ in
-                let nextVC = UserInfoUpdateViewController()
+                let nextVC = DIContainer.shared.makeUserInfoUpdateViewController()
                 owner.navigationController?.pushViewController(nextVC, animated: true)
             }.disposed(by: disposeBag)
 

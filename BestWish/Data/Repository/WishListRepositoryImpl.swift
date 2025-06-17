@@ -9,10 +9,13 @@ import Foundation
 
 final class WishListRepositoryImpl: WishListRepository {
 
+    //TODO: SupabaseManager 네이밍 변경 필요
     private let manager: SupabaseManager
+    private let userInfoManager: SupabaseUserInfoManager
 
-    init(manager: SupabaseManager) {
+    init(manager: SupabaseManager, userInfoManager: SupabaseUserInfoManager) {
         self.manager = manager
+        self.userInfoManager = userInfoManager
     }
 
     func getPlatformSequence() async throws -> [Int] {
@@ -33,16 +36,16 @@ final class WishListRepositoryImpl: WishListRepository {
         }
     }
 
-    func getPlatformsInWishList() async throws -> [Int] {
+    func getPlatformsInWishList() async throws -> [(platform: Int, count: Int)] {
+        let userInfo = try await userInfoManager.getUserInfo()
+        
         do {
-            let result = try await manager.getPlatformsInWishList()
-            return Array(Set(result.map { Int($0.platform) }))
+            return try await manager.getPlatformsInWishList(userInfo: userInfo)
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
         }
     }
 
-    // TODO: Error Handling
     func searchWishListItems(query: String?, platform: Int?) async throws -> [Product] {
         do {
             let result = try await manager.searchWishListItems(query: query, platform: platform)
@@ -110,7 +113,8 @@ extension WishListRepositoryImpl {
             discountRate: entity.discountRate,
             brand: entity.brandName,
             imagePathURL: entity.imageURL,
-            productURL: entity.productURL
+            productURL: entity.productURL,
+            createdAt: nil
         )
     }
 }

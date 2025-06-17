@@ -60,27 +60,18 @@ final class TabBarViewController: UIViewController {
 // MARK: - Binding
 private extension TabBarViewController {
     func bind() {
-        // 탭바 왼쪽 버튼 터치 시
-        tabBarView.getLeftItemButton.rx.tap
-            .subscribe(with: self) { owner, _ in
-                owner.tabBarMode.accept(.left)
-            }
-            .disposed(by: disposeBag)
-
-        // 플로팅 버튼 터치 시
-        tabBarView.getCenterItemButton.rx.tap
-            .subscribe(with: self) { owner, _ in
-                owner.tabBarMode.accept(.center)
-            }
-            .disposed(by: disposeBag)
-
-        // 탭바 오른쪽 버튼 터치 시
-        tabBarView.getRightItemButton.rx.tap
-            .subscribe(with: self) { owner, _ in
-                owner.tabBarMode.accept(.right)
-            }
-            .disposed(by: disposeBag)
-
+        
+        // 탭바 아이템 선택에 따른 이벤트 방출
+        Observable.merge(
+            tabBarView.getLeftItemButton.rx.tap.map { TabBarMode.left },
+            tabBarView.getCenterItemButton.rx.tap.map { TabBarMode.center },
+            tabBarView.getRightItemButton.rx.tap.map { TabBarMode.right }
+        )
+        .subscribe(with: self) { owner, mode in
+            owner.tabBarMode.accept(mode)
+        }
+        .disposed(by: disposeBag)
+        
         // 탭바 아이템 및 플로팅 모드에 따른 바인딩
         Observable.combineLatest(tabBarMode, floatingMode)
             .observe(on: MainScheduler.asyncInstance)

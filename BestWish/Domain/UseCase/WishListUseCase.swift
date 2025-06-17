@@ -10,7 +10,7 @@ import Foundation
 protocol WishListUseCase {
     func getPlatformSequence() async throws -> [Int]
     func updatePlatformSequence(to sequence: [Int]) async throws
-    func getPlatformsInWishList() async throws -> [Int]
+    func getPlatformsInWishList() async throws ->  [(platform: Int, count: Int)]
     func searchWishListItems(query: String?, platform: Int?) async throws -> [Product]
     func deleteWishListItem(id: UUID) async throws
     func addProductToWishList(product: ProductMetadata) async throws
@@ -37,7 +37,7 @@ final class WishListUseCaseImpl: WishListUseCase {
         try await repository.updatePlatformSequence(to: sequence)
     }
 
-    func getPlatformsInWishList() async throws -> [Int] {
+    func getPlatformsInWishList() async throws -> [(platform: Int, count: Int)] {
          try await repository.getPlatformsInWishList()
     }
 
