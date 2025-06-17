@@ -15,6 +15,8 @@ final class HomeViewModel: ViewModel {
     enum Action {
         case viewDidload
         case platformUpdate
+        case filterIndex(Int)
+        case searchQuery(String)
     }
     
     struct State {
@@ -29,7 +31,10 @@ final class HomeViewModel: ViewModel {
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
     private let _platformFilter = BehaviorRelay<[(Int, Int)]>(value: [])
     private let _platformSequence = BehaviorRelay<[Int]>(value: [])
+    private let _searchQuery = BehaviorRelay<String>(value: "")
     private let _error = PublishRelay<Error>()
+    
+    private var previousIndex = 0
     
     private let useCase: WishListUseCase
     
@@ -82,6 +87,28 @@ final class HomeViewModel: ViewModel {
                             owner._error.accept(error)
                         }
                     }
+                case .filterIndex(let index):
+                    Task {
+                        do {
+                            guard index != owner.previousIndex else { return }
+
+                            let searchQuery = owner._searchQuery.value
+                            let currentSections = owner._sections.value
+                            
+                            guard currentSections.count == 2 else { return }
+
+                            let platformSection = currentSections[0]
+                            let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: index == 0 ? nil : index)
+                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
+
+                            owner._sections.accept([platformSection, wishlistsSection])
+                            owner.previousIndex = index
+                        } catch {
+                            owner._error.accept(error)
+                        }
+                    }
+                case .searchQuery(let query):
+                    owner._searchQuery.accept(query)
                 }
             }
             .disposed(by: disposeBag)
@@ -99,8 +126,8 @@ final class HomeViewModel: ViewModel {
         }
     }
     
-    private func getWishLists() async throws -> [WishlistProduct] {
-        let result = try await self.useCase.searchWishListItems()
+    private func getWishLists(query: String? = nil, platform: Int? = nil) async throws -> [WishlistProduct] {
+        let result = try await self.useCase.searchWishListItems(query: query, platform: platform)
         return result.map { item in
             WishlistProduct(
                 productImageURL: item.imagePathURL,

@@ -26,6 +26,9 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     private let productCountLabel = UILabel()
     private let editButton = UIButton()
     
+    // ✅ 클릭된 플랫폼 index를 외부로 전달하는 relay
+    let selectedPlatformRelay = BehaviorRelay<Int>(value: 0)
+    
     private var selectedPlatform: Int = 0
     
     var disposeBag = DisposeBag()
@@ -58,13 +61,17 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
             .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { [weak self] row, data, cell in
                 guard let self else { return }
                 let (platform, _) = data
-                let isSelected = (platform == self.selectedPlatform)
+                let selectedPlatform = self.selectedPlatformRelay.value
+                let isSelected = (platform == selectedPlatform)
                 
                 cell.configure(type: platform, isSelected: isSelected)
                 cell.getPlatformButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.selectedPlatform = platform
                         owner.platformCollectionView.reloadData()
+                        
+                        // ✅ 클릭된 플랫폼 index 전달
+                        owner.selectedPlatformRelay.accept(platform)
                     }
                     .disposed(by: cell.disposeBag)
             }
@@ -73,6 +80,7 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     var getLinkButton: UIButton { linkButton }
     var getEditButton: UIButton { editButton }
+    var getSearchTextField: UITextField { searchBar.searchTextField }
 }
 
 private extension WishlistHeaderView {

@@ -136,6 +136,17 @@ final class HomeViewController: UIViewController {
                         headerView.configure(productCount: totalItemCount)
                         headerView.configure(platforms: self.homeViewModel.state.platformFilter)
                         
+                        headerView.getSearchTextField.rx.text.orEmpty
+                            .bind(with: self) { owner, query in
+                                owner.homeViewModel.action.onNext(.searchQuery(query))
+                            }.disposed(by: headerView.disposeBag)
+                        
+                        headerView.selectedPlatformRelay
+                            .bind(with: self) { owner, index in
+                                owner.homeViewModel.action.onNext(.filterIndex(index))
+                            }
+                            .disposed(by: headerView.disposeBag)
+                        
                         headerView.getLinkButton.rx.tap
                             .bind(with: self) { owner, _ in
                                 AlertLinkBuilder(baseViewController: owner).show()
