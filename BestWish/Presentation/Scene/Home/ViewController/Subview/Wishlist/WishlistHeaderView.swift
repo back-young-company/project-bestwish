@@ -53,16 +53,17 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
         productCountLabel.text = "\(productCount)개"
     }
     
-    func configure(platforms: Observable<[Int]>) {
+    func configure(platforms: Observable<[(Int ,Int)]>) {
         platforms
             .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { [weak self] row, data, cell in
                 guard let self else { return }
-                let isSelected = (data == self.selectedPlatform)
+                let (platform, _) = data
+                let isSelected = (platform == self.selectedPlatform)
                 
-                cell.configure(type: data, isSelected: isSelected)
+                cell.configure(type: platform, isSelected: isSelected)
                 cell.getPlatformButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        owner.selectedPlatform = data
+                        owner.selectedPlatform = platform
                         owner.platformCollectionView.reloadData()
                     }
                     .disposed(by: cell.disposeBag)

@@ -52,7 +52,7 @@ final class PlatformEditViewModel: ViewModel {
                 case .viewDidLoad:
                     Task {
                         do {
-                            let items = try await owner.getPlatformSequence()
+                            let items = try await owner.getPlatformSequence(isEdit: true)
                             owner.setDataSources(items: items)
                         } catch {
                             owner._error.accept(error)
@@ -62,7 +62,7 @@ final class PlatformEditViewModel: ViewModel {
                     Task {
                         do {
                             try await owner.updatePlatformSequence(indices)
-                            let items = try await owner.getPlatformSequence()
+                            let items = try await owner.getPlatformSequence(isEdit: true)
                             owner.setDataSources(items: items)
                         } catch {
                             owner._error.accept(error)
@@ -73,14 +73,14 @@ final class PlatformEditViewModel: ViewModel {
             .disposed(by: disposeBag)
     }
     
-    private func getPlatformSequence() async throws -> [PlatformEdit] {
-        let result = try await self.useCase.getPlatformSequence()
-        return result.map { platform in
-            let shopPlatform = ShopPlatform.allCases[platform]
+    private func getPlatformSequence(isEdit: Bool) async throws -> [PlatformEdit] {
+        let result = try await self.useCase.getPlatformsInWishList(isEdit: isEdit)
+        return result.map { tupple in
+            let shopPlatform = ShopPlatform.allCases[tupple.platform]
             return PlatformEdit(
                 platformName: shopPlatform.platformName,
                 platformImage: shopPlatform.rawValue,
-                platformCount: 10
+                platformCount: tupple.count
             )
         }
     }

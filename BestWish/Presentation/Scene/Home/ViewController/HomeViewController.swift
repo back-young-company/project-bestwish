@@ -34,16 +34,15 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindActions()
         bindViewModel()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.navigationBar.isHidden = true
+        bindActions()
         showTabBar()
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     private func bindViewModel() {
@@ -108,13 +107,8 @@ final class HomeViewController: UIViewController {
                     headerView.configure(title: "플랫폼 바로가기")
                     headerView.getEditButton.rx.tap
                         .bind(with: self) { owner, _ in
-                            let supabaseManger = SupabaseManager()
-                            let wishListRepository = WishListRepositoryImpl(manager: supabaseManger)
-                            let wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
-                            let platformEditViewModel = PlatformEditViewModel(useCase: wishListUseCase)
-                            let vc = PlatformEditViewController(platformEditViewModel: platformEditViewModel)
                             owner.hidesTabBar()
-                            owner.navigationController?.pushViewController(vc, animated: true)
+                            owner.navigationController?.pushViewController(DIContainer.shared.makePlatformEditViewController(), animated: true)
                         }.disposed(by: headerView.disposeBag)
                     
                     return headerView

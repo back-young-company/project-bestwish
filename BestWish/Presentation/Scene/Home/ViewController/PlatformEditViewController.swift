@@ -16,6 +16,8 @@ final class PlatformEditViewController: UIViewController {
     private let platformEditView = PlatformEditView()
     private let platformEditViewModel: PlatformEditViewModel
     
+    private var updatedIndices: [Int] = []
+    
     private let disposeBag = DisposeBag()
     
     init(platformEditViewModel: PlatformEditViewModel) {
@@ -37,14 +39,15 @@ final class PlatformEditViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         setNavigationBar()
-        bindActions()
+        
         bindViewModel()
+        bindActions()
         
         platformEditView.getTableView.isEditing = true
     }
     
     private func bindViewModel() {
-        let dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel>(configureCell: { dataSource, tableView, indexPath, item in
+        let dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
             cell.configure(type: item)
             
@@ -90,10 +93,9 @@ final class PlatformEditViewController: UIViewController {
                 let movedItem = currentItems.remove(at: sourceIndexPath.row)
                 currentItems.insert(movedItem, at: destinationIndexPath.row)
                 
-                let updatedIndices: [Int] = currentItems.compactMap { item in
+                owner.updatedIndices = currentItems.compactMap { item in
                     ShopPlatform.allCases.firstIndex(where: { $0.platformName == item.platformName })
                 }
-                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(updatedIndices))
             }
             .disposed(by: disposeBag)
         
@@ -127,6 +129,13 @@ final class PlatformEditViewController: UIViewController {
         let height = platformEditView.getHeaderView.systemLayoutSizeFitting(targetSize).height
         platformEditView.getHeaderView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
         platformEditView.getTableView.tableHeaderView = platformEditView.getHeaderView
+        
+        platformEditView.getHeaderView.getCompleteButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 

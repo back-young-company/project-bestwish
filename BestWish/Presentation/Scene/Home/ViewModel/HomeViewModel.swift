@@ -18,7 +18,7 @@ final class HomeViewModel: ViewModel {
     
     struct State {
         let sections: Observable<[HomeSectionModel]>
-        let platformFilter: Observable<[Int]>
+        let platformFilter: Observable<[(Int, Int)]>
         let platformSequence: Observable<[Int]>
         let error: Observable<Error>
     }
@@ -26,7 +26,7 @@ final class HomeViewModel: ViewModel {
     private let _action = PublishSubject<Action>()
     
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
-    private let _platformFilter = BehaviorRelay<[Int]>(value: [])
+    private let _platformFilter = BehaviorRelay<[(Int, Int)]>(value: [])
     private let _platformSequence = BehaviorRelay<[Int]>(value: [])
     private let _error = PublishRelay<Error>()
     
@@ -98,9 +98,9 @@ final class HomeViewModel: ViewModel {
         }
     }
     
-    private func getPlatformInWishList() async throws -> [Int] {
-        var result = try await self.useCase.getPlatformsInWishList()
-        result.insert(0, at: 0)
+    private func getPlatformInWishList() async throws -> [(Int, Int)] {
+        var result = try await self.useCase.getPlatformsInWishList(isEdit: false)
+        result.insert((platform: 0, count: 0), at: 0)
         return result
     }
     
