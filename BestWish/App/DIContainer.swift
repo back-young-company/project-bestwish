@@ -42,7 +42,7 @@ final class DIContainer {
     }
 
     func makeUserInfoManagementViewController() -> UserInfoManagementViewController {
-        let viewModel = UserInfoManagementViewModel(useCase: accountUseCase)
+        let viewModel = UserInfoManagementViewModel(userInfoUseCase: userInfoUseCase, accountUseCase: accountUseCase)
         return UserInfoManagementViewController(viewModel: viewModel)
     }
 

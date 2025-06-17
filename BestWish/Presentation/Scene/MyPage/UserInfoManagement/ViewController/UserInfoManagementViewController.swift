@@ -57,6 +57,10 @@ final class UserInfoManagementViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        managementView.configure(loginInfo: "애플")
+        viewModel.state.authProvider
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, authProvider in
+                owner.managementView.configure(authProvider: authProvider)
+            }.disposed(by: disposeBag)
     }
 }

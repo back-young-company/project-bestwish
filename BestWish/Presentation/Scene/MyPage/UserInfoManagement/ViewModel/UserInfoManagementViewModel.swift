@@ -11,23 +11,29 @@ import RxSwift
 import RxRelay
 
 final class UserInfoManagementViewModel: ViewModel {
-    private let useCase: AccountUseCase
+    private let userInfoUseCase: UserInfoUseCase
+    private let accountUseCase: AccountUseCase
     private let disposeBag = DisposeBag()
 
     enum Action {
+        case getAuthProvider
         case withdraw
     }
 
-    struct State { }
+    struct State {
+        let authProvider: Observable<String?>
+    }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
+    private let _authProvider = PublishSubject<String?>()
     let state: State
 
-    init(useCase: AccountUseCase) {
-        self.useCase = useCase
-        state = State()
+    init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
+        self.userInfoUseCase = userInfoUseCase
+        self.accountUseCase = accountUseCase
+        state = State(authProvider: _authProvider.asObservable())
 
         bindAction()
     }
@@ -35,16 +41,30 @@ final class UserInfoManagementViewModel: ViewModel {
     private func bindAction() {
         _action.bind(with: self) { owner, action in
             switch action {
+            case .getAuthProvider:
+                owner.getAuthProvider()
             case .withdraw:
                 owner.withdraw()
             }
         }.disposed(by: disposeBag)
     }
 
+    private func getAuthProvider() {
+        Task {
+            do {
+                let authProvider = try await userInfoUseCase.getUserInfo()
+                    .authProvider
+                _authProvider.onNext(authProvider)
+            } catch {
+                print(error)
+            }
+        }
+    }
+
     private func withdraw() {
         Task {
             do {
-                try await useCase.withdraw()
+                try await accountUseCase.withdraw()
             } catch {
                 print(error)
             }
