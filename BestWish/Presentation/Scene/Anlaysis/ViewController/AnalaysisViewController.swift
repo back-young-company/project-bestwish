@@ -17,9 +17,7 @@ final class AnalaysisViewController: UIViewController {
     
     private let analysisView = AnalysisView()
     private let viewModel: AnalysisViewModel
-    private var setHeaderView = false
     var disposeBag = DisposeBag()
-    var previouslySelectedPlatformIndexPath: IndexPath?
     
     // 데이터 소스
     lazy var dataSource = RxCollectionViewSectionedReloadDataSource<AnalysisSectionModel>(
@@ -49,8 +47,8 @@ final class AnalaysisViewController: UIViewController {
                     cell.configure(type: platform, isSelected: isSelected)
                     return cell
                 }
-            }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-                guard indexPath.section == 1 else { return UICollectionReusableView() }
+            }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
+                guard let self, indexPath.section == 1 else { return UICollectionReusableView() }
                 guard let headerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
                     withReuseIdentifier: SegmentControlHeaderView.identifier,
@@ -58,15 +56,19 @@ final class AnalaysisViewController: UIViewController {
                 ) as? SegmentControlHeaderView else {
                     return UICollectionReusableView()
                 }
-                
                 // 세그먼트 컨트롤 타이틀 데이터를 이벤트로 방출
                 headerView.getClassSegmentControl.rx.selectedSegmentIndex
                     .distinctUntilChanged()
-                    .bind(with: self) { owner, index in
-                        let category = headerView.getClassSegmentControl.titleForSegment(at: index) ?? ""
+                    .map { index in headerView.getClassSegmentControl.titleForSegment(at: index) ?? "" }
+                    .bind(with: self) { owner, category in
                         owner.viewModel.action.onNext(.didSelectedSegmentControl(category: category))
                     }
                     .disposed(by: headerView.disposeBag)
+                
+                self.viewModel.state.segmentIndex
+                    .bind(to: headerView.getClassSegmentControl.rx.selectedSegmentIndex)
+                    .disposed(by: headerView.disposeBag)
+                
                 return headerView
             })
     
@@ -123,7 +125,7 @@ final class AnalaysisViewController: UIViewController {
         
         analysisView.getRestButton.rx.tap
             .subscribe(with: self) { owner, _ in
-                
+                owner.viewModel.action.onNext(.didTapResetButton)
             }
             .disposed(by: disposeBag)
         

@@ -19,16 +19,21 @@ final class AnalysisViewModel: ViewModel {
         case didSubmitSearchText(keyword: String)           // 검색버튼 터치 시
         case didTapKeywordChip(keyword: String)             // 키워드 칩 선택 시
         case didTapPlatformChip(platform: Platform)         // 플랫폼 칩 선택 시
+        case didTapResetButton                              // 초기화 버튼 선택 시
+        case didTapSearchButton                             // 검색 버튼 선택 시
     }
     
     struct State {
         let labelDatas: Observable<[AnalysisSectionModel]>
+        let segmentIndex: Observable<Int>
     }
     
+    private let arr = ["스타일", "상의", "하의", "아우터", "원피스"]
     private var previousCategory = ""                       // 카테고리 비교 용도
+    
     private let _action = PublishSubject<Action>()
     private let _labelData = BehaviorRelay<[AnalysisSectionModel]>(value: [])
-    
+    private let _segmentIndex = BehaviorRelay(value: 0)
     var action: AnyObserver<Action> { _action.asObserver() }
     
     public let topClassFilter: [String: [String]]           // CoreData Model 데이터 정재해서 저장 (큰 카테고리: [속성])
@@ -64,7 +69,7 @@ final class AnalysisViewModel: ViewModel {
             ])
         ])
         
-        state = State(labelDatas: _labelData.asObservable())
+        state = State(labelDatas: _labelData.asObservable(), segmentIndex: _segmentIndex.asObservable())
         
         bindAction()
     }
@@ -83,6 +88,10 @@ final class AnalysisViewModel: ViewModel {
                 owner.addKeyword(attribute)
             case let .didTapPlatformChip(platform):
                 owner.selectePlatform(platform)
+            case .didTapResetButton:
+                owner.reset()
+            case .didTapSearchButton:
+                owner.movePlatform()
             }
         }.disposed(by: disposeBag)
     }
@@ -107,7 +116,7 @@ private extension AnalysisViewModel {
             currentLabelData[1].items = values.map {
                 .attribute(attribute: $0, isSelected: keywords.contains($0))
             }
-            
+            _segmentIndex.accept(arr.firstIndex(where: { $0 == category} ) ?? 0)
             _labelData.accept(currentLabelData)
         }
     }
@@ -148,5 +157,17 @@ private extension AnalysisViewModel {
         default:
             return item
         }
+    }
+    /// 초기화
+    private func reset() {
+        var value = _labelData.value
+        value[0] = AnalysisSectionModel(header: nil, type: .keyword, items: [])
+        _labelData.accept(value)
+        _segmentIndex.accept(0)
+    }
+    
+    /// 플랫폼 이동
+    private func movePlatform() {
+        
     }
 }
