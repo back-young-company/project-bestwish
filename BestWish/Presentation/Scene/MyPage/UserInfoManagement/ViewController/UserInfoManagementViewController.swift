@@ -33,6 +33,7 @@ final class UserInfoManagementViewController: UIViewController {
         setNavigationBar(alignment: .center, title: "회원 정보 관리")
         bindView()
         bindViewModel()
+        viewModel.action.onNext(.getAuthProvider)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -51,7 +52,9 @@ final class UserInfoManagementViewController: UIViewController {
         managementView.withdrawStackView.arrowButton.rx.tap
             .bind(with: self) { owner, _ in
                 AlertBuilder(baseViewController: self, type: .withdraw) {
-                    owner.viewModel.action.onNext(.withdraw)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        owner.viewModel.action.onNext(.withdraw)
+                    }
                 }.show()
             }.disposed(by: disposeBag)
     }
