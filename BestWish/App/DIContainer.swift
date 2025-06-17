@@ -13,17 +13,21 @@ final class DIContainer {
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
     private let userInfoRepository: UserInfoRepository
+    private let accountRepository: AccountRepository
     private let userInfoUseCase: UserInfoUseCase
+    private let accountUseCase: AccountUseCase
 
     private init() {
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
         self.supabaseOAuthManager = SupabaseOAuthManager.shared
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
+        self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
+        self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
     }
 
     func makeMyPageViewController() -> MyPageViewController {
-        let viewModel = MyPageViewModel(useCase: userInfoUseCase)
+        let viewModel = MyPageViewModel(userInfoUseCase: userInfoUseCase, accountUseCase: accountUseCase)
         return MyPageViewController(viewModel: viewModel)
     }
 
@@ -35,6 +39,11 @@ final class DIContainer {
     func makeUserInfoUpdateViewController() -> UserInfoUpdateViewController {
         let viewModel = UserInfoUpdateViewModel(useCase: userInfoUseCase)
         return UserInfoUpdateViewController(viewModel: viewModel)
+    }
+
+    func makeUserInfoManagementViewController() -> UserInfoManagementViewController {
+        let viewModel = UserInfoManagementViewModel(useCase: accountUseCase)
+        return UserInfoManagementViewController(viewModel: viewModel)
     }
 
     func makeOnboardingViewController() -> OnboardingViewController {

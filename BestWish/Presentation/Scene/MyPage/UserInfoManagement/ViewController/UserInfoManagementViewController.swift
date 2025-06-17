@@ -11,9 +11,11 @@ import RxCocoa
 
 final class UserInfoManagementViewController: UIViewController {
     private let managementView = UserInfoManagementView()
+    private let viewModel: UserInfoManagementViewModel
     private let disposeBag = DisposeBag()
 
-    init() {
+    init(viewModel: UserInfoManagementViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -49,7 +51,7 @@ final class UserInfoManagementViewController: UIViewController {
         managementView.withdrawStackView.arrowButton.rx.tap
             .bind(with: self) { owner, _ in
                 AlertBuilder(baseViewController: self, type: .withdraw) {
-                    print("회원 탈퇴")
+                    owner.viewModel.action.onNext(.withdraw)
                 }.show()
             }.disposed(by: disposeBag)
     }
