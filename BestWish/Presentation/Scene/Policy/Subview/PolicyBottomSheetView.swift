@@ -44,9 +44,7 @@ final class PolicyBottomSheetView: UIView {
 
 
     func configure(_ isValid: Bool) {
-//        completeButton.
-//        updateStyle(isValid ? .next : .nextUnable)
-        completeButton.isEnabled = true
+        completeButton.isEnabled = isValid
     }
 }
 
@@ -216,9 +214,9 @@ private extension PolicyBottomSheetView {
         }
 
         completeButton.snp.makeConstraints {
-            $0.top.equalTo(serviceHStack.snp.bottom).offset(CGFloat(32).fitHeight)
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(CGFloat(53).fitHeight)
+            $0.height.equalTo(54)
         }
     }
 }
