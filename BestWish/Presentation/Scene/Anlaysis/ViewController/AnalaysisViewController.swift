@@ -140,7 +140,6 @@ final class AnalaysisViewController: UIViewController {
         // 타 플랫 폼 이동
         viewModel.state.deepLink
             .subscribe(with: self) { owner, deepLink in
-                print(deepLink)
                 guard let url = URL(string: deepLink) else {
                     return print("❌ 유효하지 않는 URL")
                 }
@@ -151,6 +150,20 @@ final class AnalaysisViewController: UIViewController {
                     }
                     print("✅ 앱 전환 성공: \(url.absoluteString)")
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        // 플랫폼 이동 에러 시
+        viewModel.state.deepLinkError
+            .subscribe(with: self) { owner, error in
+                owner.showBasicAlert(title: "미지원 플랫폼", message: error.rawValue)
+            }
+            .disposed(by: disposeBag)
+        
+        // 데이터를 선택하지 않으면 버튼 비활성화
+        viewModel.state.buttonActivation
+            .subscribe(with: self) { owner, isActivated in
+                owner.analysisView.configure(isActivated)
             }
             .disposed(by: disposeBag)
     }

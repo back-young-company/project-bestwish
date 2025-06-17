@@ -131,6 +131,11 @@ final class AnalysisView: UIView {
         fatalError()
     }
     
+    public func configure(_ isActivated: Bool) {
+        searchButton.isEnabled = isActivated
+        searchButton.backgroundColor = isActivated ? .primary300 : .gray200
+    }
+    
     // MARK: - 접근 제어
     public var getCollectionView: UICollectionView { collectionView }
     public var getSearchBar: UISearchBar { searchBar }

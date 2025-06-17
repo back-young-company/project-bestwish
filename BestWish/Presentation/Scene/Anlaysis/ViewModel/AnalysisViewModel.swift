@@ -10,6 +10,77 @@ import RxRelay
 
 // MARK: - 이미지 분석 ViewModel
 final class AnalysisViewModel: ViewModel {
+    
+    let analysisSectionModel: [AnalysisItem] =
+        [
+            .platform(platform: Platform(
+                platform: .musinsa,
+                platformName: ShopPlatform.musinsa.platformName,
+                platformImage: PlatformImage.musinsa,
+                platformDeepLink: ShopPlatform.musinsa.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .zigzag,
+                platformName: ShopPlatform.zigzag.platformName,
+                platformImage: PlatformImage.zigzag,
+                platformDeepLink: ShopPlatform.zigzag.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .ably,
+                platformName: ShopPlatform.ably.platformName,
+                platformImage: PlatformImage.ably,
+                platformDeepLink: ShopPlatform.ably.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .kream,
+                platformName: ShopPlatform.kream.platformName,
+                platformImage: PlatformImage.kream,
+                platformDeepLink: ShopPlatform.kream.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .brandy,
+                platformName: ShopPlatform.brandy.platformName,
+                platformImage: PlatformImage.brandy,
+                platformDeepLink: ShopPlatform.brandy.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .tncm,
+                platformName: ShopPlatform.tncm.platformName,
+                platformImage: PlatformImage.tncm,
+                platformDeepLink: ShopPlatform.tncm.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .oco,
+                platformName: ShopPlatform.oco.platformName,
+                platformImage: PlatformImage.oco,
+                platformDeepLink: ShopPlatform.oco.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .fnoz,
+                platformName: ShopPlatform.fnoz.platformName,
+                platformImage: PlatformImage.fnoz,
+                platformDeepLink: ShopPlatform.fnoz.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .worksout,
+                platformName: ShopPlatform.worksout.platformName,
+                platformImage: PlatformImage.worksout,
+                platformDeepLink: ShopPlatform.worksout.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .eql,
+                platformName: ShopPlatform.eql.platformName,
+                platformImage: PlatformImage.eql,
+                platformDeepLink: ShopPlatform.eql.platformDeepLink
+            )),
+            .platform(platform: Platform(
+                platform: .hiver,
+                platformName: ShopPlatform.hiver.platformName,
+                platformImage: PlatformImage.hiver,
+                platformDeepLink: ShopPlatform.hiver.platformDeepLink
+            ))
+        ]
+    
     private let dummyUseCase: DummyUseCase
     private let disposeBag = DisposeBag()
     
@@ -27,20 +98,24 @@ final class AnalysisViewModel: ViewModel {
         let labelDatas: Observable<[AnalysisSectionModel]>
         let segmentIndex: Observable<Int>
         let deepLink: Observable<String>
+        let deepLinkError: Observable<PlatformError>
+        let buttonActivation: Observable<Bool>
     }
     
     private let arr = ["스타일", "상의", "하의", "아우터", "원피스"]
     private var previousCategory = ""                       // 카테고리 비교 용도
-    private var currentQuery = ""
-    private var currentPlatform: Platform?
+    private var currentQuery = BehaviorRelay<String>(value: "")
+    private var currentPlatform = BehaviorRelay<Platform?>(value: nil)
+    private let topClassFilter: [String: [String]]           // CoreData Model 데이터 정재해서 저장 (큰 카테고리: [속성])
     
     private let _action = PublishSubject<Action>()
     private let _labelData = BehaviorRelay<[AnalysisSectionModel]>(value: [])
     private let _segmentIndex = BehaviorRelay(value: 0)
-    private let _deepLink = PublishSubject<String>()
+    private let _deepLink = PublishRelay<String>()
+    private let _deepLinkError = PublishRelay<PlatformError>()
+    private let _buttonActivation = BehaviorRelay(value: false)
     var action: AnyObserver<Action> { _action.asObserver() }
     
-    public let topClassFilter: [String: [String]]           // CoreData Model 데이터 정재해서 저장 (큰 카테고리: [속성])
     public let state: State
     
     init(dummyUseCase: DummyUseCase, labelData: [LabelDataDisplay]) {
@@ -65,19 +140,20 @@ final class AnalysisViewModel: ViewModel {
         self._labelData.accept([
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
-            AnalysisSectionModel(header: nil, type: .platform, items: [
-                .platform(platform: Platform(platform: .musinsa, platformName: "무신사", platformImage: PlatformImage.musinsa, platformDeepLink: "")),
-                .platform(platform: Platform(platform: .zigzag, platformName: "지그재그", platformImage: PlatformImage.zigzag, platformDeepLink: "")),
-                .platform(platform: Platform(platform: .ably, platformName: "에이블리", platformImage: PlatformImage.ably, platformDeepLink: ""))
-            ])
+            AnalysisSectionModel(header: nil, type: .platform, items: analysisSectionModel)
         ])
+        
+        
         
         state = State(labelDatas: _labelData.asObservable(),
                       segmentIndex: _segmentIndex.asObservable(),
-                      deepLink: _deepLink.asObservable()
+                      deepLink: _deepLink.asObservable(),
+                      deepLinkError: _deepLinkError.asObservable(),
+                      buttonActivation: _buttonActivation.asObservable()
         )
         
         bindAction()
+        buttonValidation()
     }
     
     /// 각 이벤트 별 이벤트 방출
@@ -137,7 +213,6 @@ private extension AnalysisViewModel {
         currentLabelData[1].items = currentLabelData[1].items.map { setAttributeButton($0, keyword: keyword, isSelected: true) }
         changedKeyword(labelData: currentLabelData)
         _labelData.accept(currentLabelData)
-        print(currentQuery)
     }
     
     /// 키워드 삭제 이벤트
@@ -153,7 +228,7 @@ private extension AnalysisViewModel {
     private func selectePlatform(_ platform: Platform) {
         var currentLabelData = _labelData.value
         
-        currentPlatform = platform
+        currentPlatform.accept(platform)
         changedKeyword(labelData: currentLabelData)
         currentLabelData[2].items = currentLabelData[2].items.map { setAttributeButton($0, selectedPlatform: platform) }
         _labelData.accept(currentLabelData)
@@ -181,7 +256,19 @@ private extension AnalysisViewModel {
     
     /// 플랫폼 이동
     private func movePlatform() {
-        _deepLink.onNext(currentPlatform?.platformDeepLink ?? "")
+        currentPlatform
+            .subscribe(with: self) { owner, platform in
+                guard let link = platform?.platformDeepLink else {
+                    owner._deepLinkError.accept(PlatformError.notFoundDeepLink)
+                    return
+                }
+                if link != "notFound" {
+                    owner._deepLink.accept(link)
+                } else {
+                    owner._deepLinkError.accept(PlatformError.preparePlatform)
+                }
+            }
+            .disposed(by: disposeBag)
     }
     
     /// 키워드 변경 시 현제 쿼리 변경
@@ -190,16 +277,30 @@ private extension AnalysisViewModel {
             if case let .keyword(keyword) = item { return keyword }
             return nil
         }
-        currentQuery = keyword.joined(separator: " ")
-    
-        switch currentPlatform?.platform {
+        let query = keyword.joined(separator: " ")
+        var platform = currentPlatform.value
+        
+        switch currentPlatform.value?.platform {
         case .musinsa:
-            currentPlatform?.platformDeepLink = ShopPlatform.musinsa.searchResultDeepLink(keyword: currentQuery)
+            platform?.platformDeepLink = ShopPlatform.musinsa.searchResultDeepLink(keyword: query)
         case .ably:
-            currentPlatform?.platformDeepLink = ShopPlatform.ably.searchResultDeepLink(keyword: currentQuery)
+            platform?.platformDeepLink = ShopPlatform.ably.searchResultDeepLink(keyword: query)
         case .zigzag:
-            currentPlatform?.platformDeepLink = ShopPlatform.zigzag.searchResultDeepLink(keyword: currentQuery)
+            platform?.platformDeepLink = ShopPlatform.zigzag.searchResultDeepLink(keyword: query)
         default: break
         }
+        currentPlatform.accept(platform)
+        currentQuery.accept(query)
+    }
+    
+    /// 키워드와 플랫폼을 선택 하지 않았을 시 버튼 유효성 검사
+    private func buttonValidation() {
+        Observable
+            .combineLatest(currentQuery, currentPlatform)
+            .map { query, platform in
+                return !query.isEmpty && platform != nil
+            }
+            .bind(to: _buttonActivation)
+            .disposed(by: disposeBag)
     }
 }
