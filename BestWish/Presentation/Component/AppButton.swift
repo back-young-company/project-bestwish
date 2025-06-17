@@ -26,7 +26,7 @@ final class AppButton: UIButton {
 
     override var isEnabled: Bool {
         didSet {
-            backgroundColor = isEnabled ? type.backgroundColor : type.inEnabledBackgroundColor
+            backgroundColor = isEnabled ? type.backgroundColor : type.disabledBackgroundColor
         }
     }
 
@@ -168,7 +168,7 @@ extension AppButton.ButtonType {
         }
     }
 
-    var inEnabledBackgroundColor: UIColor? {
+    var disabledBackgroundColor: UIColor? {
         switch self {
         case .confirmChange:
             return .gray50
