@@ -15,7 +15,7 @@ import RxSwift
 /// ```
 final class AppButton: UIButton {
     private let disposeBag = DisposeBag()
-    private var type: ButtonType
+    private let type: ButtonType
     private let fontSize: CGFloat
 
     override var isHighlighted: Bool {
@@ -42,10 +42,10 @@ final class AppButton: UIButton {
     init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func updateStyle(_ newType: ButtonType) {
-        self.type = newType
-        setAttributes()
-    }
+//    func updateStyle(_ newType: ButtonType) {
+//        self.type = newType
+//        setAttributes()
+//    }
 }
 
 private extension AppButton {
@@ -70,9 +70,9 @@ private extension AppButton {
 extension AppButton {
     enum ButtonType {
         case complete
-        case incomplete
+//        case incomplete
         case next
-        case nextUnable
+//        case nextUnable
         case shortcut
         case analyze
         case viewProduct
@@ -91,8 +91,8 @@ extension AppButton {
 extension AppButton.ButtonType {
     var title: String {
         switch self {
-        case .complete, .incomplete: "완료"
-        case .next, .nextUnable: "다음"
+        case .complete/*, .incomplete*/: "완료"
+        case .next/*, .nextUnable*/: "다음"
         case .shortcut: "바로가기"
         case .analyze: "분석하기"
         case .viewProduct: "상품 보기"
@@ -113,7 +113,7 @@ extension AppButton.ButtonType {
         case .complete, .next, .shortcut, .analyze,
                 .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .gray0
-        case .before, .withdraw, .nextUnable, .incomplete, .back, .reset, .cancel:
+        case .before, .withdraw, /*.nextUnable, .incomplete, */.back, .reset, .cancel:
             return .gray300
         }
     }
@@ -125,8 +125,8 @@ extension AppButton.ButtonType {
             return .primary300
         case .cancel, .before, .withdraw, .reset, .back:
             return .gray0
-        case .nextUnable, .incomplete:
-            return .gray50
+//        case .nextUnable, .incomplete:
+//            return .gray50
         }
     }
 
@@ -153,7 +153,7 @@ extension AppButton.ButtonType {
         case .complete, .next, .shortcut, .analyze,
                 .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary200
-        case .cancel, .before, .withdraw, .reset, .back, .nextUnable, .incomplete:
+        case .cancel, .before, .withdraw, .reset, .back/*, .nextUnable, .incomplete*/:
             return .gray50
         }
     }
@@ -163,14 +163,13 @@ extension AppButton.ButtonType {
         case .complete, .next, .shortcut, .analyze,
                 .viewProduct, .confirmChange, .save, .cancelWithdraw, .logout:
             return .primary50
-        case .cancel, .before, .withdraw, .reset, .back, .nextUnable, .incomplete:
-            return .gray300
+        case .cancel, .before, .withdraw, .reset,.back/*, .nextUnable, .incomplete*/:            return .gray300
         }
     }
 
     var disabledBackgroundColor: UIColor? {
         switch self {
-        case .confirmChange:
+        case .confirmChange, .complete, .next:
             return .gray50
         default:
             return backgroundColor

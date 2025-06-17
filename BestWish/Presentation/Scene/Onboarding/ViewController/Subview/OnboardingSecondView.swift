@@ -41,7 +41,8 @@ final class OnboardingSecondView: UIView {
     }
 
     func configure(_ isValid: Bool) {
-        completeButton.updateStyle(isValid ? .complete : .incomplete)
+        completeButton.isEnabled = isValid
+//        completeButton.updateStyle(isValid ? .complete : .incomplete)
     }
 
 }

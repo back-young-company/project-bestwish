@@ -16,7 +16,7 @@ final class OnboardingFirstView: UIView {
     private let stackView = VerticalStackView(spacing: 32)
     let genderSelection = GenderSelectionView()
     let birthSelection = BirthSelectionView()
-    let nextPageButton = AppButton(type: .nextUnable)
+    let nextPageButton = AppButton(type: .next)
 
 
     // MARK: - Initializer, Deinit, requiered
@@ -31,7 +31,8 @@ final class OnboardingFirstView: UIView {
     }
 
     func configure(_ isValid: Bool) {
-        nextPageButton.updateStyle(isValid ? .next : .nextUnable)
+        nextPageButton.isEnabled = isValid
+//        nextPageButton.updateStyle(isValid ? .next : .nextUnable)
     }
 
 }

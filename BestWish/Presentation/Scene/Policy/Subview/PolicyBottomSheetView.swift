@@ -29,7 +29,7 @@ final class PolicyBottomSheetView: UIView {
     private let serviceLabel = UILabel()
     let serviceViewButton = UIButton()
 
-    let completeButton = AppButton(type: .incomplete)
+    let completeButton = AppButton(type: .complete)
 
     // MARK: - Init
     init(title: String, desc: String) {
@@ -44,7 +44,8 @@ final class PolicyBottomSheetView: UIView {
 
 
     func configure(_ isValid: Bool) {
-        completeButton.updateStyle(isValid ? .next : .nextUnable)
+//        completeButton.
+//        updateStyle(isValid ? .next : .nextUnable)
         completeButton.isEnabled = true
     }
 }
