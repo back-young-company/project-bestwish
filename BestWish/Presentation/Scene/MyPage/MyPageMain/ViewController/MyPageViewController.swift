@@ -101,6 +101,12 @@ final class MyPageViewController: UIViewController {
                 owner.setHeaderView(userInfo: UserInfoDisplay)
             })
             .disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+            }.disposed(by: disposeBag)
     }
 
     private func setHeaderView(userInfo: UserInfoDisplay) {
