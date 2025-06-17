@@ -15,7 +15,7 @@ final class HomeViewModel: ViewModel {
     enum Action {
         case viewDidload
         case platformUpdate
-        case filterIndex(Int)
+        case filterIndex(Int, force: Bool = false)
         case searchQuery(String)
     }
     
@@ -87,14 +87,13 @@ final class HomeViewModel: ViewModel {
                             owner._error.accept(error)
                         }
                     }
-                case .filterIndex(let index):
+                case .filterIndex(let index, let force):
                     Task {
                         do {
-                            guard index != owner.previousIndex else { return }
+                            guard force || index != owner.previousIndex else { return }
 
                             let searchQuery = owner._searchQuery.value
                             let currentSections = owner._sections.value
-                            
                             guard currentSections.count == 2 else { return }
 
                             let platformSection = currentSections[0]

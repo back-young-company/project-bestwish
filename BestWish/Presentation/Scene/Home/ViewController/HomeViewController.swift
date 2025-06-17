@@ -141,6 +141,16 @@ final class HomeViewController: UIViewController {
                                 owner.homeViewModel.action.onNext(.searchQuery(query))
                             }.disposed(by: headerView.disposeBag)
                         
+                        headerView.getSearchTextField.rx.controlEvent(.editingDidEndOnExit)
+                            .withLatestFrom(headerView.selectedPlatformRelay) { _, index in
+                                return index
+                            }
+                            .bind(with: self) { owner, index in
+                                headerView.getSearchTextField.resignFirstResponder()
+                                owner.homeViewModel.action.onNext(.filterIndex(index, force: true))
+                            }
+                            .disposed(by: headerView.disposeBag)
+                        
                         headerView.selectedPlatformRelay
                             .bind(with: self) { owner, index in
                                 owner.homeViewModel.action.onNext(.filterIndex(index))

@@ -55,7 +55,7 @@ enum ShopPlatform: String, CaseIterable {
         case .musinsa:
             return "https://musinsa.onelink.me/PvkC"
         case .zigzag:
-            return "zigzag://"
+            return "zigzag://open/"
         case .ably:
             return "ably://main"
         case .all, .kream, .brandy, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
