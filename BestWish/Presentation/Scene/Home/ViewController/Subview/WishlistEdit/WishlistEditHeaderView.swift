@@ -16,6 +16,8 @@ final class WishlistEditHeaderView: UICollectionReusableView, ReuseIdentifier {
     private let platformCountLabel = UILabel()
     private let completeButton = UIButton()
     
+    var disposeBag = DisposeBag()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -24,10 +26,18 @@ final class WishlistEditHeaderView: UICollectionReusableView, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
+    }
 
     func configure(count: Int) {
         platformCountLabel.text = "\(count)개"
     }
+    
+    var getCompleteButton: UIButton { completeButton }
 }
 
 private extension WishlistEditHeaderView {

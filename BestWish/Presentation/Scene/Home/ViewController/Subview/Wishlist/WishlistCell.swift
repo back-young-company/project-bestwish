@@ -7,6 +7,7 @@
 
 import UIKit
 
+import RxSwift
 import Kingfisher
 import SnapKit
 import Then
@@ -27,6 +28,10 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
     
     private let vStackView = UIStackView()
     
+    var getEditButton: UIButton { editButton }
+    
+    var disposeBag = DisposeBag()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -34,6 +39,12 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        disposeBag = DisposeBag()
     }
 
     func configure(type: WishlistProduct, isHidden: Bool, isLastRow: Bool? = nil) {

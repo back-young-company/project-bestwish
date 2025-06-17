@@ -165,7 +165,9 @@ final class HomeViewController: UIViewController {
                         headerView.getEditButton.rx.tap
                             .bind(with: self) { owner, _ in
                                 owner.hidesTabBar()
-                                owner.navigationController?.pushViewController(DIContainer.shared.makeWishlistEditViewController(), animated: true)
+                                let vc = DIContainer.shared.makeWishlistEditViewController()
+                                vc.delegate = owner
+                                owner.navigationController?.pushViewController(vc, animated: true)
                             }.disposed(by: headerView.disposeBag)
                         
                         return headerView
@@ -239,8 +241,12 @@ private extension HomeViewController {
     }
 }
 
-extension HomeViewController: PlatformSequenceUpdate {
-    func update() {
+extension HomeViewController: HomeViewControllerUpdate {
+    func updatePlatforms() {
         self.homeViewModel.action.onNext(.platformUpdate)
+    }
+    
+    func updateWishlists() {
+        self.homeViewModel.action.onNext(.wishlistUpdate)
     }
 }

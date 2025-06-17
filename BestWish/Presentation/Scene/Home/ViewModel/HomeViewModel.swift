@@ -15,6 +15,7 @@ final class HomeViewModel: ViewModel {
     enum Action {
         case viewDidload
         case platformUpdate
+        case wishlistUpdate
         case filterIndex(Int, force: Bool = false)
         case searchQuery(String)
     }
@@ -79,10 +80,24 @@ final class HomeViewModel: ViewModel {
                             let platforms = try await owner.getPlatformSequence()
                             let currentSections = owner._sections.value
                             guard currentSections.count == 2 else { return }
-                            let wishlistSection = currentSections[1]
+                            let wishlistsSection = currentSections[1]
                             
                             let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
-                            owner._sections.accept([platformsSection, wishlistSection])
+                            owner._sections.accept([platformsSection, wishlistsSection])
+                        } catch {
+                            owner._error.accept(error)
+                        }
+                    }
+                case .wishlistUpdate:
+                    Task {
+                        do {
+                            let wishlists = try await owner.getWishLists()
+                            let currentSections = owner._sections.value
+                            guard currentSections.count == 2 else { return }
+                            let platformsSection = currentSections[0]
+                            
+                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlists.map { .wishlist($0) })
+                            owner._sections.accept([platformsSection, wishlistsSection])
                         } catch {
                             owner._error.accept(error)
                         }
@@ -129,6 +144,7 @@ final class HomeViewModel: ViewModel {
         let result = try await self.useCase.searchWishListItems(query: query, platform: platform)
         return result.map { item in
             WishlistProduct(
+                uuid: item.id,
                 productImageURL: item.imagePathURL,
                 brandName: item.brand,
                 productName: item.title,

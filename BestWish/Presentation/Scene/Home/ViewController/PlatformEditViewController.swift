@@ -17,7 +17,7 @@ final class PlatformEditViewController: UIViewController {
     private let platformEditViewModel: PlatformEditViewModel
     
     private var updatedIndices: [Int] = []
-    weak var delegate: PlatformSequenceUpdate?
+    weak var delegate: HomeViewControllerUpdate?
     
     private let disposeBag = DisposeBag()
     
@@ -109,7 +109,7 @@ final class PlatformEditViewController: UIViewController {
         platformEditViewModel.state.sendDelegate
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
-                owner.delegate?.update()
+                owner.delegate?.updatePlatforms()
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
@@ -158,6 +158,7 @@ extension PlatformEditViewController: UITableViewDelegate {
     }
 }
 
-protocol PlatformSequenceUpdate: AnyObject {
-    func update()
+protocol HomeViewControllerUpdate: AnyObject {
+    func updatePlatforms()
+    func updateWishlists()
 }

@@ -16,6 +16,8 @@ final class WishlistEditViewController: UIViewController {
     private let wishEditView = WishlistEditView()
     private let wishEditViewModel: WishEditViewModel
     
+    weak var delegate: HomeViewControllerUpdate?
+    
     private let disposeBag = DisposeBag()
     
     init(wishEditViewModel: WishEditViewModel) {
@@ -48,6 +50,12 @@ final class WishlistEditViewController: UIViewController {
                 ) as? WishlistCell else { return UICollectionViewCell() }
                 cell.configure(type: item, isHidden: false)
                 
+                cell.getEditButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.wishEditViewModel.action.onNext(.delete(item.uuid, indexPath.item))
+                    }
+                    .disposed(by: cell.disposeBag)
+                
                 return cell
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
                 guard let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -57,6 +65,12 @@ final class WishlistEditViewController: UIViewController {
                 ) as? WishlistEditHeaderView else { return UICollectionReusableView() }
                 let totalItemCount = dataSource.sectionModels.flatMap { $0.items }.count
                 headerView.configure(count: totalItemCount)
+                
+                headerView.getCompleteButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.wishEditViewModel.action.onNext(.complete)
+                    }
+                    .disposed(by: headerView.disposeBag)
                 
                 return headerView
             })
@@ -70,6 +84,14 @@ final class WishlistEditViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, sections in
                 owner.setCollectionViewLayout(sections)
+            }
+            .disposed(by: disposeBag)
+        
+        wishEditViewModel.state.completed
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, _ in
+                owner.delegate?.updateWishlists()
+                owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
     }
