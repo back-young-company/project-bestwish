@@ -80,10 +80,7 @@ final class ImageEditViewController: UIViewController {
         
         viewModel.state.labelData
             .subscribe(with: self) { owner, labelData in
-                let service = DummyServiceImpl()
-                let repo = DummyRepositoryImpl(service: service)
-                let vm = AnalysisViewModel(dummyUseCase: DummyUseCaseImpl(repository: repo), labelData: labelData)
-                let vc = AnalaysisViewController(viewModel: vm)
+                let vc = DIContainer.shared.makeAnalysisViewController(labelData: labelData)
                 if let sheet = vc.sheetPresentationController {
                     sheet.detents = [
                         .medium(),

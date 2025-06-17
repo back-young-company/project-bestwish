@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ShopPlatform {
+enum ShopPlatform: String, CaseIterable {
     case musinsa
     case zigzag
     case ably

@@ -11,77 +11,7 @@ import RxRelay
 // MARK: - 이미지 분석 ViewModel
 final class AnalysisViewModel: ViewModel {
     
-    let analysisSectionModel: [AnalysisItem] =
-        [
-            .platform(platform: Platform(
-                platform: .musinsa,
-                platformName: ShopPlatform.musinsa.platformName,
-                platformImage: PlatformImage.musinsa,
-                platformDeepLink: ShopPlatform.musinsa.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .zigzag,
-                platformName: ShopPlatform.zigzag.platformName,
-                platformImage: PlatformImage.zigzag,
-                platformDeepLink: ShopPlatform.zigzag.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .ably,
-                platformName: ShopPlatform.ably.platformName,
-                platformImage: PlatformImage.ably,
-                platformDeepLink: ShopPlatform.ably.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .kream,
-                platformName: ShopPlatform.kream.platformName,
-                platformImage: PlatformImage.kream,
-                platformDeepLink: ShopPlatform.kream.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .brandy,
-                platformName: ShopPlatform.brandy.platformName,
-                platformImage: PlatformImage.brandy,
-                platformDeepLink: ShopPlatform.brandy.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .tncm,
-                platformName: ShopPlatform.tncm.platformName,
-                platformImage: PlatformImage.tncm,
-                platformDeepLink: ShopPlatform.tncm.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .oco,
-                platformName: ShopPlatform.oco.platformName,
-                platformImage: PlatformImage.oco,
-                platformDeepLink: ShopPlatform.oco.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .fnoz,
-                platformName: ShopPlatform.fnoz.platformName,
-                platformImage: PlatformImage.fnoz,
-                platformDeepLink: ShopPlatform.fnoz.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .worksout,
-                platformName: ShopPlatform.worksout.platformName,
-                platformImage: PlatformImage.worksout,
-                platformDeepLink: ShopPlatform.worksout.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .eql,
-                platformName: ShopPlatform.eql.platformName,
-                platformImage: PlatformImage.eql,
-                platformDeepLink: ShopPlatform.eql.platformDeepLink
-            )),
-            .platform(platform: Platform(
-                platform: .hiver,
-                platformName: ShopPlatform.hiver.platformName,
-                platformImage: PlatformImage.hiver,
-                platformDeepLink: ShopPlatform.hiver.platformDeepLink
-            ))
-        ]
-    
-    private let dummyUseCase: DummyUseCase
+    private let analysisUseCase: AnalysisUseCase
     private let disposeBag = DisposeBag()
     
     enum Action {
@@ -117,10 +47,11 @@ final class AnalysisViewModel: ViewModel {
     var action: AnyObserver<Action> { _action.asObserver() }
     
     public let state: State
+    private let labelData: [LabelDataDisplay]
     
-    init(dummyUseCase: DummyUseCase, labelData: [LabelDataDisplay]) {
-        self.dummyUseCase = dummyUseCase
-        
+    init(analysisUseCase: AnalysisUseCase, labelData: [LabelDataDisplay]) {
+        self.analysisUseCase = analysisUseCase
+        self.labelData = labelData
         // 불러온 모델 데이터 ViewModel이 실아 있을 동안 전체 저장
         topClassFilter = [
             "스타일": labelData.filter { $0.topCategory == "스타일" }.prefix(3).map { $0.attributes },
@@ -135,15 +66,21 @@ final class AnalysisViewModel: ViewModel {
             let att = labelData.filter { $0.topCategory == category && $0.probability > 40 }.map { $0.attributes }
             return att.isEmpty ? [emptyKeyword] : att
         }
-        
-        // 라벨 데이터 초기 세팅
-        self._labelData.accept([
+        let analysisSectionModel:[AnalysisSectionModel] = [
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
-            AnalysisSectionModel(header: nil, type: .platform, items: analysisSectionModel)
-        ])
+            AnalysisSectionModel(header: nil, type: .platform, items: ShopPlatform.allCases.map {
+                .platform(platform: Platform(
+                    platform: $0,
+                    platformName: $0.platformName,
+                    platformImage: $0.rawValue,
+                    platformDeepLink: $0.platformDeepLink
+                ))
+            })
+        ]
         
-        
+        // 라벨 데이터 초기 세팅
+        self._labelData.accept(analysisSectionModel)
         
         state = State(labelDatas: _labelData.asObservable(),
                       segmentIndex: _segmentIndex.asObservable(),
@@ -171,13 +108,14 @@ final class AnalysisViewModel: ViewModel {
             case let .didTapPlatformChip(platform):
                 owner.selectePlatform(platform)
             case .didTapResetButton:
-                owner.reset()
+                owner.resetKeyword()
             case .didTapSearchButton:
                 owner.movePlatform()
             }
         }.disposed(by: disposeBag)
     }
 }
+
 
 private extension AnalysisViewModel {
     
@@ -205,65 +143,41 @@ private extension AnalysisViewModel {
     
     /// 키워드 추가 이벤트
     private func addKeyword(_ keyword: String) {
-        // 중복 추가 방지
-        var currentLabelData = _labelData.value
-        if !currentLabelData[0].items.contains(.keyword(keyword: keyword)) {
-            currentLabelData[0].items.append(.keyword(keyword: keyword))
-        }
-        currentLabelData[1].items = currentLabelData[1].items.map { setAttributeButton($0, keyword: keyword, isSelected: true) }
-        changedKeyword(labelData: currentLabelData)
-        _labelData.accept(currentLabelData)
+        let models = analysisUseCase.addKeyword(keyword, models: _labelData.value)
+        changedKeyword(labelData: models)
+        _labelData.accept(models)
     }
     
     /// 키워드 삭제 이벤트
     private func deleteKeyword(_ keyword: String) {
-        var currentLabelData = _labelData.value
-        currentLabelData[0].items.removeAll(where: { $0 == .keyword(keyword: keyword) })
-        currentLabelData[1].items = currentLabelData[1].items.map { setAttributeButton($0, keyword: keyword) }
-        changedKeyword(labelData: currentLabelData)
-        _labelData.accept(currentLabelData)
+        let models = analysisUseCase.deleteKeyword(keyword, models: _labelData.value)
+        changedKeyword(labelData: models)
+        _labelData.accept(models)
     }
     
     /// 플랫폼 선택 이벤트
     private func selectePlatform(_ platform: Platform) {
-        var currentLabelData = _labelData.value
-        
+        let models = analysisUseCase.selectePlatform(platform, models: _labelData.value)
         currentPlatform.accept(platform)
-        changedKeyword(labelData: currentLabelData)
-        currentLabelData[2].items = currentLabelData[2].items.map { setAttributeButton($0, selectedPlatform: platform) }
-        _labelData.accept(currentLabelData)
-    }
-    
-    /// 옵션에 따라 데이터 상태 변경 후 반환
-    private func setAttributeButton(_ item: AnalysisItem, keyword: String = "", selectedPlatform: Platform? = nil, isSelected: Bool = false) -> AnalysisItem{
-        switch item {
-        case let .attribute(attr, _) where attr == keyword:
-            return .attribute(attribute: attr, isSelected: isSelected)
-        case let .platform(platform, _):
-            return .platform(platform: platform, isSelected: selectedPlatform?.platformName == platform.platformName)
-        default:
-            return item
-        }
+        changedKeyword(labelData: models)
+        _labelData.accept(models)
     }
     
     /// 초기화
-    private func reset() {
-        var value = _labelData.value
-        value[0] = AnalysisSectionModel(header: nil, type: .keyword, items: [])
-        _labelData.accept(value)
+    private func resetKeyword() {
+        let models = analysisUseCase.resetKeyword(models: _labelData.value)
+        _labelData.accept(models)
         _segmentIndex.accept(0)
     }
     
     /// 플랫폼 이동
     private func movePlatform() {
-        guard let link = currentPlatform.value?.platformDeepLink else {
-            _deepLinkError.accept(PlatformError.notFoundDeepLink)
-            return
-        }
-        if link != "notFound" {
+        do {
+            let link = try analysisUseCase.movePlatform(platform: currentPlatform.value)
             _deepLink.accept(link)
-        } else {
-            _deepLinkError.accept(PlatformError.preparePlatform)
+        } catch let error  {
+            guard let error = error as? PlatformError else { return }
+            _deepLinkError.accept(error)
         }
     }
     

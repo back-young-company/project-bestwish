@@ -18,6 +18,7 @@ final class DIContainer {
     private let accountUseCase: AccountUseCase
     private let coreMLRepository: CoreMLRepository
     private let coreMLUseCase: CoreMLUseCase
+    private let analysisUseCase: AnalysisUseCase
 
     private init() {
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
@@ -28,6 +29,7 @@ final class DIContainer {
         self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
         self.coreMLRepository = CoreMLRepositoryImpl()
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
+        self.analysisUseCase = AnalysisUseCaseImpl()
     }
 
     func makeMyPageViewController() -> MyPageViewController {
@@ -60,5 +62,10 @@ final class DIContainer {
     func makeImageEditController(image: UIImage) -> ImageEditViewController {
         let viewModel = ImageEditViewModel(coreMLUseCase: coreMLUseCase)
         return ImageEditViewController(image: image, viewModel: viewModel)
+    }
+    
+    func makeAnalysisViewController(labelData: [LabelDataDisplay]) -> AnalaysisViewController {
+        let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
+        return AnalaysisViewController(viewModel: viewModel)
     }
 }
