@@ -134,6 +134,8 @@ final class AnalysisView: UIView {
     // MARK: - 접근 제어
     public var getCollectionView: UICollectionView { collectionView }
     public var getSearchBar: UISearchBar { searchBar }
+    public var getRestButton: UIButton { resetButton }
+    public var getSearchButton: UIButton { searchButton }
 }
 
 private extension AnalysisView {

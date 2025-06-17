@@ -120,6 +120,18 @@ final class AnalaysisViewController: UIViewController {
                 owner.viewModel.action.onNext(.didSubmitSearchText(keyword: keyword))
             }
             .disposed(by: disposeBag)
+        
+        analysisView.getRestButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+                
+            }
+            .disposed(by: disposeBag)
+        
+        analysisView.getSearchButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+                
+            }
+            .disposed(by: disposeBag)
     }
     
     /// 델리게이트 설정
