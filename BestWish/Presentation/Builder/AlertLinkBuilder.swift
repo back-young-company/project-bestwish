@@ -11,12 +11,14 @@ final class AlertLinkBuilder {
     private let baseViewController: UIViewController
     private let alertViewController: LinkSaveViewController
 
+    var getAlertViewController: LinkSaveViewController { return alertViewController }
+    
     init(
         baseViewController: UIViewController,
         action: (() -> Void)? = nil
     ) {
         self.baseViewController = baseViewController
-        self.alertViewController = LinkSaveViewController(action: action)
+        self.alertViewController = DIContainer.shared.makeLinkSaveViewController()
     }
 
     func show() {

@@ -34,6 +34,7 @@ class MusinsaFetcher: ShareMetadataFetcher {
                 // Parse brand and product name
                 let (brand, product, extra) = MusinsaFetcher.parseTitle(title ?? "")
                 let metadata = ProductMetadataDTO(
+                    platform: 1,
                     productName: product,
                     brandName: brand,
                     discountRate: saleRate,

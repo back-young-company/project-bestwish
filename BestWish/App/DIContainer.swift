@@ -46,6 +46,11 @@ final class DIContainer {
         let viewModel = WishEditViewModel(useCase: wishListUseCase)
         return WishlistEditViewController(wishEditViewModel: viewModel)
     }
+    
+    func makeLinkSaveViewController() -> LinkSaveViewController {
+        let viewModel = LinkSaveViewModel(useCase: wishListUseCase)
+        return LinkSaveViewController(viewModel: viewModel)
+    }
 
     func makeMyPageViewController() -> MyPageViewController {
         let viewModel = MyPageViewModel(useCase: userInfoUseCase)

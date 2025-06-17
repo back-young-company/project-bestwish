@@ -159,7 +159,12 @@ final class HomeViewController: UIViewController {
                         
                         headerView.getLinkButton.rx.tap
                             .bind(with: self) { owner, _ in
-                                AlertLinkBuilder(baseViewController: owner).show()
+                                let alertViewController = DIContainer.shared.makeLinkSaveViewController()
+                                alertViewController.modalPresentationStyle = .overFullScreen
+                                alertViewController.modalTransitionStyle = .crossDissolve
+                                alertViewController.delegate = owner
+                                
+                                owner.present(alertViewController, animated: true)
                             }.disposed(by: headerView.disposeBag)
                         
                         headerView.getEditButton.rx.tap
