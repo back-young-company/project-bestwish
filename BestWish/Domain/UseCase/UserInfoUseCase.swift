@@ -8,7 +8,10 @@
 import Foundation
 
 protocol UserInfoUseCase {
+    /// 유저 정보 불러오기
     func getUserInfo() async throws -> User
+
+    /// 유저 정보 수정
     func updateUserInfo(
         profileImageCode: Int?,
         nickname: String?,
@@ -16,6 +19,7 @@ protocol UserInfoUseCase {
         birth: Date?
     ) async throws
 
+    /// 닉네임 유효성 검사
     func isValidNickname(_ nickname: String) -> Bool
 }
 
@@ -60,7 +64,6 @@ final class UserInfoUseCaseImpl: UserInfoUseCase {
         )
     }
 
-    /// 닉네임 유효성 검사
     func isValidNickname(_ nickname: String) -> Bool {
         let nicknameRegex =  "^[가-힣A-Za-z0-9]{2,10}$"
         let isValid = NSPredicate(format: "SELF MATCHES %@", nicknameRegex)
