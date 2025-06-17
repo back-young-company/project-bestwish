@@ -109,11 +109,6 @@ final class AnalaysisViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        // 라벨 데이터 컬렉션 뷰에 바인딩
-        viewModel.state.labelDatas
-            .bind(to: analysisView.getCollectionView.rx.items(dataSource: dataSource))
-            .disposed(by: disposeBag)
-        
         // 서치바 이벤트 방출
         analysisView.getSearchBar.rx.searchButtonClicked
             .withLatestFrom(analysisView.getSearchBar.rx.text.orEmpty)
@@ -123,15 +118,39 @@ final class AnalaysisViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        // 초기화 이벤트 방출
         analysisView.getRestButton.rx.tap
             .subscribe(with: self) { owner, _ in
                 owner.viewModel.action.onNext(.didTapResetButton)
             }
             .disposed(by: disposeBag)
         
+        // 상품 보기 이벤트 방출
         analysisView.getSearchButton.rx.tap
             .subscribe(with: self) { owner, _ in
-                
+                owner.viewModel.action.onNext(.didTapSearchButton)
+            }
+            .disposed(by: disposeBag)
+        
+        // 라벨 데이터 컬렉션 뷰에 바인딩
+        viewModel.state.labelDatas
+            .bind(to: analysisView.getCollectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        // 타 플랫 폼 이동
+        viewModel.state.deepLink
+            .subscribe(with: self) { owner, deepLink in
+                print(deepLink)
+                guard let url = URL(string: deepLink) else {
+                    return print("❌ 유효하지 않는 URL")
+                }
+                UIApplication.shared.open(url, options: [:]) { success in
+                    guard success else {
+                        print("❌ 앱 전환 실패: \(url.absoluteString)")
+                        return
+                    }
+                    print("✅ 앱 전환 성공: \(url.absoluteString)")
+                }
             }
             .disposed(by: disposeBag)
     }

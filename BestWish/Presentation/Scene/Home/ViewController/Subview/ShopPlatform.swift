@@ -63,7 +63,8 @@ enum ShopPlatform {
     func searchResultDeepLink(keyword: String) -> String {
         switch self {
         case .musinsa:
-            return "https://musinsaapp.page.link/?link=https%3A%2F%2Fwww.musinsa.com%2Fsearch%2Fgoods%3Fkeyword%3D\(keyword)%26keywordType%3Dpopular%26gf%3DA%26_gf%3DA&apn=com.musinsa.store&isi=1003139529&ibi=com.grab.musinsa&efr=1"
+            guard let encodedKeyword = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
+            return "https://musinsaapp.page.link/?link=https%3A%2F%2Fwww.musinsa.com%2Fsearch%2Fgoods%3Fkeyword%3D\(encodedKeyword)%26keywordType%3Dpopular%26gf%3DA%26_gf%3DA&apn=com.musinsa.store&isi=1003139529&ibi=com.grab.musinsa&efr=1"
         case .zigzag:
             return "https://zigzag.kr/search?keyword=\(keyword)"
         case .ably:

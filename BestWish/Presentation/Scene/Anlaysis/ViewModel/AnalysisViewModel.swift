@@ -26,14 +26,18 @@ final class AnalysisViewModel: ViewModel {
     struct State {
         let labelDatas: Observable<[AnalysisSectionModel]>
         let segmentIndex: Observable<Int>
+        let deepLink: Observable<String>
     }
     
     private let arr = ["스타일", "상의", "하의", "아우터", "원피스"]
     private var previousCategory = ""                       // 카테고리 비교 용도
+    private var currentQuery = ""
+    private var currentPlatform: Platform?
     
     private let _action = PublishSubject<Action>()
     private let _labelData = BehaviorRelay<[AnalysisSectionModel]>(value: [])
     private let _segmentIndex = BehaviorRelay(value: 0)
+    private let _deepLink = PublishSubject<String>()
     var action: AnyObserver<Action> { _action.asObserver() }
     
     public let topClassFilter: [String: [String]]           // CoreData Model 데이터 정재해서 저장 (큰 카테고리: [속성])
@@ -62,14 +66,16 @@ final class AnalysisViewModel: ViewModel {
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
             AnalysisSectionModel(header: nil, type: .platform, items: [
-                .platform(platform: Platform(platformName: "무신사", platformImage: PlatformImage.musinsa, platformDeepLink: "")),
-                .platform(platform: Platform(platformName: "지그재그", platformImage: PlatformImage.zigzag, platformDeepLink: "")),
-                .platform(platform: Platform(platformName: "에이블리", platformImage: PlatformImage.ably, platformDeepLink: "")),
-                .platform(platform: Platform(platformName: "브랜디", platformImage: PlatformImage.brandy, platformDeepLink: ""))
+                .platform(platform: Platform(platform: .musinsa, platformName: "무신사", platformImage: PlatformImage.musinsa, platformDeepLink: "")),
+                .platform(platform: Platform(platform: .zigzag, platformName: "지그재그", platformImage: PlatformImage.zigzag, platformDeepLink: "")),
+                .platform(platform: Platform(platform: .ably, platformName: "에이블리", platformImage: PlatformImage.ably, platformDeepLink: ""))
             ])
         ])
         
-        state = State(labelDatas: _labelData.asObservable(), segmentIndex: _segmentIndex.asObservable())
+        state = State(labelDatas: _labelData.asObservable(),
+                      segmentIndex: _segmentIndex.asObservable(),
+                      deepLink: _deepLink.asObservable()
+        )
         
         bindAction()
     }
@@ -129,7 +135,9 @@ private extension AnalysisViewModel {
             currentLabelData[0].items.append(.keyword(keyword: keyword))
         }
         currentLabelData[1].items = currentLabelData[1].items.map { setAttributeButton($0, keyword: keyword, isSelected: true) }
+        changedKeyword(labelData: currentLabelData)
         _labelData.accept(currentLabelData)
+        print(currentQuery)
     }
     
     /// 키워드 삭제 이벤트
@@ -137,12 +145,16 @@ private extension AnalysisViewModel {
         var currentLabelData = _labelData.value
         currentLabelData[0].items.removeAll(where: { $0 == .keyword(keyword: keyword) })
         currentLabelData[1].items = currentLabelData[1].items.map { setAttributeButton($0, keyword: keyword) }
+        changedKeyword(labelData: currentLabelData)
         _labelData.accept(currentLabelData)
     }
     
     /// 플랫폼 선택 이벤트
     private func selectePlatform(_ platform: Platform) {
         var currentLabelData = _labelData.value
+        
+        currentPlatform = platform
+        changedKeyword(labelData: currentLabelData)
         currentLabelData[2].items = currentLabelData[2].items.map { setAttributeButton($0, selectedPlatform: platform) }
         _labelData.accept(currentLabelData)
     }
@@ -153,11 +165,12 @@ private extension AnalysisViewModel {
         case let .attribute(attr, _) where attr == keyword:
             return .attribute(attribute: attr, isSelected: isSelected)
         case let .platform(platform, _):
-            return .platform(platform: platform, isSelected: selectedPlatform == platform)
+            return .platform(platform: platform, isSelected: selectedPlatform?.platformName == platform.platformName)
         default:
             return item
         }
     }
+    
     /// 초기화
     private func reset() {
         var value = _labelData.value
@@ -168,6 +181,25 @@ private extension AnalysisViewModel {
     
     /// 플랫폼 이동
     private func movePlatform() {
-        
+        _deepLink.onNext(currentPlatform?.platformDeepLink ?? "")
+    }
+    
+    /// 키워드 변경 시 현제 쿼리 변경
+    private func changedKeyword(labelData: [AnalysisSectionModel]) {
+        let keyword = labelData[0].items.compactMap { item in
+            if case let .keyword(keyword) = item { return keyword }
+            return nil
+        }
+        currentQuery = keyword.joined(separator: " ")
+    
+        switch currentPlatform?.platform {
+        case .musinsa:
+            currentPlatform?.platformDeepLink = ShopPlatform.musinsa.searchResultDeepLink(keyword: currentQuery)
+        case .ably:
+            currentPlatform?.platformDeepLink = ShopPlatform.ably.searchResultDeepLink(keyword: currentQuery)
+        case .zigzag:
+            currentPlatform?.platformDeepLink = ShopPlatform.zigzag.searchResultDeepLink(keyword: currentQuery)
+        default: break
+        }
     }
 }
