@@ -190,7 +190,7 @@ private extension AnalysisView {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(searchBar.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(resetButton.snp.top)
+            $0.bottom.equalTo(resetButton.snp.top).offset(-10)
         }
         
         resetButton.snp.makeConstraints {

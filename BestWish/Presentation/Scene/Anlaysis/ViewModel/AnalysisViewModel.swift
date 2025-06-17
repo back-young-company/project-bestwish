@@ -256,19 +256,15 @@ private extension AnalysisViewModel {
     
     /// 플랫폼 이동
     private func movePlatform() {
-        currentPlatform
-            .subscribe(with: self) { owner, platform in
-                guard let link = platform?.platformDeepLink else {
-                    owner._deepLinkError.accept(PlatformError.notFoundDeepLink)
-                    return
-                }
-                if link != "notFound" {
-                    owner._deepLink.accept(link)
-                } else {
-                    owner._deepLinkError.accept(PlatformError.preparePlatform)
-                }
-            }
-            .disposed(by: disposeBag)
+        guard let link = currentPlatform.value?.platformDeepLink else {
+            _deepLinkError.accept(PlatformError.notFoundDeepLink)
+            return
+        }
+        if link != "notFound" {
+            _deepLink.accept(link)
+        } else {
+            _deepLinkError.accept(PlatformError.preparePlatform)
+        }
     }
     
     /// 키워드 변경 시 현제 쿼리 변경
