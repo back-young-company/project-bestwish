@@ -33,10 +33,11 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        setNotification()
         bindViewModel()
         
-        homeViewModel.action.onNext(.viewDidload)
+        homeViewModel.action.onNext(.getDataSource)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -253,5 +254,21 @@ extension HomeViewController: HomeViewControllerUpdate {
     
     func updateWishlists() {
         self.homeViewModel.action.onNext(.wishlistUpdate)
+    }
+}
+
+extension HomeViewController {
+    func setNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(sceneWillEnterForground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+    }
+
+    @objc
+    private func sceneWillEnterForground() {
+        homeViewModel.action.onNext(.getDataSource)
     }
 }

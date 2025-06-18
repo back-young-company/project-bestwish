@@ -13,7 +13,7 @@ import RxRelay
 final class HomeViewModel: ViewModel {
     
     enum Action {
-        case viewDidload
+        case getDataSource
         case platformUpdate
         case wishlistUpdate
         case filterIndex(Int, force: Bool = false)
@@ -61,7 +61,7 @@ final class HomeViewModel: ViewModel {
         _action
             .subscribe(with: self) { owner, action in
                 switch action {
-                case .viewDidload:
+                case .getDataSource:
                     Task {
                         do {
                             let platformFilters = try await owner.getPlatformInWishList()
@@ -172,5 +172,4 @@ final class HomeViewModel: ViewModel {
 
         _sections.accept([platformsSection, wishlistSection])
     }
-    
 }

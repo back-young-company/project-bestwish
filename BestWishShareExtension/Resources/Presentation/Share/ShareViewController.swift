@@ -15,35 +15,42 @@ import SnapKit
 import Then
 
 final class ShareViewController: UIViewController {
-    
+
     private let shareView = ShareView()
-    private let shareViewModel = ShareViewModel(useCase: WishListUseCaseImpl(repository: WishListRepositoryImpl(manager: SupabaseManager(), userInfoManager: SupabaseUserInfoManager())))
-    
+    private let shareViewModel = ShareViewModel(
+        useCase: WishListUseCaseImpl(
+            repository: WishListRepositoryImpl(
+                manager: SupabaseManager(),
+                userInfoManager: SupabaseUserInfoManager()
+            )
+        )
+    )
+
     let disposeBag = DisposeBag()
-    
-//    init(shareViewModel: ShareViewModel) {
-//        self.shareViewModel = shareViewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
+
+    //    init(shareViewModel: ShareViewModel) {
+    //        self.shareViewModel = shareViewModel
+    //        super.init(nibName: nil, bundle: nil)
+    //    }
+    //
+    //    required init?(coder: NSCoder) {
+    //        fatalError("init(coder:) has not been implemented")
+    //    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setView()
         bindViewModel()
         bindActions()
-        
+
         Task {
-//            print(await SESupabaseOAuthManager().checkLoginState())
+            //            print(await SESupabaseOAuthManager().checkLoginState())
             extractSharedContent()
         }
-        
+
     }
-    
+
     private func bindViewModel() {
         shareViewModel.state.completed
             .observe(on: MainScheduler.asyncInstance)
@@ -51,7 +58,7 @@ final class ShareViewController: UIViewController {
                 owner.shareView.successConfigure()
             }
             .disposed(by: disposeBag)
-        
+
         shareViewModel.state.error
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, error in
@@ -60,7 +67,7 @@ final class ShareViewController: UIViewController {
             }
             .disposed(by: disposeBag)
     }
-    
+
     private func bindActions() {
         shareView.getShortcutButton.rx.tap
             .bind(with: self) { owner, _ in
@@ -120,7 +127,7 @@ private extension ShareViewController {
             }
         }
     }
-    
+
     func handleSharedText(_ text: String) {
         ShareExtensionService.shared
             .fetchPlatformMetadata(from: text)
