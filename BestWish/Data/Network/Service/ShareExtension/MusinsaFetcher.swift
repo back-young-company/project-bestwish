@@ -27,23 +27,36 @@ class MusinsaFetcher: ShareMetadataFetcher {
                     return
                 }
                 
-                let title = html.slice(from: "property=\"og:title\" content=\"", to: "\"")
-                let image = html.slice(from: "property=\"og:image\" content=\"", to: "\"")
-                let saleRate = html.slice(from: "property=\"product:price:sale_rate\" content=\"", to: "\"")
-                let amountPrice = html.slice(from: "property=\"product:price:amount\" content=\"", to: "\"")
-                // Parse brand and product name
-                let (brand, product, extra) = MusinsaFetcher.parseTitle(title ?? "")
-                let metadata = ProductMetadataDTO(
-                    platform: 1,
-                    productName: product,
-                    brandName: brand,
-                    discountRate: saleRate,
-                    price: amountPrice,
-                    imageURL: image,
-                    productURL: ogUrl,
-                    extra: extra
-                )
-                single(.success(metadata))
+                if let json = html.extractNEXTDataJSON() {                    
+                    let goodsNm = #""goodsNm"\s*:\s*"([^"]+)""#
+                    let thumbnailImageUrl = #""thumbnailImageUrl"\s*:\s*"([^"]+)""#
+                    let brandName = #""brandName"\s*:\s*"([^"]+)""#
+                    let salePrice = #""salePrice"\s*:\s*"?([0-9]+)"?"#
+                    let discountRate = #""discountRate"\s*:\s*"?([0-9]+)"?"#
+                    
+                    if let goodsNm = json.firstMatch(for: goodsNm),
+                       let thumbnailImageUrl = json.firstMatch(for: thumbnailImageUrl),
+                       let brandName = json.firstMatch(for: brandName),
+                       let salePrice = json.firstMatch(for: salePrice),
+                       let discountRate = json.firstMatch(for: discountRate) {
+                        
+                        let metadata = ProductMetadataDTO(
+                            platform: 1,
+                            productName: goodsNm,
+                            brandName: brandName,
+                            discountRate: discountRate,
+                            price: salePrice,
+                            imageURL: "https://image.msscdn.net" + thumbnailImageUrl,
+                            productURL: ogUrl,
+                            extra: nil
+                        )
+                        single(.success(metadata))
+                    } else {
+                        single(.failure(ShareExtensionError.invalidProductData))
+                    }
+                } else {
+                    single(.failure(ShareExtensionError.jsonScriptParsingFailed))
+                }
             }
             task.resume()
             return Disposables.create { task.cancel() }
