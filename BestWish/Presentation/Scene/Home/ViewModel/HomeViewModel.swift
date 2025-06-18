@@ -91,12 +91,15 @@ final class HomeViewModel: ViewModel {
                 case .wishlistUpdate:
                     Task {
                         do {
+                            let platformFilters = try await owner.getPlatformInWishList()
                             let wishlists = try await owner.getWishLists()
                             let currentSections = owner._sections.value
                             guard currentSections.count == 2 else { return }
                             let platformsSection = currentSections[0]
                             
                             let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlists.map { .wishlist($0) })
+                            
+                            owner._platformFilter.accept(platformFilters)
                             owner._sections.accept([platformsSection, wishlistsSection])
                         } catch {
                             owner._error.accept(error)
@@ -149,7 +152,7 @@ final class HomeViewModel: ViewModel {
                 brandName: item.brand,
                 productName: item.title,
                 productSaleRate: "\(item.discountRate)%",
-                productPrice: "\(String(item.price))원",
+                productPrice: "\(item.price.formattedPrice())원",
                 productDeepLink: item.productURL ?? ""
             )
         }

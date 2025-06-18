@@ -93,7 +93,7 @@ final class WishEditViewModel: ViewModel {
                 brandName: item.brand,
                 productName: item.title,
                 productSaleRate: "\(item.discountRate)%",
-                productPrice: "\(String(item.price))원",
+                productPrice: "\(item.price.formattedPrice())원",
                 productDeepLink: item.productURL ?? ""
             )
         }

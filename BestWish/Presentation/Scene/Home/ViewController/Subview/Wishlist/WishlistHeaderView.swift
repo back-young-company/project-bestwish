@@ -58,11 +58,21 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     func configure(platforms: Observable<[(Int ,Int)]>) {
         platforms
+            .do(onNext: { [weak self] platformList in
+                guard let self = self else { return }
+                let selected = self.selectedPlatformRelay.value
+                let availablePlatformIndices = platformList.map { $0.0 }
+
+                // ✅ 선택된 플랫폼이 사라졌을 경우 0번(전체)로 재설정
+                if !availablePlatformIndices.contains(selected) {
+                    self.selectedPlatform = 0
+                    self.selectedPlatformRelay.accept(0)
+                }
+            })
             .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { [weak self] row, data, cell in
                 guard let self else { return }
                 let (platform, _) = data
-                let selectedPlatform = self.selectedPlatformRelay.value
-                let isSelected = (platform == selectedPlatform)
+                let isSelected = (platform == self.selectedPlatformRelay.value)
                 
                 cell.configure(type: platform, isSelected: isSelected)
                 cell.getPlatformButton.rx.tap
