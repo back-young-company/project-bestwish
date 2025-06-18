@@ -40,9 +40,8 @@ private extension LoginView {
         self.backgroundColor = .primary300
 
         loginLogoImageView.do {
-            $0.image = UIImage(named: "loginLogo")?.resize(to:
-                CGSize(width: CGFloat(375).fitWidth, height: CGFloat(130).fitHeight)
-            )
+            $0.image = UIImage(named: "loginLogo")?
+                .resize(to:CGSize(width: CGFloat(375).fitWidth, height: CGFloat(130).fitHeight))
         }
 
         buttonVStackView.do {
