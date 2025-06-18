@@ -1,17 +1,15 @@
 //
-//  InfoStackView.swift
+//  IntroTextStackView.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/16/25.
 //
 
 import UIKit
-import SnapKit
-import Then
 
-final class InfoStackView: UIView {
+final class IntroTextStackView: UIView {
 
-    private let stackView = VerticalStackView(spacing: 12)
+    private let rootVStackView = VerticalStackView(spacing: 12)
     private let titleLabel = UILabel()
     private let descLabel = UILabel()
 
@@ -30,7 +28,7 @@ final class InfoStackView: UIView {
         descLabel.text = desc
     }
 }
-private extension InfoStackView {
+private extension IntroTextStackView {
     func setView() {
         setAttributes()
         setHierarchy()
@@ -38,6 +36,12 @@ private extension InfoStackView {
     }
 
     func setAttributes() {
+
+        rootVStackView.do {
+            $0.alignment = .leading
+            $0.distribution = .fill
+        }
+
         titleLabel.do {
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
@@ -51,12 +55,12 @@ private extension InfoStackView {
     }
 
     func setHierarchy() {
-        self.addSubview(stackView)
-        stackView.addArrangedSubviews(titleLabel, descLabel)
+        self.addSubview(rootVStackView)
+        rootVStackView.addArrangedSubviews(titleLabel, descLabel)
     }
 
     func setConstraints() {
-        stackView.snp.makeConstraints {
+        rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 

@@ -19,7 +19,7 @@ final class MyPageViewController: UIViewController {
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {
             case .basic(let type), .seeMore(let type):
-                guard let cell = self.myPageView.tableView.dequeueReusableCell(
+                guard let cell = self.myPageView.getTableView.dequeueReusableCell(
                     withIdentifier: MyPageCell.identifier,
                     for: indexPath
                 ) as? MyPageCell else {
@@ -66,18 +66,24 @@ final class MyPageViewController: UIViewController {
     }
 
     private func bindView() {
-        myPageView.tableView.rx.itemSelected
+        myPageView.getTableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
                     owner.hidesTabBar()
-                    let managementViewController = UserInfoManagementViewController()
+                    let managementViewController = DIContainer.shared.makeUserInfoManagementViewController()
                     owner.navigationController?.pushViewController(managementViewController, animated: true)
                 case .question:
                     owner.sendQuestion()
+                case .termsOfUse:
+                    let nextVC = PDFViewController(type: .termsOfUse)
+                    self.present(nextVC, animated: true)
+                case .privacyPolicy:
+                    let nextVC = PDFViewController(type: .privacyPolicy)
+                    self.present(nextVC, animated: true)
                 case .logout:
                     AlertBuilder(baseViewController: self, type: .logout) {
-                        print("로그아웃")
+                        owner.viewModel.action.onNext(.logout)
                     }.show()
                 default: return
                 }
@@ -86,7 +92,7 @@ final class MyPageViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.sections
-            .bind(to: myPageView.tableView.rx.items(dataSource: dataSource))
+            .bind(to: myPageView.getTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
         viewModel.state.userInfo
@@ -95,6 +101,12 @@ final class MyPageViewController: UIViewController {
                 owner.setHeaderView(userInfo: UserInfoDisplay)
             })
             .disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+            }.disposed(by: disposeBag)
     }
 
     private func setHeaderView(userInfo: UserInfoDisplay) {
@@ -107,9 +119,9 @@ final class MyPageViewController: UIViewController {
         let header = MyPageHeaderView(frame: frame)
 
         header.configure(user: userInfo)
-        myPageView.tableView.tableHeaderView = header
+        myPageView.getTableView.tableHeaderView = header
 
-        header.seeMoreButton.rx.tap
+        header.getSeeMoreButton.rx.tap
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()

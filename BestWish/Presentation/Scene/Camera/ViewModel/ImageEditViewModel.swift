@@ -7,14 +7,12 @@
 
 import RxSwift
 import RxRelay
-import CoreML
 import UIKit
 
 // MARK: - 이미지 편집 뷰 모델
 final class ImageEditViewModel: ViewModel {
     
-    let model = try? BestWidhClassfication()
-    private let dummyUseCase: DummyUseCase
+    private let coreMLUseCase: CoreMLUseCase
     private let disposeBag = DisposeBag()
 
     enum Action {
@@ -31,8 +29,8 @@ final class ImageEditViewModel: ViewModel {
     private let _labelData = PublishSubject<[LabelDataDisplay]>()
     let state: State
 
-    init(dummyUseCase: DummyUseCase) {
-        self.dummyUseCase = dummyUseCase
+    init(coreMLUseCase: CoreMLUseCase) {
+        self.coreMLUseCase = coreMLUseCase
         state = State(labelData: _labelData.asObservable())
 
         bindAction()
@@ -51,20 +49,14 @@ final class ImageEditViewModel: ViewModel {
 private extension ImageEditViewModel {
     /// 이미지 분석 후 라벨 데이터 추출
     func imageAnalaysis(image: UIImage) {
-        guard let model = model,
-              let buffer = image.toCVPixelBuffer() else { return }
 
         do {
-            let output = try model.prediction(image: buffer)
-            let labels = output.targetProbability
-                .sorted(by: { $0.value > $1.value })
-                .map {
-                    let label = LabelData(label: $0.key, probability: Int($0.value * 100))
-                    return LabelDataDisplay.convertToDisplay(from: label)
-                }
+            let labels = try coreMLUseCase.fetchLabelDataModel(image: image).map {
+                LabelDataDisplay.convertToDisplay(from: $0)
+            }
             _labelData.onNext(labels)
         } catch {
-            print("예측 실패:", error)
+            _labelData.onError(error)
         }
     }
 }

@@ -27,12 +27,12 @@ final class GenderSelectionView: UIView {
     let selectedGender = BehaviorRelay<Gender?>(value: nil)
     private let disposeBag = DisposeBag()
 
+    private let rootVStackView = VerticalStackView(spacing: 8)
     private let genderLabel = InfoLabel(title: "성별")
+    private let radioHStackView = HorizontalStackView(spacing: 24)
     private let maleButton = RadioButton(title: Gender.male.value)
     private let femaleButton = RadioButton(title: Gender.female.value)
     private let nothingButton = RadioButton(title: Gender.nothing.value)
-    private let stackView = VerticalStackView(spacing: 8)
-    private let radioStackView = HorizontalStackView(spacing: 24)
 
     init() {
         super.init(frame: .zero)
@@ -58,11 +58,11 @@ extension GenderSelectionView {
     }
 
     func setAttributes() {
-        stackView.do {
+        rootVStackView.do {
             $0.alignment = .leading
         }
 
-        radioStackView.do {
+        radioHStackView.do {
             $0.distribution = .fillProportionally
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
@@ -75,13 +75,13 @@ extension GenderSelectionView {
     }
 
     func setHierarchy() {
-        self.addSubview(stackView)
-        self.stackView.addArrangedSubviews(genderLabel, radioStackView)
-        self.radioStackView.addArrangedSubviews(maleButton, femaleButton, nothingButton)
+        self.addSubview(rootVStackView)
+        self.rootVStackView.addArrangedSubviews(genderLabel, radioHStackView)
+        self.radioHStackView.addArrangedSubviews(maleButton, femaleButton, nothingButton)
     }
 
     func setConstraints() {
-        stackView.snp.makeConstraints {
+        rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }

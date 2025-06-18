@@ -13,6 +13,7 @@ import AuthenticationServices
 final class LoginView: UIView {
 
     private let loginLogoImageView = UIImageView()
+    private let buttonVStackView = VerticalStackView(spacing: 12)
     let kakaoLoginButton = UIButton()
     let appleLoginButton = UIButton()
 
@@ -33,60 +34,55 @@ private extension LoginView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setDelegate()
-        setDataSource()
-        setBindings()
     }
 
     func setAttributes() {
         self.backgroundColor = .primary300
 
         loginLogoImageView.do {
-            $0.image = UIImage(named: "loginLogo")?.resize(to: CGSize(width: CGFloat(375).fitWidth, height: CGFloat(130).fitHeight))
+            $0.image = UIImage(named: "loginLogo")?
+                .resize(to:CGSize(width: CGFloat(375).fitWidth, height: CGFloat(130).fitHeight))
+        }
+
+        buttonVStackView.do {
+            $0.alignment = .center
+            $0.isLayoutMarginsRelativeArrangement = true
+            $0.layoutMargins = UIEdgeInsets(
+                top: 12,
+                left: 20,
+                bottom: 12,
+                right: 20
+            )
         }
 
         kakaoLoginButton.do {
-            $0.setImage(UIImage(named: "kakaoLogin")?.resize(to: CGSize(width: CGFloat(335).fitWidth, height: CGFloat(56).fitHeight)),
-                        for: .normal)
+            $0.setImage(UIImage(named: "kakaoLogin"), for: .normal)
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
         }
 
         appleLoginButton.do {
-            $0.setImage(UIImage(named: "appleLogin")?.resize(to: CGSize(width: CGFloat(335).fitWidth, height: CGFloat(56).fitHeight)),
-                        for: .normal)
+            $0.setImage(UIImage(named: "appleLogin"), for: .normal)
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
         }
     }
-    
+
     func setHierarchy() {
-        self.addSubviews(loginLogoImageView, kakaoLoginButton, appleLoginButton)
+        self.addSubviews(loginLogoImageView, buttonVStackView)
+        buttonVStackView.addArrangedSubviews(kakaoLoginButton, appleLoginButton)
     }
 
     func setConstraints() {
         loginLogoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(safeAreaLayoutGuide.snp.top).offset(CGFloat(132).fitHeight)
+            $0.top.equalTo(safeAreaLayoutGuide.snp.top)
+                .offset(CGFloat(132).fitHeight)
         }
 
-        kakaoLoginButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(loginLogoImageView.snp.bottom).offset(CGFloat(226).fitHeight)
+        buttonVStackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(CGFloat(110).fitHeight)
         }
-        appleLoginButton.snp.makeConstraints {
-            $0.top.equalTo(kakaoLoginButton.snp.bottom).offset(12)
-            $0.centerX.equalToSuperview()
-        }
-    }
-
-    func setDelegate() {
-    }
-
-    func setDataSource() {
-    }
-
-    func setBindings() {
-
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PlatformImage {
+enum PlatformImage: CaseIterable {
     static let musinsa = "musinsa"
     static let zigzag = "zigzag"
     static let ably = "ably"

@@ -35,9 +35,10 @@ extension HomeSectionModel: SectionModelType {
 }
 
 struct Platform: Equatable {
+    var platform: ShopPlatform = .musinsa
     let platformName: String
     let platformImage: String
-    let platformDeepLink: String
+    var platformDeepLink: String
 }
 
 struct WishlistProduct: Equatable {

@@ -16,6 +16,7 @@ final class ProfileUpdateView: UIView {
     private let nicknameLabel = InfoLabel(title: "닉네임")
     private let nicknameTextField = UITextField()
     private let confirmChangeButton = AppButton(type: .confirmChange)
+    private let cautionLabel = CautionLabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,6 +33,11 @@ final class ProfileUpdateView: UIView {
         emailValueLabel.text = user.email
         profileImageView.image = UIImage(named: user.profileImageName)
         nicknameTextField.text = user.nickname
+    }
+
+    func configure(isValidNickname: Bool) {
+        confirmChangeButton.isEnabled = isValidNickname
+        cautionLabel.isHidden = isValidNickname
     }
 
     func addUnderLine() {
@@ -74,6 +80,11 @@ private extension ProfileUpdateView {
             $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 0))
             $0.leftViewMode = .always
         }
+
+        cautionLabel.do {
+            $0.isHidden = true
+            $0.textColor = .red0
+        }
     }
 
     func setHierarchy() {
@@ -89,7 +100,8 @@ private extension ProfileUpdateView {
         )
         nicknameStackView.addArrangedSubviews(
             nicknameLabel,
-            nicknameTextField
+            nicknameTextField,
+            cautionLabel
         )
     }
 
@@ -121,7 +133,7 @@ private extension ProfileUpdateView {
         confirmChangeButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             make.directionalHorizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat(53).fitHeight)
+            make.height.equalTo(54)
         }
     }
 }

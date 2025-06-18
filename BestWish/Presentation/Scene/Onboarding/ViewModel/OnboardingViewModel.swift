@@ -18,12 +18,15 @@ final class OnboardingViewModel: ViewModel {
     static private let onboardingStartPage = 0
     static private let onboardingFinishPage = 1
 
+    // 한 번만 정책 시트를 띄웠는지 추적하는 플래그
+    private var showPolicyFlag = false
+
     enum Action {
         case viewDidAppear
+        case createUserInfo
         case selectedProfileIndex(Int)
         case selectedGender(Gender)
         case selectedBirth(Date)
-        case inputNicknameValid(Bool)
         case inputNickname(String)
         case nextPage
         case prevPage
@@ -31,8 +34,8 @@ final class OnboardingViewModel: ViewModel {
     }
 
     struct State {
-        let userInfo: Observable<UserInfoDisplay>
-        let isValidNickname: Observable<Bool>
+        let userInfo: Observable<UserInfoDisplay?>
+        let isValidNickname: Observable<Bool?>
         let currentPage: Observable<Int>
         let showPolicySheet: Observable<Void>
     }
@@ -40,14 +43,9 @@ final class OnboardingViewModel: ViewModel {
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _userInput = BehaviorRelay<UserInfoDisplay> (value:
-        UserInfoDisplay(
-        profileImageCode: 0)
-    )
-
+    private let _userInfo = BehaviorRelay<UserInfoDisplay?> (value: nil)
     private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
-
-    private let _isValidNickname = BehaviorRelay<Bool>(value: false)
+    private let _isValidNickname = BehaviorRelay<Bool?>(value: nil)
     private let _showPolicySheet = PublishRelay<Void>()
 
     let state: State
@@ -55,27 +53,13 @@ final class OnboardingViewModel: ViewModel {
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
 
-        let showPolicy = _action
-            .filter { action in
-            if case .viewDidAppear = action { return true }
-            return false
-        }
-            .withLatestFrom(_currentPage.asObservable())
-            .filter { $0 == Self.onboardingStartPage }
-            .take(1)
-            .map { _ in () }
-
-        // bindAction() 에서 이 이벤트를 Relay로 다시 전달
-        showPolicy
-            .bind(to: _showPolicySheet)
-            .disposed(by: disposeBag)
-
         state = State(
-            userInfo: _userInput.asObservable(),
+            userInfo: _userInfo.asObservable(),
             isValidNickname: _isValidNickname.asObservable(),
             currentPage: _currentPage.asObservable(),
             showPolicySheet: _showPolicySheet.asObservable()
         )
+
         bindAction()
     }
 
@@ -83,7 +67,10 @@ final class OnboardingViewModel: ViewModel {
         _action.subscribe(with: self) { owner, action in
             switch action {
             case .viewDidAppear:
-                break
+                owner.updateShowPolicyFlag(with: owner.showPolicyFlag)
+            case .createUserInfo:
+                let userInfo = owner.createUserInfoDisplay()
+                self._userInfo.accept(userInfo)
             case .selectedProfileIndex(let index):
                 owner.updateProfileImage(with: index)
             case .selectedGender(let gender):
@@ -98,9 +85,6 @@ final class OnboardingViewModel: ViewModel {
                 self._currentPage.accept(prev)
             case .inputNickname(let nickname):
                 owner.updateNickname(with: nickname)
-            case .inputNicknameValid(let valid):
-                owner._isValidNickname.accept(valid)
-
             case .uploadUserInfo(let userInfo):
                 Task {
                     await self.updateUserInfo(with: userInfo)
@@ -111,39 +95,55 @@ final class OnboardingViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
-    private func updateUserInfo(with index: UserInfoDisplay) async {
+    private func updateShowPolicyFlag(with flag: Bool) {
+        if !flag, self._currentPage.value == Self.onboardingStartPage {
+            showPolicyFlag = !flag
+            _showPolicySheet.accept(())
+        }
+    }
+
+    private func createUserInfoDisplay() -> UserInfoDisplay {
+        return UserInfoDisplay(profileImageCode: 0)
+    }
+
+    private func updateUserInfo(with userInfo: UserInfoDisplay) async {
         do {
             try await self.useCase.updateUserInfo(
-                profileImageCode: index.profileImageCode,
-                nickname: index.nickname,
-                gender: index.gender,
-                birth: index.birth)
+                profileImageCode: userInfo.profileImageCode,
+                nickname: userInfo.nickname,
+                gender: userInfo.gender,
+                birth: userInfo.birth)
         } catch {
             print(error.localizedDescription)
         }
     }
 
-    private func updateGender(with index: Gender) {
-        var userInput = _userInput.value
-        userInput.updateGender(to: index.rawValue)
-        _userInput.accept(userInput)
+    private func updateGender(with gender: Gender) {
+        var userInfo = _userInfo.value
+        userInfo?.updateGender(to: gender.rawValue)
+        _userInfo.accept(userInfo)
     }
 
-    private func updateBirth(with index: Date) {
-        var userInput = _userInput.value
-        userInput.updateBirth(to: index)
-        _userInput.accept(userInput)
+    private func updateBirth(with date: Date) {
+        var userInfo = _userInfo.value
+        userInfo?.updateBirth(to: date)
+        _userInfo.accept(userInfo)
     }
 
     private func updateProfileImage(with index: Int) {
-        var userInput = _userInput.value
-        userInput.updateprofileImageCode(to: index)
-        _userInput.accept(userInput)
+        var userInfo = _userInfo.value
+        userInfo?.updateprofileImageCode(to: index)
+        _userInfo.accept(userInfo)
     }
 
-    private func updateNickname(with index: String) {
-        var userInput = _userInput.value
-        userInput.updateNickname(to: index)
-        _userInput.accept(userInput)
+    private func updateNickname(with nickname: String) {
+        let isValid = useCase.isValidNickname(nickname)
+        _isValidNickname.accept(isValid)
+
+        if isValid {
+            var userInfo = _userInfo.value
+            userInfo?.updateNickname(to: nickname)
+            _userInfo.accept(userInfo)
+        }
     }
 }

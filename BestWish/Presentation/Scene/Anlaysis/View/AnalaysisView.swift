@@ -131,9 +131,15 @@ final class AnalysisView: UIView {
         fatalError()
     }
     
+    public func configure(_ isActivated: Bool) {
+        searchButton.isEnabled = isActivated
+    }
+    
     // MARK: - 접근 제어
     public var getCollectionView: UICollectionView { collectionView }
     public var getSearchBar: UISearchBar { searchBar }
+    public var getRestButton: UIButton { resetButton }
+    public var getSearchButton: UIButton { searchButton }
 }
 
 private extension AnalysisView {
@@ -145,16 +151,16 @@ private extension AnalysisView {
     
     func setAttributes() {
         overrideUserInterfaceStyle = .light
-        backgroundColor = .white
+        backgroundColor = .gray0
         
         titleLabel.do {
             $0.text = "키워드로 검색어를 만들어보세요."
-            $0.textColor = .black
-            $0.font = .systemFont(ofSize: 17, weight: .bold)
+            $0.textColor = .gray900
+            $0.font = .font(.pretendardBold, ofSize: 17)
         }
         
         searchBar.do {
-            $0.tintColor = .black
+            $0.tintColor = .gray900
             $0.backgroundImage = UIImage()
         }
         
@@ -170,7 +176,7 @@ private extension AnalysisView {
     
     func setConstraints() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(20)
+            $0.top.equalToSuperview().inset(50)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -183,7 +189,7 @@ private extension AnalysisView {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(searchBar.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(resetButton.snp.top)
+            $0.bottom.equalTo(resetButton.snp.top).offset(-10)
         }
         
         resetButton.snp.makeConstraints {

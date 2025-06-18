@@ -35,9 +35,11 @@ final class CameraViewController: UIViewController {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .notDetermined:                                                        // 처음 실행 시, 사용자에게 권한 요청
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in     // 요청 실패 시 아직 어떠한 이벤트도 넣지 않은 상태
-                guard granted else { return }
-                self?.setUpCamera()
-                self?.cameraView.showToast()
+                guard granted, let self else { return }
+                DispatchQueue.main.async {
+                    self.setUpCamera()
+                    self.cameraView.showToast()
+                }
             }
         case .restricted, .denied: break                                            // 사용 제한 상태
         case .authorized:
@@ -117,10 +119,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
     }
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(with image: UIImage) {
-        let service = DummyServiceImpl()
-        let repo = DummyRepositoryImpl(service: service)
-        let vm = ImageEditViewModel(dummyUseCase: DummyUseCaseImpl(repository: repo))
-        imageEditVC = ImageEditViewController(image: image, viewModel: vm)
+        imageEditVC = DIContainer.shared.makeImageEditController(image: image)
         
         guard let imageEditVC else { return }
         imageEditVC.onDismiss = { [weak self] in

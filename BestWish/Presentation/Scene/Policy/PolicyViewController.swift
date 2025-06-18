@@ -63,7 +63,7 @@ final class PolicyViewController: UIViewController {
     private func bindPDFButton() {
         policyView.privacyViewButton.rx.tap
             .subscribe(with: self) { owner, _ in
-            let pdfVC = PDFViewController(type: .privacy)
+            let pdfVC = PDFViewController(type: .privacyPolicy)
             if let sheet = pdfVC.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = false
@@ -74,7 +74,7 @@ final class PolicyViewController: UIViewController {
 
         policyView.serviceViewButton.rx.tap
             .subscribe(with: self) { owner, _ in
-            let pdfVC = PDFViewController(type: .service)
+            let pdfVC = PDFViewController(type: .termsOfUse)
             if let sheet = pdfVC.sheetPresentationController {
                 sheet.detents = [.large()]
                 sheet.prefersGrabberVisible = false

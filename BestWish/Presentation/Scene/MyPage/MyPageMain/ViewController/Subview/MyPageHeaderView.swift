@@ -13,7 +13,7 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
     private let infoStackView = UIStackView()
     private let nicknameLabel = UILabel()
     private let emailLabel = UILabel()
-    let seeMoreButton = UIButton()
+    private let seeMoreButton = UIButton()
     private let separatorView = UIView()
 
     override init(reuseIdentifier: String?) {
@@ -31,6 +31,8 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
         nicknameLabel.text = user.nickname
         emailLabel.text = user.email
     }
+
+    var getSeeMoreButton: UIButton { seeMoreButton }
 }
 
 private extension MyPageHeaderView {
@@ -63,8 +65,11 @@ private extension MyPageHeaderView {
         }
 
         seeMoreButton.do {
-            $0.setImage(.init(systemName: "chevron.right"), for: .normal)
-            $0.tintColor = .gray900
+            var config = UIButton.Configuration.plain()
+            config.contentInsets = .init(top: 12, leading: 12, bottom: 12, trailing: 12)
+            config.image = .init(systemName: "chevron.right")
+            config.baseForegroundColor = .gray900
+            $0.configuration = config
         }
 
         separatorView.do {
@@ -91,8 +96,8 @@ private extension MyPageHeaderView {
 
         seeMoreButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.size.equalTo(24)
-            make.trailing.equalToSuperview().inset(CGFloat(16).fitWidth)
+            make.size.equalTo(48)
+            make.trailing.equalToSuperview().inset(8)
         }
 
         separatorView.snp.makeConstraints { make in
