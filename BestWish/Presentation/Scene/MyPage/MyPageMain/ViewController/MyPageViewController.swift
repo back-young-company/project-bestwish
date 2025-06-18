@@ -121,7 +121,7 @@ final class MyPageViewController: UIViewController {
         header.configure(user: userInfo)
         myPageView.getTableView.tableHeaderView = header
 
-        header._getSeeMoreButton.rx.tap
+        header.getSeeMoreButton.rx.tap
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()

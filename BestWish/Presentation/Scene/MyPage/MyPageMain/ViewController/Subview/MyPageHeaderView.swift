@@ -32,7 +32,7 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
         emailLabel.text = user.email
     }
 
-    var _getSeeMoreButton: UIButton { seeMoreButton }
+    var getSeeMoreButton: UIButton { seeMoreButton }
 }
 
 private extension MyPageHeaderView {
