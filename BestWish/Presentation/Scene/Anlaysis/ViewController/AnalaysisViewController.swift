@@ -20,7 +20,7 @@ final class AnalaysisViewController: UIViewController {
     var disposeBag = DisposeBag()
     
     // 데이터 소스
-    lazy var dataSource = RxCollectionViewSectionedReloadDataSource<AnalysisSectionModel>(
+    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<AnalysisSectionModel>(
             configureCell: { (dataSource, collectionView, indexPath, item) in
                 switch item {
                 case let .keyword(keyword):
@@ -89,7 +89,7 @@ final class AnalaysisViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setDelegate()
+        setRegister()
         bindView()
     }
     
@@ -169,7 +169,7 @@ final class AnalaysisViewController: UIViewController {
     }
     
     /// 델리게이트 설정
-    private func setDelegate() {
+    private func setRegister() {
         analysisView.getCollectionView.register(KeywordCell.self, forCellWithReuseIdentifier: KeywordCell.identifier)
         analysisView.getCollectionView.register(AttributeCell.self, forCellWithReuseIdentifier: AttributeCell.identifier)
         analysisView.getCollectionView.register(PlatformShortcutCell.self, forCellWithReuseIdentifier: PlatformShortcutCell.identifier)
