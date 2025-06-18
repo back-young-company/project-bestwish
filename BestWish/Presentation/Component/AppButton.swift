@@ -42,10 +42,6 @@ final class AppButton: UIButton {
     init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-//    func updateStyle(_ newType: ButtonType) {
-//        self.type = newType
-//        setAttributes()
-//    }
 }
 
 private extension AppButton {
