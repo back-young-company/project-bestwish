@@ -15,6 +15,7 @@ final class ShareView: UIView {
     private let grabBar = UIView()
     private let completeImage = UIImageView()
     private let completeLabel = UILabel()
+    private let descriptionLabel = UILabel()
     private let shortcutButton = UIButton()
     
     override init(frame: CGRect) {
@@ -59,6 +60,12 @@ private extension ShareView {
             $0.textColor = .black
         }
         
+        descriptionLabel.do {
+            $0.text = "저장이 완료되면 앱으로 다시 돌아가 주세요!"
+            $0.font = .font(.pretendardBold, ofSize: 16)
+            $0.textColor = .black
+        }
+        
         shortcutButton.do {
             var config = UIButton.Configuration.plain()
             config.imagePadding = 4
@@ -75,7 +82,7 @@ private extension ShareView {
     }
 
     func setHierarchy() {
-        self.addSubviews(grabBar, completeImage, completeLabel)
+        self.addSubviews(grabBar, completeImage, completeLabel, descriptionLabel)
     }
 
     func setConstraints() {
@@ -95,6 +102,11 @@ private extension ShareView {
             $0.centerY.equalTo(completeImage)
             $0.leading.equalTo(completeImage.snp.trailing).offset(8)
             $0.height.equalTo(18)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(completeImage.snp.bottom).offset(12)
+            $0.leading.equalTo(completeImage)
         }
         
 //        shortcutButton.snp.makeConstraints {
