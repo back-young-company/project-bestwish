@@ -41,16 +41,6 @@ private extension NicknameInputView {
     }
 
     func setAttributes() {
-//        rootVStackView.do {
-//            $0.isLayoutMarginsRelativeArrangement = true
-//            $0.layoutMargins = UIEdgeInsets(
-//                top: .zero,
-//                left: 20,
-//                bottom: .zero,
-//                right: 20
-//            )
-//        }
-
         textField.do {
             $0.font = .font(.pretendardMedium, ofSize: 16)
             $0.backgroundColor = .gray0
