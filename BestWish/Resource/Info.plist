@@ -34,6 +34,8 @@
 	</dict>
 	<key>SUPABASE_URL</key>
 	<string>$(SUPABASE_URL)</string>
+    <key>SHARING_KEY</key>
+    <string>$(SHARING_KEY)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Anton-Regular.ttf</string>
