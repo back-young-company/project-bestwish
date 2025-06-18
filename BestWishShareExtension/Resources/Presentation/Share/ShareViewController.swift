@@ -28,14 +28,14 @@ final class ShareViewController: UIViewController {
 
     let disposeBag = DisposeBag()
 
-    //    init(shareViewModel: ShareViewModel) {
-    //        self.shareViewModel = shareViewModel
-    //        super.init(nibName: nil, bundle: nil)
-    //    }
-    //
-    //    required init?(coder: NSCoder) {
-    //        fatalError("init(coder:) has not been implemented")
-    //    }
+//    init(shareViewModel: ShareViewModel) {
+//        self.shareViewModel = shareViewModel
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,12 +43,8 @@ final class ShareViewController: UIViewController {
         setView()
         bindViewModel()
         bindActions()
-
-        Task {
-            //            print(await SESupabaseOAuthManager().checkLoginState())
-            extractSharedContent()
-        }
-
+        
+        extractSharedContent()
     }
 
     private func bindViewModel() {
@@ -72,7 +68,12 @@ final class ShareViewController: UIViewController {
         shareView.getShortcutButton.rx.tap
             .bind(with: self) { owner, _ in
                 if let url = URL(string: "bestwish://open") {
-                    owner.extensionContext?.open(url, completionHandler: nil)
+                    owner.extensionContext?.completeRequest(returningItems: [], completionHandler: { _ in
+                        // 딥링크는 completeRequest 이후 호출해야 효과가 있음
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            _ = owner.extensionContext?.open(url, completionHandler: nil)
+                        }
+                    })
                 }
             }
             .disposed(by: disposeBag)
