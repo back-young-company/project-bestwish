@@ -76,10 +76,10 @@ final class MyPageViewController: UIViewController {
                 case .question:
                     owner.sendQuestion()
                 case .termsOfUse:
-                    let nextVC = PDFViewController(type: .service)
+                    let nextVC = PDFViewController(type: .termsOfUse)
                     self.present(nextVC, animated: true)
                 case .privacyPolicy:
-                    let nextVC = PDFViewController(type: .privacy)
+                    let nextVC = PDFViewController(type: .privacyPolicy)
                     self.present(nextVC, animated: true)
                 case .logout:
                     AlertBuilder(baseViewController: self, type: .logout) {

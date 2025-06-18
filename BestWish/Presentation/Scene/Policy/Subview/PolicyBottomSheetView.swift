@@ -12,18 +12,16 @@ import Then
 final class PolicyBottomSheetView: UIView {
     private let infoStackView: IntroTextStackView
     private let separator = UIView()
-    /// 모두 동의합니다
+
     private let selectAllHStack = HorizontalStackView(spacing: 8)
     let selectAllCheckButton = UIButton()
     private let selectAllLabel = UILabel()
 
-    /// 개인정보
     private let privacyHStack = HorizontalStackView(spacing: 8)
     let privacyCheckButton = UIButton()
     private let privacyLabel = UILabel()
     let privacyViewButton = UIButton()
 
-    /// 이용약관
     private let serviceHStack = HorizontalStackView(spacing: 8)
     let serviceCheckButton = UIButton()
     private let serviceLabel = UILabel()
@@ -31,7 +29,6 @@ final class PolicyBottomSheetView: UIView {
 
     let completeButton = AppButton(type: .complete)
 
-    // MARK: - Init
     init(title: String, desc: String) {
         self.infoStackView = IntroTextStackView(title: title, desc: desc)
         super.init(frame: .zero)
