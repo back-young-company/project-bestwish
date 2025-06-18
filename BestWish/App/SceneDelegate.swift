@@ -57,13 +57,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        NotificationCenter.default.post(
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
-    }
-
     // 나중에 지울 코드
     //----------------------------------
     func showOnboardingView() {

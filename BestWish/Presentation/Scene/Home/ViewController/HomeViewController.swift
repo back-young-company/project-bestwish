@@ -133,6 +133,11 @@ final class HomeViewController: UIViewController {
                             for: indexPath
                         ) as? WishlistHeaderView else { return UICollectionReusableView() }
                         let totalItemCount = dataSource.sectionModels[1].items.map { $0 }.count
+                        
+                        homeViewModel.state.selectedPlatform
+                            .bind(to: headerView.selectedPlatformRelay)
+                            .disposed(by: headerView.disposeBag)
+                        
                         headerView.configure(title: "쇼핑몰 위시리스트")
                         headerView.configure(productCount: totalItemCount)
                         headerView.configure(platforms: self.homeViewModel.state.platformFilter)
@@ -143,7 +148,7 @@ final class HomeViewController: UIViewController {
                             }.disposed(by: headerView.disposeBag)
                         
                         headerView.getSearchTextField.rx.controlEvent(.editingDidEndOnExit)
-                            .withLatestFrom(headerView.selectedPlatformRelay) { _, index in
+                            .withLatestFrom(homeViewModel.state.selectedPlatform) { _, index in
                                 return index
                             }
                             .bind(with: self) { owner, index in
@@ -269,6 +274,10 @@ extension HomeViewController {
 
     @objc
     private func sceneWillEnterForground() {
-        homeViewModel.action.onNext(.getDataSource)
+        let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
+        if let bool = sharedDefaults?.bool(forKey: "AddProduct"), bool {
+            homeViewModel.action.onNext(.getDataSource)
+            sharedDefaults?.set(false, forKey: "AddProduct")
+        }
     }
 }

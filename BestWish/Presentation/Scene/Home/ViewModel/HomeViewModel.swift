@@ -24,6 +24,7 @@ final class HomeViewModel: ViewModel {
         let sections: Observable<[HomeSectionModel]>
         let platformFilter: Observable<[(Int, Int)]>
         let platformSequence: Observable<[Int]>
+        let selectedPlatform: Observable<Int>
         let error: Observable<Error>
     }
     
@@ -33,6 +34,7 @@ final class HomeViewModel: ViewModel {
     private let _platformFilter = BehaviorRelay<[(Int, Int)]>(value: [])
     private let _platformSequence = BehaviorRelay<[Int]>(value: [])
     private let _searchQuery = BehaviorRelay<String>(value: "")
+    private let _selectedPlatform = BehaviorRelay<Int>(value: 0)
     private let _error = PublishRelay<Error>()
     
     private var previousIndex = 0
@@ -51,6 +53,7 @@ final class HomeViewModel: ViewModel {
             sections: _sections.asObservable(),
             platformFilter: _platformFilter.asObservable(),
             platformSequence: _platformSequence.asObservable(),
+            selectedPlatform: _selectedPlatform.asObservable(),
             error: _error.asObservable()
         )
         
@@ -64,11 +67,15 @@ final class HomeViewModel: ViewModel {
                 case .getDataSource:
                     Task {
                         do {
+                            // 플랫폼 필터 칩
                             let platformFilters = try await owner.getPlatformInWishList()
+                            // 플랫폼 바로가기
                             let platforms = try await owner.getPlatformSequence()
+                            // 위시리스트
                             let wishLists = try await owner.getWishLists()
                             
                             owner._platformFilter.accept(platformFilters)
+                            owner._selectedPlatform.accept(0)
                             owner.setDataSources(platforms: platforms, wishLists: wishLists)
                         } catch {
                             owner._error.accept(error)
@@ -118,6 +125,7 @@ final class HomeViewModel: ViewModel {
                             let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: index == 0 ? nil : index)
                             let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
 
+                            owner._selectedPlatform.accept(index)
                             owner._sections.accept([platformSection, wishlistsSection])
                             owner.previousIndex = index
                         } catch {

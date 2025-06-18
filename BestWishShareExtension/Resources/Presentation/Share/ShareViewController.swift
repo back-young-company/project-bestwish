@@ -52,6 +52,10 @@ final class ShareViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
                 owner.shareView.successConfigure()
+                
+                let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
+                sharedDefaults?.set(true, forKey: "AddProduct")
+                sharedDefaults?.synchronize() // (Optional) 최신화 강제
             }
             .disposed(by: disposeBag)
 
