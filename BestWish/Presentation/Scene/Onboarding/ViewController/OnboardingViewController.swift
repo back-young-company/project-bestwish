@@ -128,7 +128,6 @@ private extension OnboardingViewController {
         // 생일 바인딩
         firstView.birthSelection.dateButton.rx.tap
             .subscribe(with: self) { owner, _ in
-            owner.firstView.birthSelection.dateButton.layer.borderColor = UIColor.primary300?.cgColor
             let sheetVC = DatePickerBottomSheetViewController()
             sheetVC.presentationController?.delegate = self
             // 선택된 날짜 콜백
