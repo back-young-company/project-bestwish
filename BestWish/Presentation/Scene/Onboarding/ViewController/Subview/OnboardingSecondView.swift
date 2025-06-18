@@ -11,8 +11,8 @@ import Then
 
 final class OnboardingSecondView: UIView {
     private let headerView = OnboardingHeaderView(current: 2, total: 2,
-                                              title: OnboardingText.secondTitle.value,
-                                              desc: OnboardingText.secondDesc.value)
+                                                  title: OnboardingText.secondTitle.value,
+                                                  desc: OnboardingText.secondDesc.value)
     private let profileContainer = UIView()
     let profileImageView = UIImageView()
 
@@ -32,13 +32,19 @@ final class OnboardingSecondView: UIView {
         fatalError()
     }
 
-    func configure(input: UserInfoDisplay) {
-        profileImageView.image = UIImage(named: input.profileImageName)?.resize(to: CGSize(width: CGFloat(152).fitHeight, height: CGFloat(152).fitHeight))
-
+    func configure(imageName: String?) {
+        guard let imageName else { return }
+        profileImageView.image = UIImage(named: imageName)?.resize(to: CGSize(width: CGFloat(152).fitHeight, height: CGFloat(152).fitHeight))
     }
 
-    func configure(_ isValid: Bool) {
-        completeButton.isEnabled = isValid
+    func configure(isValidNickname: Bool) {
+        // 버튼 활성화
+        completeButton.isEnabled = isValidNickname
+
+        nicknameVStackView.textField.layer.borderColor =
+        isValidNickname ? UIColor.primary300?.cgColor : UIColor.red0?.cgColor
+
+        nicknameVStackView.cautionLabel.textColor = isValidNickname ? .gray200 : .red0
     }
 
 }
@@ -77,7 +83,7 @@ private extension OnboardingSecondView {
 
     func setHierarchy() {
 
-        self.addSubviews(headerView,profileImageView, nickName2ButtonStackView)
+        self.addSubviews(headerView, profileImageView, nickName2ButtonStackView)
         nickName2ButtonStackView.addArrangedSubviews(nicknameVStackView, buttonHStackView)
         buttonHStackView.addArrangedSubviews(prevButton, completeButton)
     }

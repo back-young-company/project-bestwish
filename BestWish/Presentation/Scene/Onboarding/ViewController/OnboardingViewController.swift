@@ -33,6 +33,7 @@ final class OnboardingViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.action.onNext(.viewDidAppear)
+        viewModel.action.onNext(.createUserInfo)
     }
 
 
@@ -55,13 +56,7 @@ final class OnboardingViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        viewModel.state.userInfo
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, userInfo in
-            owner.firstView.birthSelection.configure(title: userInfo.birthString)
-        }
-            .disposed(by: disposeBag)
-
+        /// 온보딩 순서 바인딩
         viewModel.state.currentPage
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, page in
@@ -69,36 +64,26 @@ final class OnboardingViewController: UIViewController {
         }
             .disposed(by: disposeBag)
 
+        /// 온보딩 1 바인딩
+        /// - firstView.configure(생일 선택, 버튼 활성화)
+        /// 온보딩 2 바인딩
+        /// - 프로필 사진 바인딩
         viewModel.state.userInfo
-            .bind(with: self) { owner, userInput in
-            owner.secondView.configure(input: userInput)
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, userInfo in
+            owner.firstView.configure(with: userInfo)
+            owner.secondView.configure(imageName: userInfo?.profileImageName)
         }
             .disposed(by: disposeBag)
 
-        viewModel.state.userInfo
-            .map { input in
-            return input.gender != nil && input.birth != nil
-        }
-            .distinctUntilChanged()
+        /// 닉네임 유효성 검사 바인딩
+        /// secondView.configure(textField,caution 색상, 버튼 활성화)
+        viewModel.state.isValidNickname
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, isValid in
-            owner.firstView.nextPageButton.isEnabled = isValid
-            owner.firstView.configure(isValid)
-        }
-            .disposed(by: disposeBag)
-
-        Observable
-            .combineLatest(
-            viewModel.state.userInfo.map { $0.nickname != nil },
-            viewModel.state.isValidNickname
-        ) { hasNick, isValid in
-            hasNick && isValid
-        }
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, enabled in
-            owner.secondView.completeButton.isEnabled = enabled
-            owner.secondView.configure(enabled)
+            .bind(with: self) { owner, isValid in
+            guard let isValid else { return }
+            owner.secondView.configure(isValidNickname: isValid)
         }
             .disposed(by: disposeBag)
     }
@@ -128,25 +113,23 @@ private extension OnboardingViewController {
         // 생일 바인딩
         firstView.birthSelection.dateButton.rx.tap
             .subscribe(with: self) { owner, _ in
-            owner.firstView.birthSelection.dateButton.layer.borderColor = UIColor.primary300?.cgColor
             let sheetVC = DatePickerBottomSheetViewController()
             sheetVC.presentationController?.delegate = self
             // 선택된 날짜 콜백
             sheetVC.onDateSelected = { date in
-                self.dismiss(animated: true) {
-                    self.firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
+                owner.dismiss(animated: true) {
+                    owner.firstView.configure()
                 }
                 owner.viewModel.action.onNext(.selectedBirth(date))
             }
 
             sheetVC.onCancel = {
-                self.dismiss(animated: false) {
-                    self.firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
+                owner.dismiss(animated: false) {
+                    owner.firstView.configure()
                 }
             }
-
             sheetVC.presentDatePickerSheet()
-            self.present(sheetVC, animated: true)
+            owner.present(sheetVC, animated: true)
         }
             .disposed(by: disposeBag)
     }
@@ -155,58 +138,28 @@ private extension OnboardingViewController {
         // 프로필 사진 바인딩
         let tapGesture = UITapGestureRecognizer()
         secondView.profileImageView.addGestureRecognizer(tapGesture)
-
         tapGesture.rx.event
             .withLatestFrom(viewModel.state.userInfo)
             .bind(with: self) { owner, userInfo in
+            guard let userInfo else { return }
             let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
             profileSheetVC.presentProfileSheet()
             profileSheetVC.onComplete = { [weak self] selectedIndex in
                 self?.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
             }
             owner.present(profileSheetVC, animated: true)
-        }.disposed(by: disposeBag)
-
-        // 닉네임 바인딩
-        /// 1) 텍스트 스트림
-        let textStream = secondView.nicknameVStackView.textField.rx.text.orEmpty
-            .skip(2)
-
-        /// 2) 텍스트+유효성 스트림
-        let validationStream: Observable<(String, Bool)> = textStream
-            .map { text in
-            let isValid = NSPredicate(
-                format: "SELF MATCHES %@",
-                "^[가-힣A-Za-z0-9]{2,10}$"
-            ).evaluate(with: text)
-            return (text, isValid)
-        }
-            .distinctUntilChanged { prev, curr in
-            prev.0 == curr.0 && prev.1 == curr.1
-        }
-
-        /// 3) 구독
-        validationStream
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, data in
-            let (text, isValid) = data
-            owner.secondView.nicknameVStackView.textField.layer.borderColor =
-                isValid ? UIColor.primary300?.cgColor // 허용 값
-            : UIColor.red0?.cgColor // 불허 값
-
-            owner.secondView.nicknameVStackView.cautionLabel.textColor =
-                isValid ? .gray200 : .red0
-
-            // 닉네임 유효성 검사 성공시 전달
-            owner.viewModel.action.onNext(.inputNicknameValid(isValid))
-
-            if isValid {
-                // 닉네임 유효성 검사 성공시 닉네임 전달
-                owner.viewModel.action.onNext(.inputNickname(text))
-            }
         }
             .disposed(by: disposeBag)
 
+        // 닉네임 바인딩
+        secondView.nicknameVStackView.textField.rx.text.orEmpty
+            .skip(2)
+            .distinctUntilChanged()
+            .debounce(.microseconds(300), scheduler: MainScheduler.instance)
+            .bind(with: self) { owner, nickname in
+            owner.viewModel.action.onNext(.inputNickname(nickname))
+        }
+            .disposed(by: disposeBag)
     }
 
     func bindPageButton() {
@@ -226,6 +179,7 @@ private extension OnboardingViewController {
         secondView.completeButton.rx.tap
             .withLatestFrom(viewModel.state.userInfo)
             .subscribe(with: self) { owner, userInfoDisplay in
+            guard let userInfoDisplay else { return }
             owner.viewModel.action.onNext(.uploadUserInfo(userInfoDisplay))
         }
             .disposed(by: disposeBag)
