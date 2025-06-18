@@ -10,18 +10,15 @@ import SnapKit
 import Then
 
 final class OnboardingSecondView: UIView {
-    private let header = OnboardingHeaderView(current: 2, total: 2,
+    private let headerView = OnboardingHeaderView(current: 2, total: 2,
                                               title: OnboardingText.secondTitle.value,
                                               desc: OnboardingText.secondDesc.value)
-    private let stackView = VerticalStackView(spacing: 40)
     private let profileContainer = UIView()
     let profileImageView = UIImageView()
 
-
-
     private let nickName2ButtonStackView = VerticalStackView(spacing: CGFloat(160).fitHeight)
-    let nicknameStackView = NicknameInputView()
-    private let buttonStack = HorizontalStackView(spacing: 12)
+    let nicknameVStackView = NicknameInputView()
+    private let buttonHStackView = HorizontalStackView(spacing: CGFloat(12).fitWidth)
     let prevButton = AppButton(type: .before)
     let completeButton = AppButton(type: .complete)
 
@@ -36,12 +33,12 @@ final class OnboardingSecondView: UIView {
     }
 
     func configure(input: UserInfoDisplay) {
-        profileImageView.image = UIImage(named: input.profileImageName)?.resize(to: CGSize(width: CGFloat(152).fitWidth, height: CGFloat(152).fitWidth))
+        profileImageView.image = UIImage(named: input.profileImageName)?.resize(to: CGSize(width: CGFloat(152).fitHeight, height: CGFloat(152).fitHeight))
 
     }
 
     func configure(_ isValid: Bool) {
-        completeButton.updateStyle(isValid ? .complete : .incomplete)
+        completeButton.isEnabled = isValid
     }
 
 }
@@ -56,24 +53,14 @@ private extension OnboardingSecondView {
     func setAttributes() {
         self.backgroundColor = .gray0
 
-        stackView.do {
-            $0.isLayoutMarginsRelativeArrangement = true
-            $0.layoutMargins = UIEdgeInsets(
-                top: 16,
-                left: 20,
-                bottom: 16,
-                right: 20
-            )
-        }
-
         profileImageView.do {
             $0.contentMode = .scaleToFill
-            $0.layer.cornerRadius = CGFloat(152).fitWidth / 2
+            $0.layer.cornerRadius = CGFloat(152).fitHeight / 2
             $0.clipsToBounds = true
             $0.isUserInteractionEnabled = true
         }
 
-        buttonStack.do {
+        buttonHStackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 12,
@@ -90,20 +77,21 @@ private extension OnboardingSecondView {
 
     func setHierarchy() {
 
-        self.addSubviews(header,profileImageView, nickName2ButtonStackView)
-        nickName2ButtonStackView.addArrangedSubviews(nicknameStackView, buttonStack)
-        buttonStack.addArrangedSubviews(prevButton, completeButton)
+        self.addSubviews(headerView,profileImageView, nickName2ButtonStackView)
+        nickName2ButtonStackView.addArrangedSubviews(nicknameVStackView, buttonHStackView)
+        buttonHStackView.addArrangedSubviews(prevButton, completeButton)
     }
 
     func setConstraints() {
-        header.snp.makeConstraints {
+
+        headerView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(CGFloat(38).fitHeight)
             $0.leading.trailing.equalToSuperview()
         }
 
         profileImageView.snp.makeConstraints {
-            $0.top.equalTo(header.snp.bottom).offset(24)
-            $0.size.equalTo(CGFloat(152).fitWidth)
+            $0.top.equalTo(headerView.snp.bottom).offset(24)
+            $0.size.equalTo(CGFloat(152).fitHeight)
             $0.centerX.equalToSuperview()
         }
 
@@ -114,17 +102,17 @@ private extension OnboardingSecondView {
         }
 
 
-        buttonStack.snp.makeConstraints {
+        buttonHStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
         }
 
         prevButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
-            $0.height.equalTo(CGFloat(53).fitHeight)
+            $0.height.equalTo(54)
         }
 
         completeButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(53).fitHeight)
+            $0.height.equalTo(54)
         }
 
     }

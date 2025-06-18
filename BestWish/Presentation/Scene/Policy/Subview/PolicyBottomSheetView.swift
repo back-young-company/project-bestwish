@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 final class PolicyBottomSheetView: UIView {
-    private let infoStackView: InfoStackView
+    private let infoStackView: IntroTextStackView
     private let separator = UIView()
     /// 모두 동의합니다
     private let selectAllHStack = HorizontalStackView(spacing: 8)
@@ -29,11 +29,11 @@ final class PolicyBottomSheetView: UIView {
     private let serviceLabel = UILabel()
     let serviceViewButton = UIButton()
 
-    let completeButton = AppButton(type: .incomplete)
+    let completeButton = AppButton(type: .complete)
 
     // MARK: - Init
     init(title: String, desc: String) {
-        self.infoStackView = InfoStackView(title: title, desc: desc)
+        self.infoStackView = IntroTextStackView(title: title, desc: desc)
         super.init(frame: .zero)
         setView()
     }
@@ -44,8 +44,7 @@ final class PolicyBottomSheetView: UIView {
 
 
     func configure(_ isValid: Bool) {
-        completeButton.updateStyle(isValid ? .next : .nextUnable)
-        completeButton.isEnabled = true
+        completeButton.isEnabled = isValid
     }
 }
 
@@ -215,9 +214,9 @@ private extension PolicyBottomSheetView {
         }
 
         completeButton.snp.makeConstraints {
-            $0.top.equalTo(serviceHStack.snp.bottom).offset(CGFloat(32).fitHeight)
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(CGFloat(53).fitHeight)
+            $0.height.equalTo(54)
         }
     }
 }

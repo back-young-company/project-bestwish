@@ -11,15 +11,15 @@ import Then
 
 final class OnboardingHeaderView: UIView {
 
-    private let stackView = VerticalStackView(spacing: 12)
+    private let rootVStackView = VerticalStackView(spacing: 12)
     private let pageInfoLabel: PageInfoView
-    private let infoStackView: InfoStackView
+    private let infoStackView: IntroTextStackView
     private let titleLabel = UILabel()
     private let descLabel = UILabel()
 
     init(current: Int, total: Int, title: String, desc: String) {
         self.pageInfoLabel = PageInfoView(current: current, total: total)
-        self.infoStackView = InfoStackView(title: title, desc: desc)
+        self.infoStackView = IntroTextStackView(title: title, desc: desc)
         super.init(frame: .zero)
         setView()
     }
@@ -35,7 +35,7 @@ private extension OnboardingHeaderView {
     }
 
     func setAttributes() {
-        stackView.do {
+        rootVStackView.do {
             $0.alignment = .leading
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
@@ -48,12 +48,12 @@ private extension OnboardingHeaderView {
     }
 
     func setHierarchy() {
-        self.addSubview(stackView)
-        stackView.addArrangedSubviews(pageInfoLabel, infoStackView)
+        self.addSubview(rootVStackView)
+        rootVStackView.addArrangedSubviews(pageInfoLabel, infoStackView)
     }
 
     func setConstraints() {
-        stackView.snp.makeConstraints {
+        rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
@@ -61,5 +61,8 @@ private extension OnboardingHeaderView {
             $0.height.equalTo(CGFloat(19).fitHeight)
         }
 
+        infoStackView.snp.makeConstraints {
+            $0.height.greaterThanOrEqualTo(CGFloat(60).fitHeight)
+        }
     }
 }

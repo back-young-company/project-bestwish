@@ -11,7 +11,7 @@ import Then
 
 final class BirthSelectionView: UIView {
 
-    private let stackView = VerticalStackView(spacing: 8)
+    private let rootVStackView = VerticalStackView(spacing: 8)
     private let birthLabel = InfoLabel(title: "생년월일")
     let dateButton = UIButton()
 
@@ -63,18 +63,17 @@ private extension BirthSelectionView {
     }
 
     func setHierarchy() {
-        self.addSubviews(stackView)
-        stackView.addArrangedSubviews(birthLabel, dateButton)
-
+        self.addSubviews(rootVStackView)
+        rootVStackView.addArrangedSubviews(birthLabel, dateButton)
     }
 
     func setConstraints() {
-        stackView.snp.makeConstraints {
+        rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        dateButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(48).fitHeight)
 
+        dateButton.snp.makeConstraints {
+            $0.height.equalTo(48)
         }
     }
 }
