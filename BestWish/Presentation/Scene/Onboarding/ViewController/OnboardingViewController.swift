@@ -80,9 +80,9 @@ final class OnboardingViewController: UIViewController {
         /// 닉네임 유효성 검사 바인딩
         /// secondView.configure(textField,caution 색상, 버튼 활성화)
         viewModel.state.isValidNickname
+            .compactMap { $0 }
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, isValid in
-            guard let isValid else { return }
             owner.secondView.configure(isValidNickname: isValid)
         }
             .disposed(by: disposeBag)
