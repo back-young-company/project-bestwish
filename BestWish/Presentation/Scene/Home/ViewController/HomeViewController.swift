@@ -14,9 +14,18 @@ import RxRelay
 final class HomeViewController: UIViewController {
     
     private let homeView = HomeView()
-    private let homeViewModel = HomeViewModel()
+    private let homeViewModel: HomeViewModel
     
     private let disposeBag = DisposeBag()
+    
+    init(homeViewModel: HomeViewModel) {
+        self.homeViewModel = homeViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = homeView
@@ -24,16 +33,19 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        setNotification()
         bindViewModel()
         
+        homeViewModel.action.onNext(.getDataSource)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationController?.navigationBar.isHidden = true
         showTabBar()
+        self.navigationController?.navigationBar.isHidden = true
+        
     }
     
     private func bindViewModel() {
@@ -58,7 +70,7 @@ final class HomeViewController: UIViewController {
                     
                     let itemCount = collectionView.numberOfItems(inSection: indexPath.section)
                         let isLastRow = {
-                            let itemsPerRow = 2 // 레이아웃 기준
+                            let itemsPerRow = 2
                             let rowCount = Int(ceil(Double(itemCount) / Double(itemsPerRow)))
                             let currentRow = indexPath.item / itemsPerRow
                             return currentRow == rowCount - 1
@@ -98,8 +110,9 @@ final class HomeViewController: UIViewController {
                     headerView.configure(title: "플랫폼 바로가기")
                     headerView.getEditButton.rx.tap
                         .bind(with: self) { owner, _ in
-                            let vc = PlatformEditViewController()
                             owner.hidesTabBar()
+                            let vc = DIContainer.shared.makePlatformEditViewController()
+                            vc.delegate = owner
                             owner.navigationController?.pushViewController(vc, animated: true)
                         }.disposed(by: headerView.disposeBag)
                     
@@ -120,19 +133,51 @@ final class HomeViewController: UIViewController {
                             for: indexPath
                         ) as? WishlistHeaderView else { return UICollectionReusableView() }
                         let totalItemCount = dataSource.sectionModels[1].items.map { $0 }.count
+                        
+                        homeViewModel.state.selectedPlatform
+                            .bind(to: headerView.selectedPlatformRelay)
+                            .disposed(by: headerView.disposeBag)
+                        
                         headerView.configure(title: "쇼핑몰 위시리스트")
                         headerView.configure(productCount: totalItemCount)
                         headerView.configure(platforms: self.homeViewModel.state.platformFilter)
                         
+                        headerView.getSearchTextField.rx.text.orEmpty
+                            .bind(with: self) { owner, query in
+                                owner.homeViewModel.action.onNext(.searchQuery(query))
+                            }.disposed(by: headerView.disposeBag)
+                        
+                        headerView.getSearchTextField.rx.controlEvent(.editingDidEndOnExit)
+                            .withLatestFrom(homeViewModel.state.selectedPlatform) { _, index in
+                                return index
+                            }
+                            .bind(with: self) { owner, index in
+                                headerView.getSearchTextField.resignFirstResponder()
+                                owner.homeViewModel.action.onNext(.filterIndex(index, force: true))
+                            }
+                            .disposed(by: headerView.disposeBag)
+                        
+                        headerView.selectedPlatformRelay
+                            .bind(with: self) { owner, index in
+                                owner.homeViewModel.action.onNext(.filterIndex(index))
+                            }
+                            .disposed(by: headerView.disposeBag)
+                        
                         headerView.getLinkButton.rx.tap
                             .bind(with: self) { owner, _ in
-                                AlertLinkBuilder(baseViewController: owner).show()
+                                let alertViewController = DIContainer.shared.makeLinkSaveViewController()
+                                alertViewController.modalPresentationStyle = .overFullScreen
+                                alertViewController.modalTransitionStyle = .crossDissolve
+                                alertViewController.delegate = owner
+                                
+                                owner.present(alertViewController, animated: true)
                             }.disposed(by: headerView.disposeBag)
                         
                         headerView.getEditButton.rx.tap
                             .bind(with: self) { owner, _ in
                                 owner.hidesTabBar()
-                                let vc = WishlistEditViewController()
+                                let vc = DIContainer.shared.makeWishlistEditViewController()
+                                vc.delegate = owner
                                 owner.navigationController?.pushViewController(vc, animated: true)
                             }.disposed(by: headerView.disposeBag)
                         
@@ -141,19 +186,29 @@ final class HomeViewController: UIViewController {
                 }
             })
         
-        homeView.getCollectionView.rx.modelSelected(HomeItem.self)
-            .compactMap { item -> Platform? in
-                if case let .platform(platform) = item {
-                    return platform
-                }
-                return nil
+        homeView.getCollectionView.rx.itemSelected
+            .withLatestFrom(homeViewModel.state.sections) { indexPath, sections in
+                return (indexPath, sections)
             }
-            .bind(with: self) { owner, platform in
-                owner.switchDeeplink(platform.platformDeepLink)
+            .compactMap { indexPath, sections -> HomeItem? in
+                guard indexPath.section < sections.count else { return nil }
+                let item = sections[indexPath.section].items[indexPath.item]
+                return item
+            }
+            .bind(with: self) { owner, item in
+                switch item {
+                case .platform(let platform):
+                    return owner.switchDeeplink(platform.platformDeepLink)
+                case .wishlist(let product):
+                    return owner.switchDeeplink(product.productDeepLink)
+                case .wishlistEmpty:
+                    return
+                }
             }
             .disposed(by: disposeBag)
         
         homeViewModel.state.sections
+            .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, sections in
                 owner.setCollectionViewLayout(sections)
             }
@@ -176,9 +231,7 @@ private extension HomeViewController {
                 return NSCollectionLayoutSection.createPlatformShortcutSection()
             case .wishlist:
                 let isEmptyState = section.items.count == 1 && section.items.first == .wishlistEmpty
-                            return isEmptyState
-                                ? NSCollectionLayoutSection.createWishlistEmptySection()
-                                : NSCollectionLayoutSection.createWishlistSection()
+                return isEmptyState ? NSCollectionLayoutSection.createWishlistEmptySection() : NSCollectionLayoutSection.createWishlistSection()
             }
         }
     }
@@ -193,8 +246,38 @@ private extension HomeViewController {
                 print("✅ 앱 전환 성공: \(url.absoluteString)")
             } else {
                 print("❌ 앱 전환 실패: \(url.absoluteString)")
-                self.showBasicAlert(title: "미지원 플랫폼", message: "해당 플랫폼은 추후 엡데이트될 예정입니다.\n감사합니다.")
+                self.showBasicAlert(title: "미지원 플랫폼", message: "해당 플랫폼은 추후 업데이트될 예정입니다.\n감사합니다.")
             }
+        }
+    }
+}
+
+extension HomeViewController: HomeViewControllerUpdate {
+    func updatePlatforms() {
+        self.homeViewModel.action.onNext(.platformUpdate)
+    }
+    
+    func updateWishlists() {
+        self.homeViewModel.action.onNext(.wishlistUpdate)
+    }
+}
+
+extension HomeViewController {
+    func setNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(sceneWillEnterForground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+    }
+
+    @objc
+    private func sceneWillEnterForground() {
+        let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
+        if let bool = sharedDefaults?.bool(forKey: "AddProduct"), bool {
+            homeViewModel.action.onNext(.getDataSource)
+            sharedDefaults?.set(false, forKey: "AddProduct")
         }
     }
 }

@@ -28,6 +28,8 @@ final class PlatformEditHeaderView: UIView {
     func configure(count: Int) {
         platformCountLabel.text = "플랫폼 \(count)개"
     }
+    
+    var getCompleteButton: UIButton { completeButton }
 }
 
 private extension PlatformEditHeaderView {

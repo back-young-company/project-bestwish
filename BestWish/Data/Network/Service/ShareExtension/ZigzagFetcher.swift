@@ -16,15 +16,18 @@ class ZigzagFetcher: HTMLBasedMetadataFetcher {
             let brand = html.slice(from: "property=\"product:brand\" content=\"", to: "\"")
             let title = html.slice(from: "property=\"og:title\" content=\"", to: "\"")
             let image = html.slice(from: "property=\"og:image\" content=\"", to: "\"")
-            let amountPrice = html.slice(from: "property=\"product:price:amount\" content=\"", to: "\"")
             
             if let json = html.extractNEXTDataJSON() {
-                let pattern = #""deeplink_url"\s*:\s*"([^"]+)""#
-                if let match = json.firstMatch(for: pattern) {
-                    print("정규식으로 추출된 deeplink_url: \(match)")
+                let deeplinkUrl = #""deeplink_url"\s*:\s*"([^"]+)""#
+                let discountRate = #""discount_rate"\s*:\s*"?([0-9]+)"?"#
+                let discountPrice = #""discount_price"\s*:\s*"?([0-9]+)"?"#
+                
+                if let deeplinkUrl = json.firstMatch(for: deeplinkUrl),
+                   let discountRate = json.firstMatch(for: discountRate),
+                    let discountPrice = json.firstMatch(for: discountPrice) {
                     
                     // 수동으로 \\u0026로 분할하여 중복 파라미터 제거
-                    let segments = match.components(separatedBy: #"\u0026"#)
+                    let segments = deeplinkUrl.components(separatedBy: #"\u0026"#)
                     print("정제된 딥링크: \(segments)")
                     
                     // 필요한 인덱스만 선택 (0, 2, 3번째 항목)
@@ -33,10 +36,11 @@ class ZigzagFetcher: HTMLBasedMetadataFetcher {
                     print("최종 딥링크: \(finalDeeplink)")
                     
                     let metadata = ProductMetadataDTO(
+                        platform: 2,
                         productName: title,
                         brandName: brand,
-                        discountRate: "0",
-                        price: amountPrice,
+                        discountRate: discountRate,
+                        price: discountPrice,
                         imageURL: image,
                         productURL: URL(string: finalDeeplink),
                         extra: nil

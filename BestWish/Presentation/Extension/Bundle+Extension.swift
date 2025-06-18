@@ -55,4 +55,11 @@ extension Bundle {
         }
         return value
     }
+    
+    var sharing: String {
+        guard let value = infoDictionary?["SHARING_KEY"] as? String else {
+            fatalError("❌ Info.plist에 SHARING_KEY가 없습니다.")
+        }
+        return value
+    }
 }

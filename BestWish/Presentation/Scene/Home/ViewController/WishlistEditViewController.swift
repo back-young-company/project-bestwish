@@ -14,9 +14,20 @@ import RxRelay
 final class WishlistEditViewController: UIViewController {
     
     private let wishEditView = WishlistEditView()
-    private let wishEditViewModel = WishEditViewModel()
+    private let wishEditViewModel: WishEditViewModel
+    
+    weak var delegate: HomeViewControllerUpdate?
     
     private let disposeBag = DisposeBag()
+    
+    init(wishEditViewModel: WishEditViewModel) {
+        self.wishEditViewModel = wishEditViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         view = wishEditView
@@ -26,9 +37,8 @@ final class WishlistEditViewController: UIViewController {
         super.viewDidLoad()
         
         setNavigationBar()
-        bindActions()
         bindViewModel()
-        
+        bindActions()
     }
     
     private func bindViewModel() {
@@ -40,6 +50,12 @@ final class WishlistEditViewController: UIViewController {
                 ) as? WishlistCell else { return UICollectionViewCell() }
                 cell.configure(type: item, isHidden: false)
                 
+                cell.getEditButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.wishEditViewModel.action.onNext(.delete(item.uuid, indexPath.item))
+                    }
+                    .disposed(by: cell.disposeBag)
+                
                 return cell
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
                 guard let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -50,6 +66,12 @@ final class WishlistEditViewController: UIViewController {
                 let totalItemCount = dataSource.sectionModels.flatMap { $0.items }.count
                 headerView.configure(count: totalItemCount)
                 
+                headerView.getCompleteButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.wishEditViewModel.action.onNext(.complete)
+                    }
+                    .disposed(by: headerView.disposeBag)
+                
                 return headerView
             })
         
@@ -58,13 +80,25 @@ final class WishlistEditViewController: UIViewController {
             .disposed(by: disposeBag)
         
         wishEditViewModel.state.sections
+            .take(1)
+            .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, sections in
                 owner.setCollectionViewLayout(sections)
+            }
+            .disposed(by: disposeBag)
+        
+        wishEditViewModel.state.completed
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, _ in
+                owner.delegate?.updateWishlists()
+                owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
     }
     
     private func bindActions() {
+        wishEditViewModel.action.onNext(.viewDidLoad)
+        
         wishEditView.getBackButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)

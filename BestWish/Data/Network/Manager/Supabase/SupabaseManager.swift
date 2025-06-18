@@ -47,7 +47,7 @@ final class SupabaseManager {
     }
 
     // 위시 리스트에 포함된 플랫폼 조회
-    func getPlatformsInWishList(userInfo: UserDTO) async throws -> [(platform: Int, count: Int)] {
+    func getPlatformsInWishList(userInfo: UserDTO, isEdit: Bool) async throws -> [(platform: Int, count: Int)] {
         let sequence = userInfo.platformSequence ?? []
         do {
             // product 테이블에서 사용자와 일치하는 platform들만 가져오기
@@ -64,11 +64,20 @@ final class SupabaseManager {
             }
 
             // sequence 순서에 따라 정렬 및 매핑
-            let sortedResult = sequence.compactMap { platform -> (platform: Int, count: Int)? in
-                guard let count = platformCountDict[platform] else { return nil }
-                return (platform: platform, count: count)
+            let sortedResult: [(Int, Int)]
+            if isEdit {
+                sortedResult = sequence.map { platform -> (platform: Int, count: Int) in
+                    guard let count = platformCountDict[platform] else {
+                        return (platform: platform, count: 0)
+                    }
+                    return (platform: platform, count: count)
+                }
+            } else {
+                sortedResult = sequence.compactMap { platform -> (platform: Int, count: Int)? in
+                    guard let count = platformCountDict[platform] else { return nil }
+                    return (platform: platform, count: count)
+                }
             }
-
             return sortedResult
         } catch {
             throw SupabaseError.selectError(error)

@@ -11,6 +11,7 @@ struct Token {
     let service: TokenType
     let value: String?
     let account: String = "current_user"
+    let sharing: String = Bundle.main.sharing
 
     var data: Data? {
         if let value {
