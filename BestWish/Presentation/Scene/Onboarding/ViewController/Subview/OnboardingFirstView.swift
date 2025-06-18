@@ -20,7 +20,6 @@ final class OnboardingFirstView: UIView {
     private let buttonVStackView = VerticalStackView()
     let nextPageButton = AppButton(type: .next)
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -33,6 +32,19 @@ final class OnboardingFirstView: UIView {
 
     func configure(_ isValid: Bool) {
         nextPageButton.isEnabled = isValid
+    }
+    private func canNext(_ isValid: Bool) {
+        nextPageButton.isEnabled = isValid
+    }
+
+    func configure(with userInfo: UserInfoDisplay?) {
+        let isValid = userInfo?.gender != nil && userInfo?.birth != nil
+        canNext(isValid)
+        birthSelection.configure(title: userInfo?.birthString)
+    }
+
+    func configure() {
+        birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
     }
 
 }
@@ -97,4 +109,3 @@ private extension OnboardingFirstView {
         }
     }
 }
-
