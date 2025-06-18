@@ -133,7 +133,6 @@ final class AnalysisView: UIView {
     
     public func configure(_ isActivated: Bool) {
         searchButton.isEnabled = isActivated
-        searchButton.backgroundColor = isActivated ? .primary300 : .gray200
     }
     
     // MARK: - 접근 제어
@@ -157,7 +156,7 @@ private extension AnalysisView {
         titleLabel.do {
             $0.text = "키워드로 검색어를 만들어보세요."
             $0.textColor = .gray900
-            $0.font = .systemFont(ofSize: 17, weight: .bold)
+            $0.font = .font(.pretendardBold, ofSize: 17)
         }
         
         searchBar.do {
@@ -177,7 +176,7 @@ private extension AnalysisView {
     
     func setConstraints() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(20)
+            $0.top.equalToSuperview().inset(50)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         

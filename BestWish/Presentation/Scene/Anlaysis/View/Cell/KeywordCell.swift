@@ -16,7 +16,7 @@ final class KeywordCell: UICollectionViewCell, ReuseIdentifier {
     var disposeBag = DisposeBag()
     private let keywordLabel = UILabel()
     private let iconImageView = UIImageView()
-    private let horizontalStackView = UIStackView()
+    private let horizontalStackView = HorizontalStackView(spacing: 8)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,8 +61,6 @@ private extension KeywordCell {
             $0.contentMode = .scaleAspectFit
         }
         horizontalStackView.do {
-            $0.axis = .horizontal
-            $0.spacing = 8
             $0.alignment = .center
             $0.backgroundColor = .gray900
             $0.layer.cornerRadius = 15
