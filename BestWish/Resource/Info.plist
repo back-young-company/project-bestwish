@@ -11,19 +11,19 @@
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>oauth-callback</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>bestwish</string>
-            </array>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bestwish</string>
+			</array>
 		</dict>
-        <dict>
-            <key>CFBundleURLName</key>
-            <string>bestwish-deeplink</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>bestwish</string>  <!-- 사용하려는 스킴 -->
-            </array>
-        </dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>bestwish-deeplink</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bestwish</string>
+			</array>
+		</dict>
 	</array>
 	<key>CLIENT_ID</key>
 	<string>$(CLIENT_ID)</string>
@@ -32,10 +32,10 @@
 		<key>NSAllowsQUIC</key>
 		<true/>
 	</dict>
+	<key>SHARING_KEY</key>
+	<string>$(SHARING_KEY)</string>
 	<key>SUPABASE_URL</key>
 	<string>$(SUPABASE_URL)</string>
-    <key>SHARING_KEY</key>
-    <string>$(SHARING_KEY)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Anton-Regular.ttf</string>
