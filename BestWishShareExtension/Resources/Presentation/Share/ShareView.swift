@@ -48,11 +48,13 @@ private extension ShareView {
         }
         
         completeImage.do {
-            $0.image = UIImage(named: "complete")
+            $0.image = UIImage(systemName: "paperplane.fill")
+            $0.tintColor = .primary200
+            $0.contentMode = .scaleAspectFit
         }
         
         completeLabel.do {
-//            $0.text = "저장 완료!"
+            $0.text = "저장 중..."
             $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textColor = .black
         }
@@ -73,7 +75,7 @@ private extension ShareView {
     }
 
     func setHierarchy() {
-        self.addSubviews(grabBar, completeImage, completeLabel, shortcutButton)
+        self.addSubviews(grabBar, completeImage, completeLabel)
     }
 
     func setConstraints() {
@@ -95,10 +97,10 @@ private extension ShareView {
             $0.height.equalTo(18)
         }
         
-        shortcutButton.snp.makeConstraints {
-            $0.centerY.equalTo(completeLabel)
-            $0.trailing.equalToSuperview().offset(-20)
-        }
+//        shortcutButton.snp.makeConstraints {
+//            $0.centerY.equalTo(completeLabel)
+//            $0.trailing.equalToSuperview().offset(-20)
+//        }
     }
     
     func addSubviews(_ views: UIView...) {
