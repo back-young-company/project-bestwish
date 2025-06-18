@@ -19,7 +19,7 @@ final class MyPageViewController: UIViewController {
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {
             case .basic(let type), .seeMore(let type):
-                guard let cell = self.myPageView.tableView.dequeueReusableCell(
+                guard let cell = self.myPageView.getTableView.dequeueReusableCell(
                     withIdentifier: MyPageCell.identifier,
                     for: indexPath
                 ) as? MyPageCell else {
@@ -66,7 +66,7 @@ final class MyPageViewController: UIViewController {
     }
 
     private func bindView() {
-        myPageView.tableView.rx.itemSelected
+        myPageView.getTableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
@@ -92,7 +92,7 @@ final class MyPageViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.sections
-            .bind(to: myPageView.tableView.rx.items(dataSource: dataSource))
+            .bind(to: myPageView.getTableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
         viewModel.state.userInfo
@@ -101,6 +101,12 @@ final class MyPageViewController: UIViewController {
                 owner.setHeaderView(userInfo: UserInfoDisplay)
             })
             .disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+            }.disposed(by: disposeBag)
     }
 
     private func setHeaderView(userInfo: UserInfoDisplay) {
@@ -113,9 +119,9 @@ final class MyPageViewController: UIViewController {
         let header = MyPageHeaderView(frame: frame)
 
         header.configure(user: userInfo)
-        myPageView.tableView.tableHeaderView = header
+        myPageView.getTableView.tableHeaderView = header
 
-        header.seeMoreButton.rx.tap
+        header.getSeeMoreButton.rx.tap
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()

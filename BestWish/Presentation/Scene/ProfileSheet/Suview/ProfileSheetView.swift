@@ -9,9 +9,9 @@ import UIKit
 
 final class ProfileSheetView: UIView {
     private let titleLabel = UILabel()
-    let completeButton = AppButton(type: .complete, fontSize: 12)
+    private let completeButton = AppButton(type: .complete, fontSize: 12)
     private let layout = UICollectionViewFlowLayout()
-    private(set) lazy var collectionView = UICollectionView(
+    private lazy var collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: layout
     )
@@ -26,6 +26,9 @@ final class ProfileSheetView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+
+    var getCompleteButton: AppButton { completeButton }
+    var getCollectionView: UICollectionView { collectionView }
 }
 
 private extension ProfileSheetView {

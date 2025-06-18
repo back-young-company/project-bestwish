@@ -43,13 +43,13 @@ final class UserInfoManagementViewController: UIViewController {
     }
 
     private func bindView() {
-        managementView.userInfoHorizontalStackView.arrowButton.rx.tap
+        managementView.getUserInfoArrowButton.rx.tap
             .bind(with: self) { owner, _ in
                 let nextVC = DIContainer.shared.makeUserInfoUpdateViewController()
                 owner.navigationController?.pushViewController(nextVC, animated: true)
             }.disposed(by: disposeBag)
 
-        managementView.withdrawStackView.arrowButton.rx.tap
+        managementView.getWithdrawButton.rx.tap
             .bind(with: self) { owner, _ in
                 AlertBuilder(baseViewController: self, type: .withdraw) {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -64,6 +64,12 @@ final class UserInfoManagementViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, authProvider in
                 owner.managementView.configure(authProvider: authProvider)
+            }.disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
             }.disposed(by: disposeBag)
     }
 }

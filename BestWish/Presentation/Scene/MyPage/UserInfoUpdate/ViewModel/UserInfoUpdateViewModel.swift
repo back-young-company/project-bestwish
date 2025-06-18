@@ -23,11 +23,13 @@ final class UserInfoUpdateViewModel: ViewModel {
     struct State {
         let userInfo: Observable<UserInfoDisplay?>
         let completedSave: Observable<Void>
+        let error: Observable<AppError>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
+    private let _error = PublishSubject<AppError>()
     private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
     private let _completedSave = PublishSubject<Void>()
     let state: State
@@ -36,7 +38,8 @@ final class UserInfoUpdateViewModel: ViewModel {
         self.useCase = useCase
         state = State(
             userInfo: _userInfo.asObservable(),
-            completedSave: _completedSave.asObservable()
+            completedSave: _completedSave.asObservable(),
+            error: _error.asObservable()
         )
 
         bindAction()
@@ -59,9 +62,13 @@ final class UserInfoUpdateViewModel: ViewModel {
 
     private func getUserInfo() {
         Task {
-            let user = try await useCase.getUserInfo()
-            let userInfoDisplay = convertUserInfoDisplay(from: user)
-            _userInfo.accept(userInfoDisplay)
+            do {
+                let user = try await useCase.getUserInfo()
+                let userInfoDisplay = convertUserInfoDisplay(from: user)
+                _userInfo.accept(userInfoDisplay)
+            } catch {
+                handleError(error)
+            }
         }
     }
 
@@ -89,7 +96,7 @@ final class UserInfoUpdateViewModel: ViewModel {
                 )
                 _completedSave.onNext(())
             } catch {
-                print(error.localizedDescription)
+                handleError(error)
             }
         }
     }
@@ -102,6 +109,14 @@ final class UserInfoUpdateViewModel: ViewModel {
             gender: user.gender,
             birth: user.birth
         )
+    }
+
+    private func handleError(_ error: Error) {
+        if let error = error as? AppError {
+            _error.onNext(error)
+        } else {
+            _error.onNext(AppError.unknown(error))
+        }
     }
 }
 
