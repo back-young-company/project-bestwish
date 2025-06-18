@@ -68,8 +68,8 @@ private extension MyPageHeaderView {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 12, leading: 12, bottom: 12, trailing: 12)
             config.image = .init(systemName: "chevron.right")
+            config.baseForegroundColor = .gray900
             $0.configuration = config
-            $0.tintColor = .gray900
         }
 
         separatorView.do {
