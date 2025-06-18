@@ -31,7 +31,7 @@ final class ProfileUpdateViewModel: ViewModel {
     var action: AnyObserver<Action> { _action.asObserver() }
 
     private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
-    private let _isVaildNickname = BehaviorRelay<Bool>(value: true)
+    private let _isValidNickname = BehaviorRelay<Bool>(value: true)
     private let _completedSave = PublishSubject<Void>()
     private let _error = PublishSubject<AppError>()
     let state: State
@@ -40,7 +40,7 @@ final class ProfileUpdateViewModel: ViewModel {
         self.useCase = useCase
         state = State(
             userInfo: _userInfo.asObservable(),
-            isValidNickname: _isVaildNickname.asObservable(),
+            isValidNickname: _isValidNickname.asObservable(),
             completedSave: _completedSave.asObservable(),
             error: _error.asObservable()
         )
@@ -83,7 +83,7 @@ final class ProfileUpdateViewModel: ViewModel {
 
     private func updateNickname(to nickname: String) {
         let isValid = useCase.isValidNickname(nickname)
-        _isVaildNickname.accept(isValid)
+        _isValidNickname.accept(isValid)
 
         if isValid {
             var userInfo = _userInfo.value
