@@ -27,7 +27,7 @@ class MusinsaFetcher: ShareMetadataFetcher {
                     return
                 }
                 
-                if let json = html.extractNEXTDataJSON() {                    
+                if let json = html.extractNEXTDataJSON() {
                     let goodsNm = #""goodsNm"\s*:\s*"([^"]+)""#
                     let thumbnailImageUrl = #""thumbnailImageUrl"\s*:\s*"([^"]+)""#
                     let brandName = #""brandName"\s*:\s*"([^"]+)""#

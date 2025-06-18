@@ -25,6 +25,8 @@ final class ShareView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    var getShortcutButton: UIButton { shortcutButton }
 }
 
 private extension ShareView {
@@ -35,8 +37,12 @@ private extension ShareView {
     }
 
     func setAttributes() {
+        self.backgroundColor = .white
+        self.layer.cornerRadius = 15
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
         grabBar.do {
-            $0.backgroundColor = UIColor(hex: "CFCFCF")
+            $0.backgroundColor = .gray100
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 3
         }
@@ -46,7 +52,7 @@ private extension ShareView {
         }
         
         completeLabel.do {
-            $0.text = "저장 완료!"
+//            $0.text = "저장 완료!"
             $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textColor = .black
         }
@@ -86,6 +92,7 @@ private extension ShareView {
         completeLabel.snp.makeConstraints {
             $0.centerY.equalTo(completeImage)
             $0.leading.equalTo(completeImage.snp.trailing).offset(8)
+            $0.height.equalTo(18)
         }
         
         shortcutButton.snp.makeConstraints {
@@ -98,6 +105,18 @@ private extension ShareView {
         for view in views {
             self.addSubview(view)
         }
+    }
+}
+
+extension ShareView {
+    func successConfigure() {
+        completeImage.image = UIImage(named: "complete")
+        completeLabel.text = "저장 완료!"
+    }
+    
+    func failureConfigure() {
+        completeImage.image = UIImage(systemName: "xmark.circle.fill")
+        completeLabel.text = "저장 실패"
     }
 }
 
@@ -126,11 +145,11 @@ extension UIColor {
 }
 
 extension UIFont {
-    enum FontName: String, CaseIterable {
+    enum FontName2: String, CaseIterable {
         case pretendardBold = "Pretendard-Bold"
     }
 
-    static func font(_ style: FontName, ofSize size: CGFloat) -> UIFont {
+    static func font(_ style: FontName2, ofSize size: CGFloat) -> UIFont {
         guard let customFont = UIFont(name: style.rawValue, size: size) else {
             print("\(style.rawValue) font가 등록되지 않았습니다.")
             return UIFont.systemFont(ofSize: size)

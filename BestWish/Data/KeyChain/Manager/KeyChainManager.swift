@@ -24,7 +24,8 @@ actor KeyChainManager {
         let baseQuery: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: token.service.type,
-            kSecAttrAccount: token.account
+            kSecAttrAccount: token.account,
+            kSecAttrAccessGroup: token.sharing
         ]
         SecItemDelete(baseQuery as CFDictionary)
         guard let data = token.data else { return }
@@ -40,7 +41,8 @@ actor KeyChainManager {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: token.service.type,
-            kSecAttrAccount: token.account
+            kSecAttrAccount: token.account,
+            kSecAttrAccessGroup: token.sharing
         ]
         SecItemDelete(query as CFDictionary)
         print("키체인 \(token.service.type) 삭제")
@@ -53,6 +55,7 @@ actor KeyChainManager {
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: token.service.type,
             kSecAttrAccount: token.account,
+            kSecAttrAccessGroup: token.sharing,
             kSecReturnData: true,
             kSecMatchLimit: kSecMatchLimitOne
         ]

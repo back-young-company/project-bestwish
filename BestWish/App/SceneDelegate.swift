@@ -10,6 +10,15 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        
+        if url.scheme == "bestwish" {
+            // URL 파싱 및 라우팅
+            print("📦 딥링크 URL 수신: \(url.absoluteString)")
+        }
+    }
 
     func scene(
         _ scene: UIScene,
