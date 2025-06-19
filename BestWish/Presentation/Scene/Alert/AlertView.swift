@@ -103,7 +103,7 @@ private extension AlertView {
         buttonStackView.snp.makeConstraints { make in
             make.top.equalTo(subTitleLabel.snp.bottom).offset(24)
             make.directionalHorizontalEdges.equalToSuperview().inset(16)
-            make.height.equalTo(CGFloat(43).fitHeight)
+            make.height.equalTo(43)
             make.bottom.equalToSuperview().inset(20)
         }
     }
