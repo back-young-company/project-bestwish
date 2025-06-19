@@ -14,6 +14,7 @@ final class OnboardingFirstView: UIView {
     private let headerView = OnboardingHeaderView(current: 1, total: 2,
                                                   title: OnboardingText.firstTitle.value,
                                                   desc: OnboardingText.firstDesc.value)
+    private let descGengerLabel = UILabel()
     private let genderBirthVStackView = VerticalStackView(spacing: 32)
     let genderSelection = GenderSelectionView()
     let birthSelection = BirthSelectionView()
@@ -58,6 +59,15 @@ private extension OnboardingFirstView {
 
     func setAttributes() {
         self.backgroundColor = .gray0
+
+        descGengerLabel.do {
+            $0.text = OnboardingText.firstGender.value
+            $0.numberOfLines = 0
+            $0.lineBreakMode = .byWordWrapping
+            $0.font = .font(.pretendardMedium, ofSize: 12)
+            $0.textColor = .gray200
+        }
+
         genderBirthVStackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
@@ -83,7 +93,7 @@ private extension OnboardingFirstView {
     }
 
     func setHierarchy() {
-        self.addSubviews(headerView, genderBirthVStackView, buttonVStackView)
+        self.addSubviews(headerView, descGengerLabel, genderBirthVStackView, buttonVStackView)
         genderBirthVStackView.addArrangedSubviews(genderSelection, birthSelection)
         buttonVStackView.addArrangedSubview(nextPageButton)
     }
@@ -94,8 +104,13 @@ private extension OnboardingFirstView {
             $0.leading.trailing.equalToSuperview()
         }
 
+        descGengerLabel.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+
         genderBirthVStackView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(22)
+            $0.top.equalTo(descGengerLabel.snp.bottom).offset(CGFloat(22).fitHeight)
             $0.leading.trailing.equalToSuperview()
         }
 
