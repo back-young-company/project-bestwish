@@ -85,6 +85,7 @@ final class HomeViewModel: ViewModel {
                     Task {
                         do {
                             let platforms = try await owner.getPlatformSequence()
+                            
                             let currentSections = owner._sections.value
                             guard currentSections.count == 2 else { return }
                             let wishlistsSection = currentSections[1]
@@ -102,12 +103,22 @@ final class HomeViewModel: ViewModel {
                             let wishlists = try await owner.getWishLists()
                             let currentSections = owner._sections.value
                             guard currentSections.count == 2 else { return }
-                            let platformsSection = currentSections[0]
                             
-                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlists.map { .wishlist($0) })
+                            let platformsSection = currentSections[0].items
+                            
+                            let platforms: [Platform] = platformsSection.compactMap {
+                                if case let .platform(platform) = $0 {
+                                    return platform
+                                }
+                                return nil
+                            }
+                            
+//                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlists.map { .wishlist($0) })
                             
                             owner._platformFilter.accept(platformFilters)
-                            owner._sections.accept([platformsSection, wishlistsSection])
+                            owner.setDataSources(platforms: platforms, wishLists: wishlists)
+                            
+//                            owner._sections.accept([platformsSection, wishlistsSection])
                         } catch {
                             owner._error.accept(error)
                         }

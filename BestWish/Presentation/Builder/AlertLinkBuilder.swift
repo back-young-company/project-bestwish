@@ -24,6 +24,7 @@ final class AlertLinkBuilder {
     func show() {
         alertViewController.modalPresentationStyle = .overFullScreen
         alertViewController.modalTransitionStyle = .crossDissolve
+        alertViewController.delegate = baseViewController as? HomeViewControllerUpdate
         baseViewController.present(alertViewController, animated: true)
     }
 }
