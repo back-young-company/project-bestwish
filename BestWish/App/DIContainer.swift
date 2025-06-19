@@ -9,10 +9,15 @@ import UIKit
 
 final class DIContainer {
     static let shared = DIContainer()
-
+    
+    private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
+    
+    private let wishListRepository: WishListRepository
     private let userInfoRepository: UserInfoRepository
+    
+    private let wishListUseCase: WishListUseCase
     private let accountRepository: AccountRepository
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
@@ -21,15 +26,40 @@ final class DIContainer {
     private let analysisUseCase: AnalysisUseCase
 
     private init() {
+        self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
         self.supabaseOAuthManager = SupabaseOAuthManager.shared
+        
+        self.wishListRepository = WishListRepositoryImpl(manager: supabaseManager, userInfoManager: supabaseUserInfoManager)
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
         self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager)
+        
+        self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
         self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
         self.coreMLRepository = CoreMLRepositoryImpl()
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
         self.analysisUseCase = AnalysisUseCaseImpl()
+    }
+    
+    func makeHomeViewController() -> HomeViewController {
+        let viewModel = HomeViewModel(useCase: wishListUseCase)
+        return HomeViewController(homeViewModel: viewModel)
+    }
+    
+    func makePlatformEditViewController() -> PlatformEditViewController {
+        let viewModel = PlatformEditViewModel(useCase: wishListUseCase)
+        return PlatformEditViewController(platformEditViewModel: viewModel)
+    }
+    
+    func makeWishlistEditViewController() -> WishlistEditViewController {
+        let viewModel = WishEditViewModel(useCase: wishListUseCase)
+        return WishlistEditViewController(wishEditViewModel: viewModel)
+    }
+    
+    func makeLinkSaveViewController() -> LinkSaveViewController {
+        let viewModel = LinkSaveViewModel(useCase: wishListUseCase)
+        return LinkSaveViewController(viewModel: viewModel)
     }
 
     func makeMyPageViewController() -> MyPageViewController {

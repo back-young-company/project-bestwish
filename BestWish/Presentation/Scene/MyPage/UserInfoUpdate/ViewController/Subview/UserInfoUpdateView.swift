@@ -9,9 +9,9 @@ import UIKit
 
 final class UserInfoUpdateView: UIView {
     private let stackView = VerticalStackView(spacing: 32)
-    let genderSelection = GenderSelectionView()
-    let birthSelection = BirthSelectionView()
-    let saveButton = AppButton(type: .save)
+    private let genderSelection = GenderSelectionView()
+    private let birthSelection = BirthSelectionView()
+    private let saveButton = AppButton(type: .save)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,6 +28,10 @@ final class UserInfoUpdateView: UIView {
         genderSelection.configure(genderIndex: userInfo.gender)
         birthSelection.configure(title: userInfo.birthString)
     }
+
+    var getGenderSelection: GenderSelectionView { genderSelection }
+    var getBirthSelection: BirthSelectionView { birthSelection }
+    var getSaveButton: AppButton { saveButton }
 }
 
 private extension UserInfoUpdateView {
@@ -69,7 +73,7 @@ private extension UserInfoUpdateView {
         saveButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             make.directionalHorizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat(53).fitHeight)
+            make.height.equalTo(54)
         }
     }
 }

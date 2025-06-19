@@ -13,7 +13,7 @@ final class MyPageRowView: UIStackView {
     private let subTitle: String
 
     private let titleLabel = UILabel()
-    let arrowButton = UIButton()
+    private let arrowButton = UIButton()
 
     init(type: StackViewType, title: String, subTitle: String = "") {
         self.type = type
@@ -33,6 +33,8 @@ final class MyPageRowView: UIStackView {
     func configure(title: String) {
         titleLabel.text = title
     }
+
+    var getArrowButton: UIButton { arrowButton }
 }
 
 private extension MyPageRowView {

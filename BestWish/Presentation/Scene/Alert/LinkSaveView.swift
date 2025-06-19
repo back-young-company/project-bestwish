@@ -22,6 +22,8 @@ final class LinkSaveView: UIView {
     private let linkInputView = UISearchBar()
     
     private let saveButton: AppButton
+    
+    var getLinkInputTextField: UITextField { linkInputView.searchTextField }
 
     init() {
         saveButton = AppButton(type: .save)

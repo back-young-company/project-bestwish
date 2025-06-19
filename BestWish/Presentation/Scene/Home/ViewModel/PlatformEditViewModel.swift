@@ -8,39 +8,99 @@
 import Foundation
 
 import RxSwift
+import RxRelay
 
 final class PlatformEditViewModel: ViewModel {
     
     enum Action {
-        
+        case viewDidLoad
+        case itemMoved([PlatformEdit])
+        case updatePlatformEdit([Int])
     }
     
     struct State {
-        let sections = Observable<[PlatformEditSectionModel]>.just([
-            PlatformEditSectionModel(header: "헤더", items: [
-                PlatformEdit(platformName: "무신사", platformImage: PlatformImage.musinsa, platformCount: 11),
-                PlatformEdit(platformName: "지그재그", platformImage: PlatformImage.zigzag, platformCount: 10),
-                PlatformEdit(platformName: "에이블리", platformImage: PlatformImage.ably, platformCount: 9),
-                PlatformEdit(platformName: "KREAM", platformImage: PlatformImage.kream, platformCount: 8),
-                PlatformEdit(platformName: "브랜디", platformImage: PlatformImage.brandy, platformCount: 7),
-                PlatformEdit(platformName: "29CM", platformImage: PlatformImage.tncm, platformCount: 6),
-                PlatformEdit(platformName: "OCO", platformImage: PlatformImage.oco, platformCount: 5),
-                PlatformEdit(platformName: "4910", platformImage: PlatformImage.fnoz, platformCount: 4),
-                PlatformEdit(platformName: "웍스아웃", platformImage: PlatformImage.worksout, platformCount: 3),
-                PlatformEdit(platformName: "EQL", platformImage: PlatformImage.eql, platformCount: 2),
-                PlatformEdit(platformName: "하이버", platformImage: PlatformImage.hiver, platformCount: 1)
-            ])
-        ])
+        let sections: Observable<[PlatformEditSectionModel]>
+        let sendDelegate: Observable<Void>
+        let error: Observable<Error>
     }
     
     private let _action = PublishSubject<Action>()
-    var action: AnyObserver<Action> { _action.asObserver() }
     
+    private let _sections = BehaviorRelay<[PlatformEditSectionModel]>(value: [])
+    private let _sendDelegate = PublishRelay<Void>()
+    private let _error = PublishRelay<Error>()
+    
+    private let useCase: WishListUseCase
+    
+    var action: AnyObserver<Action> { _action.asObserver() }
     let state: State
     
     private let disposeBag = DisposeBag()
     
-    init() {
-        state = State()
+    init(useCase: WishListUseCase) {
+        self.useCase = useCase
+        
+        state = State(
+            sections: _sections.asObservable(),
+            sendDelegate: _sendDelegate.asObservable(),
+            error: _error.asObservable()
+        )
+        
+        self.bind()
+    }
+    
+    private func bind() {
+        _action
+            .subscribe(with: self) { owner, action in
+                switch action {
+                case .viewDidLoad:
+                    Task {
+                        do {
+                            let items = try await owner.getPlatformSequence(isEdit: true)
+                            owner.setDataSources(items: items)
+                        } catch {
+                            owner._error.accept(error)
+                        }
+                    }
+                case .itemMoved(let platforms):
+                    var section = owner._sections.value
+                    section[0] = PlatformEditSectionModel(header: "헤더", items: platforms)
+                    owner._sections.accept(section)
+                    
+                case .updatePlatformEdit(let indices):
+                    Task {
+                        do {
+                            try await owner.updatePlatformSequence(indices)
+                            let items = try await owner.getPlatformSequence(isEdit: true)
+                            owner.setDataSources(items: items)
+                            owner._sendDelegate.accept(())
+                        } catch {
+                            owner._error.accept(error)
+                        }
+                    }
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func getPlatformSequence(isEdit: Bool) async throws -> [PlatformEdit] {
+        let result = try await self.useCase.getPlatformsInWishList(isEdit: isEdit)
+        return result.map { tupple in
+            let shopPlatform = ShopPlatform.allCases[tupple.platform]
+            return PlatformEdit(
+                platformName: shopPlatform.platformName,
+                platformImage: shopPlatform.rawValue,
+                platformCount: tupple.count
+            )
+        }
+    }
+    
+    private func updatePlatformSequence(_ sequence: [Int]) async throws {
+        try await self.useCase.updatePlatformSequence(to: sequence)
+    }
+    
+    private func setDataSources(items: [PlatformEdit]) {
+        let sections = PlatformEditSectionModel(header: "헤더", items: items)
+        _sections.accept([sections])
     }
 }

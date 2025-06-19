@@ -133,7 +133,7 @@ private extension ProfileUpdateView {
         confirmChangeButton.snp.makeConstraints { make in
             make.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             make.directionalHorizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(CGFloat(53).fitHeight)
+            make.height.equalTo(54)
         }
     }
 }

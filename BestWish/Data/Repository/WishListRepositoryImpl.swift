@@ -36,11 +36,11 @@ final class WishListRepositoryImpl: WishListRepository {
         }
     }
 
-    func getPlatformsInWishList() async throws -> [(platform: Int, count: Int)] {
+    func getPlatformsInWishList(isEdit: Bool) async throws -> [(platform: Int, count: Int)] {
         let userInfo = try await userInfoManager.getUserInfo()
         
         do {
-            return try await manager.getPlatformsInWishList(userInfo: userInfo)
+            return try await manager.getPlatformsInWishList(userInfo: userInfo, isEdit: isEdit)
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
         }

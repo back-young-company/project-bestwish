@@ -34,6 +34,7 @@ class AblyFetcher: ShareMetadataFetcher {
                     
                     let deeplink = "ably://goods/\(sno)"
                     let metadata = ProductMetadataDTO(
+                        platform: 3,
                         productName: goods.name,
                         brandName: goods.market.name,
                         discountRate: "\(goods.priceInfo.discountRate ?? 0)",

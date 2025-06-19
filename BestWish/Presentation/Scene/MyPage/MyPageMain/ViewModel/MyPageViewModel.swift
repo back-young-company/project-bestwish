@@ -35,18 +35,23 @@ final class MyPageViewModel: ViewModel {
             }
         )
         let userInfo: Observable<UserInfoDisplay>
+        let error: Observable<AppError>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
+    private let _error = PublishSubject<AppError>()
     private let _userInfo = PublishSubject<UserInfoDisplay>()
     let state: State
 
     init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
-        state = State(userInfo: _userInfo.asObservable() )
+        state = State(
+            userInfo: _userInfo.asObservable(),
+            error: _error.asObservable()
+        )
         bindAction()
     }
 
@@ -63,9 +68,13 @@ final class MyPageViewModel: ViewModel {
 
     private func getUserInfo() {
         Task {
-            let user = try await userInfoUseCase.getUserInfo()
-            let userInfoDisplay = convertUserInfoDisplay(from: user)
-            _userInfo.onNext(userInfoDisplay)
+            do {
+                let user = try await userInfoUseCase.getUserInfo()
+                let userInfoDisplay = convertUserInfoDisplay(from: user)
+                _userInfo.onNext(userInfoDisplay)
+            } catch {
+                handleError(error)
+            }
         }
     }
 
@@ -74,7 +83,7 @@ final class MyPageViewModel: ViewModel {
             do {
                 try await accountUseCase.logout()
             } catch {
-                print(error)
+                handleError(error)
             }
         }
     }
@@ -85,5 +94,13 @@ final class MyPageViewModel: ViewModel {
             email: user.email,
             nickname: user.nickname
         )
+    }
+
+    private func handleError(_ error: Error) {
+        if let error = error as? AppError {
+            _error.onNext(error)
+        } else {
+            _error.onNext(AppError.unknown(error))
+        }
     }
 }

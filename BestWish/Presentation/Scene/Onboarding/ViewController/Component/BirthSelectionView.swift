@@ -6,14 +6,16 @@
 //
 
 import UIKit
-import SnapKit
-import Then
+import RxSwift
+import RxCocoa
 
 final class BirthSelectionView: UIView {
 
-    private let stackView = VerticalStackView(spacing: 8)
+    private let rootVStackView = VerticalStackView(spacing: 8)
     private let birthLabel = InfoLabel(title: "생년월일")
     let dateButton = UIButton()
+
+    private let disposeBag = DisposeBag()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,6 +37,7 @@ private extension BirthSelectionView {
         setAttributes()
         setHierarchy()
         setConstraints()
+        setBindings()
     }
 
     func setAttributes() {
@@ -63,19 +66,26 @@ private extension BirthSelectionView {
     }
 
     func setHierarchy() {
-        self.addSubviews(stackView)
-        stackView.addArrangedSubviews(birthLabel, dateButton)
-
+        self.addSubviews(rootVStackView)
+        rootVStackView.addArrangedSubviews(birthLabel, dateButton)
     }
 
     func setConstraints() {
-        stackView.snp.makeConstraints {
+        rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        dateButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(48).fitHeight)
 
+        dateButton.snp.makeConstraints {
+            $0.height.equalTo(48)
         }
+    }
+
+    func setBindings() {
+        dateButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+            owner.dateButton.layer.borderColor = UIColor.primary300?.cgColor
+        }
+            .disposed(by: disposeBag)
     }
 }
 

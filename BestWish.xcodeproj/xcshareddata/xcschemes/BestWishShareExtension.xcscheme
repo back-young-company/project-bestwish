@@ -60,7 +60,7 @@
       <RemoteRunnable
          runnableDebuggingMode = "0"
          BundleIdentifier = "com.grab.musinsa"
-         RemotePath = "/var/containers/Bundle/Application/F3640B7C-B2BC-4233-B41D-21709D266AF7/Musinsa.app">
+         RemotePath = "/var/containers/Bundle/Application/A41035FA-5FE9-4143-ACEB-DCE7CB84F7F0/Musinsa.app">
       </RemoteRunnable>
       <MacroExpansion>
          <BuildableReference

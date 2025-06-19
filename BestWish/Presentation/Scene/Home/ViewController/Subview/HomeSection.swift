@@ -42,9 +42,11 @@ struct Platform: Equatable {
 }
 
 struct WishlistProduct: Equatable {
+    let uuid: UUID
     let productImageURL: String
     let brandName: String
     let productName: String
     let productSaleRate: String
     let productPrice: String
+    let productDeepLink: String
 }

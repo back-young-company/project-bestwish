@@ -38,7 +38,7 @@ final class UserInfoUpdateViewController: UIViewController {
     }
 
     private func bindView() {
-        updateView.birthSelection.dateButton.rx.tap
+        updateView.getBirthSelection.dateButton.rx.tap
             .bind(with: self) { owner, _ in
                 let sheetVC = DatePickerBottomSheetViewController()
                 sheetVC.onDateSelected =  { selectedDate in
@@ -51,7 +51,7 @@ final class UserInfoUpdateViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        updateView.genderSelection.selectedGender
+        updateView.getGenderSelection.selectedGender
             .distinctUntilChanged()
             .map { ($0 ?? .nothing).rawValue }
             .bind(with: self) { owner, genderIndex in
@@ -59,7 +59,7 @@ final class UserInfoUpdateViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        updateView.saveButton.rx.tap
+        updateView.getSaveButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.action.onNext(.saveUserInfo)
             }
@@ -78,6 +78,12 @@ final class UserInfoUpdateViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
+            }.disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
             }.disposed(by: disposeBag)
     }
 }

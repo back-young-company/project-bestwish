@@ -10,7 +10,7 @@ import Foundation
 protocol WishListRepository {
     func getPlatformSequence() async throws -> [Int]
     func updatePlatformSequence(to sequence: [Int]) async throws
-    func getPlatformsInWishList() async throws ->  [(platform: Int, count: Int)]
+    func getPlatformsInWishList(isEdit: Bool) async throws ->  [(platform: Int, count: Int)]
     func searchWishListItems(query: String?, platform: Int?) async throws -> [Product]
     func deleteWishListItem(id: UUID) async throws
     func addProductToWishList(product: ProductMetadata) async throws

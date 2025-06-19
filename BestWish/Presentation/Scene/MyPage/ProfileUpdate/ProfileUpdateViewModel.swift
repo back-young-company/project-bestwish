@@ -24,22 +24,25 @@ final class ProfileUpdateViewModel: ViewModel {
         let userInfo: Observable<UserInfoDisplay?>
         let isValidNickname: Observable<Bool>
         let completedSave: Observable<Void>
+        let error: Observable<AppError>
     }
 
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
     private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
-    private let _isVaildNickname = BehaviorRelay<Bool>(value: true)
+    private let _isValidNickname = BehaviorRelay<Bool>(value: true)
     private let _completedSave = PublishSubject<Void>()
+    private let _error = PublishSubject<AppError>()
     let state: State
 
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
         state = State(
             userInfo: _userInfo.asObservable(),
-            isValidNickname: _isVaildNickname.asObservable(),
-            completedSave: _completedSave.asObservable()
+            isValidNickname: _isValidNickname.asObservable(),
+            completedSave: _completedSave.asObservable(),
+            error: _error.asObservable()
         )
 
         bindAction()
@@ -62,9 +65,13 @@ final class ProfileUpdateViewModel: ViewModel {
 
     private func getUserInfo() {
         Task {
-            let user = try await useCase.getUserInfo()
-            let userInfoDisplay = convertUserInfoDisplay(from: user)
-            _userInfo.accept(userInfoDisplay)
+            do {
+                let user = try await useCase.getUserInfo()
+                let userInfoDisplay = convertUserInfoDisplay(from: user)
+                _userInfo.accept(userInfoDisplay)
+            } catch {
+                handleError(error)
+            }
         }
     }
 
@@ -76,7 +83,7 @@ final class ProfileUpdateViewModel: ViewModel {
 
     private func updateNickname(to nickname: String) {
         let isValid = useCase.isValidNickname(nickname)
-        _isVaildNickname.accept(isValid)
+        _isValidNickname.accept(isValid)
 
         if isValid {
             var userInfo = _userInfo.value
@@ -97,7 +104,7 @@ final class ProfileUpdateViewModel: ViewModel {
                 )
                 _completedSave.onNext(())
             } catch {
-                print(error.localizedDescription)
+                handleError(error)
             }
         }
     }
@@ -108,5 +115,13 @@ final class ProfileUpdateViewModel: ViewModel {
             email: user.email,
             nickname: user.nickname
         )
+    }
+
+    private func handleError(_ error: Error) {
+        if let error = error as? AppError {
+            _error.onNext(error)
+        } else {
+            _error.onNext(AppError.unknown(error))
+        }
     }
 }

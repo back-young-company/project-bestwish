@@ -11,15 +11,15 @@ import Then
 import PDFKit
 
 enum PDFType {
-    case privacy
-    case service
+    case privacyPolicy // 개인정보 처리 방침
+    case termsOfUse // 서비스 이용 약관
 
     var url: URL? {
         switch self {
-        case .privacy:
+        case .privacyPolicy:
             return Bundle.main.url(forResource: "privacyPolicy", withExtension: "pdf")
-        case .service:
-            return Bundle.main.url(forResource: "servicePolicy", withExtension: "pdf")
+        case .termsOfUse:
+            return Bundle.main.url(forResource: "termsOfUse", withExtension: "pdf")
         }
     }
 }

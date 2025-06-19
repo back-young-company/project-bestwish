@@ -56,51 +56,64 @@ final class SupabaseOAuthManager: NSObject {
             return false
         }
     }
-
-    func checkOnboardingState() async throws -> Bool {
+    // MARK: Supabase에서 UserInfo 테이블의 role 값 확인 (USER : GUEST = true : false)
+    private func isUser() async throws -> Bool {
         struct Role: Codable { let role: String }
 
-        let roles: [Role] = try await client
-            .from("UserInfo")
-            .select("role")
-            .execute()
-            .value // [Role]
+        do {
+            let roles: [Role] = try await client
+                .from("UserInfo")
+                .select("role")
+                .execute()
+                .value // [Role]
 
-        guard let role = roles.map(\.role).first else {
-            return false
+            guard let role = roles.map(\.role).first else {
+                return false
+            }
+
+            print("roles:", roles.map(\.role)) // ["USER"]
+
+            return role == "USER"
+        } catch {
+            throw SupabaseError.selectError(error)
         }
-        
-        print("roles:", roles.map(\.role)) // ["USER"]
+    }
+    // MARK: - 온보딩 필요한지 확인
+    /// singleton으로 sceneDelegate에서도 사용
+    func isNeedOnboarding() async throws {
+        let state = try await isUser()
+        await MainActor.run {
+            if state {
+                SampleViewChangeManager.shared.goMainView()
+            } else {
+                SampleViewChangeManager.shared.goOnboardingView()
+            }
+        }
+    }
 
-        return role == "USER"
+    // MARK: 소셜 로그인 OAUTH 인증
+    private func oauthSession(type: SocialType) async throws -> Session? {
+        switch type {
+        case .apple:
+            let (_, session) = try await signInApple()
+            return session
+
+        case .kakao:
+            let session = try await signInKakao()
+            return session
+        }
     }
 
     // MARK: – 로그인
     func signIn(type: SocialType) {
         Task {
-            switch type {
-            case .apple:
-                do {
-                    let (_, session) = try await signInApple()
-                    await keychain.saveAllToken(session: session)
-                    SampleViewChangeManager.shared.goOnboardingView()
-                } catch {
-                    print(error.localizedDescription)
-                }
-
-            case .kakao:
-                do {
-                    guard let session = try await signInKakao() else { return }
-                    await keychain.saveAllToken(session: session)
-                    SampleViewChangeManager.shared.goOnboardingView()
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
+            guard let session = try await oauthSession(type: type) else { return }
+            await keychain.saveAllToken(session: session)
+            try await isNeedOnboarding()
         }
     }
 
-    // MARK: – 로그아웃
+// MARK: – 로그아웃
     func signOut() async throws {
         do {
             try await client.auth.signOut()
@@ -117,7 +130,7 @@ final class SupabaseOAuthManager: NSObject {
         SampleViewChangeManager.shared.goLoginView()
     }
 
-    // MARK: – 회원 탈퇴
+// MARK: – 회원 탈퇴
     func leaveService() async throws {
         let session = try await client.auth.session
         guard
@@ -168,6 +181,8 @@ final class SupabaseOAuthManager: NSObject {
         default:
             break
         }
+
+
     }
 }
 

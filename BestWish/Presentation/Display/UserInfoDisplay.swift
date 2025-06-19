@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserInfoDisplay {
+struct UserInfoDisplay: Equatable {
     var profileImageCode: Int
     var profileImageName: String {
         ProfileType(rawValue: profileImageCode)?.name ?? ProfileType.profileA.name
