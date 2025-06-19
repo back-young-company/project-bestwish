@@ -91,7 +91,7 @@ private extension PolicyBottomSheetView {
             $0.layoutMargins = UIEdgeInsets(
                 top: 0,
                 left: 20,
-                bottom: 0,
+                bottom: 12,
                 right: 20
             )
         }

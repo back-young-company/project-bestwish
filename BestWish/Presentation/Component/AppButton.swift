@@ -162,7 +162,7 @@ extension AppButton.ButtonType {
 
     var disabledBackgroundColor: UIColor? {
         switch self {
-        case .confirmChange, .complete, .next:
+        case .confirmChange, .complete, .next , .viewProduct:
             return .gray50
         default:
             return backgroundColor
