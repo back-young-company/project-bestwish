@@ -60,7 +60,7 @@ final class OnboardingViewController: UIViewController {
         viewModel.state.currentPage
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, page in
-            self.view = owner.onboardingViews[page]
+            owner.view = owner.onboardingViews[page]
         }
             .disposed(by: disposeBag)
 
