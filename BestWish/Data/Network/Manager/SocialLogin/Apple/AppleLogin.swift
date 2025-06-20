@@ -195,8 +195,3 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
     }
 }
 
-extension SupabaseOAuthManager: ASAuthorizationControllerPresentationContextProviding {
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return presentationWindow ?? UIWindow()
-    }
-}
