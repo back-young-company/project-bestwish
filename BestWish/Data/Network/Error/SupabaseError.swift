@@ -21,13 +21,13 @@ extension SupabaseError {
 
     var debugDescription: String {
         switch self {
-        case .selectError(let error):
+        case let .selectError(error):
             "Select Error: \(error.localizedDescription)"
-        case .updateError(let error):
+        case let .updateError(error):
             "Update Error: \(error.localizedDescription)"
-        case .deleteError(let error):
+        case let .deleteError(error):
             "Delete Error: \(error.localizedDescription)"
-        case .insertError(let error):
+        case let .insertError(error):
             "Insert Error: \(error.localizedDescription)"
         }
     }

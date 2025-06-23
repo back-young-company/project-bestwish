@@ -19,7 +19,7 @@ final class MyPageViewController: UIViewController {
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<MyPageSection>(
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {
-            case .basic(let type), .seeMore(let type):
+            case let .basic(type), let .seeMore(type):
                 guard let cell = self.myPageView.tableView.dequeueReusableCell(
                     withIdentifier: MyPageCell.identifier,
                     for: indexPath

@@ -60,9 +60,9 @@ final class ProfileUpdateViewModel: ViewModel {
             switch action {
             case .getUserInfo:
                 owner.getUserInfo()
-            case .updateProfileImageCode(let index):
+            case let .updateProfileImageCode(index):
                 owner.updateProfileImage(with: index)
-            case .updateNickname(let nickname):
+            case let .updateNickname(nickname):
                 owner.updateNickname(to: nickname)
             case .saveUserInfo:
                 owner.saveUserInfo()

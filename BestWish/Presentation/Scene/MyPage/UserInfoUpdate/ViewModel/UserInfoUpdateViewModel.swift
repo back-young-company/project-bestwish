@@ -51,9 +51,9 @@ final class UserInfoUpdateViewModel: ViewModel {
             switch action {
             case .getUserInfo:
                 owner.getUserInfo()
-            case .updateBirth(let date):
+            case let .updateBirth(date):
                 owner.updateBirth(date)
-            case .updateGender(let genderIndex):
+            case let .updateGender(genderIndex):
                 owner.updateGender(genderIndex)
             case .saveUserInfo:
                 owner.saveUserInfo()
