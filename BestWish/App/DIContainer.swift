@@ -90,6 +90,10 @@ final class DIContainer {
         return OnboardingViewController(viewModel: onboardingViewModel, policyViewModel: policyViewModel)
     }
     
+    func makeCameraViewController() -> CameraViewController {
+        return CameraViewController()
+    }
+    
     /// 이미지 편집 뷰 컨트롤러 생성
     func makeImageEditController(image: UIImage) -> ImageEditViewController {
         let viewModel = ImageEditViewModel(coreMLUseCase: coreMLUseCase)

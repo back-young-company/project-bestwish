@@ -31,6 +31,7 @@ final class CameraViewController: UIViewController {
         setNavigationBar(alignment: .left, title: "라이브 캡쳐")
         navigationItem.rightBarButtonItem = cameraView.getHomeButton
         viewModel.action.onNext(.viewDidLoad)
+        bindViewModel()
     }
     
     private func bindViewModel() {
