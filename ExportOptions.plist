@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>destination</key>
+	<string>export</string>
+	<key>manageAppVersionAndBuildNumber</key>
+	<true/>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.baekyeong.BestWish</key>
+		<string>BestWish GitHub Actions</string>
+		<key>com.baekyeong.BestWish.BestWishShareExtension</key>
+		<string>BestWish_GitHub_Actions_ShareExtension</string>
+	</dict>
+	<key>signingCertificate</key>
+	<string>D6D6030AB0C2EB68A5DAAE699EE0561FA2A4C6EB</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>teamID</key>
+	<string>3BLN747VAP</string>
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>
