@@ -8,7 +8,7 @@
 import RxRelay
 import RxSwift
 
-// 프로필 업데이트 저장, 프로필 불러오기, 프로필 선택
+/// 프로필 업데이트 View Model
 final class ProfileUpdateViewModel: ViewModel {
 
     // MARK: - Action
@@ -27,11 +27,11 @@ final class ProfileUpdateViewModel: ViewModel {
         let error: Observable<AppError>
     }
 
-    // MARK: - Public Properties
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
     let state: State
 
-    // MARK: - Private Properties
+    // MARK: - Private Property
     private let _action = PublishSubject<Action>()
 
     private let _userInfo = BehaviorRelay<UserInfoModel?>(value: nil)
@@ -42,7 +42,6 @@ final class ProfileUpdateViewModel: ViewModel {
     private let useCase: UserInfoUseCase
     private let disposeBag = DisposeBag()
 
-    // MARK: - Initializer
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
         state = State(
@@ -70,6 +69,7 @@ final class ProfileUpdateViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
+    /// 유저 정보 불러오기
     private func getUserInfo() {
         Task {
             do {
@@ -82,12 +82,14 @@ final class ProfileUpdateViewModel: ViewModel {
         }
     }
 
+    /// 프로필 이미지 변경
     private func updateProfileImage(with index: Int) {
         var userInfo = _userInfo.value
         userInfo?.updateprofileImageCode(to: index)
         _userInfo.accept(userInfo)
     }
 
+    /// 닉네임 유효 확인 및  변경
     private func updateNickname(to nickname: String) {
         let isValid = useCase.isValidNickname(nickname)
         _isValidNickname.accept(isValid)
@@ -99,6 +101,7 @@ final class ProfileUpdateViewModel: ViewModel {
         }
     }
 
+    /// 유저 정보 저장
     private func saveUserInfo() {
         Task {
             guard let userInfo = _userInfo.value else { return }
@@ -116,6 +119,7 @@ final class ProfileUpdateViewModel: ViewModel {
         }
     }
 
+    /// User Entity -> UserInfoModel 변환
     private func convertUserInfoModel(from user: User) -> UserInfoModel {
         UserInfoModel(
             profileImageCode: user.profileImageCode,
@@ -124,6 +128,7 @@ final class ProfileUpdateViewModel: ViewModel {
         )
     }
 
+    /// 에러 핸들링
     private func handleError(_ error: Error) {
         if let error = error as? AppError {
             _error.onNext(error)

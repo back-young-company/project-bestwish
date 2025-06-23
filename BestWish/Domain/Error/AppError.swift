@@ -7,17 +7,20 @@
 
 import Foundation
 
+/// 앱 에러 프로토콜 - errorDescription, debugDescription
 protocol AppErrorProtocol: LocalizedError {
     var errorDescription: String? { get }
     var debugDescription: String { get }
 }
 
+/// 앱 에러 열거형
 enum AppError: AppErrorProtocol {
     case supabaseError(AppErrorProtocol)
     case mappingError(AppErrorProtocol)
     case unknown(Error)
 }
 
+// MARK: - 앱 에러 Description 정의
 extension AppError {
     var errorDescription: String? {
         switch self {
@@ -36,20 +39,6 @@ extension AppError {
             return error.debugDescription
         case let .unknown(error):
             return "unkownError: \(error.localizedDescription)"
-        }
-    }
-}
-
-//TODO: Presentation으로 빼기
-extension AppError {
-    var alertTitle: String {
-        switch self {
-        case .supabaseError:
-            "네트워크 에러"
-        case .mappingError:
-            "변환 에러"
-        case .unknown:
-            "알 수 없는 에러"
         }
     }
 }

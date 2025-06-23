@@ -10,7 +10,10 @@ import UIKit
 import SnapKit
 import Then
 
+/// 유저 정보 관리 뷰
 final class UserInfoManagementView: UIView {
+
+    // MARK: - Private Property
     private let _stackView = VerticalStackView(spacing: 32)
     private let _userInfoManagementStackView = VerticalStackView(spacing: 8)
     private let _userInfoManagementTitlelabel = GroupTitleLabel(title: "회원 정보 설정")
@@ -19,7 +22,6 @@ final class UserInfoManagementView: UIView {
         title: "회원 정보",
         subTitle: "변경 하기"
     )
-
     private let _snsInfoStackView = VerticalStackView(spacing: 8)
     private let _snsInfoTitleLabel = GroupTitleLabel(title: "SNS 연결 정보")
     private let _snsInfoHorizontalStackView = MyPageRowView(
@@ -27,12 +29,15 @@ final class UserInfoManagementView: UIView {
         title: "",
         subTitle: "연결완료"
     )
-
     private let _withdrawStackView = MyPageRowView(
         type: .logout,
         title: "회원 정보를 삭제하시겠어요?",
         subTitle: "회원탈퇴"
     )
+
+    // MARK: - Internal Property
+    var userInfoArrowButton: UIButton { _userInfoHorizontalStackView.arrowButton }
+    var withdrawButton: UIButton { _withdrawStackView.arrowButton }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,7 +45,6 @@ final class UserInfoManagementView: UIView {
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -50,14 +54,13 @@ final class UserInfoManagementView: UIView {
         _snsInfoHorizontalStackView.configure(title: "\(String(describing: provider)) 계정")
     }
 
+    /// 뷰에 UnderLine 추가 메서드
     func addUnderLine() {
         _snsInfoHorizontalStackView.addUnderLine()
     }
-
-    var userInfoArrowButton: UIButton { _userInfoHorizontalStackView.arrowButton }
-    var withdrawButton: UIButton { _withdrawStackView.arrowButton }
 }
 
+// MARK: - View 설정
 private extension UserInfoManagementView {
     func setView() {
         setAttributes()

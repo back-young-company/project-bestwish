@@ -10,11 +10,12 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+/// Custom Alert ViewController
 final class AlertViewController: UIViewController {
     private let type: AlertView.AlertType
     private let alertView: AlertView
     private let disposeBag = DisposeBag()
-    private var confirmAction: (() -> Void)?
+    private var confirmAction: (() -> Void)? // 확인 버튼 액션 클로저
 
     init(type: AlertView.AlertType, action: (() -> Void)? = nil) {
         self.type = type
@@ -38,6 +39,7 @@ final class AlertViewController: UIViewController {
     }
 
     private func bindView() {
+        // Alert 외부 영역 탭 제스처
         let tapGesture = UITapGestureRecognizer()
         tapGesture.delegate = self
         alertView.addGestureRecognizer(tapGesture)
@@ -57,6 +59,7 @@ final class AlertViewController: UIViewController {
     }
 }
 
+// MARK: - Gesture Delegate
 extension AlertViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let touchLocation = touch.location(in: alertView)

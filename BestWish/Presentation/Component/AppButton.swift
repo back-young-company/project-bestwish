@@ -7,7 +7,6 @@
 
 import UIKit
 
-import RxSwift
 import SnapKit
 import Then
 
@@ -17,7 +16,6 @@ import Then
 /// private let button = AppButton(type: .analyze)
 /// ```
 final class AppButton: UIButton {
-    private let disposeBag = DisposeBag()
     private let type: ButtonType
     private let fontSize: CGFloat
 
@@ -36,13 +34,12 @@ final class AppButton: UIButton {
     init(type: ButtonType, fontSize: CGFloat = 18) {
         self.type = type
         self.fontSize = fontSize
-
         super.init(frame: .zero)
+        
         setView()
     }
 
-    required
-    init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

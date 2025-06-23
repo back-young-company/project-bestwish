@@ -10,9 +10,10 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+/// 유저 정보 관리 View Controller
 final class UserInfoManagementViewController: UIViewController {
-    private let managementView = UserInfoManagementView()
     private let viewModel: UserInfoManagementViewModel
+    private let managementView = UserInfoManagementView()
     private let disposeBag = DisposeBag()
 
     init(viewModel: UserInfoManagementViewModel) {

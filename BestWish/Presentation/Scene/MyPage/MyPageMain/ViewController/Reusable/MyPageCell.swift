@@ -10,16 +10,19 @@ import UIKit
 import SnapKit
 import Then
 
+/// 마이페이지 컬렉션 뷰 셀
 final class MyPageCell: UITableViewCell, ReuseIdentifier {
+
+    // MARK: - Private Property
     private let _titleLabel = UILabel()
     private let _seeMoreButton = UIButton()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
         setView()
     }
 
-    @available(*, unavailable)
     required init(coder: NSCoder) {
         fatalError()
     }
@@ -30,6 +33,7 @@ final class MyPageCell: UITableViewCell, ReuseIdentifier {
     }
 }
 
+// MARK: - View 설정
 private extension MyPageCell {
     func setView() {
         setAttributes()

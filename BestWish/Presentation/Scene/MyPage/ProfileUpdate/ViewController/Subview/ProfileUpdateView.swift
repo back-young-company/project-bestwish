@@ -10,7 +10,10 @@ import UIKit
 import SnapKit
 import Then
 
+/// 프로필 업데이트 뷰 (이메일, 닉네임)
 final class ProfileUpdateView: UIView {
+
+    // MARK: - Private Property
     private let _profileImageView = UIImageView()
     private let _emailStackView = VerticalStackView(spacing: 12)
     private let _emailLabel = GroupTitleLabel(title: "이메일")
@@ -21,37 +24,41 @@ final class ProfileUpdateView: UIView {
     private let _confirmChangeButton = AppButton(type: .confirmChange)
     private let _cautionLabel = CautionLabel()
 
+    // MARK: - Internal Property
+    var profileImageView: UIImageView { _profileImageView }
+    var confirmButton: AppButton { _confirmChangeButton }
+    var nicknameTextField: UITextField { _nicknameTextField }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
 
+    /// 유저 정보 데이터 Configure
     func configure(user: UserInfoModel) {
         _emailValueLabel.text = user.email
         _profileImageView.image = UIImage(named: user.profileImageName)
         _nicknameTextField.text = user.nickname
     }
 
+    /// 유효한 닉네임 Configure
     func configure(isValidNickname: Bool) {
         _confirmChangeButton.isEnabled = isValidNickname
         _cautionLabel.isHidden = isValidNickname
     }
 
+    /// 뷰에 UnderLine 추가 메서드
     func addUnderLine() {
         _nicknameTextField.addUnderLine()
     }
-
-    var profileImageView: UIImageView { _profileImageView }
-    var confirmButton: AppButton { _confirmChangeButton }
-    var nicknameTextField: UITextField { _nicknameTextField }
 }
 
+// MARK: - View 설정
 private extension ProfileUpdateView {
     func setView() {
         setAttributes()

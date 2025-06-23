@@ -11,7 +11,10 @@ import RxSwift
 import SnapKit
 import Then
 
+/// Custom Alert View
 final class AlertView: UIView {
+
+    // MARK: - Private Property
     private let type: AlertType
 
     private let _contentView = UIView()
@@ -21,6 +24,7 @@ final class AlertView: UIView {
     private let _cancelButton: AppButton
     private let _confirmButton: AppButton
 
+    // MARK: - Internal Property
     var contentView: UIView { _contentView }
     var cancelButton: AppButton { _cancelButton }
     var confirmButton: AppButton { _confirmButton }
@@ -29,18 +33,17 @@ final class AlertView: UIView {
         self.type = type
         _cancelButton = AppButton(type: type.cancelButtonType, fontSize: 16)
         _confirmButton = AppButton(type: type.confirmButtonType, fontSize: 16)
-
         super.init(frame: .zero)
 
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
 }
 
+// MARK: - View 설정
 private extension AlertView {
     func setView() {
         setAttributes()

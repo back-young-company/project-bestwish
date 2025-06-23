@@ -7,11 +7,17 @@
 
 import Foundation
 
+/// 계정 정보 관련 UseCase 프로토콜
 protocol AccountUseCase {
+
+    /// 로그아웃
     func logout() async throws
+
+    /// 회원탈퇴
     func withdraw() async throws
 }
 
+/// 계정 정보 관련 UseCase
 final class AccountUseCaseImpl: AccountUseCase {
     private let repository: AccountRepository
 
@@ -19,10 +25,12 @@ final class AccountUseCaseImpl: AccountUseCase {
         self.repository = repository
     }
 
+    /// 로그아웃
     func logout() async throws {
         try await repository.logout()
     }
 
+    /// 회원탈퇴
     func withdraw() async throws {
         try await repository.withdraw()
     }

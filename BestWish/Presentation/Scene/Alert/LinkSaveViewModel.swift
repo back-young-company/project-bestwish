@@ -34,12 +34,10 @@ final class LinkSaveViewModel: ViewModel {
     
     init(useCase: WishListUseCase) {
         self.useCase = useCase
-        
         state = State(
             completed: _completed.asObservable(),
             error: _error.asObservable()
         )
-        
         self.bind()
     }
     

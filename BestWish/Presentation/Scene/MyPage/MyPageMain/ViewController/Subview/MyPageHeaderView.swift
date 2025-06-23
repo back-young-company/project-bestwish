@@ -10,8 +10,10 @@ import UIKit
 import SnapKit
 import Then
 
+/// 마이페이지 테이블 뷰  헤더 뷰
 final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
 
+    // MARK: - Private Property
     private let _profileImageView = UIImageView()
     private let _infoStackView = UIStackView()
     private let _nicknameLabel = UILabel()
@@ -19,12 +21,15 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
     private let _seeMoreButton = UIButton()
     private let _separatorView = UIView()
 
+    // MARK: - Internal Property
+    var seeMoreButton: UIButton { _seeMoreButton }
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
+        
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -34,10 +39,9 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
         _nicknameLabel.text = user.nickname
         _emailLabel.text = user.email
     }
-
-    var seeMoreButton: UIButton { _seeMoreButton }
 }
 
+// MARK: - View 설정
 private extension MyPageHeaderView {
     func setView() {
         setAttributes()

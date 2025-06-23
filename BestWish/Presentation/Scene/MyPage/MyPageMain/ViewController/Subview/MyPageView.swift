@@ -11,7 +11,12 @@ import SnapKit
 import Then
 
 final class MyPageView: UIView {
+
+    // MARK: - Private Property
     private let _tableView = UITableView()
+
+    // MARK: - Internal Property
+    var tableView: UITableView { _tableView }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,14 +24,12 @@ final class MyPageView: UIView {
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
-
-    var tableView: UITableView { _tableView }
 }
 
+// MARK: - View 설정
 private extension MyPageView {
     func setView() {
         setAttributes()

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 위시리스트 제품 DTO
 struct ProductDTO: Codable {
     let id: UUID
     let userID: UUID?
@@ -33,6 +34,7 @@ struct ProductDTO: Codable {
     }
 }
 
+/// 플랫폼  DTO
 struct PlatformDTO: Codable {
     let platform: Int16
 }

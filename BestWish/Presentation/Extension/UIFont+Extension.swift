@@ -8,6 +8,7 @@
 import UIKit
 
 extension UIFont {
+    /// 커스텀 폰트 이름 열거형
     enum FontName: String, CaseIterable {
         case antonRegular = "Anton-Regular"
         
@@ -22,6 +23,7 @@ extension UIFont {
         case pretendardThin = "Pretendard-Thin"
     }
 
+    /// 커스텀 폰트 메서드
     static func font(_ style: FontName, ofSize size: CGFloat) -> UIFont {
         guard let customFont = UIFont(name: style.rawValue, size: size) else {
             print("\(style.rawValue) font가 등록되지 않았습니다.")

@@ -10,9 +10,10 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+/// 유저 정보 업데이트 View Controller
 final class UserInfoUpdateViewController: UIViewController {
-    private let updateView = UserInfoUpdateView()
     private let viewModel: UserInfoUpdateViewModel
+    private let updateView = UserInfoUpdateView()
     private let disposeBag = DisposeBag()
 
     init(viewModel: UserInfoUpdateViewModel) {

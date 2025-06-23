@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 유저 DTO
 struct UserDTO: Codable {
     let id: UUID
     let email: String
@@ -78,6 +79,7 @@ struct UserDTO: Codable {
     }
 }
 
+/// 플랫폼  순서 DTO
 struct PlatformSequenceDTO: Codable {
     let platformSequence: [Int16]
 

@@ -12,9 +12,10 @@ import RxCocoa
 import RxDataSources
 import RxSwift
 
+/// 마이페이지 ViewController
 final class MyPageViewController: UIViewController {
-    private let myPageView = MyPageView()
     private let viewModel: MyPageViewModel
+    private let myPageView = MyPageView()
     private let disposeBag = DisposeBag()
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<MyPageSection>(
         configureCell: { dataSource, tableView, indexPath, item in
@@ -41,7 +42,8 @@ final class MyPageViewController: UIViewController {
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.setNavigationBar(alignment: .left, title: "마이페이지")
+
+        setNavigationBar(alignment: .left, title: "마이페이지")
     }
 
     required init?(coder: NSCoder) {
@@ -110,6 +112,7 @@ final class MyPageViewController: UIViewController {
             }.disposed(by: disposeBag)
     }
 
+    /// 테이블 뷰 헤더 뷰 설정
     private func setHeaderView(userInfo: UserInfoModel) {
         let frame = CGRect(
             x: 0,
@@ -132,10 +135,9 @@ final class MyPageViewController: UIViewController {
     }
 }
 
-//MARK: 문의사항 (메일 띄우기)
-
+// MARK: - 문의사항 (메일 띄우기)
 extension MyPageViewController: MFMailComposeViewControllerDelegate {
-    // 메일 띄우기
+    /// 메일 띄우기
     private func sendQuestion() {
         // 메일 계정 설정 여부 확인
         guard MFMailComposeViewController.canSendMail() else {
@@ -163,6 +165,7 @@ extension MyPageViewController: MFMailComposeViewControllerDelegate {
         present(mailComposer, animated: true)
     }
 
+    /// 삭제 버튼 액션 메서드
     func mailComposeController(
         _ controller: MFMailComposeViewController,
         didFinishWith result: MFMailComposeResult,

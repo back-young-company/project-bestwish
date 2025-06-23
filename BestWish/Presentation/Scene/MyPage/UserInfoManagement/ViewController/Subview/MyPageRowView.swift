@@ -10,25 +10,28 @@ import UIKit
 import SnapKit
 import Then
 
+/// 마이페이지 셀 뷰
 final class MyPageRowView: UIStackView {
     private let type: StackViewType
     private let title: String
     private let subTitle: String
 
+    // MARK: - Private Property
     private let _titleLabel = UILabel()
     private let _arrowButton = UIButton()
+
+    // MARK: - Internal Property
+    var arrowButton: UIButton { _arrowButton }
 
     init(type: StackViewType, title: String, subTitle: String = "") {
         self.type = type
         self.title = title
         self.subTitle = subTitle
-
         super.init(frame: .zero)
 
         setView()
     }
 
-    @available(*, unavailable)
     required init(coder: NSCoder) {
         fatalError()
     }
@@ -36,10 +39,9 @@ final class MyPageRowView: UIStackView {
     func configure(title: String) {
         _titleLabel.text = title
     }
-
-    var arrowButton: UIButton { _arrowButton }
 }
 
+// MARK: - View 설정
 private extension MyPageRowView {
     func setView() {
         setAttributes()
@@ -89,8 +91,11 @@ private extension MyPageRowView {
     }
 }
 
+// MARK: - MyPageRowView: StackViewType 타입 정의
 extension MyPageRowView {
 
+    /// StackViewType
+    /// example: title + subTitle + > 버튼
     enum StackViewType {
         case minimal    // title만
         case button     // title + > 버튼
@@ -100,6 +105,7 @@ extension MyPageRowView {
     }
 }
 
+// MARK: - MyPageRowView: StackViewType 타입 프로퍼티 정의
 extension MyPageRowView.StackViewType {
     var isHiddenSubTitle: Bool {
         switch self {

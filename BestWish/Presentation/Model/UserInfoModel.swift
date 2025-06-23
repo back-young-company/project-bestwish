@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 유저 정보 Presentation Model
 struct UserInfoModel: Equatable {
     var profileImageCode: Int
     var profileImageName: String {
@@ -26,6 +27,7 @@ struct UserInfoModel: Equatable {
     }
 }
 
+// MARK: - 프로퍼티 수정 메서드
 extension UserInfoModel {
     mutating func updateprofileImageCode(to index: Int) {
         profileImageCode = index

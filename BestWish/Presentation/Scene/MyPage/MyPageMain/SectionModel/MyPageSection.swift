@@ -9,14 +9,14 @@ import Foundation
 
 import RxDataSources
 
-//MARK: SectionModelType - RxDataSources
-
+/// 마이페이지 SectionModelType - RxDataSources
 struct MyPageSection {
     var header: String?
     var footer: String?
     var items: [Item]
 }
 
+// MARK: - SectionModelType 채택
 extension MyPageSection: SectionModelType {
     typealias Item = MyPageCellItem
 
@@ -27,21 +27,20 @@ extension MyPageSection: SectionModelType {
     }
 }
 
-//MARK: 마이페이지 셀 아이템
-
+/// 마이페이지 셀 아이템
 enum MyPageCellItem {
     case seeMore(type: MyPageCellType)
     case basic(type: MyPageCellType)
 }
 
-// MARK: 마이페이지 섹션 타입
-
+/// 마이페이지 섹션 타입
 enum MyPageSectionType: Int, CaseIterable {
     case userInfo
     case help
     case setting
 }
 
+// MARK: - MyPageSectionType 프로퍼티 설정
 extension MyPageSectionType {
     var title: String {
         switch self {
@@ -67,8 +66,7 @@ extension MyPageSectionType {
     }
 }
 
-//MARK: 마이페이지 셀 타입
-
+/// 마이페이지 셀 타입
 enum MyPageCellType {
     case userInfo
     case question
@@ -88,6 +86,7 @@ enum MyPageCellType {
     }
 }
 
+// MARK: - MyPageCellType 프로퍼티 설정
 extension MyPageCellType {
     var title: String {
         switch self {

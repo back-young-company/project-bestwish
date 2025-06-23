@@ -10,11 +10,19 @@ import UIKit
 import SnapKit
 import Then
 
+/// 유저 정보 업데이트 뷰
 final class UserInfoUpdateView: UIView {
+
+    // MARK: - Private Property
     private let _stackView = VerticalStackView(spacing: 32)
     private let _genderSelection = GenderSelectionView()
     private let _birthSelection = BirthSelectionView()
     private let _saveButton = AppButton(type: .save)
+
+    // MARK: - Internal Property
+    var genderSelection: GenderSelectionView { _genderSelection }
+    var birthSelection: BirthSelectionView { _birthSelection }
+    var saveButton: AppButton { _saveButton }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,7 +30,6 @@ final class UserInfoUpdateView: UIView {
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -31,12 +38,9 @@ final class UserInfoUpdateView: UIView {
         _genderSelection.configure(genderIndex: userInfo.gender)
         _birthSelection.configure(title: userInfo.birthString)
     }
-
-    var genderSelection: GenderSelectionView { _genderSelection }
-    var birthSelection: BirthSelectionView { _birthSelection }
-    var saveButton: AppButton { _saveButton }
 }
 
+// MARK: - View 설정
 private extension UserInfoUpdateView {
     func setView() {
         setAttributes()

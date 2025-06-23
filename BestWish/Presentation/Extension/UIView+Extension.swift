@@ -14,6 +14,7 @@ extension UIView {
         }
     }
 
+    /// 언더라인 추가 메서드
     func addUnderLine(color: UIColor = .gray50 ?? .systemGray, height: CGFloat = 1.5) {
         let name = "underline"
         guard self.layer.sublayers?.first(where: { $0.name == name }) == nil else {

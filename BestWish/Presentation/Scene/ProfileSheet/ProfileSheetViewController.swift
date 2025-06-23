@@ -10,9 +10,11 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+/// 프로필 시트 View Controller
 final class ProfileSheetViewController: UIViewController {
     private let profileSheetView = ProfileSheetView()
     private let disposeBag = DisposeBag()
+
     private let selectedIndex: BehaviorRelay<Int>
     var onComplete: ((Int) -> Void)? // 프로필 선택 완료 후 이전 VC에 넘겨줌
 
@@ -71,6 +73,7 @@ final class ProfileSheetViewController: UIViewController {
             }.disposed(by: disposeBag)
     }
 
+    /// 프로필 시트 설정
     func presentProfileSheet() {
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.custom(resolver: { _ in CGFloat(182).fitHeight })]

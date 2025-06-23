@@ -10,7 +10,10 @@ import UIKit
 import SnapKit
 import Then
 
+/// 프로필 시트 뷰
 final class ProfileSheetView: UIView {
+
+    // MARK: - Private Property
     private let _titleLabel = UILabel()
     private let _completeButton = AppButton(type: .complete, fontSize: 12)
     private let _layout = UICollectionViewFlowLayout()
@@ -19,21 +22,22 @@ final class ProfileSheetView: UIView {
         collectionViewLayout: _layout
     )
 
+    // MARK: - Internal Property
+    var completeButton: AppButton { _completeButton }
+    var collectionView: UICollectionView { _collectionView }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
-
-    var completeButton: AppButton { _completeButton }
-    var collectionView: UICollectionView { _collectionView }
 }
 
+// MARK: - View 설정
 private extension ProfileSheetView {
     func setView() {
         setAttributes()

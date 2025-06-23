@@ -8,17 +8,15 @@
 import RxRelay
 import RxSwift
 
+/// 마이페이지 View Model
 final class MyPageViewModel: ViewModel {
-    private let userInfoUseCase: UserInfoUseCase
-    private let accountUseCase: AccountUseCase
-
-    private let disposeBag = DisposeBag()
-
+    // MARK: - Action
     enum Action {
         case getUserInfo
         case logout
     }
 
+    // MARK: - State
     struct State {
         let sections: Observable<[MyPageSection]> = Observable.just(
             MyPageSectionType.allCases.map { type in
@@ -38,20 +36,29 @@ final class MyPageViewModel: ViewModel {
         let error: Observable<AppError>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
 
     private let _error = PublishSubject<AppError>()
     private let _userInfo = PublishSubject<UserInfoModel>()
-    let state: State
+
+    private let userInfoUseCase: UserInfoUseCase
+    private let accountUseCase: AccountUseCase
+    private let disposeBag = DisposeBag()
 
     init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
+
         state = State(
             userInfo: _userInfo.asObservable(),
             error: _error.asObservable()
         )
+
         bindAction()
     }
 
@@ -66,6 +73,7 @@ final class MyPageViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
+    /// 유저 정보 가져오기
     private func getUserInfo() {
         Task {
             do {
@@ -78,6 +86,7 @@ final class MyPageViewModel: ViewModel {
         }
     }
 
+    /// 로그아웃
     private func logout() {
         Task {
             do {
@@ -88,6 +97,7 @@ final class MyPageViewModel: ViewModel {
         }
     }
 
+    /// User Entity -> UserInfoModel 변환 메서드
     private func convertUserInfoModel(from user: User) -> UserInfoModel {
         UserInfoModel(
             profileImageCode: user.profileImageCode,
@@ -96,6 +106,7 @@ final class MyPageViewModel: ViewModel {
         )
     }
 
+    /// 에러 핸들링
     private func handleError(_ error: Error) {
         if let error = error as? AppError {
             _error.onNext(error)

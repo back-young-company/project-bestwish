@@ -10,9 +10,10 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+/// 프로필 업데이트 View Controller
 final class ProfileUpdateViewController: UIViewController {
-    private let profileUpdateView = ProfileUpdateView()
     private let viewModel: ProfileUpdateViewModel
+    private let profileUpdateView = ProfileUpdateView()
     private let disposeBag = DisposeBag()
 
     init(viewModel: ProfileUpdateViewModel) {
@@ -42,6 +43,7 @@ final class ProfileUpdateViewController: UIViewController {
     }
 
     private func bindView() {
+        // 이미지뷰 제스처 추가
         let tapGesture = UITapGestureRecognizer()
         profileUpdateView.profileImageView.addGestureRecognizer(tapGesture)
 

@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIColor {
-    // Hex 문자열을 UIColor로 변환하는 메서드
+    /// Hex 문자열을 UIColor로 변환하는 메서드
     convenience init?(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")

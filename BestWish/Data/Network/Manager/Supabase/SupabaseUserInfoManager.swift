@@ -8,6 +8,7 @@
 import Foundation
 import Supabase
 
+/// Supabase 유저 정보 매니저
 final class SupabaseUserInfoManager {
     private let supabase: SupabaseClient
 

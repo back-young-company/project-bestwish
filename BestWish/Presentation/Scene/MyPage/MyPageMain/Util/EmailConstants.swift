@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// MessageUI 열거형 - 수신자, 제목, 본문 등 설정
 enum EmailConstants {
     case recipients // 수신자
     case subject    // 제목
@@ -15,6 +16,7 @@ enum EmailConstants {
     case mailUnavailableAlertMessage    // 메일 계정 설정 에러 메시지
 }
 
+// MARK: - EmailConstants 프로퍼티 설정
 extension EmailConstants {
     var value: String {
         switch self {

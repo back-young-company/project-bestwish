@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Supabase CRUD 관련 에러
 enum SupabaseError: AppErrorProtocol {
     case selectError(Error)
     case updateError(Error)
@@ -14,6 +15,7 @@ enum SupabaseError: AppErrorProtocol {
     case insertError(Error)
 }
 
+// MARK: - Supabase Error - Description
 extension SupabaseError {
     var errorDescription: String? {
         "네트워크 오류가 발생했습니다"

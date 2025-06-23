@@ -10,7 +10,10 @@ import UIKit
 import SnapKit
 import Then
 
+/// 프로필 시트 셀
 final class ProfileSheetCell: UICollectionViewCell, ReuseIdentifier {
+
+    // MARK: - Private Property
     private let _imageView = UIImageView()
 
     override var isSelected: Bool {
@@ -35,6 +38,7 @@ final class ProfileSheetCell: UICollectionViewCell, ReuseIdentifier {
     }
 }
 
+// MARK: - Cell 설정
 private extension ProfileSheetCell {
     func setView() {
         setAttributes()
