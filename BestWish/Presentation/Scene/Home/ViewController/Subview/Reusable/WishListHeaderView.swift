@@ -1,5 +1,5 @@
 //
-//  WishlistHeaderView.swift
+//  WishListHeaderView.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/11/25.
@@ -12,8 +12,8 @@ import RxCocoa
 import SnapKit
 import Then
 
-final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
-    
+final class WishListHeaderView: UICollectionReusableView, ReuseIdentifier {
+
     private let separatorView = UIView()
     
     private let titleLabel = UILabel()
@@ -58,7 +58,7 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     func configure(platforms: Observable<[(Int ,Int)]>) {
         platforms
-            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishlistPlatformCell.identifier, cellType: WishlistPlatformCell.self)) { [weak self] row, data, cell in
+            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishListPlatformCell.identifier, cellType: WishListPlatformCell.self)) { [weak self] row, data, cell in
                 guard let self else { return }
                 let (platform, _) = data
                 let selectedPlatform = self.selectedPlatformRelay.value
@@ -83,7 +83,7 @@ final class WishlistHeaderView: UICollectionReusableView, ReuseIdentifier {
     var getSearchTextField: UITextField { searchBar.searchTextField }
 }
 
-private extension WishlistHeaderView {
+private extension WishListHeaderView {
     func setView() {
         setAttributes()
         setHierarchy()
@@ -123,8 +123,8 @@ private extension WishlistHeaderView {
         
         platformCollectionView.do {
             $0.register(
-                WishlistPlatformCell.self,
-                forCellWithReuseIdentifier: WishlistPlatformCell.identifier
+                WishListPlatformCell.self,
+                forCellWithReuseIdentifier: WishListPlatformCell.identifier
             )
             let layout = UICollectionViewFlowLayout()
             layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize

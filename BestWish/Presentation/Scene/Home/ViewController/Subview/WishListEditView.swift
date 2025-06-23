@@ -1,5 +1,5 @@
 //
-//  WishlistEditView.swift
+//  WishListEditView.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/12/25.
@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class WishlistEditView: UIView {
+final class WishListEditView: UIView {
     
     private let backButton = UIButton()
     private let headerView = PlatformEditHeaderView()
@@ -30,7 +30,7 @@ final class WishlistEditView: UIView {
     var getCollectionView: UICollectionView { collectionView }
 }
 
-private extension WishlistEditView {
+private extension WishListEditView {
     func setView() {
         setAttributes()
         setHierarchy()
@@ -42,12 +42,12 @@ private extension WishlistEditView {
         
         collectionView.do {
             $0.register(
-                WishlistCell.self,
-                forCellWithReuseIdentifier: WishlistCell.identifier)
+                WishListCell.self,
+                forCellWithReuseIdentifier: WishListCell.identifier)
             $0.register(
-                WishlistEditHeaderView.self,
+                WishListEditHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: WishlistEditHeaderView.identifier
+                withReuseIdentifier: WishListEditHeaderView.identifier
             )
         }
         

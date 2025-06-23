@@ -1,5 +1,5 @@
 //
-//  WishlistEditHeaderView.swift
+//  WishListEditHeaderView.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/12/25.
@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class WishlistEditHeaderView: UICollectionReusableView, ReuseIdentifier {
+final class WishListEditHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     private let platformCountLabel = UILabel()
     private let completeButton = UIButton()
@@ -40,7 +40,7 @@ final class WishlistEditHeaderView: UICollectionReusableView, ReuseIdentifier {
     var getCompleteButton: UIButton { completeButton }
 }
 
-private extension WishlistEditHeaderView {
+private extension WishListEditHeaderView {
     func setView() {
         setAttributes()
         setHierarchy()

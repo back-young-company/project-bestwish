@@ -41,12 +41,12 @@ private extension HomeView {
                 forCellWithReuseIdentifier: PlatformShortcutCell.identifier
             )
             $0.register(
-                WishlistCell.self,
-                forCellWithReuseIdentifier: WishlistCell.identifier
+                WishListCell.self,
+                forCellWithReuseIdentifier: WishListCell.identifier
             )
             $0.register(
-                WishlistEmptyCell.self,
-                forCellWithReuseIdentifier: WishlistEmptyCell.identifier
+                WishListEmptyCell.self,
+                forCellWithReuseIdentifier: WishListEmptyCell.identifier
             )
             $0.register(
                 PlatformShortcutHeaderView.self,
@@ -54,14 +54,14 @@ private extension HomeView {
                 withReuseIdentifier: PlatformShortcutHeaderView.identifier
             )
             $0.register(
-                WishlistHeaderView.self,
+                WishListHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: WishlistHeaderView.identifier
+                withReuseIdentifier: WishListHeaderView.identifier
             )
             $0.register(
-                WishlistEmptyHeaderView.self,
+                WishListEmptyHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: WishlistEmptyHeaderView.identifier
+                withReuseIdentifier: WishListEmptyHeaderView.identifier
             )
         }
     }

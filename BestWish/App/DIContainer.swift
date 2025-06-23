@@ -54,9 +54,9 @@ final class DIContainer {
         return PlatformEditViewController(platformEditViewModel: viewModel)
     }
     
-    func makeWishlistEditViewController() -> WishlistEditViewController {
+    func makeWishlistEditViewController() -> WishListEditViewController {
         let viewModel = WishEditViewModel(useCase: wishListUseCase)
-        return WishlistEditViewController(wishEditViewModel: viewModel)
+        return WishListEditViewController(wishEditViewModel: viewModel)
     }
     
     func makeLinkSaveViewController() -> LinkSaveViewController {

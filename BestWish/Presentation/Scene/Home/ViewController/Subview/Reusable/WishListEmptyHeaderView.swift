@@ -1,5 +1,5 @@
 //
-//  WishlistEmptyHeaderView.swift
+//  WishListEmptyHeaderView.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/13/25.
@@ -12,7 +12,7 @@ import RxCocoa
 import SnapKit
 import Then
 
-final class WishlistEmptyHeaderView: UICollectionReusableView, ReuseIdentifier {
+final class WishListEmptyHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     private let separatorView = UIView()
     
@@ -28,7 +28,7 @@ final class WishlistEmptyHeaderView: UICollectionReusableView, ReuseIdentifier {
     }
 }
 
-private extension WishlistEmptyHeaderView {
+private extension WishListEmptyHeaderView {
     func setView() {
         setAttributes()
         setHierarchy()

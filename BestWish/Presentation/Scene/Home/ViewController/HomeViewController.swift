@@ -64,9 +64,9 @@ final class HomeViewController: UIViewController {
                     return cell
                 case .wishlist(let product):
                     guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: WishlistCell.identifier,
+                        withReuseIdentifier: WishListCell.identifier,
                         for: indexPath
-                    ) as? WishlistCell else { return UICollectionViewCell() }
+                    ) as? WishListCell else { return UICollectionViewCell() }
                     
                     let itemCount = collectionView.numberOfItems(inSection: indexPath.section)
                         let isLastRow = {
@@ -81,9 +81,9 @@ final class HomeViewController: UIViewController {
                     return cell
                 case .wishlistEmpty:
                     guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: WishlistEmptyCell.identifier,
+                        withReuseIdentifier: WishListEmptyCell.identifier,
                         for: indexPath
-                    ) as? WishlistEmptyCell else { return UICollectionViewCell() }
+                    ) as? WishListEmptyCell else { return UICollectionViewCell() }
                     
                     cell.getLinkButton.rx.tap
                         .bind(with: self) { owner, _ in
@@ -121,17 +121,17 @@ final class HomeViewController: UIViewController {
                     if items.count == 1 && section.items.first == .wishlistEmpty {
                         guard let headerView = collectionView.dequeueReusableSupplementaryView(
                             ofKind: kind,
-                            withReuseIdentifier: WishlistEmptyHeaderView.identifier,
+                            withReuseIdentifier: WishListEmptyHeaderView.identifier,
                             for: indexPath
-                        ) as? WishlistEmptyHeaderView else { return UICollectionReusableView() }
+                        ) as? WishListEmptyHeaderView else { return UICollectionReusableView() }
                         
                         return headerView
                     } else {
                         guard let headerView = collectionView.dequeueReusableSupplementaryView(
                             ofKind: kind,
-                            withReuseIdentifier: WishlistHeaderView.identifier,
+                            withReuseIdentifier: WishListHeaderView.identifier,
                             for: indexPath
-                        ) as? WishlistHeaderView else { return UICollectionReusableView() }
+                        ) as? WishListHeaderView else { return UICollectionReusableView() }
                         let totalItemCount = dataSource.sectionModels[1].items.map { $0 }.count
                         
                         homeViewModel.state.selectedPlatform

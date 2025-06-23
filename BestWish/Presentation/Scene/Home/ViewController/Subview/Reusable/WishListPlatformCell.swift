@@ -1,5 +1,5 @@
 //
-//  WishlistPlatformCell.swift
+//  WishListPlatformCell.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/11/25.
@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class WishlistPlatformCell: UICollectionViewCell, ReuseIdentifier {
+final class WishListPlatformCell: UICollectionViewCell, ReuseIdentifier {
     
     private let platformButton = UIButton()
     
@@ -53,7 +53,7 @@ final class WishlistPlatformCell: UICollectionViewCell, ReuseIdentifier {
     var getPlatformButton: UIButton { platformButton }
 }
 
-private extension WishlistPlatformCell {
+private extension WishListPlatformCell {
     func setView() {
         setAttributes()
         setHierarchy()

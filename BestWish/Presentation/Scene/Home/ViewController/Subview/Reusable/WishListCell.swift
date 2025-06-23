@@ -1,5 +1,5 @@
 //
-//  WishlistCell.swift
+//  WishListCell.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/10/25.
@@ -12,7 +12,7 @@ import Kingfisher
 import SnapKit
 import Then
 
-final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
+final class WishListCell: UICollectionViewCell, ReuseIdentifier {
     
     private let productImageView = UIImageView()
     
@@ -63,7 +63,7 @@ final class WishlistCell: UICollectionViewCell, ReuseIdentifier {
     }
 }
 
-private extension WishlistCell {
+private extension WishListCell {
     func setView() {
         setAttributes()
         setHierarchy()

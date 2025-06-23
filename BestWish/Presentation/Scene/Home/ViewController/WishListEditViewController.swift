@@ -1,5 +1,5 @@
 //
-//  WishlistEditViewController.swift
+//  WishListEditViewController.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/12/25.
@@ -11,9 +11,9 @@ import RxDataSources
 import RxSwift
 import RxRelay
 
-final class WishlistEditViewController: UIViewController {
-    
-    private let wishEditView = WishlistEditView()
+final class WishListEditViewController: UIViewController {
+
+    private let wishEditView = WishListEditView()
     private let wishEditViewModel: WishEditViewModel
     
     weak var delegate: HomeViewControllerUpdate?
@@ -45,9 +45,9 @@ final class WishlistEditViewController: UIViewController {
         let dataSource = RxCollectionViewSectionedReloadDataSource<WishlistEditSectionModel>(
             configureCell: { dataSource, collectionView, indexPath, item in
                 guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: WishlistCell.identifier,
+                    withReuseIdentifier: WishListCell.identifier,
                     for: indexPath
-                ) as? WishlistCell else { return UICollectionViewCell() }
+                ) as? WishListCell else { return UICollectionViewCell() }
                 cell.configure(type: item, isHidden: false)
                 
                 cell.getEditButton.rx.tap
@@ -60,9 +60,9 @@ final class WishlistEditViewController: UIViewController {
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
                 guard let headerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: WishlistEditHeaderView.identifier,
+                    withReuseIdentifier: WishListEditHeaderView.identifier,
                     for: indexPath
-                ) as? WishlistEditHeaderView else { return UICollectionReusableView() }
+                ) as? WishListEditHeaderView else { return UICollectionReusableView() }
                 let totalItemCount = dataSource.sectionModels.flatMap { $0.items }.count
                 headerView.configure(count: totalItemCount)
                 
@@ -126,7 +126,7 @@ final class WishlistEditViewController: UIViewController {
     
 }
 
-private extension WishlistEditViewController {
+private extension WishListEditViewController {
     func setCollectionViewLayout(_ sections: [WishlistEditSectionModel]) {
         wishEditView.getCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             return NSCollectionLayoutSection.createWishlistSection()

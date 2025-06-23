@@ -1,5 +1,5 @@
 //
-//  WishlistEmptyCell.swift
+//  WishListEmptyCell.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/12/25.
@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class WishlistEmptyCell: UICollectionViewCell, ReuseIdentifier {
+final class WishListEmptyCell: UICollectionViewCell, ReuseIdentifier {
 
     private let emptyImageView = UIImageView()
     private let titleLabel = UILabel()
@@ -38,7 +38,7 @@ final class WishlistEmptyCell: UICollectionViewCell, ReuseIdentifier {
     var getLinkButton: UIButton { linkButton }
 }
 
-private extension WishlistEmptyCell {
+private extension WishListEmptyCell {
     func setView() {
         setAttributes()
         setHierarchy()
