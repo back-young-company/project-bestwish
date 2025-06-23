@@ -11,7 +11,7 @@ import RxSwift
 final class LoginViewModel: ViewModel {
 
     private let disposeBag = DisposeBag()
-    private let supabaseOAuthManager = SupabaseOAuthManager.shared
+    private let useCase: AccountUseCase
 
     enum Action {
         case signInKakao
@@ -25,7 +25,8 @@ final class LoginViewModel: ViewModel {
 
     let state: State
 
-    init() {
+    init(useCase: AccountUseCase) {
+        self.useCase = useCase
         state = State()
         bindAction()
     }
@@ -35,9 +36,9 @@ final class LoginViewModel: ViewModel {
             Task {
                 switch action {
                 case .signInKakao:
-                   try await SupabaseOAuthManager.shared.signIn(type: .kakao)
+                    try await self.useCase.login(type: .kakao)
                 case .signInApple:
-                    try await SupabaseOAuthManager.shared.signIn(type: .apple)
+                    try await self.useCase.login(type: .apple)
                 }
             }
 

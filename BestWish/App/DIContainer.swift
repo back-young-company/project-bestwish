@@ -29,8 +29,8 @@ final class DIContainer {
     private init() {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
-        self.supabaseOAuthManager = SupabaseOAuthManager.shared
-        
+        self.supabaseOAuthManager = SupabaseOAuthManager()
+
         self.wishListRepository = WishListRepositoryImpl(manager: supabaseManager, userInfoManager: supabaseUserInfoManager)
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
         self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager)
@@ -43,7 +43,12 @@ final class DIContainer {
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
         self.analysisUseCase = AnalysisUseCaseImpl()
     }
-    
+
+    // TODO: - 수정하기 (with SceneDelegate)
+    func makeSupabaseOAuthManager() -> SupabaseOAuthManager {
+        return SupabaseOAuthManager()
+    }
+
     func makeHomeViewController() -> HomeViewController {
         let viewModel = HomeViewModel(useCase: wishListUseCase)
         return HomeViewController(homeViewModel: viewModel)
@@ -86,6 +91,11 @@ final class DIContainer {
     func makeUserInfoManagementViewController() -> UserInfoManagementViewController {
         let viewModel = UserInfoManagementViewModel(userInfoUseCase: userInfoUseCase, accountUseCase: accountUseCase)
         return UserInfoManagementViewController(viewModel: viewModel)
+    }
+
+    func makeLoginViewController() -> LoginViewController {
+        let viewModel = LoginViewModel(useCase: accountUseCase)
+        return LoginViewController(viewModel: viewModel)
     }
 
     func makeOnboardingViewController() -> OnboardingViewController {

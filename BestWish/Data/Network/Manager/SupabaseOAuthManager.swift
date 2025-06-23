@@ -11,10 +11,7 @@ import Foundation
 import Supabase
 
 final class SupabaseOAuthManager: NSObject {
-
-    static let shared = SupabaseOAuthManager()
-    private override init() { super.init() }
-
+    
     // actor KeyChainManager 인스턴스
     public let keychain = KeyChainManager()
     public var continuation: CheckedContinuation<(String, Supabase.Session), Error>?
@@ -83,19 +80,6 @@ final class SupabaseOAuthManager: NSObject {
         }
 
     }
-
-    /// 온보딩 필요한지 확인
-    /// singleton으로 sceneDelegate에서도 사용
-//    func isNeedOnboarding() async -> Bool {
-//        let state = await isUser()
-//        await MainActor.run {
-//            if state {
-//                SampleViewChangeManager.shared.goMainView()
-//            } else {
-//                SampleViewChangeManager.shared.goOnboardingView()
-//            }
-//        }
-//    }
 
     /// 소셜 로그인 OAUTH 인증
     private func oauthSession(type: SocialType) async throws -> Session? {
@@ -168,16 +152,6 @@ final class SupabaseOAuthManager: NSObject {
         default:
             break
         }
-
-
-    }
-}
-
-extension SupabaseOAuthManager {
-    /// 소셜로그인 타입
-    enum SocialType {
-        case kakao
-        case apple
     }
 }
 

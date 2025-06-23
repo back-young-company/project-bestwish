@@ -9,7 +9,8 @@ import Foundation
 
 /// 계정 정보 관련 UseCase 프로토콜
 protocol AccountUseCase {
-
+	/// 로그인	
+	func login(type: SocialType) async throws
     /// 로그아웃
     func logout() async throws
 
@@ -25,7 +26,12 @@ final class AccountUseCaseImpl: AccountUseCase {
         self.repository = repository
     }
 
-    /// 로그아웃
+	/// 로그인    
+	func login(type: SocialType) async throws {
+        try await repository.login(type: type)
+    }
+
+	/// 로그아웃
     func logout() async throws {
         try await repository.logout()
     }

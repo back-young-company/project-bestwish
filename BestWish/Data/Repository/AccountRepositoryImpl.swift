@@ -15,6 +15,11 @@ final class AccountRepositoryImpl: AccountRepository {
         self.manager = manager
     }
 
+    /// 로그인
+    func login(type: SocialType) async throws {
+        try await manager.signIn(type: type)
+    }
+
     /// 로그아웃
     func logout() async throws {
         try await manager.signOut()
