@@ -29,11 +29,6 @@ final class DummyView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-
-    func configure(with data: DummyDisplay) {
-        titleLabel.text = data.title
-        priceLabel.text = data.price
-    }
 }
 
 private extension DummyView {
