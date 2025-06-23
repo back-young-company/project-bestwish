@@ -7,11 +7,14 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
 final class UserInfoUpdateView: UIView {
-    private let stackView = VerticalStackView(spacing: 32)
-    private let genderSelection = GenderSelectionView()
-    private let birthSelection = BirthSelectionView()
-    private let saveButton = AppButton(type: .save)
+    private let _stackView = VerticalStackView(spacing: 32)
+    private let _genderSelection = GenderSelectionView()
+    private let _birthSelection = BirthSelectionView()
+    private let _saveButton = AppButton(type: .save)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,13 +28,13 @@ final class UserInfoUpdateView: UIView {
     }
 
     func configure(userInfo: UserInfoModel) {
-        genderSelection.configure(genderIndex: userInfo.gender)
-        birthSelection.configure(title: userInfo.birthString)
+        _genderSelection.configure(genderIndex: userInfo.gender)
+        _birthSelection.configure(title: userInfo.birthString)
     }
 
-    var getGenderSelection: GenderSelectionView { genderSelection }
-    var getBirthSelection: BirthSelectionView { birthSelection }
-    var getSaveButton: AppButton { saveButton }
+    var genderSelection: GenderSelectionView { _genderSelection }
+    var birthSelection: BirthSelectionView { _birthSelection }
+    var saveButton: AppButton { _saveButton }
 }
 
 private extension UserInfoUpdateView {
@@ -44,7 +47,7 @@ private extension UserInfoUpdateView {
     func setAttributes() {
         self.backgroundColor = .gray0
 
-        stackView.do {
+        _stackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 16,
@@ -54,26 +57,26 @@ private extension UserInfoUpdateView {
             )
         }
 
-        birthSelection.do {
+        _birthSelection.do {
             $0.dateButton.layer.borderColor = UIColor.primary300?.cgColor
         }
     }
 
     func setHierarchy() {
-        stackView.addArrangedSubviews(genderSelection, birthSelection)
-        addSubviews(stackView, saveButton)
+        _stackView.addArrangedSubviews(_genderSelection, _birthSelection)
+        addSubviews(_stackView, _saveButton)
     }
 
     func setConstraints() {
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide).inset(57)
-            make.directionalHorizontalEdges.equalToSuperview()
+        _stackView.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide).inset(57)
+            $0.directionalHorizontalEdges.equalToSuperview()
         }
 
-        saveButton.snp.makeConstraints { make in
-            make.bottom.equalTo(safeAreaLayoutGuide).inset(12)
-            make.directionalHorizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(54)
+        _saveButton.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(54)
         }
     }
 }

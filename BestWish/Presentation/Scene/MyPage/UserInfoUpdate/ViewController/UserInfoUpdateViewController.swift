@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import RxSwift
+
 import RxCocoa
+import RxSwift
 
 final class UserInfoUpdateViewController: UIViewController {
     private let updateView = UserInfoUpdateView()
@@ -38,7 +39,7 @@ final class UserInfoUpdateViewController: UIViewController {
     }
 
     private func bindView() {
-        updateView.getBirthSelection.dateButton.rx.tap
+        updateView.birthSelection.dateButton.rx.tap
             .bind(with: self) { owner, _ in
                 let sheetVC = DatePickerBottomSheetViewController()
                 sheetVC.onDateSelected =  { selectedDate in
@@ -51,7 +52,7 @@ final class UserInfoUpdateViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        updateView.getGenderSelection.selectedGender
+        updateView.genderSelection.selectedGender
             .distinctUntilChanged()
             .map { ($0 ?? .nothing).rawValue }
             .bind(with: self) { owner, genderIndex in
@@ -59,7 +60,7 @@ final class UserInfoUpdateViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        updateView.getSaveButton.rx.tap
+        updateView.saveButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.action.onNext(.saveUserInfo)
             }

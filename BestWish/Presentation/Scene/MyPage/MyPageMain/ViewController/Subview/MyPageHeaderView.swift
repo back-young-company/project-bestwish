@@ -7,14 +7,17 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
 final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
 
-    private let profileImageView = UIImageView()
-    private let infoStackView = UIStackView()
-    private let nicknameLabel = UILabel()
-    private let emailLabel = UILabel()
-    private let seeMoreButton = UIButton()
-    private let separatorView = UIView()
+    private let _profileImageView = UIImageView()
+    private let _infoStackView = UIStackView()
+    private let _nicknameLabel = UILabel()
+    private let _emailLabel = UILabel()
+    private let _seeMoreButton = UIButton()
+    private let _separatorView = UIView()
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -27,12 +30,12 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
     }
 
     func configure(user: UserInfoModel) {
-        profileImageView.image = .init(named: user.profileImageName)
-        nicknameLabel.text = user.nickname
-        emailLabel.text = user.email
+        _profileImageView.image = .init(named: user.profileImageName)
+        _nicknameLabel.text = user.nickname
+        _emailLabel.text = user.email
     }
 
-    var getSeeMoreButton: UIButton { seeMoreButton }
+    var seeMoreButton: UIButton { _seeMoreButton }
 }
 
 private extension MyPageHeaderView {
@@ -43,28 +46,28 @@ private extension MyPageHeaderView {
     }
 
     func setAttributes() {
-        profileImageView.do {
+        _profileImageView.do {
             $0.contentMode = .scaleAspectFit
         }
 
-        infoStackView.do {
+        _infoStackView.do {
             $0.axis = .vertical
             $0.spacing = 8
         }
 
-        nicknameLabel.do {
+        _nicknameLabel.do {
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 18)
             $0.numberOfLines = 1
         }
 
-        emailLabel.do {
+        _emailLabel.do {
             $0.textColor = .gray200
             $0.font = .font(.pretendardMedium, ofSize: 14)
             $0.numberOfLines = 1
         }
 
-        seeMoreButton.do {
+        _seeMoreButton.do {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 12, leading: 12, bottom: 12, trailing: 12)
             config.image = .init(systemName: "chevron.right")
@@ -72,37 +75,37 @@ private extension MyPageHeaderView {
             $0.configuration = config
         }
 
-        separatorView.do {
+        _separatorView.do {
             $0.backgroundColor = .gray50
         }
     }
 
     func setHierarchy() {
-        infoStackView.addArrangedSubviews(nicknameLabel, emailLabel)
-        self.addSubviews(profileImageView, infoStackView, seeMoreButton, separatorView)
+        _infoStackView.addArrangedSubviews(_nicknameLabel, _emailLabel)
+        self.addSubviews(_profileImageView, _infoStackView, _seeMoreButton, _separatorView)
     }
 
     func setConstraints() {
-        profileImageView.snp.makeConstraints { make in
-            make.verticalEdges.equalToSuperview().inset(24)
-            make.leading.equalToSuperview().inset(CGFloat(16).fitWidth)
-            make.width.equalTo(profileImageView.snp.height)
+        _profileImageView.snp.makeConstraints { 
+            $0.verticalEdges.equalToSuperview().inset(24)
+            $0.leading.equalToSuperview().inset(CGFloat(16).fitWidth)
+            $0.width.equalTo(_profileImageView.snp.height)
         }
 
-        infoStackView.snp.makeConstraints { make in
-            make.leading.equalTo(profileImageView.snp.trailing).offset(18)
-            make.centerY.equalTo(profileImageView)
+        _infoStackView.snp.makeConstraints { 
+            $0.leading.equalTo(_profileImageView.snp.trailing).offset(18)
+            $0.centerY.equalTo(_profileImageView)
         }
 
-        seeMoreButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.size.equalTo(48)
-            make.trailing.equalToSuperview().inset(8)
+        _seeMoreButton.snp.makeConstraints { 
+            $0.centerY.equalToSuperview()
+            $0.size.equalTo(48)
+            $0.trailing.equalToSuperview().inset(8)
         }
 
-        separatorView.snp.makeConstraints { make in
-            make.bottom.directionalHorizontalEdges.equalToSuperview()
-            make.height.equalTo(8)
+        _separatorView.snp.makeConstraints { 
+            $0.bottom.directionalHorizontalEdges.equalToSuperview()
+            $0.height.equalTo(8)
         }
     }
 }

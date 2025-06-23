@@ -11,7 +11,6 @@ enum EmailConstants {
     case recipients // 수신자
     case subject    // 제목
     case body       // 본문
-
     case mailUnavailableAlertTitle      // 메일 계정 설정 에러 타이틀
     case mailUnavailableAlertMessage    // 메일 계정 설정 에러 메시지
 }

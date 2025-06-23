@@ -6,15 +6,18 @@
 //
 
 import UIKit
+
 import RxSwift
+import SnapKit
+import Then
 
 final class AlertView: UIView {
     private let type: AlertType
 
     private let _contentView = UIView()
-    private let titleLabel = UILabel()
-    private let subTitleLabel = UILabel()
-    private let buttonStackView = UIStackView()
+    private let _titleLabel = UILabel()
+    private let _subTitleLabel = UILabel()
+    private let _buttonStackView = UIStackView()
     private let _cancelButton: AppButton
     private let _confirmButton: AppButton
 
@@ -54,14 +57,14 @@ private extension AlertView {
             $0.clipsToBounds = true
         }
 
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = type.title
             $0.textColor = .gray800
             $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textAlignment = .center
         }
 
-        subTitleLabel.do {
+        _subTitleLabel.do {
             $0.text = type.subTitle
             $0.textColor = .gray600
             $0.font = .font(.pretendardMedium, ofSize: 12)
@@ -69,7 +72,7 @@ private extension AlertView {
             $0.numberOfLines = 0
         }
 
-        buttonStackView.do {
+        _buttonStackView.do {
             $0.axis = .horizontal
             $0.spacing = 12
             $0.distribution = .fillEqually
@@ -78,32 +81,32 @@ private extension AlertView {
 
     func setHierarchy() {
         self.addSubviews(_contentView)
-        _contentView.addSubviews(titleLabel, subTitleLabel, buttonStackView)
-        buttonStackView.addArrangedSubviews(_cancelButton, _confirmButton)
+        _contentView.addSubviews(_titleLabel, _subTitleLabel, _buttonStackView)
+        _buttonStackView.addArrangedSubviews(_cancelButton, _confirmButton)
     }
 
     func setConstraints() {
-        _contentView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.directionalHorizontalEdges.equalToSuperview().inset(20)
+        _contentView.snp.makeConstraints { 
+            $0.centerY.equalToSuperview()
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
 
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(type.titleTopPadding)
-            make.directionalHorizontalEdges.equalToSuperview()
-            make.height.equalTo(35)
+        _titleLabel.snp.makeConstraints { 
+            $0.top.equalToSuperview().inset(type.titleTopPadding)
+            $0.directionalHorizontalEdges.equalToSuperview()
+            $0.height.equalTo(35)
         }
 
-        subTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.directionalHorizontalEdges.equalToSuperview()
+        _subTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(_titleLabel.snp.bottom).offset(4)
+            $0.directionalHorizontalEdges.equalToSuperview()
         }
 
-        buttonStackView.snp.makeConstraints { make in
-            make.top.equalTo(subTitleLabel.snp.bottom).offset(24)
-            make.directionalHorizontalEdges.equalToSuperview().inset(16)
-            make.height.equalTo(43)
-            make.bottom.equalToSuperview().inset(20)
+        _buttonStackView.snp.makeConstraints {
+            $0.top.equalTo(_subTitleLabel.snp.bottom).offset(24)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(43)
+            $0.bottom.equalToSuperview().inset(20)
         }
     }
 }

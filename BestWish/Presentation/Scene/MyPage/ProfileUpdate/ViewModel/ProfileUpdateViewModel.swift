@@ -5,14 +5,13 @@
 //  Created by 이수현 on 6/10/25.
 //
 
-import RxSwift
 import RxRelay
+import RxSwift
 
 // 프로필 업데이트 저장, 프로필 불러오기, 프로필 선택
 final class ProfileUpdateViewModel: ViewModel {
-    private let disposeBag = DisposeBag()
-    private let useCase: UserInfoUseCase
 
+    // MARK: - Action
     enum Action {
         case getUserInfo
         case updateProfileImageCode(Int)
@@ -20,6 +19,7 @@ final class ProfileUpdateViewModel: ViewModel {
         case saveUserInfo
     }
 
+    // MARK: - State
     struct State {
         let userInfo: Observable<UserInfoModel?>
         let isValidNickname: Observable<Bool>
@@ -27,15 +27,22 @@ final class ProfileUpdateViewModel: ViewModel {
         let error: Observable<AppError>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Public Properties
     var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Properties
+    private let _action = PublishSubject<Action>()
 
     private let _userInfo = BehaviorRelay<UserInfoModel?>(value: nil)
     private let _isValidNickname = BehaviorRelay<Bool>(value: true)
     private let _completedSave = PublishSubject<Void>()
     private let _error = PublishSubject<AppError>()
-    let state: State
 
+    private let useCase: UserInfoUseCase
+    private let disposeBag = DisposeBag()
+
+    // MARK: - Initializer
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
         state = State(

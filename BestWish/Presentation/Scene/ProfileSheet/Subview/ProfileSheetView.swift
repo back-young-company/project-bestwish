@@ -7,13 +7,16 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
 final class ProfileSheetView: UIView {
-    private let titleLabel = UILabel()
-    private let completeButton = AppButton(type: .complete, fontSize: 12)
-    private let layout = UICollectionViewFlowLayout()
-    private lazy var collectionView = UICollectionView(
+    private let _titleLabel = UILabel()
+    private let _completeButton = AppButton(type: .complete, fontSize: 12)
+    private let _layout = UICollectionViewFlowLayout()
+    private lazy var _collectionView = UICollectionView(
         frame: .zero,
-        collectionViewLayout: layout
+        collectionViewLayout: _layout
     )
 
     override init(frame: CGRect) {
@@ -27,8 +30,8 @@ final class ProfileSheetView: UIView {
         fatalError()
     }
 
-    var getCompleteButton: AppButton { completeButton }
-    var getCollectionView: UICollectionView { collectionView }
+    var completeButton: AppButton { _completeButton }
+    var collectionView: UICollectionView { _collectionView }
 }
 
 private extension ProfileSheetView {
@@ -40,13 +43,13 @@ private extension ProfileSheetView {
 
     func setAttributes() {
         self.backgroundColor = .gray0
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = "프로필 이미지"
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 16)
         }
 
-        layout.do {
+        _layout.do {
             $0.scrollDirection = .horizontal
             $0.minimumInteritemSpacing = 12
             $0.sectionInset = .init(top: 0, left: 20, bottom: 0, right: 20)
@@ -56,7 +59,7 @@ private extension ProfileSheetView {
             )
         }
 
-        collectionView.do {
+        _collectionView.do {
             $0.register(ProfileSheetCell.self, forCellWithReuseIdentifier: ProfileSheetCell.identifier)
             $0.showsVerticalScrollIndicator = false
             $0.showsHorizontalScrollIndicator = false
@@ -66,25 +69,25 @@ private extension ProfileSheetView {
     }
 
     func setHierarchy() {
-        self.addSubviews(titleLabel, completeButton, collectionView)
+        self.addSubviews(_titleLabel, _completeButton, _collectionView)
     }
 
     func setConstraints() {
-        titleLabel.snp.makeConstraints { make in
+        _titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(23.5)
             make.leading.equalToSuperview().inset(20)
-            make.trailing.equalTo(completeButton)
+            make.trailing.equalTo(_completeButton)
         }
 
-        completeButton.snp.makeConstraints { make in
-            make.centerY.equalTo(titleLabel)
+        _completeButton.snp.makeConstraints { make in
+            make.centerY.equalTo(_titleLabel)
             make.trailing.equalToSuperview().inset(20)
             make.width.equalTo(CGFloat(48).fitWidth)
             make.height.equalTo(CGFloat(26).fitHeight)
         }
 
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(CGFloat(23.5).fitHeight)
+        _collectionView.snp.makeConstraints { make in
+            make.top.equalTo(_titleLabel.snp.bottom).offset(CGFloat(23.5).fitHeight)
             make.height.equalTo(CGFloat(96.5).fitHeight)
             make.directionalHorizontalEdges.equalToSuperview()
         }

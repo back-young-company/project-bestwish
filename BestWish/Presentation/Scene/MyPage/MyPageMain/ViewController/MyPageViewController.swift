@@ -5,11 +5,12 @@
 //  Created by 이수현 on 6/9/25.
 //
 
+import MessageUI
 import UIKit
-import RxSwift
+
 import RxCocoa
 import RxDataSources
-import MessageUI
+import RxSwift
 
 final class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
@@ -19,7 +20,7 @@ final class MyPageViewController: UIViewController {
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {
             case .basic(let type), .seeMore(let type):
-                guard let cell = self.myPageView.getTableView.dequeueReusableCell(
+                guard let cell = self.myPageView.tableView.dequeueReusableCell(
                     withIdentifier: MyPageCell.identifier,
                     for: indexPath
                 ) as? MyPageCell else {
@@ -66,7 +67,7 @@ final class MyPageViewController: UIViewController {
     }
 
     private func bindView() {
-        myPageView.getTableView.rx.itemSelected
+        myPageView.tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
@@ -92,7 +93,7 @@ final class MyPageViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.sections
-            .bind(to: myPageView.getTableView.rx.items(dataSource: dataSource))
+            .bind(to: myPageView.tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
         viewModel.state.userInfo
@@ -119,9 +120,9 @@ final class MyPageViewController: UIViewController {
         let header = MyPageHeaderView(frame: frame)
 
         header.configure(user: userInfo)
-        myPageView.getTableView.tableHeaderView = header
+        myPageView.tableView.tableHeaderView = header
 
-        header.getSeeMoreButton.rx.tap
+        header.seeMoreButton.rx.tap
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()

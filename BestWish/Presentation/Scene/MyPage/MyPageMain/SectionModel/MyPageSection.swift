@@ -5,8 +5,9 @@
 //  Created by 이수현 on 6/9/25.
 //
 
-import RxDataSources
 import Foundation
+
+import RxDataSources
 
 //MARK: SectionModelType - RxDataSources
 

@@ -7,13 +7,16 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
 final class MyPageRowView: UIStackView {
     private let type: StackViewType
     private let title: String
     private let subTitle: String
 
-    private let titleLabel = UILabel()
-    private let arrowButton = UIButton()
+    private let _titleLabel = UILabel()
+    private let _arrowButton = UIButton()
 
     init(type: StackViewType, title: String, subTitle: String = "") {
         self.type = type
@@ -31,10 +34,10 @@ final class MyPageRowView: UIStackView {
     }
 
     func configure(title: String) {
-        titleLabel.text = title
+        _titleLabel.text = title
     }
 
-    var getArrowButton: UIButton { arrowButton }
+    var arrowButton: UIButton { _arrowButton }
 }
 
 private extension MyPageRowView {
@@ -48,14 +51,14 @@ private extension MyPageRowView {
         self.axis = .horizontal
         self.distribution = .fill
 
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = title
             $0.textColor = type.titleColor
             $0.font = type.titleFont
             $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
         }
 
-        arrowButton.do {
+        _arrowButton.do {
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .gray200
             config.attributedTitle = AttributedString(subTitle, attributes: AttributeContainer([
@@ -76,11 +79,11 @@ private extension MyPageRowView {
     }
 
     func setHierarchy() {
-        self.addArrangedSubviews(titleLabel, arrowButton)
+        self.addArrangedSubviews(_titleLabel, _arrowButton)
     }
 
     func setConstraints() {
-        titleLabel.snp.makeConstraints { make in
+        _titleLabel.snp.makeConstraints { make in
             make.height.equalTo(43)
         }
     }

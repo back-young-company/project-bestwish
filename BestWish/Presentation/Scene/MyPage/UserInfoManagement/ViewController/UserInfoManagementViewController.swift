@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import RxSwift
+
 import RxCocoa
+import RxSwift
 
 final class UserInfoManagementViewController: UIViewController {
     private let managementView = UserInfoManagementView()
@@ -43,13 +44,13 @@ final class UserInfoManagementViewController: UIViewController {
     }
 
     private func bindView() {
-        managementView.getUserInfoArrowButton.rx.tap
+        managementView.userInfoArrowButton.rx.tap
             .bind(with: self) { owner, _ in
                 let nextVC = DIContainer.shared.makeUserInfoUpdateViewController()
                 owner.navigationController?.pushViewController(nextVC, animated: true)
             }.disposed(by: disposeBag)
 
-        managementView.getWithdrawButton.rx.tap
+        managementView.withdrawButton.rx.tap
             .bind(with: self) { owner, _ in
                 AlertBuilder(baseViewController: self, type: .withdraw) {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {

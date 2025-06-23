@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import RxSwift
+
 import RxCocoa
+import RxSwift
 
 final class AlertViewController: UIViewController {
     private let type: AlertView.AlertType

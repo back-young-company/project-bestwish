@@ -6,8 +6,9 @@
 //
 
 import Foundation
-import RxSwift
+
 import RxRelay
+import RxSwift
 
 final class UserInfoUpdateViewModel: ViewModel {
     private let disposeBag = DisposeBag()

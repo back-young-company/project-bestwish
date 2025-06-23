@@ -5,8 +5,8 @@
 //  Created by 이수현 on 6/9/25.
 //
 
-import RxSwift
 import RxRelay
+import RxSwift
 
 final class MyPageViewModel: ViewModel {
     private let userInfoUseCase: UserInfoUseCase
