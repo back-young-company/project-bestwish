@@ -16,15 +16,21 @@ extension SupabaseOAuthManager {
             return nil
         }
         do {
-            let session = try await client.auth.signInWithOAuth(provider: Provider.kakao, redirectTo: redirectURL) { session in
+            let session = try await client.auth.signInWithOAuth(provider: Provider.kakao, redirectTo: redirectURL) { [weak self] session in
+                guard let self else { return }
+
+                self.kakaoAuthSession = session
+                session.presentationContextProvider = self
                 session.prefersEphemeralWebBrowserSession = true
             }
+            kakaoAuthSession = nil
             return session
         } catch {
+            kakaoAuthSession?.cancel()
+            kakaoAuthSession = nil
             print("error: \(error.localizedDescription)")
+            return nil
         }
-
-        return nil
     }
 
     func unlinkKakaoAccount(_ token: String) async throws {

@@ -16,9 +16,9 @@ final class SupabaseOAuthManager: NSObject {
 
     // actor KeyChainManager 인스턴스
     public let keychain = KeyChainManager()
-
     public var continuation: CheckedContinuation<(String, Supabase.Session), Error>?
     public weak var presentationWindow: UIWindow?
+    public var kakaoAuthSession: ASWebAuthenticationSession?
     public var currentNonce: String?
 
     let client = SupabaseClient(
@@ -190,5 +190,14 @@ extension SupabaseOAuthManager {
     enum SocialType {
         case kakao
         case apple
+    }
+}
+
+extension SupabaseOAuthManager: ASWebAuthenticationPresentationContextProviding, ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return presentationWindow ?? UIWindow()
+    }
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return presentationWindow ?? UIWindow()
     }
 }
