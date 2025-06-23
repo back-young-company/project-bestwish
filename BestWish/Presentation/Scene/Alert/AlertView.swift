@@ -9,23 +9,23 @@ import UIKit
 import RxSwift
 
 final class AlertView: UIView {
-    private let disposeBag = DisposeBag()
-    private let _dismiss = PublishSubject<Void>()
-    var dismiss: Observable<Void> { _dismiss.asObservable() }
-
     private let type: AlertType
 
-    private let alertView = UIView()
+    private let _contentView = UIView()
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
     private let buttonStackView = UIStackView()
-    private let cancelButton: AppButton
-    let confirmButton: AppButton
+    private let _cancelButton: AppButton
+    private let _confirmButton: AppButton
+
+    var contentView: UIView { _contentView }
+    var cancelButton: AppButton { _cancelButton }
+    var confirmButton: AppButton { _confirmButton }
 
     init(type: AlertType) {
         self.type = type
-        cancelButton = AppButton(type: type.cancelButtonType, fontSize: 16)
-        confirmButton = AppButton(type: type.confirmButtonType, fontSize: 16)
+        _cancelButton = AppButton(type: type.cancelButtonType, fontSize: 16)
+        _confirmButton = AppButton(type: type.confirmButtonType, fontSize: 16)
 
         super.init(frame: .zero)
 
@@ -43,13 +43,12 @@ private extension AlertView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setBindings()
     }
 
     func setAttributes() {
         self.backgroundColor = .black.withAlphaComponent(0.5)
 
-        alertView.do {
+        _contentView.do {
             $0.backgroundColor = .gray0
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
@@ -78,13 +77,13 @@ private extension AlertView {
     }
 
     func setHierarchy() {
-        self.addSubviews(alertView)
-        alertView.addSubviews(titleLabel, subTitleLabel, buttonStackView)
-        buttonStackView.addArrangedSubviews(cancelButton, confirmButton)
+        self.addSubviews(_contentView)
+        _contentView.addSubviews(titleLabel, subTitleLabel, buttonStackView)
+        buttonStackView.addArrangedSubviews(_cancelButton, _confirmButton)
     }
 
     func setConstraints() {
-        alertView.snp.makeConstraints { make in
+        _contentView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
@@ -106,25 +105,5 @@ private extension AlertView {
             make.height.equalTo(43)
             make.bottom.equalToSuperview().inset(20)
         }
-    }
-
-    func setBindings() {
-        let tapGesture = UITapGestureRecognizer()
-        tapGesture.delegate = self
-        self.addGestureRecognizer(tapGesture)
-
-        Observable.merge(
-            tapGesture.rx.event.map { _ in },
-            cancelButton.rx.tap.map { }
-        )
-        .subscribe(_dismiss)
-        .disposed(by: disposeBag)
-    }
-}
-
-extension AlertView: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        let touchLocation = touch.location(in: self)
-        return !alertView.frame.contains(touchLocation)
     }
 }
