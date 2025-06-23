@@ -7,12 +7,13 @@
 
 import UIKit
 
-// MARK: - CoreML 유즈케이스
+/// CoreML 유즈케이스
 protocol CoreMLUseCase {
+    /// 라벨 데이터 추출
     func fetchLabelDataModel(image: UIImage) throws -> [LabelData]
 }
 
-// MARK: - CoreML 유즈케이스 구현체
+/// CoreML 유즈케이스 구현체
 final class CoreMLUserCaseImpl: CoreMLUseCase {
     private let repository: CoreMLRepository
     
@@ -20,6 +21,7 @@ final class CoreMLUserCaseImpl: CoreMLUseCase {
         self.repository = repository
     }
     
+    /// 라벨 데이터 추출
     func fetchLabelDataModel(image: UIImage) throws -> [LabelData] {
         return try repository.fetchCoreMLLabelData(image: image)
     }

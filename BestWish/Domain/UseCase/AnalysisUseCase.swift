@@ -5,17 +5,23 @@
 //  Created by Quarang on 6/17/25.
 //
 
-// MARK: - 이미지 분석 유즈 케이스
+/// 이미지 분석 유즈 케이스
 protocol AnalysisUseCase {
+    /// 키워드 추가 이벤트
     func addKeyword(_ keyword: String, models: [AnalysisSectionModel]) -> [AnalysisSectionModel]
+    /// 키워드 삭제 이벤트
     func deleteKeyword(_ keyword: String, models: [AnalysisSectionModel]) -> [AnalysisSectionModel]
+    /// 플랫폼 선택 이벤트
     func selectePlatform(_ platform: Platform, models: [AnalysisSectionModel]) -> [AnalysisSectionModel]
+    /// 초기화
     func resetKeyword(models: [AnalysisSectionModel]) -> [AnalysisSectionModel]
+    /// 플랫폼 이동
     func movePlatform(platform: Platform?) throws -> String
+    /// 속성 버튼 세팅
     func setAttributeButton(_ item: AnalysisItem, keyword: String, selectedPlatform: Platform?, isSelected: Bool) -> AnalysisItem
 }
 
-// MARK: - 이미지 분석 유즈 케이스 구현체
+/// 이미지 분석 유즈 케이스 구현체
 final class AnalysisUseCaseImpl: AnalysisUseCase {
     
     /// 키워드 추가 이벤트
