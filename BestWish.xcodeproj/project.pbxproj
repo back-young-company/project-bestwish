@@ -96,6 +96,7 @@
 				Data/Network/DTO/ProductDTO.swift,
 				Data/Network/DTO/ProductMetadataDTO.swift,
 				Data/Network/DTO/UserDTO.swift,
+				Data/Network/Error/CoreMLError.swift,
 				Data/Network/Error/MappingError.swift,
 				Data/Network/Error/ShareExtensionError.swift,
 				Data/Network/Error/SupabaseError.swift,
