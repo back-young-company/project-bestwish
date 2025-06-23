@@ -29,7 +29,7 @@ final class ProfileUpdateView: UIView {
         fatalError()
     }
 
-    func configure(user: UserInfoDisplay) {
+    func configure(user: UserInfoModel) {
         emailValueLabel.text = user.email
         profileImageView.image = UIImage(named: user.profileImageName)
         nicknameTextField.text = user.nickname

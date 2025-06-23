@@ -30,11 +30,11 @@ final class OnboardingViewModel: ViewModel {
         case inputNickname(String)
         case nextPage
         case prevPage
-        case uploadUserInfo(UserInfoDisplay)
+        case uploadUserInfo(UserInfoModel)
     }
 
     struct State {
-        let userInfo: Observable<UserInfoDisplay?>
+        let userInfo: Observable<UserInfoModel?>
         let isValidNickname: Observable<Bool?>
         let currentPage: Observable<Int>
         let showPolicySheet: Observable<Void>
@@ -43,7 +43,7 @@ final class OnboardingViewModel: ViewModel {
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
 
-    private let _userInfo = BehaviorRelay<UserInfoDisplay?> (value: nil)
+    private let _userInfo = BehaviorRelay<UserInfoModel?> (value: nil)
     private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
     private let _isValidNickname = BehaviorRelay<Bool?>(value: nil)
     private let _showPolicySheet = PublishRelay<Void>()
@@ -69,7 +69,7 @@ final class OnboardingViewModel: ViewModel {
             case .viewDidAppear:
                 owner.updateShowPolicyFlag(with: owner.showPolicyFlag)
             case .createUserInfo:
-                let userInfo = owner.createUserInfoDisplay()
+                let userInfo = owner.createUserInfoModel()
                 self._userInfo.accept(userInfo)
             case .selectedProfileIndex(let index):
                 owner.updateProfileImage(with: index)
@@ -102,11 +102,11 @@ final class OnboardingViewModel: ViewModel {
         }
     }
 
-    private func createUserInfoDisplay() -> UserInfoDisplay {
-        return UserInfoDisplay(profileImageCode: 0)
+    private func createUserInfoModel() -> UserInfoModel {
+        return UserInfoModel(profileImageCode: 0)
     }
 
-    private func updateUserInfo(with userInfo: UserInfoDisplay) async {
+    private func updateUserInfo(with userInfo: UserInfoModel) async {
         do {
             try await self.useCase.updateUserInfo(
                 profileImageCode: userInfo.profileImageCode,

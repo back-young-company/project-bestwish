@@ -178,9 +178,9 @@ private extension OnboardingViewController {
         // TODO: 메인화면으로 이동해야함.
         secondView.completeButton.rx.tap
             .withLatestFrom(viewModel.state.userInfo)
-            .subscribe(with: self) { owner, userInfoDisplay in
-            guard let userInfoDisplay else { return }
-            owner.viewModel.action.onNext(.uploadUserInfo(userInfoDisplay))
+            .subscribe(with: self) { owner, UserInfoModel in
+            guard let UserInfoModel else { return }
+            owner.viewModel.action.onNext(.uploadUserInfo(UserInfoModel))
         }
             .disposed(by: disposeBag)
     }

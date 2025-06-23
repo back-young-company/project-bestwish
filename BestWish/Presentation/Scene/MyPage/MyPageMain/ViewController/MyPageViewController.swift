@@ -97,8 +97,8 @@ final class MyPageViewController: UIViewController {
 
         viewModel.state.userInfo
             .observe(on: MainScheduler.instance)
-            .bind(with: self, onNext: { owner, UserInfoDisplay in
-                owner.setHeaderView(userInfo: UserInfoDisplay)
+            .bind(with: self, onNext: { owner, UserInfoModel in
+                owner.setHeaderView(userInfo: UserInfoModel)
             })
             .disposed(by: disposeBag)
 
@@ -109,7 +109,7 @@ final class MyPageViewController: UIViewController {
             }.disposed(by: disposeBag)
     }
 
-    private func setHeaderView(userInfo: UserInfoDisplay) {
+    private func setHeaderView(userInfo: UserInfoModel) {
         let frame = CGRect(
             x: 0,
             y: 0,

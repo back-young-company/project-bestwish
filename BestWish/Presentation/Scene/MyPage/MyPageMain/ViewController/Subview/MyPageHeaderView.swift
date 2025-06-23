@@ -26,7 +26,7 @@ final class MyPageHeaderView: UITableViewHeaderFooterView, ReuseIdentifier {
         fatalError()
     }
 
-    func configure(user: UserInfoDisplay) {
+    func configure(user: UserInfoModel) {
         profileImageView.image = .init(named: user.profileImageName)
         nicknameLabel.text = user.nickname
         emailLabel.text = user.email

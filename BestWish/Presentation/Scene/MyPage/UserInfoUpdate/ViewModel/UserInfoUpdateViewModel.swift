@@ -21,7 +21,7 @@ final class UserInfoUpdateViewModel: ViewModel {
     }
 
     struct State {
-        let userInfo: Observable<UserInfoDisplay?>
+        let userInfo: Observable<UserInfoModel?>
         let completedSave: Observable<Void>
         let error: Observable<AppError>
     }
@@ -30,7 +30,7 @@ final class UserInfoUpdateViewModel: ViewModel {
     var action: AnyObserver<Action> { _action.asObserver() }
 
     private let _error = PublishSubject<AppError>()
-    private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
+    private let _userInfo = BehaviorRelay<UserInfoModel?>(value: nil)
     private let _completedSave = PublishSubject<Void>()
     let state: State
 
@@ -64,8 +64,8 @@ final class UserInfoUpdateViewModel: ViewModel {
         Task {
             do {
                 let user = try await useCase.getUserInfo()
-                let userInfoDisplay = convertUserInfoDisplay(from: user)
-                _userInfo.accept(userInfoDisplay)
+                let UserInfoModel = convertUserInfoModel(from: user)
+                _userInfo.accept(UserInfoModel)
             } catch {
                 handleError(error)
             }
@@ -101,8 +101,8 @@ final class UserInfoUpdateViewModel: ViewModel {
         }
     }
 
-    private func convertUserInfoDisplay(from user: User) -> UserInfoDisplay {
-        UserInfoDisplay(
+    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+        UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,
             nickname: user.nickname,

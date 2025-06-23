@@ -101,8 +101,8 @@ final class DIContainer {
         return ImageEditViewController(image: image, viewModel: viewModel)
     }
     
+    func makeAnalysisViewController(labelData: [LabelDataModel]) -> AnalaysisViewController {
     /// 이미지 분석 뷰 컨트롤러 생성
-    func makeAnalysisViewController(labelData: [LabelDataDisplay]) -> AnalaysisViewController {
         let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
         return AnalaysisViewController(viewModel: viewModel)
     }

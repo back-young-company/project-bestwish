@@ -50,11 +50,11 @@ final class AnalysisViewModel: ViewModel {
     private let _deepLinkError = PublishRelay<PlatformError>()
     private let _buttonActivation = BehaviorRelay(value: false)
     
-    private let labelData: [LabelDataDisplay]
+    private let labelData: [LabelDataModel]
     private let analysisUseCase: AnalysisUseCase
     private let disposeBag = DisposeBag()
     
-    init(analysisUseCase: AnalysisUseCase, labelData: [LabelDataDisplay]) {
+    init(analysisUseCase: AnalysisUseCase, labelData: [LabelDataModel]) {
         self.analysisUseCase = analysisUseCase
         self.labelData = labelData
         // 불러온 모델 데이터 ViewModel이 실아 있을 동안 전체 저장

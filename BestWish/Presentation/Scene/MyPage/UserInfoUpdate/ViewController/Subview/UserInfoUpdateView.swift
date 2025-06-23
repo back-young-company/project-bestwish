@@ -24,7 +24,7 @@ final class UserInfoUpdateView: UIView {
         fatalError()
     }
 
-    func configure(userInfo: UserInfoDisplay) {
+    func configure(userInfo: UserInfoModel) {
         genderSelection.configure(genderIndex: userInfo.gender)
         birthSelection.configure(title: userInfo.birthString)
     }

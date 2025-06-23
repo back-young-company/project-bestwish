@@ -1,5 +1,5 @@
 //
-//  UserInfoDisplay.swift
+//  UserInfoModel.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/12/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserInfoDisplay: Equatable {
+struct UserInfoModel: Equatable {
     var profileImageCode: Int
     var profileImageName: String {
         ProfileType(rawValue: profileImageCode)?.name ?? ProfileType.profileA.name
@@ -26,7 +26,7 @@ struct UserInfoDisplay: Equatable {
     }
 }
 
-extension UserInfoDisplay {
+extension UserInfoModel {
     mutating func updateprofileImageCode(to index: Int) {
         profileImageCode = index
     }

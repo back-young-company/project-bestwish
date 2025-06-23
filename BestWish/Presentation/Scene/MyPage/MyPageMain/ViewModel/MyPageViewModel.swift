@@ -34,7 +34,7 @@ final class MyPageViewModel: ViewModel {
                 }
             }
         )
-        let userInfo: Observable<UserInfoDisplay>
+        let userInfo: Observable<UserInfoModel>
         let error: Observable<AppError>
     }
 
@@ -42,7 +42,7 @@ final class MyPageViewModel: ViewModel {
     var action: AnyObserver<Action> { _action.asObserver() }
 
     private let _error = PublishSubject<AppError>()
-    private let _userInfo = PublishSubject<UserInfoDisplay>()
+    private let _userInfo = PublishSubject<UserInfoModel>()
     let state: State
 
     init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
@@ -70,8 +70,8 @@ final class MyPageViewModel: ViewModel {
         Task {
             do {
                 let user = try await userInfoUseCase.getUserInfo()
-                let userInfoDisplay = convertUserInfoDisplay(from: user)
-                _userInfo.onNext(userInfoDisplay)
+                let UserInfoModel = convertUserInfoModel(from: user)
+                _userInfo.onNext(UserInfoModel)
             } catch {
                 handleError(error)
             }
@@ -88,8 +88,8 @@ final class MyPageViewModel: ViewModel {
         }
     }
 
-    private func convertUserInfoDisplay(from user: User) -> UserInfoDisplay {
-        UserInfoDisplay(
+    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+        UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,
             nickname: user.nickname
