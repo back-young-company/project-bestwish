@@ -5,9 +5,10 @@
 //  Created by yimkeul on 6/7/25.
 //
 
-import Foundation
-import Supabase
 import AuthenticationServices
+import Foundation
+
+import Supabase
 
 final class SupabaseOAuthManager: NSObject {
 
@@ -26,40 +27,45 @@ final class SupabaseOAuthManager: NSObject {
         supabaseKey: Bundle.main.apiKey
     )
 
-    // MARK: – Supabase 토근 확인 및 세션 연결
+    /// Supabase 토근 확인 및 세션 연결
     func checkLoginState() async -> Bool {
         // nonisolated read 이므로 await 없이 즉시 반환
         guard
             let accessToken = keychain.read(token: .init(service: .access)),
             let refreshToken = keychain.read(token: .init(service: .refresh))
             else {
+            NSLog("KeyChain 읽어오기 실패")
             return false
         }
 
+        let session: Supabase.Session
+
         do {
-            let session = try await client.auth.setSession(
+            session = try await client.auth.setSession(
                 accessToken: accessToken,
                 refreshToken: refreshToken
             )
 
-            // 백그라운드에서 저장/삭제 작업은 detached Task로
             Task.detached(priority: .utility) {
                 await self.keychain.saveAllToken(session: session)
-                print("토큰 로그인 세션 유지 성공")
+                NSLog("토큰 로그인 세션 유지 성공")
             }
             return true
         } catch {
             Task.detached(priority: .utility) {
-                print("토큰 로그인 세션 복원 실패:", error.localizedDescription)
+                NSLog("토큰 로그인 세션 복원 실패:", error.localizedDescription)
                 await self.keychain.deleteAllToken()
             }
             return false
         }
-    }
-    // MARK: Supabase에서 UserInfo 테이블의 role 값 확인 (USER : GUEST = true : false)
-    private func isUser() async throws -> Bool {
-        struct Role: Codable { let role: String }
 
+    }
+
+
+    /// 온보딩 필요 유무 확인
+    /// Supabase에서 UserInfo 테이블의 role 값 확인 (USER : GUEST = true : false)
+    func isNeedOnboarding() async -> Bool {
+        struct Role: Codable { let role: String }
         do {
             let roles: [Role] = try await client
                 .from("UserInfo")
@@ -67,31 +73,31 @@ final class SupabaseOAuthManager: NSObject {
                 .execute()
                 .value // [Role]
 
-            guard let role = roles.map(\.role).first else {
-                return false
-            }
+            let role = roles.map(\.role).first
 
-            print("roles:", roles.map(\.role)) // ["USER"]
-
+            NSLog("roles: \(roles.map(\.role))") // ["USER"]
             return role == "USER"
         } catch {
-            throw SupabaseError.selectError(error)
+            NSLog("Supabase Request User Role Failed")
+            return false
         }
-    }
-    // MARK: - 온보딩 필요한지 확인
-    /// singleton으로 sceneDelegate에서도 사용
-    func isNeedOnboarding() async throws {
-        let state = try await isUser()
-        await MainActor.run {
-            if state {
-                SampleViewChangeManager.shared.goMainView()
-            } else {
-                SampleViewChangeManager.shared.goOnboardingView()
-            }
-        }
+
     }
 
-    // MARK: 소셜 로그인 OAUTH 인증
+    /// 온보딩 필요한지 확인
+    /// singleton으로 sceneDelegate에서도 사용
+//    func isNeedOnboarding() async -> Bool {
+//        let state = await isUser()
+//        await MainActor.run {
+//            if state {
+//                SampleViewChangeManager.shared.goMainView()
+//            } else {
+//                SampleViewChangeManager.shared.goOnboardingView()
+//            }
+//        }
+//    }
+
+    /// 소셜 로그인 OAUTH 인증
     private func oauthSession(type: SocialType) async throws -> Session? {
         switch type {
         case .apple:
@@ -104,41 +110,44 @@ final class SupabaseOAuthManager: NSObject {
         }
     }
 
-    // MARK: – 로그인
-    func signIn(type: SocialType) {
-        Task {
-            guard let session = try await oauthSession(type: type) else { return }
-            await keychain.saveAllToken(session: session)
-            try await isNeedOnboarding()
+    /// 로그인
+    func signIn(type: SocialType) async throws {
+        guard let session = try await oauthSession(type: type) else { return }
+        await keychain.saveAllToken(session: session)
+
+        // TODO: - 화면이동을 다른곳에서 하기
+        let isNeedOnboarding = await isNeedOnboarding()
+        if isNeedOnboarding {
+            SampleViewChangeManager.shared.goMainView()
+        } else {
+            SampleViewChangeManager.shared.goOnboardingView()
         }
+
     }
 
-// MARK: – 로그아웃
+    /// 로그아웃
     func signOut() async throws {
         do {
             try await client.auth.signOut()
-            print("로그아웃 요청 보냄")
+            // 로그아웃 후 키체인 삭제
+            Task.detached(priority: .utility) {
+                await self.keychain.deleteAllToken()
+            }
+            // TODO: - 화면이동을 다른곳에서 하기
+            SampleViewChangeManager.shared.goLoginView()
         } catch {
-            print("Supabase signOut 실패:", error.localizedDescription)
+            throw AuthError.signOutFailed(error)
         }
-
-        // 로그아웃 후 키체인 삭제
-        Task.detached(priority: .utility) {
-            await self.keychain.deleteAllToken()
-        }
-
-        SampleViewChangeManager.shared.goLoginView()
     }
 
-// MARK: – 회원 탈퇴
-    func leaveService() async throws {
+    /// 회원 탈퇴
+    func withdraw() async throws {
         let session = try await client.auth.session
         guard
             let rawProvider = session.user.appMetadata["provider"]?.rawValue,
             let socialProvider = Provider(rawValue: rawProvider)
             else {
-            print("지원하지 않는 로그인 방식이거나 provider 정보가 없습니다.")
-            return
+            throw AuthError.missProvider
         }
 
         switch socialProvider {
@@ -146,31 +155,15 @@ final class SupabaseOAuthManager: NSObject {
             guard let session = try await signInKakao(),
                 let providerToken = session.providerToken
                 else { return }
-
-            do {
-                try await unlinkKakaoAccount(providerToken)
-            } catch {
-                print("카카오 계정삭제 실패", error.localizedDescription)
-                return
-            }
-
-            do {
-                _ = try await client.rpc("delete_current_user").execute()
-                try await signOut()
-            } catch {
-                print("supabase User 삭제 실패 :", error.localizedDescription)
-            }
+            try await unlinkKakaoAccount(providerToken)
+            try await client.rpc("delete_current_user").execute()
+            try await signOut()
 
         case .apple:
             let (token, clientSecret) = try await getAppleAccessToken()
             try await revokeAccount(token, clientSecret)
-
-            do {
-                _ = try await client.rpc("delete_current_user").execute()
-                try await signOut()
-            } catch {
-                print("supabase User 삭제 실패 :", error.localizedDescription)
-            }
+            try await client.rpc("delete_current_user").execute()
+            try await signOut()
 
         default:
             break
@@ -181,12 +174,15 @@ final class SupabaseOAuthManager: NSObject {
 }
 
 extension SupabaseOAuthManager {
+    /// 소셜로그인 타입
     enum SocialType {
         case kakao
         case apple
     }
 }
 
+
+// MARK: - Login할때 하단으로 부터 웹뷰 제어
 extension SupabaseOAuthManager: ASWebAuthenticationPresentationContextProviding, ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return presentationWindow ?? UIWindow()

@@ -22,6 +22,6 @@ final class AccountRepositoryImpl: AccountRepository {
 
     /// 회원탈퇴
     func withdraw() async throws {
-        try await manager.leaveService()
+        try await manager.withdraw()
     }
 }

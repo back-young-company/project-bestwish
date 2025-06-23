@@ -54,7 +54,7 @@ extension SupabaseOAuthManager {
                     let statusCode = response.response?.statusCode ?? -1
                     let bodyString = response.data.flatMap { String(data: $0, encoding: .utf8) } ?? "응답 바디 없음"
                     NSLog("리프레시 토큰 리보크 실패. HTTP \(statusCode), 응답: \(bodyString), 오류: \(error.localizedDescription)")
-                    continuation.resume(throwing: AuthError.withDrawFailed(error))
+                    continuation.resume(throwing: AuthError.withdrawFailed(error))
                 }
             }
         }

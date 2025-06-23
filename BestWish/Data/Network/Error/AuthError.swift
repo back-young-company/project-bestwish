@@ -10,13 +10,15 @@ import Foundation
 enum AuthError: AppErrorProtocol {
     case kakaoSignInFailed(Error)
     case appleSignInFailed(Error)
+    case signOutFailed(Error)
     case appleRequestAccessTokenFailed(Error)
     case encodeParsingTokenError(String)
     case supabaseRequestSecretCodeFailed(Error)
     case supabaseRequestSecretCodeNil
-    case withDrawFailed(Error)
+    case withdrawFailed(Error)
     case appleDidCompleteFailed
-
+    case setSessionFailed(Error)
+    case missProvider
 }
 
 extension AuthError {
@@ -30,6 +32,8 @@ extension AuthError {
             "Kakao SignIn Error: \(error.localizedDescription)"
         case .appleSignInFailed(let error):
             "Auth Error: \(error.localizedDescription)"
+        case .signOutFailed(let error):
+            "SignOut Error: \(error.localizedDescription)"
         case .appleRequestAccessTokenFailed(let error):
             "Apple Access Token Error: \(error.localizedDescription)"
         case .encodeParsingTokenError(let field):
@@ -38,11 +42,14 @@ extension AuthError {
             "Supabase Request Client Secret Error : \(error.localizedDescription)"
         case .supabaseRequestSecretCodeNil:
             "Supabase Request Client Secret Return Nil"
-        case .withDrawFailed(let error):
-            "WithDraw Error: \(error.localizedDescription)"
+        case .withdrawFailed(let error):
+            "Withdraw Error: \(error.localizedDescription)"
         case .appleDidCompleteFailed:
             "Apple DidCompleted Failed"
-
+        case .setSessionFailed(let error):
+            "Supabase Set Session Failed : \(error.localizedDescription)"
+        case .missProvider:
+            "Missing Provider"
         }
     }
 }

@@ -75,7 +75,7 @@ extension SupabaseOAuthManager {
                     NSLog("애플 회원탈퇴 성공. 상태 코드:", response.response?.statusCode ?? -1)
                     continuation.resume()
                 case .failure(let error):
-                    continuation.resume(throwing: AuthError.withDrawFailed(error))
+                    continuation.resume(throwing: AuthError.withdrawFailed(error))
                 }
             }
         }

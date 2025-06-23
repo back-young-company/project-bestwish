@@ -44,10 +44,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         Task {
             let isLogin = await SupabaseOAuthManager.shared.checkLoginState()
             if isLogin {
-                do {
-                    try await SupabaseOAuthManager.shared.isNeedOnboarding()
-                } catch {
-                    self.showLoginView()
+                let isNeedOnboarding = await SupabaseOAuthManager.shared.isNeedOnboarding()
+                if isNeedOnboarding {
+                    SampleViewChangeManager.shared.goMainView()
+                } else {
+                    SampleViewChangeManager.shared.goOnboardingView()
                 }
             } else {
                 await MainActor.run {

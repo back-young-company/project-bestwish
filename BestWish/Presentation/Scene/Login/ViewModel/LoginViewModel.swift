@@ -32,12 +32,15 @@ final class LoginViewModel: ViewModel {
 
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
-            switch action {
-            case .signInKakao:
-                SupabaseOAuthManager.shared.signIn(type: .kakao)
-            case .signInApple:
-                SupabaseOAuthManager.shared.signIn(type: .apple)
+            Task {
+                switch action {
+                case .signInKakao:
+                   try await SupabaseOAuthManager.shared.signIn(type: .kakao)
+                case .signInApple:
+                    try await SupabaseOAuthManager.shared.signIn(type: .apple)
+                }
             }
+
         }.disposed(by: disposeBag)
     }
 }
