@@ -10,7 +10,7 @@ import UIKit
 final class UserInfoManagementView: UIView {
     private let stackView = VerticalStackView(spacing: 32)
     private let userInfoManagementStackView = VerticalStackView(spacing: 8)
-    private let userInfoManagementTitlelabel = InfoLabel(title: "회원 정보 설정")
+    private let userInfoManagementTitlelabel = GroupTitleLabel(title: "회원 정보 설정")
     private let userInfoHorizontalStackView = MyPageRowView(
         type: .maximum,
         title: "회원 정보",
@@ -18,7 +18,7 @@ final class UserInfoManagementView: UIView {
     )
 
     private let snsInfoStackView = VerticalStackView(spacing: 8)
-    private let snsInfoTitleLabel = InfoLabel(title: "SNS 연결 정보")
+    private let snsInfoTitleLabel = GroupTitleLabel(title: "SNS 연결 정보")
     private let snsInfoHorizontalStackView = MyPageRowView(
         type: .subTitle,
         title: "",

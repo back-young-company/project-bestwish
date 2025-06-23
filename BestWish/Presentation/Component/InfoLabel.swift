@@ -1,5 +1,5 @@
 //
-//  InfoLabel.swift
+//  GroupTitleLabel.swift
 //  BestWish
 //
 //  Created by 이수현 on 6/10/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class InfoLabel: UILabel {
+final class GroupTitleLabel: UILabel {
     init(title: String) {
         super.init(frame: .zero)
 

@@ -28,7 +28,7 @@ final class GenderSelectionView: UIView {
     private let disposeBag = DisposeBag()
 
     private let rootVStackView = VerticalStackView(spacing: 8)
-    private let genderLabel = InfoLabel(title: "성별")
+    private let genderLabel = GroupTitleLabel(title: "성별")
     private let radioHStackView = HorizontalStackView(spacing: 24)
     private let maleButton = RadioButton(title: Gender.male.value)
     private let femaleButton = RadioButton(title: Gender.female.value)

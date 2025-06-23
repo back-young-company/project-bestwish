@@ -14,7 +14,7 @@ final class NicknameInputView: UIView {
     private let disposeBag = DisposeBag()
 
     private let rootVStackView = VerticalStackView(spacing: 12)
-    private let nicknameLabel = InfoLabel(title: "닉네임")
+    private let nicknameLabel = GroupTitleLabel(title: "닉네임")
     let textField = UITextField()
     let cautionLabel = UILabel()
 

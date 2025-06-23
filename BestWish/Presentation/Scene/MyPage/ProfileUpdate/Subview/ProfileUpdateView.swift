@@ -10,10 +10,10 @@ import UIKit
 final class ProfileUpdateView: UIView {
     private let profileImageView = UIImageView()
     private let emailStackView = VerticalStackView(spacing: 12)
-    private let emailLabel = InfoLabel(title: "이메일")
+    private let emailLabel = GroupTitleLabel(title: "이메일")
     private let emailValueLabel = PaddingLabel(top: 0, left: 10, bottom: 0, right: 0)
     private let nicknameStackView = VerticalStackView(spacing: 12)
-    private let nicknameLabel = InfoLabel(title: "닉네임")
+    private let nicknameLabel = GroupTitleLabel(title: "닉네임")
     private let nicknameTextField = UITextField()
     private let confirmChangeButton = AppButton(type: .confirmChange)
     private let cautionLabel = CautionLabel()
