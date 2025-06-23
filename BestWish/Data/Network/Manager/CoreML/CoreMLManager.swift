@@ -9,7 +9,7 @@ import Foundation
 import CoreML
 import UIKit
 
-// MARK: - CoreML 데이터 추출 레포지토리
+/// CoreML 데이터 추출 레포지토리
 final class CoreMLManager {
     /// 라벨 데이터 추출
     func fetchCoreMLLabelData(image: UIImage) throws -> [LabelData] {

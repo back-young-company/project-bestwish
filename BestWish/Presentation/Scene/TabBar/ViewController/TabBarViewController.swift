@@ -6,25 +6,27 @@
 //
 
 import UIKit
-import RxSwift
+
 import RxCocoa
+import RxSwift
 
 /// 커스텀 탭바  클래스
 ///
 /// ```swift
 /// private let tabBar = TabBarViewController(viewControllers: [AVC(), BVC(), CVC()])
 /// ```
-// MARK: - 메인 탭바 컨트롤러
 final class TabBarViewController: UIViewController {
 
     private let viewControllers:[UIViewController]
     private let disposeBag = DisposeBag()
     private let tabBarView = TabBarView()
+    
     private let tabBarMode = BehaviorRelay<TabBarMode>(value: .left)
     private let floatingMode = BehaviorRelay<FloatingMode>(value: .home)
     private let isHiddenTabBar = BehaviorRelay<Bool>(value: false)
 
     private var hasEnteredCameraMode = false
+    
     private var childrenFrame: CGRect {
         var height = UIScreen.main.bounds.height
         if !isHiddenTabBar.value {
@@ -63,9 +65,9 @@ private extension TabBarViewController {
         
         // 탭바 아이템 선택에 따른 이벤트 방출
         Observable.merge(
-            tabBarView.getLeftItemButton.rx.tap.map { TabBarMode.left },
-            tabBarView.getCenterItemButton.rx.tap.map { TabBarMode.center },
-            tabBarView.getRightItemButton.rx.tap.map { TabBarMode.right }
+            tabBarView.leftItemButton.rx.tap.map { TabBarMode.left },
+            tabBarView.centerItemButton.rx.tap.map { TabBarMode.center },
+            tabBarView.rightItemButton.rx.tap.map { TabBarMode.right }
         )
         .subscribe(with: self) { owner, mode in
             owner.tabBarMode.accept(mode)
@@ -110,13 +112,13 @@ private extension TabBarViewController {
     /// 모드에 따른 탭바 이미지 업데이트
     private func updateTabBarImages(for mode: TabBarMode, using floating: FloatingMode) {
         let imageSet = TabBarImageSet(mode: mode, floating: floating)
-        tabBarView.getLeftItemButton.setImage(imageSet.left.normal, for: .normal)
-        tabBarView.getCenterItemButton.setImage(imageSet.center.normal, for: .normal)
-        tabBarView.getRightItemButton.setImage(imageSet.right.normal, for: .normal)
+        tabBarView.leftItemButton.setImage(imageSet.left.normal, for: .normal)
+        tabBarView.centerItemButton.setImage(imageSet.center.normal, for: .normal)
+        tabBarView.rightItemButton.setImage(imageSet.right.normal, for: .normal)
 
-        tabBarView.getLeftItemButton.setImage(imageSet.left.highlight, for: .highlighted)
-        tabBarView.getCenterItemButton.setImage(imageSet.center.highlight, for: .highlighted)
-        tabBarView.getRightItemButton.setImage(imageSet.right.highlight, for: .highlighted)
+        tabBarView.leftItemButton.setImage(imageSet.left.highlight, for: .highlighted)
+        tabBarView.centerItemButton.setImage(imageSet.center.highlight, for: .highlighted)
+        tabBarView.rightItemButton.setImage(imageSet.right.highlight, for: .highlighted)
     }
 
     /// 탭바 아이템 / 플로팅 버튼 선택 시 이벤트
@@ -159,7 +161,7 @@ private extension TabBarViewController {
     func changeChildView(_ index: Int) {
         
         guard viewControllers.count == 3 else {
-            print("탭바 아이템은 반드시 3개가 존재해야 합니다.")
+            NSLog("탭바 아이템은 반드시 3개가 존재해야 합니다.")
             return
         }
         children.forEach {

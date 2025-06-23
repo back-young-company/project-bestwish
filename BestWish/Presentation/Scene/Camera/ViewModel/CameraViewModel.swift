@@ -6,28 +6,34 @@
 //
 
 import AVFoundation
-import RxSwift
-import RxRelay
 import UIKit
 
-// MARK: - 이미지 편집 뷰 모델
+import RxRelay
+import RxSwift
+
+/// 이미지 편집 뷰 모델
 final class CameraViewModel: ViewModel {
     
-    private let disposeBag = DisposeBag()
-
+    // MARK: - Action
     enum Action {
         case viewDidLoad
     }
-
+    
+    // MARK: - State
     struct State {
         let successSetUpCamera: Observable<Void>
     }
-
-    private let _action = PublishSubject<Action>()
+    
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
-
-    private let _successSetUpCamera = PublishSubject<Void>()
     let state: State
+    
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+    
+    private let _successSetUpCamera = PublishSubject<Void>()
+    
+    private let disposeBag = DisposeBag()
 
     init() {
         state = State(successSetUpCamera: _successSetUpCamera.asObserver())
@@ -45,6 +51,7 @@ final class CameraViewModel: ViewModel {
     }
 }
 
+// MARK: - 비즈니스 로직
 private extension CameraViewModel {
     
     /// 카메라 권한 확인 로직 메서드

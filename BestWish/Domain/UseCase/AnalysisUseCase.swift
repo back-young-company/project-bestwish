@@ -62,6 +62,7 @@ final class AnalysisUseCaseImpl: AnalysisUseCase {
         }
     }
     
+    /// 속성 버튼 세팅
     func setAttributeButton(_ item: AnalysisItem, keyword: String = "", selectedPlatform: Platform? = nil, isSelected: Bool = false) -> AnalysisItem {
         switch item {
         case let .attribute(attr, _) where attr == keyword:

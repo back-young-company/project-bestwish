@@ -7,10 +7,12 @@
 
 import UIKit
 
+// MARK: - CoreML 유즈케이스
 protocol CoreMLUseCase {
     func fetchLabelDataModel(image: UIImage) throws -> [LabelData]
 }
 
+// MARK: - CoreML 유즈케이스 구현체
 final class CoreMLUserCaseImpl: CoreMLUseCase {
     private let repository: CoreMLRepository
     

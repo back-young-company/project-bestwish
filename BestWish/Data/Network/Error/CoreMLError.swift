@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - 앱 에러 케이스 선언
+/// 앱 에러 케이스 선언
 enum CoreMLError: AppErrorProtocol {
     case modelLoadingFailed(Error)
 }

@@ -90,6 +90,7 @@ final class DIContainer {
         return OnboardingViewController(viewModel: onboardingViewModel, policyViewModel: policyViewModel)
     }
     
+    /// 카메라 뷰 컨트롤러 생성
     func makeCameraViewController() -> CameraViewController {
         return CameraViewController()
     }
@@ -100,6 +101,7 @@ final class DIContainer {
         return ImageEditViewController(image: image, viewModel: viewModel)
     }
     
+    /// 이미지 분석 뷰 컨트롤러 생성
     func makeAnalysisViewController(labelData: [LabelDataDisplay]) -> AnalaysisViewController {
         let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
         return AnalaysisViewController(viewModel: viewModel)

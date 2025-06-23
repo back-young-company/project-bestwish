@@ -5,29 +5,35 @@
 //  Created by Quarang on 6/11/25.
 //
 
-import RxSwift
-import RxRelay
 import UIKit
 
-// MARK: - 이미지 편집 뷰 모델
+import RxSwift
+import RxRelay
+
+/// 이미지 편집 뷰 모델
 final class ImageEditViewModel: ViewModel {
     
     private let coreMLUseCase: CoreMLUseCase
     private let disposeBag = DisposeBag()
 
+    // MARK: - Action
     enum Action {
         case didTapDoneButton(UIImage)
     }
 
+    // MARK: - State
     struct State {
         let labelData: Observable<[LabelDataDisplay]>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
-
-    private let _labelData = PublishSubject<[LabelDataDisplay]>()
     let state: State
+    
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+    private let _labelData = PublishSubject<[LabelDataDisplay]>()
+    
 
     init(coreMLUseCase: CoreMLUseCase) {
         self.coreMLUseCase = coreMLUseCase
@@ -46,10 +52,10 @@ final class ImageEditViewModel: ViewModel {
     }
 }
 
+// MARK: - 비즈니스 로직
 private extension ImageEditViewModel {
     /// 이미지 분석 후 라벨 데이터 추출
     func imageAnalaysis(image: UIImage) {
-
         do {
             let labels = try coreMLUseCase.fetchLabelDataModel(image: image).map {
                 LabelDataDisplay.convertToDisplay(from: $0)

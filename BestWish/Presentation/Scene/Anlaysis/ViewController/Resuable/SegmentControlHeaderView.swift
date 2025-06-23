@@ -6,16 +6,22 @@
 //
 
 import UIKit
+
+import RxSwift
 import SnapKit
 import Then
-import RxSwift
 
 // MARK: - 세그먼트 컨트롤 뷰 (0번째 index 섹션 헤더)
 final class SegmentControlHeaderView: UICollectionReusableView, ReuseIdentifier {
     
-    private let divider = UIView()
-    private var classSegmentControl = UISegmentedControl(items: ["스타일", "상의", "하의", "아우터", "원피스"])
-    var disposeBag = DisposeBag()
+    // MARK: - Private Property
+    private let _divider = UIView()
+    private var _classSegmentControl = UISegmentedControl(items: ["스타일", "상의", "하의", "아우터", "원피스"])
+    private var _disposeBag = DisposeBag()
+    
+    // MARK: - Internal Property
+    var classSegmentControl: UISegmentedControl { _classSegmentControl }
+    var disposeBag: DisposeBag { _disposeBag }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,19 +29,17 @@ final class SegmentControlHeaderView: UICollectionReusableView, ReuseIdentifier 
         setView()
     }
     
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        disposeBag = DisposeBag()
+        _disposeBag = DisposeBag()
     }
-    
-    public var getClassSegmentControl: UISegmentedControl { classSegmentControl }
 }
 
+// MARK: - 세그먼트 컨트롤 헤더 설정
 private extension SegmentControlHeaderView {
     func setView() {
         setAttributes()
@@ -44,10 +48,10 @@ private extension SegmentControlHeaderView {
     }
     
     func setAttributes() {
-        divider.do {
+        _divider.do {
             $0.backgroundColor = .gray50
         }
-        classSegmentControl.do {
+        _classSegmentControl.do {
             $0.selectedSegmentIndex = 0
             $0.selectedSegmentTintColor = .primary300
             $0.setTitleTextAttributes([
@@ -58,21 +62,20 @@ private extension SegmentControlHeaderView {
                 .foregroundColor: UIColor.white,
                 .font: UIFont.systemFont(ofSize: 14, weight: .semibold)
             ], for: .selected)
-
         }
     }
     
     func setHierarchy() {
-        addSubviews(divider, classSegmentControl)
+        addSubviews(_divider, _classSegmentControl)
     }
     
     func setConstraints() {
-        divider.snp.makeConstraints {
+        _divider.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
             $0.height.equalTo(1)
         }
-        classSegmentControl.snp.makeConstraints {
-            $0.top.equalTo(divider.snp.bottom).offset(8)
+        _classSegmentControl.snp.makeConstraints {
+            $0.top.equalTo(_divider.snp.bottom).offset(8)
             $0.horizontalEdges.bottom.equalToSuperview()
         }
     }

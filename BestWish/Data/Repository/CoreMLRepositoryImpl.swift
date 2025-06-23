@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-// MARK: - CoreML 레포지토리
+/// CoreML 레포지토리
 final class CoreMLRepositoryImpl: CoreMLRepository {
     
     private let manager: CoreMLManager

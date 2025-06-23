@@ -5,22 +5,27 @@
 //  Created by Quarang on 6/9/25.
 //
 
-import UIKit
 import AVFoundation
+import UIKit
+
 import CropViewController
 import RxSwift
 
-// MARK: - 카메라 뷰 컨트롤러
+/// 카메라 뷰 컨트롤러
 final class CameraViewController: UIViewController {
     
-    var disposeBag = DisposeBag()
+    // MARK: - Private Property
     private let cameraView = CameraView()
     private let viewModel = CameraViewModel()
+    private let disposeBag = DisposeBag()
     
     private var session: AVCaptureSession?                      // 카메라 입력, 출력을 연결하는 세션 객체
     private let output = AVCapturePhotoOutput()                 // 사진 촬영을 담당하는 출력 객체
     private var currentCameraPosition: AVCaptureDevice.Position = .back
     private let globalQueue = DispatchQueue(label: "BestWish.globalQueue", qos: .userInteractive)
+    
+    // MARK: - Internal Property
+    public var getHeaderHomeButton: UIBarButtonItem { return cameraView.homeButton }
     
     override func loadView() {
         view = cameraView
@@ -29,7 +34,7 @@ final class CameraViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBar(alignment: .left, title: "라이브 캡쳐")
-        navigationItem.rightBarButtonItem = cameraView.getHomeButton
+        navigationItem.rightBarButtonItem = cameraView.homeButton
         viewModel.action.onNext(.viewDidLoad)
         bindViewModel()
     }
@@ -58,21 +63,17 @@ final class CameraViewController: UIViewController {
             if session.canAddOutput(output) { session.addOutput(output) }
             
             // 프리뷰 레이이어에 세션 설정 및 비율 유지하며 꽉 차게 표시
-            cameraView.getPreviewLayer.session = session
-            cameraView.getPreviewLayer.videoGravity = .resizeAspectFill
+            cameraView.previewLayer.session = session
+            cameraView.previewLayer.videoGravity = .resizeAspectFill
             
             // 카메라 세션 시작
             globalQueue.async { session.startRunning() }
             
             self.session = session
         } catch {
-            print("카메라 설정 에러\(error)")
+            NSLog("카메라 설정 에러\(error)")
         }
     }
-    
-    
-    // MARK: - Internal Property
-    public var getHeaderHomeButton: UIBarButtonItem { return cameraView.getHomeButton }
 }
 
 // MARK: - 사진 촬영 관련
