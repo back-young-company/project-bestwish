@@ -10,16 +10,16 @@ import UIKit
 import SnapKit
 import Then
 
+/// 플랫폼 편집 Cell
 final class PlatformEditCell: UITableViewCell, ReuseIdentifier {
-    
-    private let platformImageView = UIImageView()
-    private let platformTitleLabel = UILabel()
-    private let platformCountLabel = UILabel()
+
+    // MARK: - Private Property
+    private let _platformImageView = UIImageView()
+    private let _platformTitleLabel = UILabel()
+    private let _platformCountLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .none
-        self.separatorInset = .zero
         
         setView()
     }
@@ -28,20 +28,16 @@ final class PlatformEditCell: UITableViewCell, ReuseIdentifier {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-    }
-    
-    func configure(type: PlatformEdit) {
-        platformTitleLabel.text = type.platformName
-        platformImageView.image = UIImage(named: type.platformImage)
-        platformCountLabel.text = "\(type.platformCount)"
+    func configure(type: PlatformEditItem) {
+        _platformTitleLabel.text = type.platformName
+        _platformImageView.image = UIImage(named: type.platformImage)
+        _platformCountLabel.text = "\(type.platformCount)"
         
-        platformImageView.updateShadowPath()
+        _platformImageView.updateShadowPath()
     }
 }
 
+// MARK: - PlatformEditCell 설정
 private extension PlatformEditCell {
     func setView() {
         setAttributes()
@@ -50,7 +46,10 @@ private extension PlatformEditCell {
     }
 
     func setAttributes() {
-        platformImageView.do {
+        self.selectionStyle = .none
+        self.separatorInset = .zero
+
+        _platformImageView.do {
             $0.layer.cornerRadius = 32
             $0.layer.shadowColor = UIColor.gray900?.cgColor
             $0.layer.shadowOpacity = 0.1
@@ -58,37 +57,37 @@ private extension PlatformEditCell {
             $0.layer.shadowRadius = 4
         }
         
-        platformTitleLabel.do {
+        _platformTitleLabel.do {
             $0.textColor = .gray800
             $0.font = .font(.pretendardMedium, ofSize: 14)
         }
 
-        platformCountLabel.do {
+        _platformCountLabel.do {
             $0.textColor = .gray200
             $0.font = .font(.pretendardMedium, ofSize: 14)
         }
     }
 
     func setHierarchy() {
-        self.contentView.addSubviews(platformImageView, platformTitleLabel, platformCountLabel)
+        self.contentView.addSubviews(_platformImageView, _platformTitleLabel, _platformCountLabel)
     }
 
     func setConstraints() {
-        platformImageView.snp.makeConstraints {
+        _platformImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
             $0.leading.equalToSuperview().offset(20)
             $0.bottom.equalToSuperview().offset(-8)
             $0.size.equalTo(64)
         }
         
-        platformTitleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(platformImageView)
-            $0.leading.equalTo(platformImageView.snp.trailing).offset(8)
+        _platformTitleLabel.snp.makeConstraints {
+            $0.centerY.equalTo(_platformImageView)
+            $0.leading.equalTo(_platformImageView.snp.trailing).offset(8)
         }
         
-        platformCountLabel.snp.makeConstraints {
-            $0.centerY.equalTo(platformTitleLabel)
-            $0.leading.equalTo(platformTitleLabel.snp.trailing).offset(8)
+        _platformCountLabel.snp.makeConstraints {
+            $0.centerY.equalTo(_platformTitleLabel)
+            $0.leading.equalTo(_platformTitleLabel.snp.trailing).offset(8)
         }
     }
 }

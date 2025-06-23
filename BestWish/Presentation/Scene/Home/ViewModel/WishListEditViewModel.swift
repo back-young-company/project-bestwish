@@ -10,47 +10,50 @@ import Foundation
 import RxSwift
 import RxRelay
 
+/// 위시리스트 편집 View Model
 final class WishEditViewModel: ViewModel {
-    
+
+    // MARK: - Action
     enum Action {
         case viewDidLoad
         case delete(UUID, Int)
         case complete
     }
-    
+
+    // MARK: - State
     struct State {
         let sections: Observable<[WishlistEditSectionModel]>
         let completed: Observable<Void>
         let error: Observable<Error>
     }
-    
+
+    // MARK: - Internal Property
+    var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
     private let _sections = BehaviorRelay<[WishlistEditSectionModel]>(value: [])
     private let _completed = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
-    
-    private let useCase: WishListUseCase
-    
+
     private var uuidArray: [UUID] = []
-    
-    private let _action = PublishSubject<Action>()
-    var action: AnyObserver<Action> { _action.asObserver() }
-    
-    let state: State
-    
+
+    private let useCase: WishListUseCase
     private let disposeBag = DisposeBag()
-    
+
     init(useCase: WishListUseCase) {
         self.useCase = useCase
-        
+
         state = State(
             sections: _sections.asObservable(),
             completed: _completed.asObservable(),
             error: _error.asObservable()
         )
-        
+
         self.bind()
     }
-    
+
     private func bind() {
         _action
             .subscribe(with: self) { owner, action in
@@ -63,7 +66,7 @@ final class WishEditViewModel: ViewModel {
                     }
                 case .delete(let uuid, let item):
                     owner.uuidArray.append(uuid)
-                    
+
                     var wishlists = owner._sections.value[0].items
                     wishlists.remove(at: item)
                     let section = WishlistEditSectionModel(header: "섹션", items: wishlists)
@@ -83,11 +86,15 @@ final class WishEditViewModel: ViewModel {
             }
             .disposed(by: disposeBag)
     }
-    
-    private func getWishLists() async throws -> [WishlistProduct] {
+}
+
+// MARK: - private 메서드
+private extension WishEditViewModel {
+    /// Supabase 위시리스트 가져오기
+    func getWishLists() async throws -> [WishListProductItem] {
         let result = try await self.useCase.searchWishListItems()
         return result.map { item in
-            WishlistProduct(
+            WishListProductItem(
                 uuid: item.id,
                 productImageURL: item.imagePathURL,
                 brandName: item.brand,
@@ -98,7 +105,8 @@ final class WishEditViewModel: ViewModel {
             )
         }
     }
-    
+
+    /// Supabase 위시리스트 삭제
     private func deleteWishListItem(id: UUID) async throws {
         try await self.useCase.deleteWishListItem(id: id)
     }

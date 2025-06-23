@@ -7,17 +7,22 @@
 
 import UIKit
 
-import RxSwift
 import SnapKit
 import Then
 
+/// 플랫폼 편집 Header View
 final class PlatformEditHeaderView: UIView {
+
+    // MARK: - Private Property
+    private let _platformCountLabel = UILabel()
+    private let _completeButton = UIButton()
     
-    private let platformCountLabel = UILabel()
-    private let completeButton = UIButton()
-    
+    // MARK: - Internal Property
+    var completeButton: UIButton { _completeButton }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
 
@@ -26,12 +31,11 @@ final class PlatformEditHeaderView: UIView {
     }
 
     func configure(count: Int) {
-        platformCountLabel.text = "플랫폼 \(count)개"
+        _platformCountLabel.text = "플랫폼 \(count)개"
     }
-    
-    var getCompleteButton: UIButton { completeButton }
 }
 
+// MARK: - PlatformEditHeaderView 설정
 private extension PlatformEditHeaderView {
     func setView() {
         setAttributes()
@@ -40,12 +44,12 @@ private extension PlatformEditHeaderView {
     }
     
     func setAttributes() {
-        platformCountLabel.do {
+        _platformCountLabel.do {
             $0.textColor = .gray200
             $0.font = .font(.pretendardMedium, ofSize: 12)
         }
         
-        completeButton.do {
+        _completeButton.do {
             let titleFont = UIFont.font(.pretendardBold, ofSize: 12)
             var config = UIButton.Configuration.filled()
             config.cornerStyle = .capsule
@@ -57,17 +61,17 @@ private extension PlatformEditHeaderView {
     }
     
     func setHierarchy() {
-        self.addSubviews(platformCountLabel, completeButton)
+        self.addSubviews(_platformCountLabel, _completeButton)
     }
     
     func setConstraints() {
-        platformCountLabel.snp.makeConstraints {
+        _platformCountLabel.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview().inset(14)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        completeButton.snp.makeConstraints {
-            $0.centerY.equalTo(platformCountLabel)
+        _completeButton.snp.makeConstraints {
+            $0.centerY.equalTo(_platformCountLabel)
             $0.trailing.equalToSuperview().offset(-20)
             $0.width.equalTo(48)
             $0.height.equalTo(26)

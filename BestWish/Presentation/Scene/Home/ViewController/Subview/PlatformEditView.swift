@@ -10,12 +10,19 @@ import UIKit
 import SnapKit
 import Then
 
+/// 플랫폼 편집 View
 final class PlatformEditView: UIView {
-    
-    private let backButton = UIButton()
-    private let headerView = PlatformEditHeaderView()
-    private let tableView = UITableView()
-    
+
+    // MARK: - Private Property
+    private let _backButton = UIButton()
+    private let _headerView = PlatformEditHeaderView()
+    private let _tableView = UITableView()
+
+    // MARK: - Internal Property
+    var backButton: UIButton { _backButton }
+    var headerView: PlatformEditHeaderView { _headerView }
+    var tableView: UITableView { _tableView }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -24,12 +31,9 @@ final class PlatformEditView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    var getBackButton: UIButton { backButton }
-    var getHeaderView: PlatformEditHeaderView { headerView }
-    var getTableView: UITableView { tableView }
 }
 
+// MARK: - PlatformEditView 설정
 private extension PlatformEditView {
     func setView() {
         setAttributes()
@@ -40,14 +44,14 @@ private extension PlatformEditView {
     func setAttributes() {
         self.backgroundColor = .white
         
-        tableView.do {
+        _tableView.do {
             $0.register(
                 PlatformEditCell.self,
                 forCellReuseIdentifier: PlatformEditCell.identifier)
             $0.separatorStyle = .none
         }
         
-        backButton.do {
+        _backButton.do {
             var config = UIButton.Configuration.plain()
             config.image = UIImage(systemName: "chevron.left")
             config.contentInsets = .init(top: 2, leading: 6, bottom: 2, trailing: 6)
@@ -57,11 +61,11 @@ private extension PlatformEditView {
     }
 
     func setHierarchy() {
-        self.addSubview(tableView)
+        self.addSubview(_tableView)
     }
 
     func setConstraints() {
-        tableView.snp.makeConstraints {
+        _tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }

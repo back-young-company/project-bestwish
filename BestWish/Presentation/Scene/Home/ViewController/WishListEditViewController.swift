@@ -7,19 +7,22 @@
 
 import UIKit
 
+import RxCocoa
 import RxDataSources
 import RxSwift
-import RxRelay
 
+/// 위시리스트 편집 View Controller
 final class WishListEditViewController: UIViewController {
 
-    private let wishEditView = WishListEditView()
+    // MARK: - Private Property
     private let wishEditViewModel: WishEditViewModel
-    
-    weak var delegate: HomeViewControllerUpdate?
-    
+    private let wishEditView = WishListEditView()
+
+    // MARK: - Internal Property
     private let disposeBag = DisposeBag()
-    
+
+    weak var delegate: HomeViewControllerUpdate?
+
     init(wishEditViewModel: WishEditViewModel) {
         self.wishEditViewModel = wishEditViewModel
         super.init(nibName: nil, bundle: nil)
@@ -66,7 +69,7 @@ final class WishListEditViewController: UIViewController {
                 let totalItemCount = dataSource.sectionModels.flatMap { $0.items }.count
                 headerView.configure(count: totalItemCount)
                 
-                headerView.getCompleteButton.rx.tap
+                headerView.completeButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.wishEditViewModel.action.onNext(.complete)
                     }
@@ -76,7 +79,7 @@ final class WishListEditViewController: UIViewController {
             })
         
         wishEditViewModel.state.sections
-            .bind(to: wishEditView.getCollectionView.rx.items(dataSource: dataSource))
+            .bind(to: wishEditView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         wishEditViewModel.state.sections
@@ -99,20 +102,31 @@ final class WishListEditViewController: UIViewController {
     private func bindActions() {
         wishEditViewModel.action.onNext(.viewDidLoad)
         
-        wishEditView.getBackButton.rx.tap
+        wishEditView.backButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
     }
-    
+}
+
+// MARK: - private 메서드
+private extension WishListEditViewController {
+    /// 컬렉션 뷰 레이아웃 설정
+    func setCollectionViewLayout(_ sections: [WishlistEditSectionModel]) {
+        wishEditView.collectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
+            return NSCollectionLayoutSection.createWishlistSection()
+        }
+    }
+
+    /// 네비게이션 바 설정
     private func setNavigationBar() {
         self.title = "편집"
         self.navigationController?.navigationBar.isHidden = false
-        
-        let backItem = UIBarButtonItem(customView: wishEditView.getBackButton)
+
+        let backItem = UIBarButtonItem(customView: wishEditView.backButton)
         self.navigationItem.leftBarButtonItem = backItem
-        
+
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.titleTextAttributes = [
@@ -122,14 +136,5 @@ final class WishListEditViewController: UIViewController {
         appearance.shadowColor = .clear
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-    
-}
-
-private extension WishListEditViewController {
-    func setCollectionViewLayout(_ sections: [WishlistEditSectionModel]) {
-        wishEditView.getCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
-            return NSCollectionLayoutSection.createWishlistSection()
-        }
     }
 }

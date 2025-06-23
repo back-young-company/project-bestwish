@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 플랫폼 이미지 열거형
 enum PlatformImage: CaseIterable {
     static let musinsa = "musinsa"
     static let zigzag = "zigzag"
@@ -19,11 +20,4 @@ enum PlatformImage: CaseIterable {
     static let worksout = "worksout"
     static let eql = "eql"
     static let hiver = "hiver"
-}
-
-enum ProductImage {
-    static let product1 = "product1"
-    static let product2 = "product2"
-    static let product3 = "product3"
-    static let product4 = "product4"
 }

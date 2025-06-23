@@ -11,17 +11,23 @@ import RxSwift
 import SnapKit
 import Then
 
+/// 빈 위시리스트 Cell
 final class WishListEmptyCell: UICollectionViewCell, ReuseIdentifier {
 
-    private let emptyImageView = UIImageView()
-    private let titleLabel = UILabel()
-    private let secondaryLabel = UILabel()
-    private let linkButton = UIButton()
-    
-    var disposeBag = DisposeBag()
+    // MARK: - Private Property
+    private let _emptyImageView = UIImageView()
+    private let _titleLabel = UILabel()
+    private let _descriptionLabel = UILabel()
+    private let _linkButton = UIButton()
+    private var _disposeBag = DisposeBag()
+
+    // MARK: - Internal Property
+    var linkButton: UIButton { _linkButton }
+    var disposeBag: DisposeBag { _disposeBag }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         setView()
     }
 
@@ -32,12 +38,11 @@ final class WishListEmptyCell: UICollectionViewCell, ReuseIdentifier {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        disposeBag = DisposeBag()
+        _disposeBag = DisposeBag()
     }
-    
-    var getLinkButton: UIButton { linkButton }
 }
 
+//MARK: - WishListEmptyCell 설정
 private extension WishListEmptyCell {
     func setView() {
         setAttributes()
@@ -46,25 +51,25 @@ private extension WishListEmptyCell {
     }
     
     func setAttributes() {
-        emptyImageView.do {
+        _emptyImageView.do {
             $0.image = UIImage(named: "no_product")
             $0.contentMode = .scaleAspectFit
         }
         
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = "위시리스트가 텅 비었어요!"
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 20)
         }
         
-        secondaryLabel.do {
+        _descriptionLabel.do {
             $0.text = "위시리스트를 추가해\n상품을 모아보세요!"
             $0.textColor = .gray400
             $0.font = .font(.pretendardMedium, ofSize: 16)
             $0.numberOfLines = 0
         }
         
-        linkButton.do {
+        _linkButton.do {
             var config = UIButton.Configuration.plain()
             let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
 
@@ -80,29 +85,29 @@ private extension WishListEmptyCell {
     }
     
     func setHierarchy() {
-        self.contentView.addSubviews(emptyImageView, titleLabel, secondaryLabel, linkButton)
+        self.contentView.addSubviews(_emptyImageView, _titleLabel, _descriptionLabel, _linkButton)
     }
     
     func setConstraints() {
-        emptyImageView.snp.makeConstraints {
+        _emptyImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
             $0.size.equalToSuperview().multipliedBy(0.4)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(emptyImageView.snp.bottom).offset(12)
+        _titleLabel.snp.makeConstraints {
+            $0.top.equalTo(_emptyImageView.snp.bottom).offset(12)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(20)
         }
         
-        secondaryLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(8)
+        _descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(_titleLabel.snp.bottom).offset(8)
             $0.centerX.equalToSuperview()
         }
         
-        linkButton.snp.makeConstraints {
-            $0.top.equalTo(secondaryLabel.snp.bottom).offset(16)
+        _linkButton.snp.makeConstraints {
+            $0.top.equalTo(_descriptionLabel.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(108)
             $0.height.equalTo(33)

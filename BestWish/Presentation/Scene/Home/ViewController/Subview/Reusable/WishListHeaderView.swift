@@ -12,29 +12,32 @@ import RxCocoa
 import SnapKit
 import Then
 
+/// 위시리스트 Header View
 final class WishListHeaderView: UICollectionReusableView, ReuseIdentifier {
 
-    private let separatorView = UIView()
-    
-    private let titleLabel = UILabel()
-    private let linkButton = UIButton()
-    
-    private let searchBar = UISearchBar()
-    
-    private let platformCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
-    private let productCountLabel = UILabel()
-    private let editButton = UIButton()
-    
+    // MARK: - Private Property
+    private let _separatorView = UIView()
+    private let _titleLabel = UILabel()
+    private let _linkButton = UIButton()
+    private let _searchBar = UISearchBar()
+    private let _platformCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private let _productCountLabel = UILabel()
+    private let _editButton = UIButton()
+    private var _disposeBag = DisposeBag()
+
+    private var selectedPlatform: Int = 0
+
+    // MARK: - Internal Property
     // ✅ 클릭된 플랫폼 index를 외부로 전달하는 relay
     let selectedPlatformRelay = BehaviorRelay<Int>(value: 0)
-    
-    private var selectedPlatform: Int = 0
-    
-    var disposeBag = DisposeBag()
+    var linkButton: UIButton { _linkButton }
+    var editButton: UIButton { _editButton }
+    var searchTextField: UITextField { _searchBar.searchTextField }
+    var disposeBag: DisposeBag { _disposeBag }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
 
@@ -44,45 +47,42 @@ final class WishListHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        disposeBag = DisposeBag()
+
+        _disposeBag = DisposeBag()
     }
 
     func configure(title: String) {
-        titleLabel.text = title
+        _titleLabel.text = title
     }
     
     func configure(productCount: Int) {
-        productCountLabel.text = "\(productCount)개"
+        _productCountLabel.text = "\(productCount)개"
     }
     
     func configure(platforms: Observable<[(Int ,Int)]>) {
         platforms
-            .bind(to: platformCollectionView.rx.items(cellIdentifier: WishListPlatformCell.identifier, cellType: WishListPlatformCell.self)) { [weak self] row, data, cell in
+            .bind(to: _platformCollectionView.rx.items(cellIdentifier: WishListFilterCell.identifier, cellType: WishListFilterCell.self)) { [weak self] row, data, cell in
                 guard let self else { return }
                 let (platform, _) = data
                 let selectedPlatform = self.selectedPlatformRelay.value
                 let isSelected = (platform == selectedPlatform)
                 
                 cell.configure(type: platform, isSelected: isSelected)
-                cell.getPlatformButton.rx.tap
+                cell.platformButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.selectedPlatform = platform
-                        owner.platformCollectionView.reloadData()
+                        owner._platformCollectionView.reloadData()
                         
                         // ✅ 클릭된 플랫폼 index 전달
                         owner.selectedPlatformRelay.accept(platform)
                     }
                     .disposed(by: cell.disposeBag)
             }
-            .disposed(by: disposeBag)
+            .disposed(by: _disposeBag)
     }
-    
-    var getLinkButton: UIButton { linkButton }
-    var getEditButton: UIButton { editButton }
-    var getSearchTextField: UITextField { searchBar.searchTextField }
 }
 
+// MARK: - WishListHeaderView 설정
 private extension WishListHeaderView {
     func setView() {
         setAttributes()
@@ -91,17 +91,17 @@ private extension WishListHeaderView {
     }
 
     func setAttributes() {
-        separatorView.do {
+        _separatorView.do {
             $0.backgroundColor = .gray50
         }
         
-        titleLabel.do {
+        _titleLabel.do {
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 16)
             $0.numberOfLines = 1
         }
         
-        linkButton.do {
+        _linkButton.do {
             var config = UIButton.Configuration.plain()
             let titleFont = UIFont.font(.pretendardBold, ofSize: 12)
 
@@ -115,16 +115,16 @@ private extension WishListHeaderView {
             $0.clipsToBounds = true
         }
         
-        searchBar.do {
+        _searchBar.do {
             $0.backgroundImage = UIImage()
             $0.placeholder = "상품 검색"
             $0.searchTextField.font = .font(.pretendardMedium, ofSize: 14)
         }
         
-        platformCollectionView.do {
+        _platformCollectionView.do {
             $0.register(
-                WishListPlatformCell.self,
-                forCellWithReuseIdentifier: WishListPlatformCell.identifier
+                WishListFilterCell.self,
+                forCellWithReuseIdentifier: WishListFilterCell.identifier
             )
             let layout = UICollectionViewFlowLayout()
             layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
@@ -136,12 +136,12 @@ private extension WishListHeaderView {
             $0.showsHorizontalScrollIndicator = false
         }
         
-        productCountLabel.do {
+        _productCountLabel.do {
             $0.textColor = .gray200
             $0.font = .font(.pretendardMedium, ofSize: 12)
         }
         
-        editButton.do {
+        _editButton.do {
             $0.setTitle("편집", for: .normal)
             $0.setTitleColor(.gray200, for: .normal)
             $0.titleLabel?.font = .font(.pretendardMedium, ofSize: 12)
@@ -149,51 +149,51 @@ private extension WishListHeaderView {
     }
 
     func setHierarchy() {
-        self.addSubviews(separatorView, titleLabel, linkButton, searchBar, platformCollectionView, productCountLabel, editButton)
+        self.addSubviews(_separatorView, _titleLabel, _linkButton, _searchBar, _platformCollectionView, _productCountLabel, _editButton)
     }
 
     func setConstraints() {
-        separatorView.snp.makeConstraints {
+        _separatorView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(8)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(separatorView.snp.bottom).offset(20)
+        _titleLabel.snp.makeConstraints {
+            $0.top.equalTo(_separatorView.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
             $0.height.equalTo(16)
         }
         
-        linkButton.snp.makeConstraints {
-            $0.centerY.equalTo(titleLabel)
+        _linkButton.snp.makeConstraints {
+            $0.centerY.equalTo(_titleLabel)
             $0.trailing.equalToSuperview().offset(-20)
         }
         
-        searchBar.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+        _searchBar.snp.makeConstraints {
+            $0.top.equalTo(_titleLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(40)
         }
         
-        searchBar.searchTextField.snp.makeConstraints {
+        _searchBar.searchTextField.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
-        platformCollectionView.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom).offset(10)
+        _platformCollectionView.snp.makeConstraints {
+            $0.top.equalTo(_searchBar.snp.bottom).offset(10)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(49)
         }
         
-        productCountLabel.snp.makeConstraints {
-            $0.top.equalTo(platformCollectionView.snp.bottom).offset(20)
+        _productCountLabel.snp.makeConstraints {
+            $0.top.equalTo(_platformCollectionView.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
             $0.bottom.equalToSuperview().offset(-10)
         }
         
-        editButton.snp.makeConstraints {
-            $0.centerY.equalTo(productCountLabel)
+        _editButton.snp.makeConstraints {
+            $0.centerY.equalTo(_productCountLabel)
             $0.trailing.equalToSuperview().offset(-20)
         }
     }

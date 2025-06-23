@@ -11,13 +11,16 @@ import Kingfisher
 import SnapKit
 import Then
 
+/// 플랫폼 바로가기 Cell
 final class PlatformShortcutCell: UICollectionViewCell, ReuseIdentifier {
-    
-    private let platformTitleLabel = UILabel()
-    private let platformImageView = UIImageView()
+
+    // MARK: - Private Property
+    private let _platformTitleLabel = UILabel()
+    private let _platformImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         setView()
     }
 
@@ -27,25 +30,22 @@ final class PlatformShortcutCell: UICollectionViewCell, ReuseIdentifier {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        platformImageView.image = nil
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
         
+        _platformImageView.image = nil
     }
 
-  func configure(type: Platform, isSelected: Bool = false) {
-        platformTitleLabel.text = type.platformName
-        platformImageView.image = UIImage(named: type.platformImage)
+  func configure(type: PlatformItem, isSelected: Bool = false) {
+        _platformTitleLabel.text = type.platformName
+        _platformImageView.image = UIImage(named: type.platformImage)
         
         backgroundColor = isSelected ? .primary50 : .clear
         layer.cornerRadius = 8
         clipsToBounds = true
-        platformImageView.updateShadowPath()
+        _platformImageView.updateShadowPath()
     }
 }
 
+//MARK: - PlatformShortcutCell 설정
 private extension PlatformShortcutCell {
     func setView() {
         setAttributes()
@@ -54,13 +54,13 @@ private extension PlatformShortcutCell {
     }
 
     func setAttributes() {
-        platformTitleLabel.do {
+        _platformTitleLabel.do {
             $0.textColor = .black
             $0.font = .font(.pretendardMedium, ofSize: 12)
             $0.textAlignment = .center
         }
 
-        platformImageView.do {
+        _platformImageView.do {
             $0.layer.cornerRadius = 32
             $0.layer.shadowColor = UIColor.gray900?.cgColor
             $0.layer.shadowOpacity = 0.1
@@ -70,18 +70,18 @@ private extension PlatformShortcutCell {
     }
 
     func setHierarchy() {
-        self.contentView.addSubviews(platformTitleLabel, platformImageView)
+        self.contentView.addSubviews(_platformTitleLabel, _platformImageView)
     }
 
     func setConstraints() {
-        platformImageView.snp.makeConstraints {
+        _platformImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(8)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.size.equalTo(64)
         }
         
-        platformTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(platformImageView.snp.bottom).offset(8)
+        _platformTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(_platformImageView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(8)
             $0.bottom.equalToSuperview().offset(-8)
         }

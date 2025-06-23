@@ -8,23 +8,32 @@
 import UIKit
 
 import SnapKit
+import Then
 
+/// 홈 View
 final class HomeView: UIView {
-    
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
+
+    // MARK: - Private Property
+    private let _collectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
+
+    // MARK: - Internal Property
+    var collectionView: UICollectionView { _collectionView }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
 
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    var getCollectionView: UICollectionView { collectionView }
 }
 
+//MARK: - HomeView 설정
 private extension HomeView {
     func setView() {
         setAttributes()
@@ -35,7 +44,7 @@ private extension HomeView {
     func setAttributes() {
         self.backgroundColor = .white
         
-        collectionView.do {
+        _collectionView.do {
             $0.register(
                 PlatformShortcutCell.self,
                 forCellWithReuseIdentifier: PlatformShortcutCell.identifier
@@ -67,11 +76,11 @@ private extension HomeView {
     }
 
     func setHierarchy() {
-        addSubviews(collectionView)
+        addSubviews(_collectionView)
     }
 
     func setConstraints() {
-        collectionView.snp.makeConstraints {
+        _collectionView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide)
             $0.bottom.directionalHorizontalEdges.equalToSuperview()
         }

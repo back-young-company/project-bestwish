@@ -11,17 +11,22 @@ import RxSwift
 import SnapKit
 import Then
 
+/// 플랫폼 바로가기 Header View
 final class PlatformShortcutHeaderView: UICollectionReusableView, ReuseIdentifier {
-    
-    private let bestWishLabel = UILabel()
-    private let titleLabel = UILabel()
-    
-    private let editButton = UIButton()
-    
-    var disposeBag = DisposeBag()
+
+    // MARK: - Private Property
+    private let _bestWishLabel = UILabel()
+    private let _titleLabel = UILabel()
+    private let _editButton = UIButton()
+    private var _disposeBag = DisposeBag()
+
+    // MARK: - Internal Property
+    var editButton: UIButton { _editButton }
+    var disposeBag: DisposeBag { _disposeBag }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
 
@@ -31,17 +36,16 @@ final class PlatformShortcutHeaderView: UICollectionReusableView, ReuseIdentifie
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        disposeBag = DisposeBag()
+
+        _disposeBag = DisposeBag()
     }
 
     func configure(title: String) {
-        titleLabel.text = title
+        _titleLabel.text = title
     }
-    
-    var getEditButton: UIButton { editButton }
 }
 
+//MARK: - PlatformShortcutHeaderView 설정
 private extension PlatformShortcutHeaderView {
     func setView() {
         setAttributes()
@@ -50,20 +54,20 @@ private extension PlatformShortcutHeaderView {
     }
 
     func setAttributes() {
-        bestWishLabel.do {
+        _bestWishLabel.do {
             $0.text = "BESTWISH"
             $0.textColor = .gray900
             $0.font = .font(.antonRegular, ofSize: 20)
             $0.numberOfLines = 1
         }
         
-        titleLabel.do {
+        _titleLabel.do {
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 16)
             $0.numberOfLines = 1
         }
         
-        editButton.do {
+        _editButton.do {
             $0.setTitle("편집", for: .normal)
             $0.setTitleColor(.gray200, for: .normal)
             $0.titleLabel?.font = .font(.pretendardMedium, ofSize: 12)
@@ -71,25 +75,25 @@ private extension PlatformShortcutHeaderView {
     }
 
     func setHierarchy() {
-        self.addSubviews(bestWishLabel, titleLabel, editButton)
+        self.addSubviews(_bestWishLabel, _titleLabel, _editButton)
     }
 
     func setConstraints() {
-        bestWishLabel.snp.makeConstraints {
+        _bestWishLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(9)
             $0.leading.equalToSuperview().offset(8)
             $0.height.equalTo(20)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(bestWishLabel.snp.bottom).offset(26.5)
+        _titleLabel.snp.makeConstraints {
+            $0.top.equalTo(_bestWishLabel.snp.bottom).offset(26.5)
             $0.leading.equalToSuperview().offset(8)
             $0.height.equalTo(16)
             $0.bottom.equalToSuperview().offset(-10)
         }
         
-        editButton.snp.makeConstraints {
-            $0.centerY.equalTo(titleLabel)
+        _editButton.snp.makeConstraints {
+            $0.centerY.equalTo(_titleLabel)
             $0.trailing.equalToSuperview().offset(-8)
         }
     }

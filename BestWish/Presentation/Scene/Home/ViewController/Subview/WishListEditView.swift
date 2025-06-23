@@ -10,12 +10,22 @@ import UIKit
 import SnapKit
 import Then
 
+/// 위시리스트 편집 View
 final class WishListEditView: UIView {
-    
-    private let backButton = UIButton()
-    private let headerView = PlatformEditHeaderView()
-    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
+
+    // MARK: - Private Property
+    private let _backButton = UIButton()
+    private let _headerView = PlatformEditHeaderView()
+    private let _collectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
+
+    // MARK: - Internal Property
+    var backButton: UIButton { _backButton }
+    var headerView: PlatformEditHeaderView { _headerView }
+    var collectionView: UICollectionView { _collectionView }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
@@ -24,12 +34,9 @@ final class WishListEditView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    var getBackButton: UIButton { backButton }
-    var getHeaderView: PlatformEditHeaderView { headerView }
-    var getCollectionView: UICollectionView { collectionView }
 }
 
+// MARK: - WishListEditView 설정
 private extension WishListEditView {
     func setView() {
         setAttributes()
@@ -40,7 +47,7 @@ private extension WishListEditView {
     func setAttributes() {
         self.backgroundColor = .white
         
-        collectionView.do {
+        _collectionView.do {
             $0.register(
                 WishListCell.self,
                 forCellWithReuseIdentifier: WishListCell.identifier)
@@ -51,7 +58,7 @@ private extension WishListEditView {
             )
         }
         
-        backButton.do {
+        _backButton.do {
             var config = UIButton.Configuration.plain()
             config.image = UIImage(systemName: "chevron.left")
             config.contentInsets = .init(top: 2, leading: 6, bottom: 2, trailing: 6)
@@ -61,11 +68,11 @@ private extension WishListEditView {
     }
 
     func setHierarchy() {
-        self.addSubview(collectionView)
+        self.addSubview(_collectionView)
     }
 
     func setConstraints() {
-        collectionView.snp.makeConstraints {
+        _collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }

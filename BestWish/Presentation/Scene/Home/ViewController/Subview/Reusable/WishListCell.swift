@@ -7,33 +7,32 @@
 
 import UIKit
 
-import RxSwift
 import Kingfisher
+import RxSwift
 import SnapKit
 import Then
 
+/// 위시리스트 Cell
 final class WishListCell: UICollectionViewCell, ReuseIdentifier {
-    
-    private let productImageView = UIImageView()
-    
-    private let editButton = UIButton()
-    
-    private let productSaleRateLabel = UILabel()
-    private let productPriceLabel = UILabel()
-    
-    private let hStackView = UIStackView()
-    
-    private let productNameLabel = UILabel()
-    private let brandNameLabel = UILabel()
-    
-    private let vStackView = UIStackView()
-    
-    var getEditButton: UIButton { editButton }
-    
-    var disposeBag = DisposeBag()
-    
+
+    // MARK: - Private Property
+    private let _productImageView = UIImageView()
+    private let _editButton = UIButton()
+    private let _productSaleRateLabel = UILabel()
+    private let _productPriceLabel = UILabel()
+    private let _hStackView = UIStackView()
+    private let _productNameLabel = UILabel()
+    private let _brandNameLabel = UILabel()
+    private let _vStackView = UIStackView()
+    private var _disposeBag = DisposeBag()
+
+    // MARK: - Internal Property
+    var getEditButton: UIButton { _editButton }
+    var disposeBag: DisposeBag { _disposeBag }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         setView()
     }
 
@@ -44,25 +43,26 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        disposeBag = DisposeBag()
+        _disposeBag = DisposeBag()
     }
 
-    func configure(type: WishlistProduct, isHidden: Bool, isLastRow: Bool? = nil) {
-        productImageView.kf.setImage(with: URL(string: type.productImageURL)!)
-        productSaleRateLabel.text = type.productSaleRate
-        productPriceLabel.text = type.productPrice
-        productNameLabel.text = type.productName
-        brandNameLabel.text = type.brandName
-        editButton.isHidden = isHidden
+    func configure(type: WishListProductItem, isHidden: Bool, isLastRow: Bool? = nil) {
+        _productImageView.kf.setImage(with: URL(string: type.productImageURL)!)
+        _productSaleRateLabel.text = type.productSaleRate
+        _productPriceLabel.text = type.productPrice
+        _productNameLabel.text = type.productName
+        _brandNameLabel.text = type.brandName
+        _editButton.isHidden = isHidden
         
-        vStackView.snp.remakeConstraints {
-            $0.top.equalTo(productImageView.snp.bottom).offset(8)
+        _vStackView.snp.remakeConstraints {
+            $0.top.equalTo(_productImageView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().offset(isLastRow ?? false ? -80 : 0)
         }
     }
 }
 
+//MARK: - WishListCell 설정
 private extension WishListCell {
     func setView() {
         setAttributes()
@@ -71,12 +71,12 @@ private extension WishListCell {
     }
 
     func setAttributes() {
-        productImageView.do {
+        _productImageView.do {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
         }
         
-        editButton.do {
+        _editButton.do {
             var config = UIButton.Configuration.plain()
             let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
             
@@ -85,33 +85,33 @@ private extension WishListCell {
             $0.configuration = config
         }
         
-        productSaleRateLabel.do {
+        _productSaleRateLabel.do {
             $0.textColor = .secondary400
             $0.font = .font(.pretendardBold, ofSize: 16)
         }
         
-        productPriceLabel.do {
+        _productPriceLabel.do {
             $0.textColor = .black
             $0.font = .font(.pretendardBold, ofSize: 18)
         }
         
-        hStackView.do {
+        _hStackView.do {
             $0.axis = .horizontal
             $0.spacing = 4
             $0.alignment = .center
         }
         
-        productNameLabel.do {
+        _productNameLabel.do {
             $0.textColor = .black
             $0.font = .font(.pretendardMedium, ofSize: 12)
         }
         
-        brandNameLabel.do {
+        _brandNameLabel.do {
             $0.textColor = .black
             $0.font = .font(.pretendardBold, ofSize: 12)
         }
         
-        vStackView.do {
+        _vStackView.do {
             $0.axis = .vertical
             $0.spacing = 4
             $0.alignment = .leading
@@ -119,25 +119,25 @@ private extension WishListCell {
     }
 
     func setHierarchy() {
-        hStackView.addArrangedSubviews(productSaleRateLabel, productPriceLabel)
-        vStackView.addArrangedSubviews(hStackView, productNameLabel, brandNameLabel)
-        self.contentView.addSubviews(productImageView, editButton, vStackView)
+        self.contentView.addSubviews(_productImageView, _editButton, _vStackView)
+        _vStackView.addArrangedSubviews(_hStackView, _productNameLabel, _brandNameLabel)
+        _hStackView.addArrangedSubviews(_productSaleRateLabel, _productPriceLabel)
     }
 
     func setConstraints() {
-        productImageView.snp.makeConstraints {
+        _productImageView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(productImageView.snp.width)
+            $0.height.equalTo(_productImageView.snp.width)
         }
         
-        editButton.snp.makeConstraints {
+        _editButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.trailing.equalToSuperview().offset(-10)
         }
         
-        vStackView.snp.makeConstraints {
-            $0.top.equalTo(productImageView.snp.bottom).offset(8)
+        _vStackView.snp.makeConstraints {
+            $0.top.equalTo(_productImageView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }

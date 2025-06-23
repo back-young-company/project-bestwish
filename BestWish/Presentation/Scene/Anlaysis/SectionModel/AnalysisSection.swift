@@ -11,7 +11,7 @@ import RxDataSources
 enum AnalysisItem: Equatable {
     case keyword(keyword: String)
     case attribute(attribute: String, isSelected: Bool)
-    case platform(platform: Platform, isSelected: Bool = false)
+    case platform(platform: PlatformItem, isSelected: Bool = false)
 }
 
 /// AnalysisItem과 동일하지만 파라미터 없이 구분만을 위한 케이스

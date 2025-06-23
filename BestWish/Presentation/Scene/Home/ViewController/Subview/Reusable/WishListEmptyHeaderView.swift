@@ -12,14 +12,16 @@ import RxCocoa
 import SnapKit
 import Then
 
+/// 빈 위시리스트 Header View
 final class WishListEmptyHeaderView: UICollectionReusableView, ReuseIdentifier {
-    
+
+    // MARK: - Private Property
     private let separatorView = UIView()
-    
     private let titleLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
 
@@ -28,6 +30,7 @@ final class WishListEmptyHeaderView: UICollectionReusableView, ReuseIdentifier {
     }
 }
 
+//MARK: - WishListEmptyHeaderView 설정
 private extension WishListEmptyHeaderView {
     func setView() {
         setAttributes()

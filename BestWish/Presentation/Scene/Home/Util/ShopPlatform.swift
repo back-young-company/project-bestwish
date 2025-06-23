@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 외부 플랫폼 열거형
 enum ShopPlatform: String, CaseIterable {
     case all = "all"
     case musinsa = "musinsa"

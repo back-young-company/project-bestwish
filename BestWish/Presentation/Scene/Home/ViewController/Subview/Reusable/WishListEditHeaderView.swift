@@ -11,15 +11,21 @@ import RxSwift
 import SnapKit
 import Then
 
+/// 위시리스트 편집 Header View
 final class WishListEditHeaderView: UICollectionReusableView, ReuseIdentifier {
-    
-    private let platformCountLabel = UILabel()
-    private let completeButton = UIButton()
-    
-    var disposeBag = DisposeBag()
-    
+
+    // MARK: - Private Property
+    private let _platformCountLabel = UILabel()
+    private let _completeButton = UIButton()
+    private var _disposeBag = DisposeBag()
+
+    // MARK: - Internal Property
+    var completeButton: UIButton { _completeButton }
+    var disposeBag: DisposeBag { _disposeBag }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
 
@@ -29,17 +35,16 @@ final class WishListEditHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        disposeBag = DisposeBag()
+
+        _disposeBag = DisposeBag()
     }
 
     func configure(count: Int) {
-        platformCountLabel.text = "\(count)개"
+        _platformCountLabel.text = "\(count)개"
     }
-    
-    var getCompleteButton: UIButton { completeButton }
 }
 
+//MARK: - WishListEditHeaderView 설정
 private extension WishListEditHeaderView {
     func setView() {
         setAttributes()
@@ -48,13 +53,13 @@ private extension WishListEditHeaderView {
     }
     
     func setAttributes() {
-        platformCountLabel.do {
+        _platformCountLabel.do {
             $0.text = "0개"
             $0.textColor = .gray200
             $0.font = .font(.pretendardMedium, ofSize: 12)
         }
         
-        completeButton.do {
+        _completeButton.do {
             let titleFont = UIFont.font(.pretendardBold, ofSize: 12)
             var config = UIButton.Configuration.filled()
             config.cornerStyle = .capsule
@@ -66,19 +71,19 @@ private extension WishListEditHeaderView {
     }
     
     func setHierarchy() {
-        self.addSubviews(platformCountLabel, completeButton)
+        self.addSubviews(_platformCountLabel, _completeButton)
     }
     
     func setConstraints() {
-        platformCountLabel.snp.makeConstraints {
+        _platformCountLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(14)
             $0.leading.equalToSuperview().offset(20)
             $0.height.equalTo(12)
             $0.bottom.equalToSuperview().offset(-26)
         }
         
-        completeButton.snp.makeConstraints {
-            $0.centerY.equalTo(platformCountLabel)
+        _completeButton.snp.makeConstraints {
+            $0.centerY.equalTo(_platformCountLabel)
             $0.trailing.equalToSuperview().offset(-20)
             $0.width.equalTo(48)
             $0.height.equalTo(26)
