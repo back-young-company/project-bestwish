@@ -25,8 +25,14 @@ extension UIViewController {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
+        appearance.titleTextAttributes = [
+            .font: UIFont.font(.pretendardBold, ofSize: 18),
+            .foregroundColor: UIColor.gray900 ?? .black
+        ]
+        appearance.shadowColor = .clear
 
         navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
         switch alignment {
         case .left:
