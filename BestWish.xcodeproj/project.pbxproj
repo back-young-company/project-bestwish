@@ -499,6 +499,9 @@
 			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 8;

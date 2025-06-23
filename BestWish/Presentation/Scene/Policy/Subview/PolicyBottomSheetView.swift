@@ -76,6 +76,11 @@ private extension PolicyBottomSheetView {
             $0.setImage(off, for: .normal)
             $0.setImage(on, for: .selected)
             $0.tintColor = .primary300
+            var config = UIButton.Configuration.plain()
+            config.imagePadding = 0
+            config.contentInsets = .init(top: 12, leading: .zero, bottom: 12, trailing: .zero)
+            config.background.backgroundColor = .clear
+            $0.configuration = config
         }
 
         selectAllLabel.do {
@@ -91,7 +96,7 @@ private extension PolicyBottomSheetView {
             $0.layoutMargins = UIEdgeInsets(
                 top: 0,
                 left: 20,
-                bottom: 0,
+                bottom: 12,
                 right: 20
             )
         }
@@ -102,6 +107,12 @@ private extension PolicyBottomSheetView {
             $0.setImage(off, for: .normal)
             $0.setImage(on, for: .selected)
             $0.tintColor = .primary300
+
+            var config = UIButton.Configuration.plain()
+            config.imagePadding = 0
+            config.contentInsets = .init(top: 12, leading: .zero, bottom: 12, trailing: .zero)
+            config.background.backgroundColor = .clear
+            $0.configuration = config
         }
         privacyLabel.do {
             $0.text = PolicyText.privacy.value
@@ -136,6 +147,11 @@ private extension PolicyBottomSheetView {
             $0.setImage(off, for: .normal)
             $0.setImage(on, for: .selected)
             $0.tintColor = .primary300
+            var config = UIButton.Configuration.plain()
+            config.imagePadding = 0
+            config.contentInsets = .init(top: 12, leading: .zero, bottom: 12, trailing: .zero)
+            config.background.backgroundColor = .clear
+            $0.configuration = config
         }
         serviceLabel.do {
             $0.text = PolicyText.service.value

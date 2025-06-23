@@ -69,7 +69,7 @@ final class AnalysisViewModel: ViewModel {
         let analysisSectionModel:[AnalysisSectionModel] = [
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
-            AnalysisSectionModel(header: nil, type: .platform, items: ShopPlatform.allCases.map {
+            AnalysisSectionModel(header: nil, type: .platform, items: ShopPlatform.allCases.filter{ $0 != .all }.map {
                 .platform(platform: Platform(
                     platform: $0,
                     platformName: $0.platformName,
