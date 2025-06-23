@@ -37,7 +37,7 @@ final class ImageEditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        setNavigationBar(alignment: .left, title: "이미지 편집")
+        //        setNavigationBar(alignment: .left, title: "이미지 편집")
         setCropViewController()
         setDelegate()
         bindView()
@@ -79,7 +79,7 @@ final class ImageEditViewController: UIViewController {
             .disposed(by: disposeBag)
         
         viewModel.state.labelData
-            .subscribe(with: self) { owner, labelData in
+            .subscribe(with: self, onNext: { owner, labelData in
                 let vc = DIContainer.shared.makeAnalysisViewController(labelData: labelData)
                 if let sheet = vc.sheetPresentationController {
                     sheet.detents = [
@@ -94,6 +94,9 @@ final class ImageEditViewController: UIViewController {
                 }
                 vc.modalPresentationStyle = .pageSheet
                 owner.present(vc, animated: true)
+            }) { owner, error in
+                guard let error = error as? CoreMLError else { return }
+                print(error.errorDescription ?? "")
             }
             .disposed(by: disposeBag)
     }

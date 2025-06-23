@@ -55,7 +55,11 @@ private extension ImageEditViewModel {
                 LabelDataDisplay.convertToDisplay(from: $0)
             }
             _labelData.onNext(labels)
-        } catch {
+        } catch let error {
+            guard let error = error as? AppError else {
+                _labelData.onError(AppError.unknown(error))
+                return
+            }
             _labelData.onError(error)
         }
     }
