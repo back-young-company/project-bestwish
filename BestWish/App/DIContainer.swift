@@ -13,6 +13,7 @@ final class DIContainer {
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
+    private let coreMLManager: CoreMLManager
     
     private let wishListRepository: WishListRepository
     private let userInfoRepository: UserInfoRepository
@@ -37,7 +38,8 @@ final class DIContainer {
         self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
         self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
-        self.coreMLRepository = CoreMLRepositoryImpl()
+        self.coreMLManager = CoreMLManager()
+        self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
         self.analysisUseCase = AnalysisUseCaseImpl()
     }
