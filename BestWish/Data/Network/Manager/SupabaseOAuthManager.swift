@@ -162,14 +162,8 @@ final class SupabaseOAuthManager: NSObject {
             }
 
         case .apple:
-            let token = try await getAppleAccessToken()
-
-            do {
-                try await revokeAccount(token)
-            } catch {
-                print("애플 계정삭제 실패", error.localizedDescription)
-                return
-            }
+            let (token, clientSecret) = try await getAppleAccessToken()
+            try await revokeAccount(token, clientSecret)
 
             do {
                 _ = try await client.rpc("delete_current_user").execute()
