@@ -12,7 +12,6 @@ import Supabase
 
 final class SupabaseOAuthManager: NSObject {
 
-    // actor KeyChainManager 인스턴스
     public var continuation: CheckedContinuation<(String, Supabase.Session), Error>?
     public weak var presentationWindow: UIWindow?
     public var kakaoAuthSession: ASWebAuthenticationSession?
