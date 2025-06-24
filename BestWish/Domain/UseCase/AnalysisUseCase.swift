@@ -16,9 +16,9 @@ protocol AnalysisUseCase {
     /// 초기화
     func resetKeyword(models: [AnalysisSectionModel]) -> [AnalysisSectionModel]
     /// 플랫폼 이동
-    func movePlatform(platform: Platform?) throws -> String
+    func movePlatform(platform: PlatformItem?) throws -> String
     /// 속성 버튼 세팅
-    func setAttributeButton(_ item: AnalysisItem, keyword: String, selectedPlatform: Platform?, isSelected: Bool) -> AnalysisItem
+    func setAttributeButton(_ item: AnalysisItem, keyword: String, selectedPlatform: PlatformItem?, isSelected: Bool) -> AnalysisItem
 }
 
 /// 이미지 분석 유즈 케이스 구현체
