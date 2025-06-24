@@ -13,10 +13,10 @@ import RxSwift
 
 /// 마이페이지 메인 뷰 모델 테스트 클래스
 final class MyPageViewModelTests: XCTestCase {
-    var viewModel: MyPageViewModel!
-    var mockUserInfoUseCase: MockUserInfoUseCase!
-    var mockAccountUseCase: MockAccountUseCase!
-    var disposeBag: DisposeBag!
+    private var viewModel: MyPageViewModel!
+    private var mockUserInfoUseCase: MockUserInfoUseCase!
+    private var mockAccountUseCase: MockAccountUseCase!
+    private var disposeBag: DisposeBag!
 
     override func setUp() {
         mockAccountUseCase = MockAccountUseCase()
