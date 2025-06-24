@@ -74,8 +74,8 @@ final class ProfileUpdateViewModel: ViewModel {
         Task {
             do {
                 let user = try await useCase.getUserInfo()
-                let UserInfoModel = convertUserInfoModel(from: user)
-                _userInfo.accept(UserInfoModel)
+                let userInfoModel = convertUserInfoModel(from: user)
+                _userInfo.accept(userInfoModel)
             } catch {
                 handleError(error)
             }
@@ -137,3 +137,13 @@ final class ProfileUpdateViewModel: ViewModel {
         }
     }
 }
+
+// MARK: - 테스트 전용 메서드
+#if DEBUG
+extension ProfileUpdateViewModel {
+    /// 유저 정보 초기값 설정
+    func injectIntialUserInfo(_ user: UserInfoModel) {
+        _userInfo.accept(user)
+    }
+}
+#endif
