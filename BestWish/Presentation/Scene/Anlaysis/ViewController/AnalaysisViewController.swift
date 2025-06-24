@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import RxSwift
+
 import RxDataSources
+import RxSwift
 
 /// 이미지 분석 후 검색 뷰 컨트롤러
 final class AnalaysisViewController: UIViewController {
@@ -31,7 +32,7 @@ final class AnalaysisViewController: UIViewController {
                     cell.configure(keyword: keyword)
                     return cell
                     
-                case .attribute(let attribute, let isSelected):
+                case let .attribute(attribute, isSelected):
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: AttributeCell.identifier,
                         for: indexPath

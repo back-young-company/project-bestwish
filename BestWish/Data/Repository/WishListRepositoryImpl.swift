@@ -9,7 +9,7 @@ import Foundation
 
 final class WishListRepositoryImpl: WishListRepository {
 
-    //TODO: SupabaseManager 네이밍 변경 필요
+    // FIXME: SupabaseManager 네이밍 변경 필요
     private let manager: SupabaseManager
     private let userInfoManager: SupabaseUserInfoManager
 
