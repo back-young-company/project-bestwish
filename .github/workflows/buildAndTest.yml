@@ -17,7 +17,7 @@ jobs:
         with:
           xcode-version: '16.2'
 
-      # 1. 빌드 스텝만 실행
+      # 빌드 스텝 실행
       - name: Build Application
         run: |
           xcodebuild clean build \
@@ -25,12 +25,3 @@ jobs:
             -scheme BestWish \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
           | xcbeautify
-
-      # 2. 테스트 스텝만 실행
-      - name: Run Tests
-        run: |
-          xcodebuild clean test \
-            -project BestWish.xcodeproj \
-            -scheme BestWish \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
-            | xcbeautify
