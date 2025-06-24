@@ -21,9 +21,6 @@ jobs:
       - name: Clean DerivedData
         run: rm -rf ~/Library/Developer/Xcode/DerivedData
 
-      - name: Install Pods # Pods 캐시를 사용하지 않거나, 캐시 미스 시 실행
-        run: pod install --repo-update
-
       # 2. 빌드 스텝만 실행
       - name: Build Application
         run: |
