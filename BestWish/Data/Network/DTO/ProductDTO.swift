@@ -19,7 +19,7 @@ struct ProductDTO: Codable {
     let imagePathURL: String?
     let productURL: String?
     let createdAt: Date?
-₩
+
     enum CodingKeys: String, CodingKey {
         case id
         case userID = "user_id"
