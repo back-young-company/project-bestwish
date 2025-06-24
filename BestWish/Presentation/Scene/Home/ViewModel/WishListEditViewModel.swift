@@ -1,5 +1,5 @@
 //
-//  WishEditViewModel.swift
+//  WishListEditViewModel.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/12/25.
@@ -11,7 +11,7 @@ import RxSwift
 import RxRelay
 
 /// 위시리스트 편집 View Model
-final class WishEditViewModel: ViewModel {
+final class WishListEditViewModel: ViewModel {
 
     // MARK: - Action
     enum Action {
@@ -22,7 +22,7 @@ final class WishEditViewModel: ViewModel {
 
     // MARK: - State
     struct State {
-        let sections: Observable<[WishlistEditSectionModel]>
+        let sections: Observable<[WishListEditSectionModel]>
         let completed: Observable<Void>
         let error: Observable<Error>
     }
@@ -33,7 +33,7 @@ final class WishEditViewModel: ViewModel {
 
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
-    private let _sections = BehaviorRelay<[WishlistEditSectionModel]>(value: [])
+    private let _sections = BehaviorRelay<[WishListEditSectionModel]>(value: [])
     private let _completed = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
 
@@ -61,7 +61,7 @@ final class WishEditViewModel: ViewModel {
                 case .viewDidLoad:
                     Task {
                         let wishlists = try await owner.getWishLists()
-                        let section = WishlistEditSectionModel(header: "섹션", items: wishlists)
+                        let section = WishListEditSectionModel(header: "섹션", items: wishlists)
                         owner._sections.accept([section])
                     }
                 case .delete(let uuid, let item):
@@ -69,7 +69,7 @@ final class WishEditViewModel: ViewModel {
 
                     var wishlists = owner._sections.value[0].items
                     wishlists.remove(at: item)
-                    let section = WishlistEditSectionModel(header: "섹션", items: wishlists)
+                    let section = WishListEditSectionModel(header: "섹션", items: wishlists)
                     owner._sections.accept([section])
                 case .complete:
                     Task {
@@ -89,7 +89,7 @@ final class WishEditViewModel: ViewModel {
 }
 
 // MARK: - private 메서드
-private extension WishEditViewModel {
+private extension WishListEditViewModel {
     /// Supabase 위시리스트 가져오기
     func getWishLists() async throws -> [WishListProductItem] {
         let result = try await self.useCase.searchWishListItems()

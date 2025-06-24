@@ -15,7 +15,7 @@ import RxSwift
 final class WishListEditViewController: UIViewController {
 
     // MARK: - Private Property
-    private let wishEditViewModel: WishEditViewModel
+    private let wishEditViewModel: WishListEditViewModel
     private let wishEditView = WishListEditView()
 
     // MARK: - Internal Property
@@ -23,7 +23,7 @@ final class WishListEditViewController: UIViewController {
 
     weak var delegate: HomeViewControllerUpdate?
 
-    init(wishEditViewModel: WishEditViewModel) {
+    init(wishEditViewModel: WishListEditViewModel) {
         self.wishEditViewModel = wishEditViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -45,7 +45,7 @@ final class WishListEditViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<WishlistEditSectionModel>(
+        let dataSource = RxCollectionViewSectionedReloadDataSource<WishListEditSectionModel>(
             configureCell: { dataSource, collectionView, indexPath, item in
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: WishListCell.identifier,
@@ -113,7 +113,7 @@ final class WishListEditViewController: UIViewController {
 // MARK: - private 메서드
 private extension WishListEditViewController {
     /// 컬렉션 뷰 레이아웃 설정
-    func setCollectionViewLayout(_ sections: [WishlistEditSectionModel]) {
+    func setCollectionViewLayout(_ sections: [WishListEditSectionModel]) {
         wishEditView.collectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             return NSCollectionLayoutSection.createWishlistSection()
         }

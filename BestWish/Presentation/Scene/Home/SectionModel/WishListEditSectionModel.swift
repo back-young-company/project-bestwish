@@ -1,5 +1,5 @@
 //
-//  WishListEditSection.swift
+//  WishListEditSectionModel.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/12/25.
@@ -9,15 +9,15 @@ import Foundation
 
 import RxDataSources
 
-struct WishlistEditSectionModel {
+struct WishListEditSectionModel {
     let header: String
     var items: [WishListProductItem]
 }
 
-extension WishlistEditSectionModel: SectionModelType {
+extension WishListEditSectionModel: SectionModelType {
     typealias Item = WishListProductItem
 
-    init(original: WishlistEditSectionModel, items: [WishListProductItem]) {
+    init(original: WishListEditSectionModel, items: [WishListProductItem]) {
         self = original
         self.items = items
     }

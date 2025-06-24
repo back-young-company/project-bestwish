@@ -55,7 +55,7 @@ final class DIContainer {
     }
     
     func makeWishlistEditViewController() -> WishListEditViewController {
-        let viewModel = WishEditViewModel(useCase: wishListUseCase)
+        let viewModel = WishListEditViewModel(useCase: wishListUseCase)
         return WishListEditViewController(wishEditViewModel: viewModel)
     }
     
