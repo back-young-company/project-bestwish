@@ -7,12 +7,13 @@
 
 import Foundation
 import XCTest
-import RxSwift
 @testable import BestWish
 
-/// 마이페이지 메인 뷰 테스트 클래스
+import RxSwift
+
+/// 마이페이지 메인 뷰 모델 테스트 클래스
 final class MyPageViewModelTests: XCTestCase {
-    var viewmodel: MyPageViewModel!
+    var viewModel: MyPageViewModel!
     var mockUserInfoUseCase: MockUserInfoUseCase!
     var mockAccountUseCase: MockAcoountUseCase!
     var disposeBag: DisposeBag!
@@ -20,7 +21,7 @@ final class MyPageViewModelTests: XCTestCase {
     override func setUp() {
         mockAccountUseCase = MockAcoountUseCase()
         mockUserInfoUseCase = MockUserInfoUseCase()
-        viewmodel = MyPageViewModel(
+        viewModel = MyPageViewModel(
             userInfoUseCase: mockUserInfoUseCase,
             accountUseCase: mockAccountUseCase
         )
@@ -29,6 +30,9 @@ final class MyPageViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
+        mockAccountUseCase = nil
+        mockUserInfoUseCase = nil
+        viewModel = nil
         disposeBag = nil
     }
 
@@ -37,30 +41,29 @@ final class MyPageViewModelTests: XCTestCase {
         // Given
         let expectation = XCTestExpectation(description: #function)
         let dummyUser = User(
-            name: "Soo",
+            name: nil,
             email: "test@test.com",
             nickname: "Test Nickname",
-            gender: 0,
-            birth: Date(timeIntervalSince1970: 10000000),
+            gender: nil,
+            birth: nil,
             profileImageCode: 0,
-            authProvider: "apple"
+            authProvider: nil
         )
         mockUserInfoUseCase.user = dummyUser
 
         var received: UserInfoModel?
 
-        viewmodel.state.userInfo
+        viewModel.state.userInfo
             .bind { userInfo in
                 received = userInfo
                 expectation.fulfill()
             }.disposed(by: disposeBag)
 
         // When
-        viewmodel.action.onNext(.getUserInfo)
-
-        // Then
+        viewModel.action.onNext(.getUserInfo)
         wait(for: [expectation], timeout: 2.0)
 
+        // Then
         // MyPageViewModel의 convertUserInfoModel 메서드에선 아래 3가지 항목만 사용
         XCTAssertEqual(dummyUser.email, received?.email)
         XCTAssertEqual(dummyUser.nickname, received?.nickname)
@@ -74,16 +77,14 @@ final class MyPageViewModelTests: XCTestCase {
         mockUserInfoUseCase.shouldThrow = true
 
         var received: AppError?
-
-        viewmodel.state.error
+        viewModel.state.error
             .bind { error in
                 received = error
                 expectation.fulfill()
             }.disposed(by: disposeBag)
 
         // When
-        viewmodel.action.onNext(.getUserInfo)
-
+        viewModel.action.onNext(.getUserInfo)
         wait(for: [expectation], timeout: 2.0)
 
         // Then
@@ -97,15 +98,14 @@ final class MyPageViewModelTests: XCTestCase {
 
         var received: [MyPageSection]?
 
-        viewmodel.state.sections
+        viewModel.state.sections
             .bind { sections in
                 received = sections
                 expectation.fulfill()
             }.disposed(by: disposeBag)
 
         // When
-        viewmodel.action.onNext(.getSection)
-
+        viewModel.action.onNext(.getSection)
         wait(for: [expectation], timeout: 2.0)
 
         // Then
@@ -121,15 +121,14 @@ final class MyPageViewModelTests: XCTestCase {
         mockAccountUseCase.shouldThrow = true
 
         var received: AppError?
-        viewmodel.state.error
+        viewModel.state.error
             .bind { error in
                 received = error
                 expectation.fulfill()
             }.disposed(by: disposeBag)
 
         // When
-        viewmodel.action.onNext(.logout)
-
+        viewModel.action.onNext(.logout)
         wait(for: [expectation], timeout: 2.0)
         
         // Then
