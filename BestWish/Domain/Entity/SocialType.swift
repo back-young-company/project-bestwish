@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 소셜로그인 타입
 enum SocialType {
     case kakao
     case apple

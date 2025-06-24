@@ -33,6 +33,7 @@ final class NicknameInputView: UIView {
     }
 }
 
+// MARK: - private 메서드
 private extension NicknameInputView {
     func setView() {
         setAttributes()

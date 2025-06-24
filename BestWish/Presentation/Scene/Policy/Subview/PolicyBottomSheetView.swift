@@ -51,6 +51,7 @@ final class PolicyBottomSheetView: UIView {
     }
 }
 
+// MARK: - private 메서드
 private extension PolicyBottomSheetView {
     func setView() {
         setAttributes()

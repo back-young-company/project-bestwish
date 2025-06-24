@@ -57,6 +57,7 @@ final class OnboardingFirstView: UIView {
     }
 }
 
+// MARK: - private 메서드
 private extension OnboardingFirstView {
     func setView() {
         setAttributes()

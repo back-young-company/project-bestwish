@@ -35,6 +35,7 @@ final class DatePickerBottomSheetView: UIView {
     }
 }
 
+// MARK: - private 메서드
 private extension DatePickerBottomSheetView {
     func setView() {
         setAttributes()

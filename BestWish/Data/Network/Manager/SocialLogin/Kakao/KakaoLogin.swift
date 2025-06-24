@@ -10,6 +10,7 @@ import Foundation
 import Alamofire
 import Supabase
 
+// MARK: - SupabaseOAuth를 활용한 카카오 로그인
 extension SupabaseOAuthManager {
 
     /// 카카오 로그인

@@ -36,6 +36,7 @@ final class BirthSelectionView: UIView {
     }
 }
 
+// MARK: - private 메서드
 private extension BirthSelectionView {
     func setView() {
         setAttributes()

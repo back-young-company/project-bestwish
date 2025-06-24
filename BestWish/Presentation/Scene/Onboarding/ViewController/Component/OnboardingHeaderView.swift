@@ -28,6 +28,7 @@ final class OnboardingHeaderView: UIView {
     }
 }
 
+// MARK: - private 메서드
 private extension OnboardingHeaderView {
     func setView() {
         setAttributes()

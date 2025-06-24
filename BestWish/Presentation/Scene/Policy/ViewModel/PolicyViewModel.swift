@@ -30,7 +30,6 @@ final class PolicyViewModel: ViewModel {
     let state: State
 
     // MARK: - Private Property
-
     private let _action = PublishSubject<Action>()
 
     private let _isPrivacySelected = BehaviorRelay<Bool>(value: false)

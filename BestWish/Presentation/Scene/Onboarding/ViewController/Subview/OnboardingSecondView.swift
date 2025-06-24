@@ -69,6 +69,7 @@ final class OnboardingSecondView: UIView {
 
 }
 
+// MARK: - private 메서드
 private extension OnboardingSecondView {
     func setView() {
         setAttributes()

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 사용자 인증 정보 관련 에러 모음
 enum AuthError: AppErrorProtocol {
     case kakaoSignInFailed(Error)
     case appleSignInFailed(Error)
@@ -21,6 +22,7 @@ enum AuthError: AppErrorProtocol {
     case missProvider
 }
 
+// MARK: - AuthError 케이스 별 텍스트
 extension AuthError {
     var errorDescription: String? {
         "인증 오류가 발생했습니다"

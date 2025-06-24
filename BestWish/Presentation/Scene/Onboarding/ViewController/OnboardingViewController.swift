@@ -91,7 +91,7 @@ final class OnboardingViewController: UIViewController {
     }
 }
 
-
+// MARK: - private 메서드
 private extension OnboardingViewController {
     /// 이용약관 바텀 시트 바인딩
     func bindPolicySheet() {

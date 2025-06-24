@@ -47,9 +47,10 @@ final class GenderSelectionView: UIView {
         }
     }
 }
-extension GenderSelectionView {
 
-    private func setView() {
+// MARK: - private 메서드
+private extension GenderSelectionView {
+    func setView() {
         setAttributes()
         setHierarchy()
         setConstraints()

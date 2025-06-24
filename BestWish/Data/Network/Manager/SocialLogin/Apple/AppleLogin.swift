@@ -12,6 +12,7 @@ import Foundation
 import Alamofire
 import Supabase
 
+// MARK: - SupabaseOAuth를 활용한 애플 로그인
 extension SupabaseOAuthManager {
 
     /// 애플 로그인 시도
@@ -173,7 +174,7 @@ extension SupabaseOAuthManager {
     }
 }
 
-// MARK: - AppleLogin(Face,지문 인식) 완료 후 동작
+// MARK: - 애플 로그인(Face,지문 인식) 완료 후 동작
 extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         guard

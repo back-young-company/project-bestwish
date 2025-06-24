@@ -33,6 +33,8 @@ final class IntroTextStackView: UIView {
         _descLabel.text = desc
     }
 }
+
+// MARK: - private 메서드
 private extension IntroTextStackView {
     func setView() {
         setAttributes()
