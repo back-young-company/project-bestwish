@@ -20,9 +20,8 @@ jobs:
       - name: Build and Run Tests
         run: |
           set -eo pipefail               # e: 오류시 즉시 중단 / o pipefail: 파이프 실패 감지
-          xcodebuild \
-            -workspace BestWish.xcworkspace \
+          xcodebuild clean test \
+            -project BestWish.xcodeproj \
             -scheme BestWish \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
-            -configuration Debug \
-            clean test | xcbeautify
+          | xcbeautify
