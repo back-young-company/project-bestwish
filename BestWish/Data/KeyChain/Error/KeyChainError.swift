@@ -21,7 +21,7 @@ extension KeyChainError {
 
     var debugDescription: String {
         switch self {
-        case .readError(let detail):
+        case let .readError(detail):
             "KeyChain Read Error : \(detail)"
         case .saveError:
             "KeyChain Save Error"

@@ -28,25 +28,25 @@ extension AuthError {
 
     var debugDescription: String {
         switch self {
-        case .kakaoSignInFailed(let error):
+        case let .kakaoSignInFailed(error):
             "Kakao SignIn Error: \(error.localizedDescription)"
-        case .appleSignInFailed(let error):
+        case let .appleSignInFailed(error):
             "Auth Error: \(error.localizedDescription)"
-        case .signOutFailed(let error):
+        case let .signOutFailed(error):
             "SignOut Error: \(error.localizedDescription)"
-        case .appleRequestAccessTokenFailed(let error):
+        case let .appleRequestAccessTokenFailed(error):
             "Apple Access Token Error: \(error.localizedDescription)"
-        case .encodeParsingTokenError(let field):
+        case let .encodeParsingTokenError(field):
             "Encoding Parsing Access Token Error : \(field)"
-        case .supabaseRequestSecretCodeFailed(let error):
+        case let .supabaseRequestSecretCodeFailed(error):
             "Supabase Request Client Secret Error : \(error.localizedDescription)"
         case .supabaseRequestSecretCodeNil:
             "Supabase Request Client Secret Return Nil"
-        case .withdrawFailed(let error):
+        case let .withdrawFailed(error):
             "Withdraw Error: \(error.localizedDescription)"
         case .appleDidCompleteFailed:
             "Apple DidCompleted Failed"
-        case .setSessionFailed(let error):
+        case let .setSessionFailed(error):
             "Supabase Set Session Failed : \(error.localizedDescription)"
         case .missProvider:
             "Missing Provider"
