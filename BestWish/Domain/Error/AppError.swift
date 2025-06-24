@@ -27,9 +27,9 @@ extension AppError {
     var errorDescription: String? {
         switch self {
         case let .supabaseError(error),
-             let .mappingError(error):
-             .authError(error),
-             .keyChainError(error):
+             let .mappingError(error),
+             let .authError(error),
+             let .keyChainError(error):
             return error.errorDescription
         case .unknown:
             return "알 수 없는 에러가 발생했습니다."
@@ -38,10 +38,10 @@ extension AppError {
 
     var debugDescription: String {
         switch self {
-        case .supabaseError(error),
-             .mappingError(error),
-             .authError(error),
-             .keyChainError(error):
+        case let .supabaseError(error),
+             let .mappingError(error),
+             let .authError(error),
+             let .keyChainError(error):
             return error.debugDescription
         case let .unknown(error):
             return "unkownError: \(error.localizedDescription)"
