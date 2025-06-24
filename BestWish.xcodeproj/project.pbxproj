@@ -502,7 +502,7 @@
 				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
@@ -537,7 +537,7 @@
 				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
