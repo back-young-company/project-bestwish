@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 위시리스트 관련 레포지토리
 final class WishListRepositoryImpl: WishListRepository {
 
     // FIXME: SupabaseManager 네이밍 변경 필요
@@ -18,6 +19,7 @@ final class WishListRepositoryImpl: WishListRepository {
         self.userInfoManager = userInfoManager
     }
 
+    /// 플랫폼 순서 가져오기
     func getPlatformSequence() async throws -> [Int] {
         do {
             return try await manager.getPlatformSequence()
@@ -28,6 +30,7 @@ final class WishListRepositoryImpl: WishListRepository {
         }
     }
 
+    /// 플랫폼 순서 업데이트
     func updatePlatformSequence(to sequence: [Int]) async throws {
         do {
             try await manager.updatePlatformSequence(to: sequence.map { Int16($0) })
@@ -36,6 +39,7 @@ final class WishListRepositoryImpl: WishListRepository {
         }
     }
 
+    /// 위시리스트 내 플랫폼 가져오기
     func getPlatformsInWishList(isEdit: Bool) async throws -> [(platform: Int, count: Int)] {
         let userInfo = try await userInfoManager.getUserInfo()
         
@@ -46,6 +50,7 @@ final class WishListRepositoryImpl: WishListRepository {
         }
     }
 
+    /// 아이템 검색
     func searchWishListItems(query: String?, platform: Int?) async throws -> [Product] {
         do {
             let result = try await manager.searchWishListItems(query: query, platform: platform)
@@ -57,6 +62,7 @@ final class WishListRepositoryImpl: WishListRepository {
         }
     }
 
+    /// 위시 아이템 삭제
     func deleteWishListItem(id: UUID) async throws {
         do {
             try await manager.deleteWishListItem(id: id)
@@ -65,6 +71,7 @@ final class WishListRepositoryImpl: WishListRepository {
         }
     }
 
+    /// 위시 아이템 추가
     func addProductToWishList(product: ProductMetadata) async throws {
         do {
             try await manager.addProductToWishList(
@@ -76,7 +83,9 @@ final class WishListRepositoryImpl: WishListRepository {
     }
 }
 
+// MARK: - DTO -> Entity 매핑
 extension WishListRepositoryImpl {
+    /// ProductDTO -> Product  Entity 매핑
     private func convertToProduct(from dto: ProductDTO) throws -> Product {
         guard let userID = dto.userID,
               let platform = dto.platform,
@@ -103,6 +112,7 @@ extension WishListRepositoryImpl {
         )
     }
 
+    /// ProductMetadata -> ProductDTO 매핑
     private func convertToProductDTO(from entity: ProductMetadata) -> ProductDTO {
         ProductDTO(
             id: UUID(),

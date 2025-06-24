@@ -6,12 +6,14 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
+import RxCocoa
+import RxSwift
+
+/// 유저 정보 업데이트 View Controller
 final class UserInfoUpdateViewController: UIViewController {
-    private let updateView = UserInfoUpdateView()
     private let viewModel: UserInfoUpdateViewModel
+    private let updateView = UserInfoUpdateView()
     private let disposeBag = DisposeBag()
 
     init(viewModel: UserInfoUpdateViewModel) {
@@ -38,7 +40,7 @@ final class UserInfoUpdateViewController: UIViewController {
     }
 
     private func bindView() {
-        updateView.getBirthSelection.dateButton.rx.tap
+        updateView.birthSelection.dateButton.rx.tap
             .bind(with: self) { owner, _ in
                 let sheetVC = DatePickerBottomSheetViewController()
                 sheetVC.onDateSelected =  { selectedDate in
@@ -51,7 +53,7 @@ final class UserInfoUpdateViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        updateView.getGenderSelection.selectedGender
+        updateView.genderSelection.selectedGender
             .distinctUntilChanged()
             .map { ($0 ?? .nothing).rawValue }
             .bind(with: self) { owner, genderIndex in
@@ -59,7 +61,7 @@ final class UserInfoUpdateViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        updateView.getSaveButton.rx.tap
+        updateView.saveButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.action.onNext(.saveUserInfo)
             }
@@ -84,6 +86,7 @@ final class UserInfoUpdateViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+                NSLog("UserInfoUpdateViewController Error: \(error.debugDescription)")
             }.disposed(by: disposeBag)
     }
 }

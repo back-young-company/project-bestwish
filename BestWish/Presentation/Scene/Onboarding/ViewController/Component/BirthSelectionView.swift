@@ -12,7 +12,7 @@ import RxCocoa
 final class BirthSelectionView: UIView {
 
     private let rootVStackView = VerticalStackView(spacing: 8)
-    private let birthLabel = InfoLabel(title: "생년월일")
+    private let birthLabel = GroupTitleLabel(title: "생년월일")
     let dateButton = UIButton()
 
     private let disposeBag = DisposeBag()

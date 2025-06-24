@@ -7,11 +7,12 @@
 
 import Foundation
 
+/// 유저 정보 관련 UseCase 프로토콜
 protocol UserInfoUseCase {
     /// 유저 정보 불러오기
     func getUserInfo() async throws -> User
 
-    /// 유저 정보 수정
+    /// 유저 정보 업데이트
     func updateUserInfo(
         profileImageCode: Int?,
         nickname: String?,
@@ -23,7 +24,9 @@ protocol UserInfoUseCase {
     func isValidNickname(_ nickname: String) -> Bool
 }
 
+// MARK: - Protocol 메서드의 파라미터 초기값 설정
 extension UserInfoUseCase {
+    /// 유저 정보 업데이트
     func updateUserInfo(
         profileImageCode: Int? = nil,
         nickname: String? = nil,
@@ -39,6 +42,7 @@ extension UserInfoUseCase {
     }
 }
 
+/// 유저 정보 관련 UseCase 
 final class UserInfoUseCaseImpl: UserInfoUseCase {
     private let repository: UserInfoRepository
 

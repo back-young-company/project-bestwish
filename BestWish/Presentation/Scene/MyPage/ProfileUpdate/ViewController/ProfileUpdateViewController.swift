@@ -6,12 +6,14 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
+import RxCocoa
+import RxSwift
+
+/// 프로필 업데이트 View Controller
 final class ProfileUpdateViewController: UIViewController {
-    private let profileUpdateView = ProfileUpdateView()
     private let viewModel: ProfileUpdateViewModel
+    private let profileUpdateView = ProfileUpdateView()
     private let disposeBag = DisposeBag()
 
     init(viewModel: ProfileUpdateViewModel) {
@@ -41,8 +43,9 @@ final class ProfileUpdateViewController: UIViewController {
     }
 
     private func bindView() {
+        // 이미지뷰 제스처 추가
         let tapGesture = UITapGestureRecognizer()
-        profileUpdateView.getProfileImageView.addGestureRecognizer(tapGesture)
+        profileUpdateView.profileImageView.addGestureRecognizer(tapGesture)
 
         // 프로필 이미지 뷰 선택 로직
         tapGesture.rx.event
@@ -59,7 +62,7 @@ final class ProfileUpdateViewController: UIViewController {
             }.disposed(by: disposeBag)
 
         // 프로필 닉네임 변경 로직
-        profileUpdateView.getNicknameTextField.rx.text
+        profileUpdateView.nicknameTextField.rx.text
             .orEmpty
             .filter { !$0.isEmpty }
             .distinctUntilChanged()
@@ -69,7 +72,7 @@ final class ProfileUpdateViewController: UIViewController {
             }.disposed(by: disposeBag)
 
         // 저장 버튼 탭 로직
-        profileUpdateView.getConfirmButton.rx.tap
+        profileUpdateView.confirmButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.action.onNext(.saveUserInfo)
             }.disposed(by: disposeBag)
@@ -99,7 +102,11 @@ final class ProfileUpdateViewController: UIViewController {
         viewModel.state.error
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
-                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+                owner.showBasicAlert(
+                    title: error.alertTitle,
+                    message: error.localizedDescription
+                )
+                NSLog("ProdifleUpdateViewController Error: \(error.debugDescription)")
             }.disposed(by: disposeBag)
     }
 }

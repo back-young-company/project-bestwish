@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 위시 아이템 엔티티
 struct Product {
     let id: UUID
     let userID: UUID

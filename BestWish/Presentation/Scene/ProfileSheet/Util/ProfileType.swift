@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 프로필 이미지 타입
 enum ProfileType: Int, CaseIterable {
     case profileA
     case profileB
@@ -16,6 +17,7 @@ enum ProfileType: Int, CaseIterable {
     case profileF
 }
 
+// MARK: - 프로필 타입 이미지 name 설정
 extension ProfileType {
     var name: String {
         switch self {

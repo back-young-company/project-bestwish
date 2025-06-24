@@ -38,7 +38,7 @@ final class OnboardingFirstView: UIView {
         nextPageButton.isEnabled = isValid
     }
 
-    func configure(with userInfo: UserInfoDisplay?) {
+    func configure(with userInfo: UserInfoModel?) {
         let isValid = userInfo?.gender != nil && userInfo?.birth != nil
         canNext(isValid)
         birthSelection.configure(title: userInfo?.birthString)

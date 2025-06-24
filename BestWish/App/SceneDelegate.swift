@@ -78,7 +78,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             UINavigationController(rootViewController: DIContainer.shared.makeCameraViewController()),
             UINavigationController(rootViewController: DIContainer.shared.makeMyPageViewController())
         ])
-        window?.rootViewController = vc // DummyViewController(viewModel: vm)
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
         window?.backgroundColor = .gray0
     }

@@ -5,14 +5,13 @@
 //  Created by 이수현 on 6/10/25.
 //
 
-import RxSwift
 import RxRelay
+import RxSwift
 
-// 프로필 업데이트 저장, 프로필 불러오기, 프로필 선택
+/// 프로필 업데이트 View Model
 final class ProfileUpdateViewModel: ViewModel {
-    private let disposeBag = DisposeBag()
-    private let useCase: UserInfoUseCase
 
+    // MARK: - Action
     enum Action {
         case getUserInfo
         case updateProfileImageCode(Int)
@@ -20,21 +19,28 @@ final class ProfileUpdateViewModel: ViewModel {
         case saveUserInfo
     }
 
+    // MARK: - State
     struct State {
-        let userInfo: Observable<UserInfoDisplay?>
+        let userInfo: Observable<UserInfoModel?>
         let isValidNickname: Observable<Bool>
         let completedSave: Observable<Void>
         let error: Observable<AppError>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
 
-    private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+
+    private let _userInfo = BehaviorRelay<UserInfoModel?>(value: nil)
     private let _isValidNickname = BehaviorRelay<Bool>(value: true)
     private let _completedSave = PublishSubject<Void>()
     private let _error = PublishSubject<AppError>()
-    let state: State
+
+    private let useCase: UserInfoUseCase
+    private let disposeBag = DisposeBag()
 
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
@@ -53,9 +59,9 @@ final class ProfileUpdateViewModel: ViewModel {
             switch action {
             case .getUserInfo:
                 owner.getUserInfo()
-            case .updateProfileImageCode(let index):
+            case let .updateProfileImageCode(index):
                 owner.updateProfileImage(with: index)
-            case .updateNickname(let nickname):
+            case let .updateNickname(nickname):
                 owner.updateNickname(to: nickname)
             case .saveUserInfo:
                 owner.saveUserInfo()
@@ -63,24 +69,27 @@ final class ProfileUpdateViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
+    /// 유저 정보 불러오기
     private func getUserInfo() {
         Task {
             do {
                 let user = try await useCase.getUserInfo()
-                let userInfoDisplay = convertUserInfoDisplay(from: user)
-                _userInfo.accept(userInfoDisplay)
+                let UserInfoModel = convertUserInfoModel(from: user)
+                _userInfo.accept(UserInfoModel)
             } catch {
                 handleError(error)
             }
         }
     }
 
+    /// 프로필 이미지 변경
     private func updateProfileImage(with index: Int) {
         var userInfo = _userInfo.value
         userInfo?.updateprofileImageCode(to: index)
         _userInfo.accept(userInfo)
     }
 
+    /// 닉네임 유효 확인 및  변경
     private func updateNickname(to nickname: String) {
         let isValid = useCase.isValidNickname(nickname)
         _isValidNickname.accept(isValid)
@@ -92,6 +101,7 @@ final class ProfileUpdateViewModel: ViewModel {
         }
     }
 
+    /// 유저 정보 저장
     private func saveUserInfo() {
         Task {
             guard let userInfo = _userInfo.value else { return }
@@ -109,14 +119,16 @@ final class ProfileUpdateViewModel: ViewModel {
         }
     }
 
-    private func convertUserInfoDisplay(from user: User) -> UserInfoDisplay {
-        UserInfoDisplay(
+    /// User Entity -> UserInfoModel 변환
+    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+        UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,
             nickname: user.nickname
         )
     }
 
+    /// 에러 핸들링
     private func handleError(_ error: Error) {
         if let error = error as? AppError {
             _error.onNext(error)

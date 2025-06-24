@@ -32,7 +32,7 @@ final class ImageEditView: UIView {
         self._toolbar = _toolbar
         self._cropView = _cropView
         super.init(frame: .zero)
-        
+
         setView()
     }
     

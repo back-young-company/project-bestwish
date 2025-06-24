@@ -6,13 +6,14 @@
 //
 
 import Foundation
-import RxSwift
+
 import RxRelay
+import RxSwift
 
+/// 유저 정보 업데이트 View Model
 final class UserInfoUpdateViewModel: ViewModel {
-    private let disposeBag = DisposeBag()
-    private let useCase: UserInfoUseCase
 
+    // MARK: - Action
     enum Action {
         case getUserInfo
         case updateBirth(Date)
@@ -20,19 +21,26 @@ final class UserInfoUpdateViewModel: ViewModel {
         case saveUserInfo
     }
 
+    // MARK: - State
     struct State {
-        let userInfo: Observable<UserInfoDisplay?>
+        let userInfo: Observable<UserInfoModel?>
         let completedSave: Observable<Void>
         let error: Observable<AppError>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
 
     private let _error = PublishSubject<AppError>()
-    private let _userInfo = BehaviorRelay<UserInfoDisplay?>(value: nil)
+    private let _userInfo = BehaviorRelay<UserInfoModel?>(value: nil)
     private let _completedSave = PublishSubject<Void>()
-    let state: State
+
+    private let useCase: UserInfoUseCase
+    private let disposeBag = DisposeBag()
 
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
@@ -50,9 +58,9 @@ final class UserInfoUpdateViewModel: ViewModel {
             switch action {
             case .getUserInfo:
                 owner.getUserInfo()
-            case .updateBirth(let date):
+            case let .updateBirth(date):
                 owner.updateBirth(date)
-            case .updateGender(let genderIndex):
+            case let .updateGender(genderIndex):
                 owner.updateGender(genderIndex)
             case .saveUserInfo:
                 owner.saveUserInfo()
@@ -60,30 +68,34 @@ final class UserInfoUpdateViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
+    /// 유저 정보 불러오기
     private func getUserInfo() {
         Task {
             do {
                 let user = try await useCase.getUserInfo()
-                let userInfoDisplay = convertUserInfoDisplay(from: user)
-                _userInfo.accept(userInfoDisplay)
+                let UserInfoModel = convertUserInfoModel(from: user)
+                _userInfo.accept(UserInfoModel)
             } catch {
                 handleError(error)
             }
         }
     }
 
+    /// 생일 업데이트 메서드
     private func updateBirth(_ date: Date) {
         guard var prevInfo = _userInfo.value else { return }
         prevInfo.updateBirth(to: date)
         _userInfo.accept(prevInfo)
     }
 
+    /// 성별 업데이트 메서드
     private func updateGender(_ genderIndex: Int) {
         guard var prevInfo = _userInfo.value else { return }
         prevInfo.updateGender(to: genderIndex)
         _userInfo.accept(prevInfo)
     }
 
+    /// 유저 정보 저장
     private func saveUserInfo() {
         Task {
             guard let userInfo = _userInfo.value else { return }
@@ -101,8 +113,9 @@ final class UserInfoUpdateViewModel: ViewModel {
         }
     }
 
-    private func convertUserInfoDisplay(from user: User) -> UserInfoDisplay {
-        UserInfoDisplay(
+    /// User Entity -> UserInfoModel 변환 메서드
+    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+        UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,
             nickname: user.nickname,
@@ -111,6 +124,7 @@ final class UserInfoUpdateViewModel: ViewModel {
         )
     }
 
+    /// 에러 핸들링
     private func handleError(_ error: Error) {
         if let error = error as? AppError {
             _error.onNext(error)

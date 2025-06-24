@@ -7,26 +7,33 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
+/// 마이페이지 컬렉션 뷰 셀
 final class MyPageCell: UITableViewCell, ReuseIdentifier {
-    private let titleLabel = UILabel()
-    private let seeMoreButton = UIButton()
+
+    // MARK: - Private Property
+    private let _titleLabel = UILabel()
+    private let _seeMoreButton = UIButton()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
         setView()
     }
 
-    @available(*, unavailable)
     required init(coder: NSCoder) {
         fatalError()
     }
 
     func configure(type: MyPageCellType) {
-        titleLabel.text = type.title
-        seeMoreButton.isHidden = !type.showsSeeMoreButton
+        _titleLabel.text = type.title
+        _seeMoreButton.isHidden = !type.showsSeeMoreButton
     }
 }
 
+// MARK: - View 설정
 private extension MyPageCell {
     func setView() {
         setAttributes()
@@ -37,32 +44,32 @@ private extension MyPageCell {
     func setAttributes() {
         self.selectionStyle = .none
 
-        titleLabel.do {
+        _titleLabel.do {
             $0.textColor = .black
             $0.font = .font(.pretendardMedium, ofSize: 16)
         }
 
-        seeMoreButton.do {
+        _seeMoreButton.do {
             $0.setImage(.init(systemName: "chevron.right"), for: .normal)
             $0.tintColor = .gray200
         }
     }
 
     func setHierarchy() {
-        self.contentView.addSubviews(titleLabel, seeMoreButton)
+        self.contentView.addSubviews(_titleLabel, _seeMoreButton)
     }
 
     func setConstraints() {
-        titleLabel.snp.makeConstraints { make in
-            make.verticalEdges.equalToSuperview()
-            make.leading.equalToSuperview().inset(CGFloat(16).fitWidth)
-            make.trailing.equalTo(seeMoreButton.snp.leading).offset(-8)
+        _titleLabel.snp.makeConstraints { 
+            $0.verticalEdges.equalToSuperview()
+            $0.leading.equalToSuperview().inset(CGFloat(16).fitWidth)
+            $0.trailing.equalTo(_seeMoreButton.snp.leading).offset(-8)
         }
 
-        seeMoreButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.size.equalTo(16)
-            make.trailing.equalToSuperview().inset(CGFloat(16).fitWidth)
+        _seeMoreButton.snp.makeConstraints { 
+            $0.centerY.equalToSuperview()
+            $0.size.equalTo(16)
+            $0.trailing.equalToSuperview().inset(CGFloat(16).fitWidth)
         }
     }
 }

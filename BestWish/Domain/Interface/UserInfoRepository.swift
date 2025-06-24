@@ -7,8 +7,13 @@
 
 import Foundation
 
+/// 유저 정보 관련 레포지토리 프로토콜
 protocol UserInfoRepository {
+
+    /// 유저 정보 가져오기
     func getUserInfo() async throws -> User
+
+    /// 유저 정보 업데이트
     func updateUserInfo(
         profileImageCode: Int?,
         nickname: String?,

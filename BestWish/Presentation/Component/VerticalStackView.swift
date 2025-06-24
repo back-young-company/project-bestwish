@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// 수직 라벨
 final class VerticalStackView: UIStackView {
     init(spacing: CGFloat = 0) {
         super.init(frame: .zero)

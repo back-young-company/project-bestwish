@@ -64,21 +64,25 @@ final class DIContainer {
         return LinkSaveViewController(viewModel: viewModel)
     }
 
+    /// 마이페이지 뷰 컨트롤러 생성
     func makeMyPageViewController() -> MyPageViewController {
         let viewModel = MyPageViewModel(userInfoUseCase: userInfoUseCase, accountUseCase: accountUseCase)
         return MyPageViewController(viewModel: viewModel)
     }
 
+    /// 프로필 업데이트 뷰 컨트롤러 생성
     func makeProfileUpdateViewController() -> ProfileUpdateViewController {
         let viewModel = ProfileUpdateViewModel(useCase: userInfoUseCase)
         return ProfileUpdateViewController(viewModel: viewModel)
     }
 
+    /// 유저 정보 업데이트 뷰 컨트롤러 생성
     func makeUserInfoUpdateViewController() -> UserInfoUpdateViewController {
         let viewModel = UserInfoUpdateViewModel(useCase: userInfoUseCase)
         return UserInfoUpdateViewController(viewModel: viewModel)
     }
 
+    /// 유저 정보 관리 뷰 컨트롤러 생성
     func makeUserInfoManagementViewController() -> UserInfoManagementViewController {
         let viewModel = UserInfoManagementViewModel(userInfoUseCase: userInfoUseCase, accountUseCase: accountUseCase)
         return UserInfoManagementViewController(viewModel: viewModel)
@@ -100,9 +104,9 @@ final class DIContainer {
         let viewModel = ImageEditViewModel(coreMLUseCase: coreMLUseCase)
         return ImageEditViewController(image: image, viewModel: viewModel)
     }
-    
+
     /// 이미지 분석 뷰 컨트롤러 생성
-    func makeAnalysisViewController(labelData: [LabelDataDisplay]) -> AnalaysisViewController {
+    func makeAnalysisViewController(labelData: [LabelDataModel]) -> AnalaysisViewController {
         let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
         return AnalaysisViewController(viewModel: viewModel)
     }

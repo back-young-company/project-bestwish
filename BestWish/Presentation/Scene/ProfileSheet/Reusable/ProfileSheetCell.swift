@@ -7,12 +7,18 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
+/// 프로필 시트 셀
 final class ProfileSheetCell: UICollectionViewCell, ReuseIdentifier {
-    private let imageView = UIImageView()
+
+    // MARK: - Private Property
+    private let _imageView = UIImageView()
 
     override var isSelected: Bool {
         didSet {
-            imageView.layer.borderWidth = isSelected ? 3 : 0
+            _imageView.layer.borderWidth = isSelected ? 3 : 0
         }
     }
 
@@ -28,10 +34,11 @@ final class ProfileSheetCell: UICollectionViewCell, ReuseIdentifier {
     }
 
     func configure(imageName: String) {
-        imageView.image = .init(named: imageName)
+        _imageView.image = .init(named: imageName)
     }
 }
 
+// MARK: - Cell 설정
 private extension ProfileSheetCell {
     func setView() {
         setAttributes()
@@ -40,7 +47,7 @@ private extension ProfileSheetCell {
     }
 
     func setAttributes() {
-        imageView.do {
+        _imageView.do {
             $0.contentMode = .scaleAspectFit
             $0.layer.cornerRadius = CGFloat(80).fitHeight / 2
             $0.clipsToBounds = true
@@ -49,12 +56,12 @@ private extension ProfileSheetCell {
     }
 
     func setHierarchy() {
-        self.contentView.addSubview(imageView)
+        self.contentView.addSubview(_imageView)
     }
 
     func setConstraints() {
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        _imageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
 }

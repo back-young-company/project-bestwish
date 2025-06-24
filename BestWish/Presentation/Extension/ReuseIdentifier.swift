@@ -21,7 +21,6 @@ import Foundation
 ///     )
 /// }
 /// ```
-///
 protocol ReuseIdentifier: AnyObject {
     static var identifier: String { get }
 }

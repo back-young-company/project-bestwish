@@ -20,7 +20,7 @@ final class ImageEditViewModel: ViewModel {
 
     // MARK: - State
     struct State {
-        let labelData: Observable<[LabelDataDisplay]>
+        let labelData: Observable<[LabelDataModel]>
     }
 
     // MARK: - Internal Property
@@ -29,7 +29,7 @@ final class ImageEditViewModel: ViewModel {
     
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
-    private let _labelData = PublishSubject<[LabelDataDisplay]>()
+    private let _labelData = PublishSubject<[LabelDataModel]>()
 
     private let coreMLUseCase: CoreMLUseCase
     private let disposeBag = DisposeBag()
@@ -57,7 +57,7 @@ private extension ImageEditViewModel {
     func imageAnalaysis(image: UIImage) {
         do {
             let labels = try coreMLUseCase.fetchLabelDataModel(image: image).map {
-                LabelDataDisplay.convertToDisplay(from: $0)
+                LabelDataModel.convertToDisplay(from: $0)
             }
             _labelData.onNext(labels)
         } catch let error {

@@ -6,12 +6,14 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
+import RxCocoa
+import RxSwift
+
+/// 유저 정보 관리 View Controller
 final class UserInfoManagementViewController: UIViewController {
-    private let managementView = UserInfoManagementView()
     private let viewModel: UserInfoManagementViewModel
+    private let managementView = UserInfoManagementView()
     private let disposeBag = DisposeBag()
 
     init(viewModel: UserInfoManagementViewModel) {
@@ -43,15 +45,15 @@ final class UserInfoManagementViewController: UIViewController {
     }
 
     private func bindView() {
-        managementView.getUserInfoArrowButton.rx.tap
+        managementView.userInfoArrowButton.rx.tap
             .bind(with: self) { owner, _ in
                 let nextVC = DIContainer.shared.makeUserInfoUpdateViewController()
                 owner.navigationController?.pushViewController(nextVC, animated: true)
             }.disposed(by: disposeBag)
 
-        managementView.getWithdrawButton.rx.tap
+        managementView.withdrawButton.rx.tap
             .bind(with: self) { owner, _ in
-                AlertBuilder(baseViewController: self, type: .withdraw) {
+                AlertBuilder(baseViewController: owner, type: .withdraw) {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         owner.viewModel.action.onNext(.withdraw)
                     }
@@ -70,6 +72,7 @@ final class UserInfoManagementViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+                NSLog("UserInfoManagementViewController Error: \(error.debugDescription)")
             }.disposed(by: disposeBag)
     }
 }

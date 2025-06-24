@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 유저 엔티티
 struct User {
     let name: String?
     let email: String

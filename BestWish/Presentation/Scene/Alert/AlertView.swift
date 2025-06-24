@@ -6,63 +6,68 @@
 //
 
 import UIKit
+
 import RxSwift
+import SnapKit
+import Then
 
+/// Custom Alert View
 final class AlertView: UIView {
-    private let disposeBag = DisposeBag()
-    private let _dismiss = PublishSubject<Void>()
-    var dismiss: Observable<Void> { _dismiss.asObservable() }
 
+    // MARK: - Private Property
     private let type: AlertType
 
-    private let alertView = UIView()
-    private let titleLabel = UILabel()
-    private let subTitleLabel = UILabel()
-    private let buttonStackView = UIStackView()
-    private let cancelButton: AppButton
-    let confirmButton: AppButton
+    private let _contentView = UIView()
+    private let _titleLabel = UILabel()
+    private let _subTitleLabel = UILabel()
+    private let _buttonStackView = UIStackView()
+    private let _cancelButton: AppButton
+    private let _confirmButton: AppButton
+
+    // MARK: - Internal Property
+    var contentView: UIView { _contentView }
+    var cancelButton: AppButton { _cancelButton }
+    var confirmButton: AppButton { _confirmButton }
 
     init(type: AlertType) {
         self.type = type
-        cancelButton = AppButton(type: type.cancelButtonType, fontSize: 16)
-        confirmButton = AppButton(type: type.confirmButtonType, fontSize: 16)
-
+        _cancelButton = AppButton(type: type.cancelButtonType, fontSize: 16)
+        _confirmButton = AppButton(type: type.confirmButtonType, fontSize: 16)
         super.init(frame: .zero)
 
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
 }
 
+// MARK: - View 설정
 private extension AlertView {
     func setView() {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setBindings()
     }
 
     func setAttributes() {
         self.backgroundColor = .black.withAlphaComponent(0.5)
 
-        alertView.do {
+        _contentView.do {
             $0.backgroundColor = .gray0
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
         }
 
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = type.title
             $0.textColor = .gray800
             $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textAlignment = .center
         }
 
-        subTitleLabel.do {
+        _subTitleLabel.do {
             $0.text = type.subTitle
             $0.textColor = .gray600
             $0.font = .font(.pretendardMedium, ofSize: 12)
@@ -70,7 +75,7 @@ private extension AlertView {
             $0.numberOfLines = 0
         }
 
-        buttonStackView.do {
+        _buttonStackView.do {
             $0.axis = .horizontal
             $0.spacing = 12
             $0.distribution = .fillEqually
@@ -78,53 +83,33 @@ private extension AlertView {
     }
 
     func setHierarchy() {
-        self.addSubviews(alertView)
-        alertView.addSubviews(titleLabel, subTitleLabel, buttonStackView)
-        buttonStackView.addArrangedSubviews(cancelButton, confirmButton)
+        self.addSubviews(_contentView)
+        _contentView.addSubviews(_titleLabel, _subTitleLabel, _buttonStackView)
+        _buttonStackView.addArrangedSubviews(_cancelButton, _confirmButton)
     }
 
     func setConstraints() {
-        alertView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.directionalHorizontalEdges.equalToSuperview().inset(20)
+        _contentView.snp.makeConstraints { 
+            $0.centerY.equalToSuperview()
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
 
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(type.titleTopPadding)
-            make.directionalHorizontalEdges.equalToSuperview()
-            make.height.equalTo(35)
+        _titleLabel.snp.makeConstraints { 
+            $0.top.equalToSuperview().inset(type.titleTopPadding)
+            $0.directionalHorizontalEdges.equalToSuperview()
+            $0.height.equalTo(35)
         }
 
-        subTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.directionalHorizontalEdges.equalToSuperview()
+        _subTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(_titleLabel.snp.bottom).offset(4)
+            $0.directionalHorizontalEdges.equalToSuperview()
         }
 
-        buttonStackView.snp.makeConstraints { make in
-            make.top.equalTo(subTitleLabel.snp.bottom).offset(24)
-            make.directionalHorizontalEdges.equalToSuperview().inset(16)
-            make.height.equalTo(43)
-            make.bottom.equalToSuperview().inset(20)
+        _buttonStackView.snp.makeConstraints {
+            $0.top.equalTo(_subTitleLabel.snp.bottom).offset(24)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(43)
+            $0.bottom.equalToSuperview().inset(20)
         }
-    }
-
-    func setBindings() {
-        let tapGesture = UITapGestureRecognizer()
-        tapGesture.delegate = self
-        self.addGestureRecognizer(tapGesture)
-
-        Observable.merge(
-            tapGesture.rx.event.map { _ in },
-            cancelButton.rx.tap.map { }
-        )
-        .subscribe(_dismiss)
-        .disposed(by: disposeBag)
-    }
-}
-
-extension AlertView: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        let touchLocation = touch.location(in: self)
-        return !alertView.frame.contains(touchLocation)
     }
 }

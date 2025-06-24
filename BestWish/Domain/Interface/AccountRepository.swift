@@ -7,7 +7,12 @@
 
 import Foundation
 
+/// 계정 관련 레포지토리 프로토콜
 protocol AccountRepository {
+    
+    /// 로그아웃
     func logout() async throws
+
+    /// 회원탈퇴
     func withdraw() async throws
 }

@@ -7,11 +7,13 @@
 
 import Foundation
 
+/// Supbase 테이블
 enum SupabaseTable: String {
     case product = "Product"
     case userInfo = "UserInfo"
 }
 
+/// Supbase - Product 테이블의 속성
 enum ProductAttributes: String {
     case id
     case created_at
@@ -25,6 +27,7 @@ enum ProductAttributes: String {
     case product_url
 }
 
+/// Supbase - UserInfo 테이블의 속성
 enum UserInfoAttributes: String {
     case id
     case created_at

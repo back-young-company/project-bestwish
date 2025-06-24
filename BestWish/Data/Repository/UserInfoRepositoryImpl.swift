@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 유저 정보 관련 레포지토리
 final class UserInfoRepositoryImpl: UserInfoRepository {
     private let manager: SupabaseUserInfoManager
 
@@ -14,6 +15,7 @@ final class UserInfoRepositoryImpl: UserInfoRepository {
         self.manager = manager
     }
 
+    /// 유저 정보 불러오기
     func getUserInfo() async throws -> User {
         do {
             let result = try await manager.getUserInfo()
@@ -23,6 +25,7 @@ final class UserInfoRepositoryImpl: UserInfoRepository {
         }
     }
 
+    /// 유저 정보 업데이트
     func updateUserInfo(
         profileImageCode: Int?,
         nickname: String?,
@@ -42,7 +45,10 @@ final class UserInfoRepositoryImpl: UserInfoRepository {
     }
 }
 
+// MARK: - DTO -> Entity 매핑
 extension UserInfoRepositoryImpl {
+
+    /// UserDTO -> User
     private func convertToUser(from dto: UserDTO) -> User {
 
         // TODO: 리펙토링하기

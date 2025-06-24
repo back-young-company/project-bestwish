@@ -5,20 +5,18 @@
 //  Created by 이수현 on 6/9/25.
 //
 
-import RxSwift
 import RxRelay
+import RxSwift
 
+/// 마이페이지 View Model
 final class MyPageViewModel: ViewModel {
-    private let userInfoUseCase: UserInfoUseCase
-    private let accountUseCase: AccountUseCase
-
-    private let disposeBag = DisposeBag()
-
+    // MARK: - Action
     enum Action {
         case getUserInfo
         case logout
     }
 
+    // MARK: - State
     struct State {
         let sections: Observable<[MyPageSection]> = Observable.just(
             MyPageSectionType.allCases.map { type in
@@ -34,24 +32,33 @@ final class MyPageViewModel: ViewModel {
                 }
             }
         )
-        let userInfo: Observable<UserInfoDisplay>
+        let userInfo: Observable<UserInfoModel>
         let error: Observable<AppError>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
 
     private let _error = PublishSubject<AppError>()
-    private let _userInfo = PublishSubject<UserInfoDisplay>()
-    let state: State
+    private let _userInfo = PublishSubject<UserInfoModel>()
+
+    private let userInfoUseCase: UserInfoUseCase
+    private let accountUseCase: AccountUseCase
+    private let disposeBag = DisposeBag()
 
     init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
+
         state = State(
             userInfo: _userInfo.asObservable(),
             error: _error.asObservable()
         )
+
         bindAction()
     }
 
@@ -66,18 +73,20 @@ final class MyPageViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
+    /// 유저 정보 가져오기
     private func getUserInfo() {
         Task {
             do {
                 let user = try await userInfoUseCase.getUserInfo()
-                let userInfoDisplay = convertUserInfoDisplay(from: user)
-                _userInfo.onNext(userInfoDisplay)
+                let UserInfoModel = convertUserInfoModel(from: user)
+                _userInfo.onNext(UserInfoModel)
             } catch {
                 handleError(error)
             }
         }
     }
 
+    /// 로그아웃
     private func logout() {
         Task {
             do {
@@ -88,14 +97,16 @@ final class MyPageViewModel: ViewModel {
         }
     }
 
-    private func convertUserInfoDisplay(from user: User) -> UserInfoDisplay {
-        UserInfoDisplay(
+    /// User Entity -> UserInfoModel 변환 메서드
+    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+        UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,
             nickname: user.nickname
         )
     }
 
+    /// 에러 핸들링
     private func handleError(_ error: Error) {
         if let error = error as? AppError {
             _error.onNext(error)
