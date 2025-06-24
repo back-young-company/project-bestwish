@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 
-// MARK: - 세그먼트 컨트롤 뷰 (0번째 index 섹션 헤더)
+/// 세그먼트 컨트롤 뷰 (0번째 index 섹션 헤더)
 final class SegmentControlHeaderView: UICollectionReusableView, ReuseIdentifier {
     
     // MARK: - Private Property

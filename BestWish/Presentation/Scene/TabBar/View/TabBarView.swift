@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-// 메인 탭바 뷰
+/// 메인 탭바 뷰
 final class TabBarView: UIView {
     
     // MARK: - Private Property

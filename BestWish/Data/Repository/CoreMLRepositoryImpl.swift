@@ -22,7 +22,7 @@ final class CoreMLRepositoryImpl: CoreMLRepository {
         do {
             let labels = try manager.fetchCoreMLLabelData(image: image)
             return labels
-        } catch let error as CoreMLError {
+        } catch let error as AppError {
             throw error
         }
     }

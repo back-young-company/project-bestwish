@@ -66,7 +66,7 @@ final class AnalysisViewModel: ViewModel {
             "원피스": mapping("원피스"),
         ]
         
-        // 모델 데이터 정제 (일치율 40% 보다 큰 경우)
+        /// 모델 데이터 정제 (일치율 40% 보다 큰 경우)
         func mapping(_ category: String) -> [String]{
             let emptyKeyword = "해당 카테고리의 키워드를 인식할 수 없습니다."          // 비어 있는 키워드 예외처리를 위함
             let att = labelData.filter { $0.topCategory == category && $0.probability > 40 }.map { $0.attributes }

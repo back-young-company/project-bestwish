@@ -12,9 +12,6 @@ import RxRelay
 
 /// 이미지 편집 뷰 모델
 final class ImageEditViewModel: ViewModel {
-    
-    private let coreMLUseCase: CoreMLUseCase
-    private let disposeBag = DisposeBag()
 
     // MARK: - Action
     enum Action {
@@ -33,8 +30,10 @@ final class ImageEditViewModel: ViewModel {
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
     private let _labelData = PublishSubject<[LabelDataDisplay]>()
-    
 
+    private let coreMLUseCase: CoreMLUseCase
+    private let disposeBag = DisposeBag()
+    
     init(coreMLUseCase: CoreMLUseCase) {
         self.coreMLUseCase = coreMLUseCase
         state = State(labelData: _labelData.asObservable())

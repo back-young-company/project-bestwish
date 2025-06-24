@@ -18,8 +18,8 @@ import RxSwift
 final class TabBarViewController: UIViewController {
 
     private let viewControllers:[UIViewController]
-    private let disposeBag = DisposeBag()
     private let tabBarView = TabBarView()
+    private let disposeBag = DisposeBag()
     
     private let tabBarMode = BehaviorRelay<TabBarMode>(value: .left)
     private let floatingMode = BehaviorRelay<FloatingMode>(value: .home)

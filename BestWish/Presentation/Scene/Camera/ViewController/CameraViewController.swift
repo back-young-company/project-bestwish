@@ -15,8 +15,8 @@ import RxSwift
 final class CameraViewController: UIViewController {
     
     // MARK: - Private Property
-    private let cameraView = CameraView()
     private let viewModel = CameraViewModel()
+    private let cameraView = CameraView()
     private let disposeBag = DisposeBag()
     
     private var session: AVCaptureSession?                      // 카메라 입력, 출력을 연결하는 세션 객체
@@ -25,7 +25,7 @@ final class CameraViewController: UIViewController {
     private let globalQueue = DispatchQueue(label: "BestWish.globalQueue", qos: .userInteractive)
     
     // MARK: - Internal Property
-    public var getHeaderHomeButton: UIBarButtonItem { return cameraView.homeButton }
+    var getHeaderHomeButton: UIBarButtonItem { return cameraView.homeButton }
     
     override func loadView() {
         view = cameraView
@@ -35,16 +35,16 @@ final class CameraViewController: UIViewController {
         super.viewDidLoad()
         setNavigationBar(alignment: .left, title: "라이브 캡쳐")
         navigationItem.rightBarButtonItem = cameraView.homeButton
-        viewModel.action.onNext(.viewDidLoad)
         bindViewModel()
+        viewModel.action.onNext(.viewDidLoad)
     }
     
     private func bindViewModel() {
         
         viewModel.state.successSetUpCamera
             .subscribe(with: self) { owner, _ in
-                self.setUpCamera()
-                self.cameraView.showToast()
+                owner.setUpCamera()
+                owner.cameraView.showToast()
             }
             .disposed(by: disposeBag)
     }
