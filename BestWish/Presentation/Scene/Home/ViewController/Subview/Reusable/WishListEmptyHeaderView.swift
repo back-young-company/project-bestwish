@@ -30,7 +30,7 @@ final class WishListEmptyHeaderView: UICollectionReusableView, ReuseIdentifier {
     }
 }
 
-//MARK: - WishListEmptyHeaderView 설정
+// MARK: - WishListEmptyHeaderView 설정
 private extension WishListEmptyHeaderView {
     func setView() {
         setAttributes()

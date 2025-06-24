@@ -20,6 +20,7 @@ final class PlatformEditViewController: UIViewController {
     private let disposeBag = DisposeBag()
 
     private var updatedIndices: [Int] = []
+
     weak var delegate: HomeViewControllerUpdate?
 
     init(platformEditViewModel: PlatformEditViewModel) {

@@ -54,7 +54,7 @@ final class HomeViewController: UIViewController {
                 guard let self else { return UICollectionViewCell() }
                 
                 switch item {
-                case .platform(let platform):
+                case let .platform(platform):
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: PlatformShortcutCell.identifier,
                         for: indexPath
@@ -63,7 +63,7 @@ final class HomeViewController: UIViewController {
                     cell.configure(type: platform)
 
                     return cell
-                case .wishlist(let product):
+                case let .wishlist(product):
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: WishListCell.identifier,
                         for: indexPath
@@ -198,9 +198,9 @@ final class HomeViewController: UIViewController {
             }
             .bind(with: self) { owner, item in
                 switch item {
-                case .platform(let platform):
+                case let .platform(platform):
                     return owner.switchDeeplink(platform.platformDeepLink)
-                case .wishlist(let product):
+                case let .wishlist(product):
                     return owner.switchDeeplink(product.productDeepLink)
                 case .wishlistEmpty:
                     return

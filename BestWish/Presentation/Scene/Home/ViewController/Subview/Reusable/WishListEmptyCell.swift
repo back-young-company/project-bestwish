@@ -42,7 +42,7 @@ final class WishListEmptyCell: UICollectionViewCell, ReuseIdentifier {
     }
 }
 
-//MARK: - WishListEmptyCell 설정
+// MARK: - WishListEmptyCell 설정
 private extension WishListEmptyCell {
     func setView() {
         setAttributes()

@@ -44,7 +44,7 @@ final class WishListEditHeaderView: UICollectionReusableView, ReuseIdentifier {
     }
 }
 
-//MARK: - WishListEditHeaderView 설정
+// MARK: - WishListEditHeaderView 설정
 private extension WishListEditHeaderView {
     func setView() {
         setAttributes()

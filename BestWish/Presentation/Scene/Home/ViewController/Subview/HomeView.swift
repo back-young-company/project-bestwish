@@ -33,7 +33,7 @@ final class HomeView: UIView {
     }
 }
 
-//MARK: - HomeView 설정
+// MARK: - HomeView 설정
 private extension HomeView {
     func setView() {
         setAttributes()

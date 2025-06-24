@@ -45,7 +45,7 @@ final class PlatformShortcutHeaderView: UICollectionReusableView, ReuseIdentifie
     }
 }
 
-//MARK: - PlatformShortcutHeaderView 설정
+// MARK: - PlatformShortcutHeaderView 설정
 private extension PlatformShortcutHeaderView {
     func setView() {
         setAttributes()

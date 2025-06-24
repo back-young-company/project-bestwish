@@ -14,11 +14,11 @@ import Then
 /// 위시리스트 필터 Cell
 final class WishListFilterCell: UICollectionViewCell, ReuseIdentifier {
 
-    //MARK: Private Property
+    // MARK: Private Property
     private let _platformButton = UIButton()
     private var _disposeBag = DisposeBag()
 
-    //MARK: Internal Property
+    // MARK: Internal Property
     var platformButton: UIButton { _platformButton }
     var disposeBag: DisposeBag { _disposeBag }
 

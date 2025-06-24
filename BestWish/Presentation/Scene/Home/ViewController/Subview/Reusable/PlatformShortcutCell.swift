@@ -45,7 +45,7 @@ final class PlatformShortcutCell: UICollectionViewCell, ReuseIdentifier {
     }
 }
 
-//MARK: - PlatformShortcutCell 설정
+// MARK: - PlatformShortcutCell 설정
 private extension PlatformShortcutCell {
     func setView() {
         setAttributes()
