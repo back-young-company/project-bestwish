@@ -28,16 +28,7 @@ jobs:
             -project BestWish.xcodeproj \
             -scheme BestWish \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
-            SYMROOT=${{ github.workspace }}/build # 빌드 결과물을 특정 폴더에 저장
           | xcbeautify
-
-      # 3. 빌드된 아티팩트 저장 (선택 사항)
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: BestWish-app-build
-          path: ${{ github.workspace }}/build/Debug-iphonesimulator/BestWish.app # 빌드된 앱 경로
-          # retention-days: 1 # 아티팩트 보존 기간 (선택 사항)
 
       # 4. 테스트 스텝만 실행
       - name: Run Tests
