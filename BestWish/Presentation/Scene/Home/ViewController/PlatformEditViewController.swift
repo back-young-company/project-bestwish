@@ -11,17 +11,18 @@ import RxCocoa
 import RxDataSources
 import RxSwift
 
+/// 플랫폼 편집 View Controller
 final class PlatformEditViewController: UIViewController {
-    
-    private let platformEditView = PlatformEditView()
+
+    // MARK: - Private Property
     private let platformEditViewModel: PlatformEditViewModel
-    
-    private var updatedIndices: [Int] = []
-    
-    weak var delegate: HomeViewControllerUpdate?
-    
+    private let platformEditView = PlatformEditView()
     private let disposeBag = DisposeBag()
-    
+
+    private var updatedIndices: [Int] = []
+
+    weak var delegate: HomeViewControllerUpdate?
+
     init(platformEditViewModel: PlatformEditViewModel) {
         self.platformEditViewModel = platformEditViewModel
         super.init(nibName: nil, bundle: nil)
@@ -45,7 +46,7 @@ final class PlatformEditViewController: UIViewController {
         bindViewModel()
         bindActions()
         
-        platformEditView.getTableView.isEditing = true
+        platformEditView.tableView.isEditing = true
     }
     
     private func bindViewModel() {
@@ -61,7 +62,7 @@ final class PlatformEditViewController: UIViewController {
         })
         
         platformEditViewModel.state.sections
-            .bind(to: platformEditView.getTableView.rx.items(dataSource: dataSource))
+            .bind(to: platformEditView.tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         platformEditViewModel.state.sections
@@ -76,13 +77,13 @@ final class PlatformEditViewController: UIViewController {
     private func bindActions() {
         platformEditViewModel.action.onNext(.viewDidLoad)
         
-        platformEditView.getBackButton.rx.tap
+        platformEditView.backButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
         
-        platformEditView.getTableView.rx.itemMoved
+        platformEditView.tableView.rx.itemMoved
             .withLatestFrom(platformEditViewModel.state.sections) { indexPath, sections in
                 return (indexPath, sections)
             }
@@ -102,7 +103,7 @@ final class PlatformEditViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        platformEditView.getHeaderView.getCompleteButton.rx.tap
+        platformEditView.headerView.completeButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
             }
@@ -116,18 +117,21 @@ final class PlatformEditViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        platformEditView.getTableView.rx.setDelegate(self)
+        platformEditView.tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-        
     }
-    
+}
+
+// MARK: - private 메서드 정리
+private extension PlatformEditViewController {
+    /// 네비게이션 바 설정
     private func setNavigationBar() {
         self.title = "플랫폼 편집"
         self.navigationController?.navigationBar.isHidden = false
-        
-        let backItem = UIBarButtonItem(customView: platformEditView.getBackButton)
+
+        let backItem = UIBarButtonItem(customView: platformEditView.backButton)
         self.navigationItem.leftBarButtonItem = backItem
-        
+
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.titleTextAttributes = [
@@ -138,29 +142,35 @@ final class PlatformEditViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = appearance
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
-    
+
+    /// 헤더 뷰 설정
     private func setupHeaderView(count: Int) {
-        platformEditView.getHeaderView.configure(count: count)
-        
+        platformEditView.headerView.configure(count: count)
+
         let targetSize = CGSize(width: view.bounds.width, height: 0)
-        let height = platformEditView.getHeaderView.systemLayoutSizeFitting(targetSize).height
-        platformEditView.getHeaderView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
-        platformEditView.getTableView.tableHeaderView = platformEditView.getHeaderView
+        let height = platformEditView.headerView.systemLayoutSizeFitting(targetSize).height
+        platformEditView.headerView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
+        platformEditView.tableView.tableHeaderView = platformEditView.headerView
     }
 }
 
+// MARK: - 테이블 뷰 delegate
 extension PlatformEditViewController: UITableViewDelegate {
+    /// editing Style 설정
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }
     
-    // 재정렬 시 들여쓰기를 하지 않도록 설정 (선택사항이지만 권장)
+    /// 재정렬 시 들여쓰기를 하지 않도록 설정 (선택사항이지만 권장)
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
 }
 
+/// 플랫폼 및 위시리스트 업데이트를 위한 Protocol
 protocol HomeViewControllerUpdate: AnyObject {
+    /// 플랫폼 업데이트
     func updatePlatforms()
+    /// 위시리스트 업데이트
     func updateWishlists()
 }

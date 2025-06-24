@@ -17,7 +17,7 @@ final class AnalysisViewModel: ViewModel {
         case didTapAttributeChip(attribute: String)         // 속성 칩 선택 시
         case didSubmitSearchText(keyword: String)           // 검색버튼 터치 시
         case didTapKeywordChip(keyword: String)             // 키워드 칩 선택 시
-        case didTapPlatformChip(platform: Platform)         // 플랫폼 칩 선택 시
+        case didTapPlatformChip(platform: PlatformItem)         // 플랫폼 칩 선택 시
         case didTapResetButton                              // 초기화 버튼 선택 시
         case didTapSearchButton                             // 검색 버튼 선택 시
     }
@@ -39,7 +39,7 @@ final class AnalysisViewModel: ViewModel {
     private let arr = ["스타일", "상의", "하의", "아우터", "원피스"]
     private var previousCategory = ""                       // 카테고리 비교 용도
     private var currentQuery = BehaviorRelay<String>(value: "")
-    private var currentPlatform = BehaviorRelay<Platform?>(value: nil)
+    private var currentPlatform = BehaviorRelay<PlatformItem?>(value: nil)
     private let topClassFilter: [String: [String]]           // CoreData Model 데이터 정재해서 저장 (큰 카테고리: [속성])
     
     private let _action = PublishSubject<Action>()
@@ -77,7 +77,7 @@ final class AnalysisViewModel: ViewModel {
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
             AnalysisSectionModel(header: nil, type: .platform, items: ShopPlatform.allCases.filter{ $0 != .all }.map {
-                .platform(platform: Platform(
+                .platform(platform: PlatformItem(
                     platform: $0,
                     platformName: $0.platformName,
                     platformImage: $0.rawValue,
@@ -165,7 +165,7 @@ private extension AnalysisViewModel {
     }
     
     /// 플랫폼 선택 이벤트
-    private func selectePlatform(_ platform: Platform) {
+    private func selectePlatform(_ platform: PlatformItem) {
         let models = analysisUseCase.selectePlatform(platform, models: _labelData.value)
         currentPlatform.accept(platform)
         changedKeyword(labelData: models)

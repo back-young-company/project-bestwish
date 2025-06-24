@@ -10,8 +10,10 @@ import Foundation
 import RxSwift
 import RxRelay
 
+/// 홈 View Model
 final class HomeViewModel: ViewModel {
-    
+
+    // MARK: - Action
     enum Action {
         case getDataSource
         case platformUpdate
@@ -19,7 +21,8 @@ final class HomeViewModel: ViewModel {
         case filterIndex(Int, force: Bool = false)
         case searchQuery(String)
     }
-    
+
+    // MARK: - State
     struct State {
         let sections: Observable<[HomeSectionModel]>
         let platformFilter: Observable<[(Int, Int)]>
@@ -27,9 +30,13 @@ final class HomeViewModel: ViewModel {
         let selectedPlatform: Observable<Int>
         let error: Observable<Error>
     }
-    
+
+    // MARK: - Internal Property
+    var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
     private let _action = PublishSubject<Action>()
-    
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
     private let _platformFilter = BehaviorRelay<[(Int, Int)]>(value: [])
     private let _platformSequence = BehaviorRelay<[Int]>(value: [])
@@ -40,10 +47,6 @@ final class HomeViewModel: ViewModel {
     private var previousIndex = 0
     
     private let useCase: WishListUseCase
-    
-    var action: AnyObserver<Action> { _action.asObserver() }
-    let state: State
-    
     private let disposeBag = DisposeBag()
     
     init(useCase: WishListUseCase) {
@@ -106,7 +109,7 @@ final class HomeViewModel: ViewModel {
                             
                             let platformsSection = currentSections[0].items
                             
-                            let platforms: [Platform] = platformsSection.compactMap {
+                            let platforms: [PlatformItem] = platformsSection.compactMap {
                                 if case let .platform(platform) = $0 {
                                     return platform
                                 }
@@ -149,23 +152,28 @@ final class HomeViewModel: ViewModel {
             }
             .disposed(by: disposeBag)
     }
-    
-    private func getPlatformSequence() async throws -> [Platform] {
+}
+
+// MARK: - private 메서드
+private extension HomeViewModel {
+    /// Supabase 플랫폼 시퀀스 가져오기
+    func getPlatformSequence() async throws -> [PlatformItem] {
         let result = try await self.useCase.getPlatformSequence()
         return result.map { platform in
             let shopPlatform = ShopPlatform.allCases[platform]
-            return Platform(
+            return PlatformItem(
                 platformName: shopPlatform.platformName,
                 platformImage: shopPlatform.rawValue,
                 platformDeepLink: shopPlatform.platformDeepLink
             )
         }
     }
-    
-    private func getWishLists(query: String? = nil, platform: Int? = nil) async throws -> [WishlistProduct] {
+
+    /// Supabase 위시리스트 가져오기
+    func getWishLists(query: String? = nil, platform: Int? = nil) async throws -> [WishListProductItem] {
         let result = try await self.useCase.searchWishListItems(query: query, platform: platform)
         return result.map { item in
-            WishlistProduct(
+            WishListProductItem(
                 uuid: item.id,
                 productImageURL: item.imagePathURL,
                 brandName: item.brand,
@@ -176,16 +184,18 @@ final class HomeViewModel: ViewModel {
             )
         }
     }
-    
-    private func getPlatformInWishList() async throws -> [(Int, Int)] {
+
+    /// Supabase 위시리스트 필터 가져오기
+    func getPlatformInWishList() async throws -> [(Int, Int)] {
         var result = try await self.useCase.getPlatformsInWishList(isEdit: false)
         result.insert((platform: 0, count: 0), at: 0)
         return result
     }
-    
-    private func setDataSources(platforms: [Platform], wishLists: [WishlistProduct]) {
+
+    /// section model 설정 및 전달
+    func setDataSources(platforms: [PlatformItem], wishLists: [WishListProductItem]) {
         let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
-        
+
         let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
         let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists)
 
