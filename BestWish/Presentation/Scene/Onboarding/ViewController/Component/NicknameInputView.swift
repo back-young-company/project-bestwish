@@ -23,7 +23,6 @@ final class NicknameInputView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-
 }
 
 private extension NicknameInputView {
