@@ -160,6 +160,13 @@ private extension OnboardingViewController {
             owner.viewModel.action.onNext(.inputNickname(nickname))
         }
             .disposed(by: disposeBag)
+
+        secondView.nicknameVStackView.textField.rx.controlEvent(.editingDidBegin)
+            .subscribe(with: self) { owner, _ in
+                owner.secondView.nicknameVStackView.textField.layer.borderColor = UIColor.primary300?.cgColor
+        }
+            .disposed(by: disposeBag)
+
     }
 
     func bindPageButton() {

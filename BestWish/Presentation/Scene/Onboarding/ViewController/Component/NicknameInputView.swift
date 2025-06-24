@@ -6,12 +6,8 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
 final class NicknameInputView: UIView {
-
-    private let disposeBag = DisposeBag()
 
     private let rootVStackView = VerticalStackView(spacing: 12)
     private let nicknameLabel = GroupTitleLabel(title: "닉네임")
@@ -35,7 +31,6 @@ private extension NicknameInputView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setBindings()
     }
 
     func setAttributes() {
@@ -77,15 +72,6 @@ private extension NicknameInputView {
         textField.snp.makeConstraints {
             $0.height.equalTo(48)
         }
-    }
-
-    func setBindings() {
-        // 편집 시작
-        textField.rx.controlEvent(.editingDidBegin)
-            .subscribe(with: self) { owner, _ in
-            owner.textField.layer.borderColor = UIColor.primary300?.cgColor
-        }
-            .disposed(by: disposeBag)
     }
 }
 
