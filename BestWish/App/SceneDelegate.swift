@@ -75,7 +75,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func showMainView() {
         let vc = TabBarViewController(viewControllers: [
             UINavigationController(rootViewController: DIContainer.shared.makeHomeViewController()),
-            UINavigationController(rootViewController: CameraViewController()),
+            UINavigationController(rootViewController: DIContainer.shared.makeCameraViewController()),
             UINavigationController(rootViewController: DIContainer.shared.makeMyPageViewController())
         ])
         window?.rootViewController = vc // DummyViewController(viewModel: vm)

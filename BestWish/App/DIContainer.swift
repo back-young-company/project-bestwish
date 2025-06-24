@@ -13,6 +13,7 @@ final class DIContainer {
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
+    private let coreMLManager: CoreMLManager
     
     private let wishListRepository: WishListRepository
     private let userInfoRepository: UserInfoRepository
@@ -37,7 +38,8 @@ final class DIContainer {
         self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
         self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
-        self.coreMLRepository = CoreMLRepositoryImpl()
+        self.coreMLManager = CoreMLManager()
+        self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
         self.analysisUseCase = AnalysisUseCaseImpl()
     }
@@ -88,12 +90,18 @@ final class DIContainer {
         return OnboardingViewController(viewModel: onboardingViewModel, policyViewModel: policyViewModel)
     }
     
+    /// 카메라 뷰 컨트롤러 생성
+    func makeCameraViewController() -> CameraViewController {
+        return CameraViewController()
+    }
+    
     /// 이미지 편집 뷰 컨트롤러 생성
     func makeImageEditController(image: UIImage) -> ImageEditViewController {
         let viewModel = ImageEditViewModel(coreMLUseCase: coreMLUseCase)
         return ImageEditViewController(image: image, viewModel: viewModel)
     }
     
+    /// 이미지 분석 뷰 컨트롤러 생성
     func makeAnalysisViewController(labelData: [LabelDataDisplay]) -> AnalaysisViewController {
         let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
         return AnalaysisViewController(viewModel: viewModel)

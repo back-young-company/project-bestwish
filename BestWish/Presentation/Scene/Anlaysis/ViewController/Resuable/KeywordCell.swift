@@ -6,41 +6,47 @@
 //
 
 import UIKit
+
+import RxSwift
 import SnapKit
 import Then
-import RxSwift
 
-// MARK: - 선택한 속성으로 만들어진 키워드 셀
+/// 선택한 속성으로 만들어진 키워드 셀
 final class KeywordCell: UICollectionViewCell, ReuseIdentifier {
     
-    var disposeBag = DisposeBag()
-    private let keywordLabel = UILabel()
-    private let iconImageView = UIImageView()
-    private let horizontalStackView = HorizontalStackView(spacing: 8)
+    // MARK: - Private Property
+    private let _keywordLabel = UILabel()
+    private let _iconImageView = UIImageView()
+    private let _horizontalStackView = HorizontalStackView(spacing: 8)
+    private var _disposeBag = DisposeBag()
+    
+    // MARK: - Internal Property
+    var disposeBag: DisposeBag { _disposeBag }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
     
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        keywordLabel.text = nil
-        disposeBag = DisposeBag()
+        _keywordLabel.text = nil
+        _disposeBag = DisposeBag()
     }
     
     func configure(keyword: String) {
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
-        keywordLabel.font = titleFont
-        keywordLabel.text = keyword
+        _keywordLabel.font = titleFont
+        _keywordLabel.text = keyword
     }
 }
 
+// MARK: - 키워드 셀 설정
 private extension KeywordCell {
     func setView() {
         setAttributes()
@@ -49,18 +55,18 @@ private extension KeywordCell {
     }
     
     func setAttributes() {
-        keywordLabel.do {
+        _keywordLabel.do {
             $0.font = UIFont.font(.pretendardBold, ofSize: 14)
             $0.textColor = .gray0
             $0.textAlignment = .center
             $0.lineBreakMode = .byTruncatingTail
         }
-        iconImageView.do {
+        _iconImageView.do {
             $0.image = UIImage(systemName: "xmark.circle.fill")
             $0.tintColor = .gray0
             $0.contentMode = .scaleAspectFit
         }
-        horizontalStackView.do {
+        _horizontalStackView.do {
             $0.alignment = .center
             $0.backgroundColor = .gray900
             $0.layer.cornerRadius = 15
@@ -71,15 +77,15 @@ private extension KeywordCell {
     }
     
     func setHierarchy() {
-        contentView.addSubview(horizontalStackView)
-        horizontalStackView.addArrangedSubviews(keywordLabel, iconImageView)
+        contentView.addSubview(_horizontalStackView)
+        _horizontalStackView.addArrangedSubviews(_keywordLabel, _iconImageView)
     }
     
     func setConstraints() {
-        horizontalStackView.snp.makeConstraints {
+        _horizontalStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        iconImageView.snp.makeConstraints {
+        _iconImageView.snp.makeConstraints {
             $0.size.equalTo(20)
         }
     }

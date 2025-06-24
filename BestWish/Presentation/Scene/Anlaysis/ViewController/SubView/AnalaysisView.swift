@@ -6,17 +6,25 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
 
-// MARK: - 이미지 분석 대시보드
+/// 이미지 분석 대시보드
 final class AnalysisView: UIView {
     
-    private let titleLabel = UILabel()
-    private let searchBar = UISearchBar()
-    private let resetButton = AppButton(type: .reset)
-    private let searchButton = AppButton(type: .viewProduct)
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout)
+    // MARK: - Private Property
+    private let _titleLabel = UILabel()
+    private let _searchBar = UISearchBar()
+    private let _resetButton = AppButton(type: .reset)
+    private let _searchButton = AppButton(type: .viewProduct)
+    private lazy var _collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout)
+    
+    // MARK: - Internal Property
+    var collectionView: UICollectionView { _collectionView }
+    var searchBar: UISearchBar { _searchBar }
+    var restButton: UIButton { _resetButton }
+    var searchButton: UIButton { _searchButton }
     
     /// 섹션 정의
     func createAnlaysisSection(_ index: Int) -> NSCollectionLayoutSection {
@@ -126,25 +134,20 @@ final class AnalysisView: UIView {
         setView()
     }
     
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
     
     public func configure(_ isActivated: Bool) {
-        searchButton.isEnabled = isActivated
+        _searchButton.isEnabled = isActivated
     }
-    
-    // MARK: - 접근 제어
-    public var getCollectionView: UICollectionView { collectionView }
-    public var getSearchBar: UISearchBar { searchBar }
-    public var getRestButton: UIButton { resetButton }
-    public var getSearchButton: UIButton { searchButton }
 }
 
+// MARK: - 이미지 분석 뷰 설정
 private extension AnalysisView {
     func setView() {
         setAttributes()
+        setRegister()
         setHierarchy()
         setConstraints()
     }
@@ -153,71 +156,65 @@ private extension AnalysisView {
         overrideUserInterfaceStyle = .light
         backgroundColor = .gray0
         
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = "키워드로 검색어를 만들어보세요."
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 17)
         }
         
-        searchBar.do {
+        _searchBar.do {
             $0.tintColor = .gray900
             $0.backgroundImage = UIImage()
         }
         
-        collectionView.do {
+        _collectionView.do {
             $0.isScrollEnabled = true
             $0.showsVerticalScrollIndicator = false
         }
     }
     
     func setHierarchy() {
-        addSubviews(titleLabel, searchBar, collectionView, resetButton, searchButton)
+        addSubviews(_titleLabel, _searchBar, _collectionView, _resetButton, _searchButton)
+    }
+    
+    func setRegister() {
+        _collectionView.register(KeywordCell.self, forCellWithReuseIdentifier: KeywordCell.identifier)
+        _collectionView.register(AttributeCell.self, forCellWithReuseIdentifier: AttributeCell.identifier)
+        _collectionView.register(PlatformShortcutCell.self, forCellWithReuseIdentifier: PlatformShortcutCell.identifier)
+        _collectionView.register(SegmentControlHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SegmentControlHeaderView.identifier)
     }
     
     func setConstraints() {
-        titleLabel.snp.makeConstraints {
+        _titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().inset(50)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
         
-        searchBar.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(12)
+        _searchBar.snp.makeConstraints {
+            $0.top.equalTo(_titleLabel.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(10)
             $0.height.equalTo(44)
         }
         
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom).offset(8)
+        _collectionView.snp.makeConstraints {
+            $0.top.equalTo(_searchBar.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(resetButton.snp.top).offset(-10)
+            $0.bottom.equalTo(_resetButton.snp.top).offset(-10)
         }
         
-        resetButton.snp.makeConstraints {
+        _resetButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
             $0.height.equalTo(53)
             $0.width.equalTo(100)
             $0.bottom.equalToSuperview().offset(-24)
         }
         
-        searchButton.snp.makeConstraints {
-            $0.centerY.equalTo(resetButton)
+        _searchButton.snp.makeConstraints {
+            $0.centerY.equalTo(_resetButton)
             $0.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(53)
-            $0.leading.equalTo(resetButton.snp.trailing).offset(15)
+            $0.leading.equalTo(_resetButton.snp.trailing).offset(15)
         }
     }
 }
 
-// MARK: - 섹션 백그라운드
-final class SectionBackgroundDecorationView: UICollectionReusableView, ReuseIdentifier {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIColor.secondarySystemBackground
-        layer.cornerRadius = 8
-        clipsToBounds = true
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-}

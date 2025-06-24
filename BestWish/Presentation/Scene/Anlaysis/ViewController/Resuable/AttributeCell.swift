@@ -6,47 +6,55 @@
 //
 
 import UIKit
+
+import RxSwift
 import SnapKit
 import Then
-import RxSwift
 
-// MARK: - 카테고리에 따른 속성 셀
+/// 카테고리에 따른 속성 셀
 final class AttributeCell: UICollectionViewCell, ReuseIdentifier {
     
-    var disposeBag = DisposeBag()
-    private let attributeLabel = PaddingLabel(top: 4, left: 12, bottom: 4, right: 12)
+    // MARK: - Private Property
+    private let _attributeLabel = PaddingLabel(top: 4, left: 12, bottom: 4, right: 12)
+    private var _disposeBag = DisposeBag()
+    
+    // MARK: - Internal Property
+    var disposeBag: DisposeBag { _disposeBag }
+    
+    private let emptyKeyword = "해당 카테고리의 키워드를 인식할 수 없습니다."
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
     
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        attributeLabel.text = nil
-        disposeBag = DisposeBag()
+        _attributeLabel.text = nil
+        _disposeBag = DisposeBag()
     }
     
     func configure(attribute: String, isSelected: Bool) {
-        attributeLabel.text = attribute
+        _attributeLabel.text = attribute
         // 키워드가 비어 있을 시에는 옵션을 설정하지 않음
         guard attribute != emptyKeyword else {
-            attributeLabel.backgroundColor = .clear
+            _attributeLabel.backgroundColor = .clear
             return
         }
         
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
-        attributeLabel.font = titleFont
-        attributeLabel.backgroundColor = isSelected ? .primary300 : .gray0
-        attributeLabel.textColor = isSelected ? .gray0 : .gray900
+        _attributeLabel.font = titleFont
+        _attributeLabel.backgroundColor = isSelected ? .primary300 : .gray0
+        _attributeLabel.textColor = isSelected ? .gray0 : .gray900
     }
 }
 
+// MARK: - 셀 설정
 private extension AttributeCell {
     func setView() {
         setAttributes()
@@ -55,7 +63,7 @@ private extension AttributeCell {
     }
     
     func setAttributes() {
-        attributeLabel.do {
+        _attributeLabel.do {
             $0.font = UIFont.font(.pretendardBold, ofSize: 14)
             $0.textColor = .gray900
             $0.backgroundColor = .gray0
@@ -66,11 +74,11 @@ private extension AttributeCell {
     }
     
     func setHierarchy() {
-        contentView.addSubview(attributeLabel)
+        contentView.addSubview(_attributeLabel)
     }
     
     func setConstraints() {
-        attributeLabel.snp.makeConstraints {
+        _attributeLabel.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }

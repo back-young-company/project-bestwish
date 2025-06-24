@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - 실제 뷰에서 사용할 데이터
+/// 실제 뷰에서 사용할 데이터
 struct LabelDataDisplay {
     let topCategory: String
     let subCategory: String

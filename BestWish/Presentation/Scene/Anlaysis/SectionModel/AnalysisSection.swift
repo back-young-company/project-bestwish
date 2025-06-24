@@ -7,21 +7,21 @@
 
 import RxDataSources
 
-// MARK: - 각 섹션 아이템 케이스 저의
+/// 각 섹션 아이템 케이스 정의
 enum AnalysisItem: Equatable {
     case keyword(keyword: String)
     case attribute(attribute: String, isSelected: Bool)
     case platform(platform: Platform, isSelected: Bool = false)
 }
 
-// MARK: - AnalysisItem과 동일하지만 파라미터 없이 구분만을 위한 케이스
+/// AnalysisItem과 동일하지만 파라미터 없이 구분만을 위한 케이스
 enum AnalysisSectionType: Int {
     case keyword = 0
     case attribute = 1
     case platform = 2
 }
 
-// MARK: - 실제로 사용한 섹션 모델
+/// 실제로 사용한 섹션 모델
 struct AnalysisSectionModel {
     var header: [String]?
     let type: AnalysisSectionType
