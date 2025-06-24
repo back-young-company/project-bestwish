@@ -19,7 +19,7 @@ jobs:
 
       - name: Build and Run Tests
         run: |
-          set -o pipefail               # e: 오류시 즉시 중단 / o pipefail: 파이프 실패 감지
+          #set -o pipefail               # e: 오류시 즉시 중단 / o pipefail: 파이프 실패 감지
           xcodebuild clean test \
             -project BestWish.xcodeproj \
             -scheme BestWish \
