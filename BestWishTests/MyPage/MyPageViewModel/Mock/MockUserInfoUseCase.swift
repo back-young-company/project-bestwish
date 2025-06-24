@@ -8,8 +8,10 @@
 import Foundation
 @testable import BestWish
 
+// MARK: - Error 타입 반환을 손쉽게 하기 위해 사용
 extension String: @retroactive Error { }
 
+/// Mock UserInfo Use Case
 final class MockUserInfoUseCase: UserInfoUseCase {
     var shouldThrow = false
     var user: User?
