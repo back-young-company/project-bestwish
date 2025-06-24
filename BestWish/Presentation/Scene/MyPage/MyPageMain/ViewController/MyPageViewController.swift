@@ -59,6 +59,7 @@ final class MyPageViewController: UIViewController {
 
         bindViewModel()
         bindView()
+        viewModel.action.onNext(.getSection)
     }
 
     override func viewWillAppear(_ animated: Bool) {
