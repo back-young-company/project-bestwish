@@ -156,11 +156,6 @@
 			path = BestWishTests;
 			sourceTree = "<group>";
 		};
-		CBD6BA342DEF1B3B003242CA /* BestWishUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BestWishUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,7 +219,6 @@
 			children = (
 				CBD6BA132DEF1B39003242CA /* BestWish */,
 				CBD6BA2A2DEF1B3B003242CA /* BestWishTests */,
-				CBD6BA342DEF1B3B003242CA /* BestWishUITests */,
 				14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */,
 				14C3CB582E0261D0002F341A /* Frameworks */,
 				CBD6BA122DEF1B39003242CA /* Products */,
@@ -342,9 +336,6 @@
 			);
 			dependencies = (
 				CBD6BA332DEF1B3B003242CA /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				CBD6BA342DEF1B3B003242CA /* BestWishUITests */,
 			);
 			name = BestWishUITests;
 			packageProductDependencies = (
