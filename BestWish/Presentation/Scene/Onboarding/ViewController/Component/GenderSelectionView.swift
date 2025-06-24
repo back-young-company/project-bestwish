@@ -7,8 +7,6 @@
 
 
 import UIKit
-import RxSwift
-import RxCocoa
 
 enum Gender: Int, CaseIterable {
     case male, female, nothing
@@ -23,16 +21,12 @@ enum Gender: Int, CaseIterable {
 
 final class GenderSelectionView: UIView {
 
-    // 외부에서 선택 상태를 구독할 수 있도록 Relay 공개
-    let selectedGender = BehaviorRelay<Gender?>(value: nil)
-    private let disposeBag = DisposeBag()
-
     private let rootVStackView = VerticalStackView(spacing: 8)
     private let genderLabel = GroupTitleLabel(title: "성별")
     private let radioHStackView = HorizontalStackView(spacing: 24)
-    private let maleButton = RadioButton(title: Gender.male.value)
-    private let femaleButton = RadioButton(title: Gender.female.value)
-    private let nothingButton = RadioButton(title: Gender.nothing.value)
+    let maleButton = RadioButton(title: Gender.male.value)
+    let femaleButton = RadioButton(title: Gender.female.value)
+    let nothingButton = RadioButton(title: Gender.nothing.value)
 
     init() {
         super.init(frame: .zero)
@@ -44,8 +38,12 @@ final class GenderSelectionView: UIView {
     }
 
     func configure(genderIndex: Int?) {
-        guard let genderIndex else { return }
-        selectedGender.accept(Gender(rawValue: genderIndex))
+        let selectedGender = genderIndex.flatMap(Gender.init)
+
+        let buttons = [maleButton, femaleButton, nothingButton]
+        for (genderCase, button) in zip(Gender.allCases, buttons) {
+            button.isSelected = (genderCase == selectedGender)
+        }
     }
 }
 extension GenderSelectionView {
@@ -54,7 +52,6 @@ extension GenderSelectionView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        bindUI()
     }
 
     func setAttributes() {
@@ -84,32 +81,5 @@ extension GenderSelectionView {
         rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-    }
-
-    func bindUI() {
-        // 버튼 탭 → selectedGender 갱신
-        maleButton.rx.tap
-            .map { Gender.male }
-            .bind(to: selectedGender)
-            .disposed(by: disposeBag)
-
-        femaleButton.rx.tap
-            .map { Gender.female }
-            .bind(to: selectedGender)
-            .disposed(by: disposeBag)
-
-        nothingButton.rx.tap
-            .map { Gender.nothing }
-            .bind(to: selectedGender)
-            .disposed(by: disposeBag)
-
-        // selectedGender 구독 → 각 버튼 isSelected 업데이트
-        selectedGender
-            .subscribe(with: self) { owner, gender in
-            owner.maleButton.isSelected = (gender == .male)
-            owner.femaleButton.isSelected = (gender == .female)
-            owner.nothingButton.isSelected = (gender == .nothing)
-        }
-            .disposed(by: disposeBag)
     }
 }

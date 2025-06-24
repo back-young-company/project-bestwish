@@ -41,6 +41,7 @@ final class OnboardingFirstView: UIView {
     func configure(with userInfo: UserInfoModel?) {
         let isValid = userInfo?.gender != nil && userInfo?.birth != nil
         canNext(isValid)
+        genderSelection.configure(genderIndex: userInfo?.gender)
         birthSelection.configure(title: userInfo?.birthString)
     }
 
