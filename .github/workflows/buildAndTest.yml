@@ -20,7 +20,7 @@ jobs:
       # 빌드 스텝 실행
       - name: Build Application
         run: |
-          set -o pipefail
+          set -eo pipefail
           xcodebuild clean build \
             -project BestWish.xcodeproj \
             -scheme BestWish \
