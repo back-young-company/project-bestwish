@@ -42,13 +42,6 @@
 			remoteGlobalIDString = CBD6BA102DEF1B39003242CA;
 			remoteInfo = BestWish;
 		};
-		CBD6BA322DEF1B3B003242CA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CBD6BA102DEF1B39003242CA;
-			remoteInfo = BestWish;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -69,7 +62,6 @@
 		14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestWishShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6BA112DEF1B39003242CA /* BestWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestWishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CBD6BA312DEF1B3B003242CA /* BestWishUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestWishUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -156,11 +148,6 @@
 			path = BestWishTests;
 			sourceTree = "<group>";
 		};
-		CBD6BA342DEF1B3B003242CA /* BestWishUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BestWishUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -202,13 +189,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CBD6BA2E2DEF1B3B003242CA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -224,7 +204,6 @@
 			children = (
 				CBD6BA132DEF1B39003242CA /* BestWish */,
 				CBD6BA2A2DEF1B3B003242CA /* BestWishTests */,
-				CBD6BA342DEF1B3B003242CA /* BestWishUITests */,
 				14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */,
 				14C3CB582E0261D0002F341A /* Frameworks */,
 				CBD6BA122DEF1B39003242CA /* Products */,
@@ -236,7 +215,6 @@
 			children = (
 				CBD6BA112DEF1B39003242CA /* BestWish.app */,
 				CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */,
-				CBD6BA312DEF1B3B003242CA /* BestWishUITests.xctest */,
 				14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */,
 			);
 			name = Products;
@@ -330,29 +308,6 @@
 			productReference = CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		CBD6BA302DEF1B3B003242CA /* BestWishUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CBD6BA422DEF1B3B003242CA /* Build configuration list for PBXNativeTarget "BestWishUITests" */;
-			buildPhases = (
-				CBD6BA2D2DEF1B3B003242CA /* Sources */,
-				CBD6BA2E2DEF1B3B003242CA /* Frameworks */,
-				CBD6BA2F2DEF1B3B003242CA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CBD6BA332DEF1B3B003242CA /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				CBD6BA342DEF1B3B003242CA /* BestWishUITests */,
-			);
-			name = BestWishUITests;
-			packageProductDependencies = (
-			);
-			productName = BestWishUITests;
-			productReference = CBD6BA312DEF1B3B003242CA /* BestWishUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -370,10 +325,6 @@
 						CreatedOnToolsVersion = 16.4;
 					};
 					CBD6BA262DEF1B3B003242CA = {
-						CreatedOnToolsVersion = 16.4;
-						TestTargetID = CBD6BA102DEF1B39003242CA;
-					};
-					CBD6BA302DEF1B3B003242CA = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = CBD6BA102DEF1B39003242CA;
 					};
@@ -407,7 +358,6 @@
 			targets = (
 				CBD6BA102DEF1B39003242CA /* BestWish */,
 				CBD6BA262DEF1B3B003242CA /* BestWishTests */,
-				CBD6BA302DEF1B3B003242CA /* BestWishUITests */,
 				14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */,
 			);
 		};
@@ -429,13 +379,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CBD6BA252DEF1B3B003242CA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CBD6BA2F2DEF1B3B003242CA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -466,13 +409,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CBD6BA2D2DEF1B3B003242CA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -485,11 +421,6 @@
 			isa = PBXTargetDependency;
 			target = CBD6BA102DEF1B39003242CA /* BestWish */;
 			targetProxy = CBD6BA282DEF1B3B003242CA /* PBXContainerItemProxy */;
-		};
-		CBD6BA332DEF1B3B003242CA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CBD6BA102DEF1B39003242CA /* BestWish */;
-			targetProxy = CBD6BA322DEF1B3B003242CA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -823,54 +754,6 @@
 			};
 			name = Release;
 		};
-		CBD6BA432DEF1B3B003242CA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
-			baseConfigurationReferenceRelativePath = Config_Debug.xcconfig;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3BLN747VAP;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWishUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = BestWish;
-			};
-			name = Debug;
-		};
-		CBD6BA442DEF1B3B003242CA /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
-			baseConfigurationReferenceRelativePath = Config_Release.xcconfig;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3BLN747VAP;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWishUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = BestWish;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -906,15 +789,6 @@
 			buildConfigurations = (
 				CBD6BA402DEF1B3B003242CA /* Debug */,
 				CBD6BA412DEF1B3B003242CA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CBD6BA422DEF1B3B003242CA /* Build configuration list for PBXNativeTarget "BestWishUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CBD6BA432DEF1B3B003242CA /* Debug */,
-				CBD6BA442DEF1B3B003242CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
