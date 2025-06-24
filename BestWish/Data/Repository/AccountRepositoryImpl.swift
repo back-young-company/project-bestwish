@@ -10,16 +10,16 @@ import Foundation
 /// 유저 계정 관련 레포지토리
 final class AccountRepositoryImpl: AccountRepository {
     private let manager: SupabaseOAuthManager
-    private let keychain: KeyChainManager
+    private let keyChain: KeyChainManager
 
-    init(manager: SupabaseOAuthManager, keycahin: KeyChainManager) {
+    init(manager: SupabaseOAuthManager, keyChain: KeyChainManager) {
         self.manager = manager
-        self.keychain = keycahin
+        self.keyChain = keyChain
     }
 
 	/// 로그인 확인
     func checkLoginState() async -> Bool {
-        await manager.checkLoginState(keychain)
+        await manager.checkLoginState(keyChain)
     }
 
 	/// 온보딩 확인
@@ -29,16 +29,16 @@ final class AccountRepositoryImpl: AccountRepository {
 
     /// 로그인
     func login(type: SocialType) async throws {
-        try await manager.signIn(type: type, keychain)
+        try await manager.signIn(type: type, keyChain)
     }
 
     /// 로그아웃
     func logout() async throws {
-        try await manager.signOut(keychain)
+        try await manager.signOut(keyChain)
     }
 
     /// 회원탈퇴
     func withdraw() async throws {
-        try await manager.withdraw(keychain)
+        try await manager.withdraw(keyChain)
     }
 }

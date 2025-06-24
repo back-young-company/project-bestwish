@@ -36,7 +36,7 @@ final class DIContainer {
 
         self.wishListRepository = WishListRepositoryImpl(manager: supabaseManager, userInfoManager: supabaseUserInfoManager)
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
-        self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager, keycahin: keyChainManager)
+        self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager, keyChain: keyChainManager)
 
         self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
@@ -48,7 +48,7 @@ final class DIContainer {
     }
 
     func makeAccountRepository() -> AccountRepository {
-        return AccountRepositoryImpl(manager: supabaseOAuthManager, keycahin: keyChainManager)
+        return AccountRepositoryImpl(manager: supabaseOAuthManager, keyChain: keyChainManager)
     }
 
     func makeHomeViewController() -> HomeViewController {

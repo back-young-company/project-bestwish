@@ -36,11 +36,13 @@ final class LoginViewModel: ViewModel {
 
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
-            Task {
-                switch action {
-                case .signInKakao:
+            switch action {
+            case .signInKakao:
+                Task {
                     try await self.useCase.login(type: .kakao)
-                case .signInApple:
+                }
+            case .signInApple:
+                Task {
                     try await self.useCase.login(type: .apple)
                 }
             }

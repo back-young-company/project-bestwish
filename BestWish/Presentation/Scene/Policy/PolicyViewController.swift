@@ -11,8 +11,11 @@ import RxSwift
 
 /// 이용약관 View Controller
 final class PolicyViewController: UIViewController {
-    private let policyView = PolicyBottomSheetView(title: PolicyText.title.value, desc: PolicyText.desc.value)
     private let viewModel: PolicyViewModel
+    private let policyView = PolicyBottomSheetView(
+        title: PolicyText.title.value,
+        desc: PolicyText.desc.value
+    )
     private let disposeBag = DisposeBag()
 
     init(viewModel: PolicyViewModel) {
@@ -25,7 +28,6 @@ final class PolicyViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Life Cycle
     override func loadView() {
         view = policyView
     }

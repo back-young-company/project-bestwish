@@ -13,10 +13,10 @@ import RxSwift
 
 /// 온보딩 View Controller
 final class OnboardingViewController: UIViewController {
-    private let firstView = OnboardingFirstView()
-    private let secondView = OnboardingSecondView()
     private let viewModel: OnboardingViewModel
     private let policyViewModel: PolicyViewModel
+    private let firstView = OnboardingFirstView()
+    private let secondView = OnboardingSecondView()
     private let disposeBag = DisposeBag()
     private let onboardingViews: [UIView]
     private let returnManager: IQKeyboardReturnManager = .init()
