@@ -47,6 +47,7 @@ final class OnboardingViewModel: ViewModel {
     private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
     private let _isValidNickname = BehaviorRelay<Bool?>(value: nil)
     private let _showPolicySheet = PublishRelay<Void>()
+    private let _error = PublishSubject<AppError>()
 
     let state: State
 
@@ -114,7 +115,7 @@ final class OnboardingViewModel: ViewModel {
                 gender: userInfo.gender,
                 birth: userInfo.birth)
         } catch {
-            print(error.localizedDescription)
+            handleError(error)
         }
     }
 
@@ -144,6 +145,15 @@ final class OnboardingViewModel: ViewModel {
             var userInfo = _userInfo.value
             userInfo?.updateNickname(to: nickname)
             _userInfo.accept(userInfo)
+        }
+    }
+
+    /// 에러 핸들링
+    private func handleError(_ error: Error) {
+        if let error = error as? AppError {
+            _error.onNext(error)
+        } else {
+            _error.onNext(AppError.unknown(error))
         }
     }
 }

@@ -17,8 +17,7 @@ extension Bundle {
             let scheme = schemes.first,
             let callbackName = firstType["CFBundleURLName"] as? String
         else {
-            print("⚠️ Info.plist의 CFBundleURLTypes 설정을 확인하세요.")
-            return nil
+            fatalError("⚠️ Info.plist의 CFBundleURLTypes 설정을 확인하세요.")
         }
 
         return URL(string: "\(scheme)://\(callbackName)")
