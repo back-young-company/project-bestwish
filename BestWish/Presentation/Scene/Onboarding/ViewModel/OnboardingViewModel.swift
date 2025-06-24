@@ -6,21 +6,14 @@
 //
 
 import Foundation
-import RxSwift
-import RxRelay
 
+import RxRelay
+import RxSwift
+
+/// 온보딩 View Model
 final class OnboardingViewModel: ViewModel {
 
-    private let useCase: UserInfoUseCase
-    private let disposeBag = DisposeBag()
-
-    // 총 페이지수
-    static private let onboardingStartPage = 0
-    static private let onboardingFinishPage = 1
-
-    // 한 번만 정책 시트를 띄웠는지 추적하는 플래그
-    private var showPolicyFlag = false
-
+    // MARK: - Action
     enum Action {
         case viewDidAppear
         case createUserInfo
@@ -28,11 +21,12 @@ final class OnboardingViewModel: ViewModel {
         case selectedGender(Gender)
         case selectedBirth(Date)
         case inputNickname(String)
-        case nextPage
-        case prevPage
+        case didTapNextPage
+        case didTapPrevPage
         case uploadUserInfo(UserInfoModel)
     }
 
+    // MARK: - State
     struct State {
         let userInfo: Observable<UserInfoModel?>
         let isValidNickname: Observable<Bool?>
@@ -40,8 +34,12 @@ final class OnboardingViewModel: ViewModel {
         let showPolicySheet: Observable<Void>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
 
     private let _userInfo = BehaviorRelay<UserInfoModel?> (value: nil)
     private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
@@ -49,7 +47,16 @@ final class OnboardingViewModel: ViewModel {
     private let _showPolicySheet = PublishRelay<Void>()
     private let _error = PublishSubject<AppError>()
 
-    let state: State
+    /// 총 페이지수
+    static private let onboardingStartPage = 0
+    static private let onboardingFinishPage = 1
+
+    /// 한 번만 정책 시트를 띄웠는지 추적하는 플래그
+    private var showPolicyFlag = false
+
+    private let useCase: UserInfoUseCase
+    private let disposeBag = DisposeBag()
+
 
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
@@ -78,10 +85,10 @@ final class OnboardingViewModel: ViewModel {
                 owner.updateGender(with: gender)
             case .selectedBirth(let date):
                 owner.updateBirth(with: date)
-            case .nextPage:
+            case .didTapNextPage:
                 let next = min(self._currentPage.value + 1, OnboardingViewModel.onboardingFinishPage)
                 self._currentPage.accept(next)
-            case .prevPage:
+            case .didTapPrevPage:
                 let prev = max(self._currentPage.value - 1, OnboardingViewModel.onboardingStartPage)
                 self._currentPage.accept(prev)
             case .inputNickname(let nickname):
@@ -96,6 +103,7 @@ final class OnboardingViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
+    /// 이용약관 최초 실행시에만 적용되도록 Flag 변경
     private func updateShowPolicyFlag(with flag: Bool) {
         if !flag, self._currentPage.value == Self.onboardingStartPage {
             showPolicyFlag = !flag
@@ -103,10 +111,12 @@ final class OnboardingViewModel: ViewModel {
         }
     }
 
+    /// 신규 유저 정보 생성
     private func createUserInfoModel() -> UserInfoModel {
         return UserInfoModel(profileImageCode: 0)
     }
 
+    /// 유저 정보 갱신
     private func updateUserInfo(with userInfo: UserInfoModel) async {
         do {
             try await self.useCase.updateUserInfo(
@@ -119,24 +129,28 @@ final class OnboardingViewModel: ViewModel {
         }
     }
 
+    /// 유저 정보 - 성별 갱신
     private func updateGender(with gender: Gender) {
         var userInfo = _userInfo.value
         userInfo?.updateGender(to: gender.rawValue)
         _userInfo.accept(userInfo)
     }
 
+    /// 유저 정보 - 생년월일 갱신
     private func updateBirth(with date: Date) {
         var userInfo = _userInfo.value
         userInfo?.updateBirth(to: date)
         _userInfo.accept(userInfo)
     }
 
+    /// 유저 정보 - 프로필 이미지 갱신
     private func updateProfileImage(with index: Int) {
         var userInfo = _userInfo.value
         userInfo?.updateprofileImageCode(to: index)
         _userInfo.accept(userInfo)
     }
 
+    /// 유저 정보 - 닉네임 갱신
     private func updateNickname(with nickname: String) {
         let isValid = useCase.isValidNickname(nickname)
         _isValidNickname.accept(isValid)

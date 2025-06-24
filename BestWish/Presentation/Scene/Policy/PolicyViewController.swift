@@ -9,6 +9,7 @@ import UIKit
 
 import RxSwift
 
+/// 이용약관 View Controller
 final class PolicyViewController: UIViewController {
     private let policyView = PolicyBottomSheetView(title: PolicyText.title.value, desc: PolicyText.desc.value)
     private let viewModel: PolicyViewModel

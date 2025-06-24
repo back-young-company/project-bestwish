@@ -11,6 +11,7 @@ import UIKit
 import IQKeyboardReturnManager
 import RxSwift
 
+/// 온보딩 View Controller
 final class OnboardingViewController: UIViewController {
     private let firstView = OnboardingFirstView()
     private let secondView = OnboardingSecondView()
@@ -189,13 +190,13 @@ private extension OnboardingViewController {
     func bindPageButton() {
         firstView.nextPageButton.rx.tap
             .asDriver()
-            .map { .nextPage }
+            .map { .didTapNextPage }
             .drive(viewModel.action)
             .disposed(by: disposeBag)
 
         secondView.prevButton.rx.tap
             .asDriver()
-            .map { .prevPage }
+            .map { .didTapPrevPage }
             .drive(viewModel.action)
             .disposed(by: disposeBag)
 
