@@ -54,16 +54,6 @@ final class ShareViewModel: ViewModel {
                 switch action {
                 case let .addProduct(provider):
                     return owner.handleSharedItem(from: provider)
-
-//                case .product(let product):
-//                    Task {
-//                        do {
-//                            try await owner.addProductToWishList(product: product.toEntity())
-//                            owner._completed.accept(())
-//                        } catch {
-//                            owner._error.accept(error)
-//                        }
-//                    }
                 }
             }
             .disposed(by: disposeBag)
@@ -71,6 +61,7 @@ final class ShareViewModel: ViewModel {
     
     private func addProductToWishList(product: ProductEntity) async throws {
         try await self.wishListUseCase.addProductToWishList(product: product)
+
     }
 }
 
@@ -95,6 +86,7 @@ private extension ShareViewModel {
             do {
                 let entity = try await productSyncUseCase.productToEntity(from: text)
                 try await addProductToWishList(product: entity)
+                _completed.accept(())
             } catch {
                 print("❌ Metadata fetch error: \(error.localizedDescription)")
                 // 여기서 에러 넘겨주기

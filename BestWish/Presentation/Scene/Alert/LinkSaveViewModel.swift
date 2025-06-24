@@ -62,6 +62,7 @@ final class LinkSaveViewModel: ViewModel {
             do {
                 let entity = try await productSyncUseCase.productToEntity(from: text)
                 try await addProductToWishList(product: entity)
+                _completed.accept(())
             } catch {
                 print("❌ Metadata fetch error: \(error.localizedDescription)")
                 // 여기서 에러 넘겨주기
