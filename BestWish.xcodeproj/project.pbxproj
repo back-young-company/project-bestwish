@@ -109,6 +109,7 @@
 				Data/Network/Service/ShareExtension/ShareExtensionService.swift,
 				Data/Network/Service/ShareExtension/ZigzagFetcher.swift,
 				Data/Repository/WishListRepositoryImpl.swift,
+				"Data/Util/Bundle+Util.swift",
 				"Data/Util/String+Util.swift",
 				"Data/Util/UIImage+Util.swift",
 				Domain/Entity/Product.swift,
@@ -120,7 +121,6 @@
 				Domain/Interface/MetadataFetcherRepository.swift,
 				Domain/Interface/WishListRepository.swift,
 				Domain/UseCase/WishListUseCase.swift,
-				"Presentation/Extension/Bundle+Extension.swift",
 				Presentation/Interface/ViewModel.swift,
 			);
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
