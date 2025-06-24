@@ -1,14 +1,14 @@
 //
-//  ProductDTO.swift
+//  ProductEntity.swift
 //  BestWish
 //
-//  Created by 이수현 on 6/5/25.
+//  Created by 이수현 on 6/15/25.
 //
 
 import Foundation
 
-/// 위시리스트 제품 DTO
-struct ProductDTO: Codable {
+/// 위시 아이템 엔티티
+struct ProductEntity {
     let id: UUID?
     let userID: UUID?
     let platform: Int?
@@ -20,21 +20,8 @@ struct ProductDTO: Codable {
     let productURL: String?
     let createdAt: Date?
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case userID = "user_id"
-        case platform
-        case title
-        case price
-        case discountRate = "discount_rate"
-        case brand
-        case imagePathURL = "image_path_url"
-        case productURL = "product_url"
-        case createdAt = "created_at"
-    }
-
-    func toEntity() -> ProductEntity {
-        return ProductEntity(
+    func toDTO() -> ProductDTO {
+        return ProductDTO(
             id: id,
             userID: userID,
             platform: platform,
@@ -47,9 +34,16 @@ struct ProductDTO: Codable {
             createdAt: createdAt
         )
     }
-}
 
-/// 플랫폼 DTO
-struct PlatformDTO: Codable {
-    let platform: Int16
+    func toModel() -> ProductModel {
+        return ProductModel(
+            platform: platform,
+            title: title,
+            price: "\(price?.formattedPrice() ?? "")원",
+            discountRate: discountRate,
+            brand: brand,
+            imagePathURL: URL(string: imagePathURL ?? ""),
+            productURL: URL(string: productURL ?? "")
+        )
+    }
 }

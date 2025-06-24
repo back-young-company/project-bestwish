@@ -10,10 +10,10 @@ import Foundation
 import RxSwift
 
 // MARK: - Metadata Fetcher Protocol
-protocol ShareMetadataFetcher {
-    func fetchMetadata(ogUrl: URL, extraUrl: URL) async throws -> ProductMetadataDTO
+protocol ProductDTOFetcher {
+    func fetchProductDTO(ogUrl: URL, extraUrl: URL) async throws -> ProductDTO
 }
 
-protocol HTMLBasedMetadataFetcher {
-    func fetchMetadata(ogUrl: URL, extraUrl: URL, html: String) async throws -> ProductMetadataDTO
+protocol HTMLProductDTOFetcher {
+    func fetchProductDTO(ogUrl: URL, extraUrl: URL, html: String) async throws -> ProductDTO
 }

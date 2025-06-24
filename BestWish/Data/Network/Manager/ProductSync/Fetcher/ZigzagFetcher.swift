@@ -10,8 +10,9 @@ import Foundation
 import RxSwift
 
 /// 지그재그 fetcher
-final class ZigzagFetcher: HTMLBasedMetadataFetcher {
-    func fetchMetadata(ogUrl: URL, extraUrl: URL, html: String) async throws -> ProductMetadataDTO {
+final class ZigzagFetcher: HTMLProductDTOFetcher {
+    /// 상품 데이터 fetch
+    func fetchProductDTO(ogUrl: URL, extraUrl: URL, html: String) async throws -> ProductDTO {
         let brand = html.slice(from: "property=\"product:brand\" content=\"", to: "\"")
         let title = html.slice(from: "property=\"og:title\" content=\"", to: "\"")
         let image = html.slice(from: "property=\"og:image\" content=\"", to: "\"")
@@ -34,15 +35,17 @@ final class ZigzagFetcher: HTMLBasedMetadataFetcher {
         let filtered = [0, 2, 3].compactMap { $0 < segments.count ? segments[$0] : nil }
         let finalDeeplink = filtered.joined(separator: "&")
 
-        return ProductMetadataDTO(
+        return ProductDTO(
+            id: nil,
+            userID: nil,
             platform: 2,
-            productName: title,
-            brandName: brand,
+            title: title,
+            price: Int(discountPrice),
             discountRate: discountRate,
-            price: discountPrice,
-            imageURL: image,
-            productURL: URL(string: finalDeeplink),
-            extra: nil
+            brand: brand,
+            imagePathURL: image,
+            productURL: finalDeeplink,
+            createdAt: nil
         )
     }
 }

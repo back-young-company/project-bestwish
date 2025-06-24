@@ -20,11 +20,11 @@ protocol WishListRepository {
     func getPlatformsInWishList(isEdit: Bool) async throws ->  [(platform: Int, count: Int)]
 
     /// 아이템 검색
-    func searchWishListItems(query: String?, platform: Int?) async throws -> [Product]
+    func searchWishListItems(query: String?, platform: Int?) async throws -> [ProductEntity]
 
     /// 위시 아이템 삭제
     func deleteWishListItem(id: UUID) async throws
 
     /// 위시 아이템 추가
-    func addProductToWishList(product: ProductMetadata) async throws
+    func addProductToWishList(product: ProductDTO) async throws
 }

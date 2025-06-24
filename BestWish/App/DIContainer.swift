@@ -13,16 +13,19 @@ final class DIContainer {
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
+    private let productSyncManager: ProductSyncManager
     private let coreMLManager: CoreMLManager
     
     private let wishListRepository: WishListRepository
     private let userInfoRepository: UserInfoRepository
-    
-    private let wishListUseCase: WishListUseCase
+    private let coreMLRepository: CoreMLRepository
+    private let productSyncRepository: ProductSyncRepository
     private let accountRepository: AccountRepository
+
+    private let wishListUseCase: WishListUseCase
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
-    private let coreMLRepository: CoreMLRepository
+    private let productSyncUseCase: ProductSyncUseCase
     private let coreMLUseCase: CoreMLUseCase
     private let analysisUseCase: AnalysisUseCase
 
@@ -30,16 +33,19 @@ final class DIContainer {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
         self.supabaseOAuthManager = SupabaseOAuthManager.shared
-        
+        self.productSyncManager = ProductSyncManager()
+        self.coreMLManager = CoreMLManager()
+
         self.wishListRepository = WishListRepositoryImpl(manager: supabaseManager, userInfoManager: supabaseUserInfoManager)
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
+        self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager)
+        self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
         self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager)
         
         self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
         self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
-        self.coreMLManager = CoreMLManager()
-        self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
+        self.productSyncUseCase = ProductSyncUseCaseImpl(repository: productSyncRepository)
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
         self.analysisUseCase = AnalysisUseCaseImpl()
     }
@@ -60,7 +66,7 @@ final class DIContainer {
     }
     
     func makeLinkSaveViewController() -> LinkSaveViewController {
-        let viewModel = LinkSaveViewModel(useCase: wishListUseCase)
+        let viewModel = LinkSaveViewModel(wishListUseCase: wishListUseCase, productSyncUseCase: productSyncUseCase)
         return LinkSaveViewController(viewModel: viewModel)
     }
 

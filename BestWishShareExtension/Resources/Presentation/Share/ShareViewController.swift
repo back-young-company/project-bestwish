@@ -18,10 +18,15 @@ final class ShareViewController: UIViewController {
 
     private let shareView = ShareView()
     private let shareViewModel = ShareViewModel(
-        useCase: WishListUseCaseImpl(
+        wishListUseCase: WishListUseCaseImpl(
             repository: WishListRepositoryImpl(
                 manager: SupabaseManager(),
                 userInfoManager: SupabaseUserInfoManager()
+            )
+        ),
+        productSyncUseCase: ProductSyncUseCaseImpl(
+            repository: ProductSyncRepositoryImpl(
+                manager: ProductSyncManager()
             )
         )
     )
@@ -104,8 +109,9 @@ private extension ShareViewController {
     }
 }
 
+// MARK: - private 메서드
 private extension ShareViewController {
-    // MARK: - 아래의 메서드들은 ViewModel로 이전
+    // MARK: - 아래의 메서드들은 ViewModel로 이전 필요
     // 📥 공유된 콘텐츠를 추출하여 각 provider에 대해 처리
     func extractSharedContent() {
         guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem] else { return }
@@ -113,34 +119,7 @@ private extension ShareViewController {
         for item in extensionItems {
             guard let attachments = item.attachments else { continue }
             for provider in attachments {
-                handleSharedItem(from: provider)
-            }
-        }
-    }
-
-    // 🔍 provider의 타입에 따라 URL 또는 텍스트로 처리 분기
-    func handleSharedItem(from provider: NSItemProvider) {
-        if provider.hasItemConformingToTypeIdentifier("public.url") {
-            provider.loadItem(forTypeIdentifier: "public.url", options: nil) { [weak self] item, _ in
-                guard let self, let url = item as? URL else { return }
-                self.handleSharedText(url.absoluteString)
-            }
-        } else if provider.hasItemConformingToTypeIdentifier("public.text") {
-            provider.loadItem(forTypeIdentifier: "public.text", options: nil) { [weak self] item, _ in
-                guard let self, let text = item as? String else { return }
-                self.handleSharedText(text)
-            }
-        }
-    }
-
-    func handleSharedText(_ text: String) {
-        Task {
-            do {
-                let (_, metadata) = try await ProductSyncManager.shared.fetchProductSync(from: text)
-                shareViewModel.action.onNext(.product(metadata))
-            } catch {
-                print("❌ Metadata fetch error: \(error.localizedDescription)")
-                shareView.failureConfigure()
+                self.shareViewModel.action.onNext(.addProduct(provider))
             }
         }
     }

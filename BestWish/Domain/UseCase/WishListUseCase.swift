@@ -20,18 +20,18 @@ protocol WishListUseCase {
     func getPlatformsInWishList(isEdit: Bool) async throws ->  [(platform: Int, count: Int)]
 
     /// 아이템 검색
-    func searchWishListItems(query: String?, platform: Int?) async throws -> [Product]
+    func searchWishListItems(query: String?, platform: Int?) async throws -> [ProductEntity]
 
     /// 위시 아이템 삭제
     func deleteWishListItem(id: UUID) async throws
 
     /// 위시 아이템 추가
-    func addProductToWishList(product: ProductMetadata) async throws
+    func addProductToWishList(product: ProductEntity) async throws
 }
 
 // MARK: - Protocol 메서드의 파라미터 초기값 설정
 extension WishListUseCase {
-    func searchWishListItems(query: String? = nil, platform: Int? = nil) async throws -> [Product] {
+    func searchWishListItems(query: String? = nil, platform: Int? = nil) async throws -> [ProductEntity] {
         try await searchWishListItems(query: nil, platform: nil)
     }
 }
@@ -60,7 +60,7 @@ final class WishListUseCaseImpl: WishListUseCase {
     }
 
     /// 아이템 검색
-    func searchWishListItems(query: String? = nil, platform: Int? = nil) async throws -> [Product] {
+    func searchWishListItems(query: String? = nil, platform: Int? = nil) async throws -> [ProductEntity] {
         try await repository.searchWishListItems(query: query, platform: platform)
     }
 
@@ -70,7 +70,7 @@ final class WishListUseCaseImpl: WishListUseCase {
     }
 
     /// 위시 아이템 추가
-    func addProductToWishList(product: ProductMetadata) async throws {
-        try await repository.addProductToWishList(product: product)
+    func addProductToWishList(product: ProductEntity) async throws {
+        try await repository.addProductToWishList(product: product.toDTO())
     }
 }

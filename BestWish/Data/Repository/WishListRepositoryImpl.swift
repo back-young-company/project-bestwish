@@ -51,7 +51,7 @@ final class WishListRepositoryImpl: WishListRepository {
     }
 
     /// 아이템 검색
-    func searchWishListItems(query: String?, platform: Int?) async throws -> [Product] {
+    func searchWishListItems(query: String?, platform: Int?) async throws -> [ProductEntity] {
         do {
             let result = try await manager.searchWishListItems(query: query, platform: platform)
             return try result.map { try convertToProduct(from: $0) }
@@ -72,10 +72,10 @@ final class WishListRepositoryImpl: WishListRepository {
     }
 
     /// 위시 아이템 추가
-    func addProductToWishList(product: ProductMetadata) async throws {
+    func addProductToWishList(product: ProductDTO) async throws {
         do {
             try await manager.addProductToWishList(
-                product: convertToProductDTO(from: product)
+                product: product //convertToProductDTO(from: product)
             )
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
@@ -85,21 +85,24 @@ final class WishListRepositoryImpl: WishListRepository {
 
 // MARK: - DTO -> Entity 매핑
 extension WishListRepositoryImpl {
-    /// ProductDTO -> Product  Entity 매핑
-    private func convertToProduct(from dto: ProductDTO) throws -> Product {
-        guard let userID = dto.userID,
+    /// ProductDTO -> Product Entity 매핑
+    private func convertToProduct(from dto: ProductDTO) throws -> ProductEntity {
+        guard let id = dto.id,
+              let userID = dto.userID,
               let platform = dto.platform,
               let title = dto.title,
               let price = dto.price,
               let discountRate = dto.discountRate,
               let brand = dto.brand,
-              let imagePathURL = dto.imagePathURL
+              let imagePathURL = dto.imagePathURL,
+              let productURL = dto.productURL,
+              let createdAt = dto.createdAt
         else {
             throw MappingError.productDTOToProduct
         }
 
-        return Product(
-            id: dto.id,
+        return ProductEntity(
+            id: id,
             userID: userID,
             platform: platform,
             title: title,
@@ -107,8 +110,8 @@ extension WishListRepositoryImpl {
             discountRate: discountRate,
             brand: brand,
             imagePathURL: imagePathURL,
-            productURL: dto.productURL,
-            createdAt: dto.createdAt
+            productURL: productURL,
+            createdAt: createdAt
         )
     }
 

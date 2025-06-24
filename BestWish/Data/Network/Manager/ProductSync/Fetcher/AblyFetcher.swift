@@ -10,8 +10,9 @@ import Foundation
 import RxSwift
 
 /// 에이블리 Fetcher
-final class AblyFetcher: ShareMetadataFetcher {
-    func fetchMetadata(ogUrl: URL, extraUrl: URL) async throws -> ProductMetadataDTO {
+final class AblyFetcher: ProductDTOFetcher {
+    /// 상품 데이터 fetch
+    func fetchProductDTO(ogUrl: URL, extraUrl: URL) async throws -> ProductDTO {
         let (data, _) = try await URLSession.shared.data(from: extraUrl)
         guard let html = String(data: data, encoding: .utf8) else {
             throw ShareExtensionError.dataLoadingFailed
@@ -30,15 +31,17 @@ final class AblyFetcher: ShareMetadataFetcher {
 
             let deeplink = "ably://goods/\(sno)"
 
-            return ProductMetadataDTO(
+            return ProductDTO(
+                id: nil,
+                userID: nil,
                 platform: 3,
-                productName: goods.name,
-                brandName: goods.market.name,
-                discountRate: "\(goods.priceInfo.discountRate ?? 0)",
-                price: "\(goods.priceInfo.thumbnailPrice ?? 0)",
-                imageURL: goods.coverImages.first,
-                productURL: URL(string: deeplink),
-                extra: nil
+                title: goods.name,
+                price: goods.priceInfo.thumbnailPrice,
+                discountRate: String(goods.priceInfo.discountRate ?? 0),
+                brand: goods.market.name,
+                imagePathURL: goods.coverImages.first,
+                productURL: deeplink,
+                createdAt: nil
             )
         } catch {
             throw ShareExtensionError.jsonDecodingFailed

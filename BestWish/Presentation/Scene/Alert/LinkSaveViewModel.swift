@@ -12,7 +12,7 @@ import RxCocoa
 
 final class LinkSaveViewModel: ViewModel {
     enum Action {
-        case product(ProductMetadataDTO)
+        case addProduct(String)
     }
     
     struct State {
@@ -23,8 +23,9 @@ final class LinkSaveViewModel: ViewModel {
     private let _completed = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
     
-    private let useCase: WishListUseCase
-    
+    private let wishListUseCase: WishListUseCase
+    private let productSyncUseCase: ProductSyncUseCase
+
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
     
@@ -32,8 +33,12 @@ final class LinkSaveViewModel: ViewModel {
     
     private let disposeBag = DisposeBag()
     
-    init(useCase: WishListUseCase) {
-        self.useCase = useCase
+    init(
+        wishListUseCase: WishListUseCase,
+        productSyncUseCase: ProductSyncUseCase
+    ) {
+        self.wishListUseCase = wishListUseCase
+        self.productSyncUseCase = productSyncUseCase
         state = State(
             completed: _completed.asObservable(),
             error: _error.asObservable()
@@ -45,21 +50,26 @@ final class LinkSaveViewModel: ViewModel {
         _action
             .subscribe(with: self) { owner, action in
                 switch action {
-                case .product(let product):
-                    Task {
-                        do {
-                            try await owner.addProductToWishList(product: product.toEntity())
-                            owner._completed.accept(())
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
+                case let .addProduct(url):
+                    return owner.productToEntity(url)
                 }
             }
             .disposed(by: disposeBag)
     }
-    
-    private func addProductToWishList(product: ProductMetadata) async throws {
-        try await self.useCase.addProductToWishList(product: product)
+
+    private func productToEntity(_ text: String) {
+        Task {
+            do {
+                let entity = try await productSyncUseCase.productToEntity(from: text)
+                try await addProductToWishList(product: entity)
+            } catch {
+                print("❌ Metadata fetch error: \(error.localizedDescription)")
+                // 여기서 에러 넘겨주기
+            }
+        }
+    }
+
+    private func addProductToWishList(product: ProductEntity) async throws {
+        try await self.wishListUseCase.addProductToWishList(product: product)
     }
 }

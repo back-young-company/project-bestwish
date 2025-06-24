@@ -10,8 +10,9 @@ import Foundation
 import RxSwift
 
 /// 무신사 Fetcher
-final class MusinsaFetcher: ShareMetadataFetcher {
-    func fetchMetadata(ogUrl: URL, extraUrl: URL) async throws -> ProductMetadataDTO {
+final class MusinsaFetcher: ProductDTOFetcher {
+    /// 상품 데이터 fetch
+    func fetchProductDTO(ogUrl: URL, extraUrl: URL) async throws -> ProductDTO {
         let (data, _) = try await URLSession.shared.data(from: extraUrl)
         guard let html = String(data: data, encoding: .utf8) else {
             throw ShareExtensionError.dataLoadingFailed
@@ -20,7 +21,7 @@ final class MusinsaFetcher: ShareMetadataFetcher {
         if let productURLString = html.firstMatch(for: #"link=(https:\/\/www\.musinsa\.com\/products\/\d+)"#),
            let redirectedURL = URL(string: productURLString),
            redirectedURL != extraUrl {
-            return try await fetchMetadata(ogUrl: ogUrl, extraUrl: redirectedURL)
+            return try await fetchProductDTO(ogUrl: ogUrl, extraUrl: redirectedURL)
         }
 
         guard let json = html.extractNEXTDataJSON() else {
@@ -41,27 +42,17 @@ final class MusinsaFetcher: ShareMetadataFetcher {
             throw ShareExtensionError.invalidProductData
         }
 
-        return ProductMetadataDTO(
+        return ProductDTO(
+            id: nil,
+            userID: nil,
             platform: 1,
-            productName: goodsNm,
-            brandName: brandName,
+            title: goodsNm,
+            price: Int(salePrice),
             discountRate: discountRate,
-            price: salePrice,
-            imageURL: "https://image.msscdn.net" + thumbnailImageUrl,
-            productURL: ogUrl,
-            extra: nil
+            brand: brandName,
+            imagePathURL: "https://image.msscdn.net" + thumbnailImageUrl,
+            productURL: ogUrl.absoluteString,
+            createdAt: nil
         )
-    }
-
-    private static func parseTitle(_ title: String) -> (brand: String?, product: String?, extra: String?) {
-        guard let firstSpaceRange = title.range(of: " ") else {
-            return (nil, nil, nil)
-        }
-        let brand = String(title[..<firstSpaceRange.lowerBound])
-        let remainder = String(title[firstSpaceRange.upperBound...])
-        let productAndExtra = remainder.components(separatedBy: " - ")
-        let product = productAndExtra.first
-        let extra = productAndExtra.count > 1 ? productAndExtra[1] : nil
-        return (brand, product, extra)
     }
 }
