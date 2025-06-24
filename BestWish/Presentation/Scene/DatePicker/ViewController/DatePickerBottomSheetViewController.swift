@@ -7,43 +7,51 @@
 
 import UIKit
 
+import RxSwift
+import RxCocoa
+
 final class DatePickerBottomSheetViewController: UIViewController {
+
     // 외부에서 선택된 날짜 넘겨받을 클로저
     var onDateSelected: ((Date) -> Void)?
-    var onCancel: (()->Void)?
+    var onCancel: (() -> Void)?
 
     // 분리된 뷰
     private let datePickerBottomSheetView = DatePickerBottomSheetView()
+    private let disposeBag = DisposeBag()
 
     init() {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .pageSheet
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func loadView() {
         view = datePickerBottomSheetView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        datePickerBottomSheetView.completeButton.addTarget(self, action: #selector(didTapConfirm), for: .touchUpInside)
-        datePickerBottomSheetView.cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
-
+        bindUI()
         presentDatePickerSheet()
     }
 
-    @objc private func didTapConfirm() {
-        let selected = datePickerBottomSheetView.datePicker.date
-        onDateSelected?(selected)
-    }
+    private func bindUI() {
+        datePickerBottomSheetView.completeButton.rx.tap
+            .withLatestFrom(datePickerBottomSheetView.datePicker.rx.date)
+            .subscribe(with: self) { owner, date in
+                owner.onDateSelected?(date)
+            }
+            .disposed(by: disposeBag)
 
-    @objc private func didTapCancel() {
-        onCancel?()
+        datePickerBottomSheetView.cancelButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+                owner.onCancel?()
+            }
+            .disposed(by: disposeBag)
     }
 
     func presentDatePickerSheet() {
