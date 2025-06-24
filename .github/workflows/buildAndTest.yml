@@ -16,24 +16,20 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.2'
-      
-      # 1. DerivedData 삭제 (캐싱 문제 방지를 위해 빌드 전 클린하게 시작)
-      - name: Clean DerivedData
-        run: rm -rf ~/Library/Developer/Xcode/DerivedData
 
-      # 2. 빌드 스텝만 실행
+      # 1. 빌드 스텝만 실행
       - name: Build Application
         run: |
-          xcodebuild build \
+          xcodebuild clean build \
             -project BestWish.xcodeproj \
             -scheme BestWish \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
           | xcbeautify
 
-      # 4. 테스트 스텝만 실행
+      # 2. 테스트 스텝만 실행
       - name: Run Tests
         run: |
-          xcodebuild test \
+          xcodebuild clean test \
             -project BestWish.xcodeproj \
             -scheme BestWish \
             -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
