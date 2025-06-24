@@ -53,7 +53,7 @@ final class UserInfoManagementViewController: UIViewController {
 
         managementView.withdrawButton.rx.tap
             .bind(with: self) { owner, _ in
-                AlertBuilder(baseViewController: self, type: .withdraw) {
+                AlertBuilder(baseViewController: owner, type: .withdraw) {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         owner.viewModel.action.onNext(.withdraw)
                     }
@@ -72,6 +72,7 @@ final class UserInfoManagementViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+                NSLog("UserInfoManagementViewController Error: \(error.debugDescription)")
             }.disposed(by: disposeBag)
     }
 }

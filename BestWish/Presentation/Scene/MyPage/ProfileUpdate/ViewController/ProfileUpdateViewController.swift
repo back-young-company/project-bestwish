@@ -106,6 +106,7 @@ final class ProfileUpdateViewController: UIViewController {
                     title: error.alertTitle,
                     message: error.localizedDescription
                 )
+                NSLog("ProdifleUpdateViewController Error: \(error.debugDescription)")
             }.disposed(by: disposeBag)
     }
 }

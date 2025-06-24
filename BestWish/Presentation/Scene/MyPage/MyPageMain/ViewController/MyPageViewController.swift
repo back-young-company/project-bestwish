@@ -109,6 +109,7 @@ final class MyPageViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+                NSLog("MyPageViewController Error: \(error.debugDescription)")
             }.disposed(by: disposeBag)
     }
 
