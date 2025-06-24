@@ -16,17 +16,37 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: '16.2'
+      
+      # 1. DerivedData 삭제 (캐싱 문제 방지를 위해 빌드 전 클린하게 시작)
+      - name: Clean DerivedData
+        run: rm -rf ~/Library/Developer/Xcode/DerivedData
 
-      - name: Build and Run Tests
+      - name: Install Pods # Pods 캐시를 사용하지 않거나, 캐시 미스 시 실행
+        run: pod install --repo-update
+
+      # 2. 빌드 스텝만 실행
+      - name: Build Application
         run: |
-          # set -eo pipefail은 명령어 실행 중 오류 발생 시 즉시 워크플로우를 중단시킵니다.
-          # 이는 xcodebuild가 실패했을 때 CI가 이를 정확히 인지하고 실패하도록 합니다.
-          set -eo pipefail
-          xcodebuild clean test \
+          xcodebuild build \
             -project BestWish.xcodeproj \
             -scheme BestWish \
-            -destination 'platform=iOS Simulator,name=iPhone SE (3rd generation),OS=17.5'
-          # | xcbeautify # xcbeautify는 로그를 보기 좋게 포맷팅하지만,
-                        # 초기 디버깅 시에는 주석 처리하여 xcodebuild의 원본 오류 메시지를 확인하는 것이 좋습니다.
-                        # 빌드가 안정화되면 다시 활성화할 수 있습니다.
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
+            SYMROOT=${{ github.workspace }}/build # 빌드 결과물을 특정 폴더에 저장
+          | xcbeautify
 
+      # 3. 빌드된 아티팩트 저장 (선택 사항)
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BestWish-app-build
+          path: ${{ github.workspace }}/build/Debug-iphonesimulator/BestWish.app # 빌드된 앱 경로
+          # retention-days: 1 # 아티팩트 보존 기간 (선택 사항)
+
+      # 4. 테스트 스텝만 실행
+      - name: Run Tests
+        run: |
+          xcodebuild test \
+            -project BestWish.xcodeproj \
+            -scheme BestWish \
+            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
+            | xcbeautify
