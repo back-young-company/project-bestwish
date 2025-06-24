@@ -44,19 +44,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // TODO: - 수정하기 (with DIContainer)
         let repository = DIContainer.shared.makeAccountRepository()
-        
+        let dummyCoordinatorRepository = DIContainer.shared.makeDummyCoordinatorRepository()
+
         Task {
-            let didLogin = await repository.checkLoginState()
-            if didLogin {
+            let hasToken = await repository.checkTokenState()
+            if hasToken {
                 let didOnboarding = await repository.checkOnboardingState()
                 if didOnboarding {
-                    self.showMainView()
+                    dummyCoordinatorRepository.showMainView()
                 } else {
-                    self.showOnboardingView()
+                    dummyCoordinatorRepository.showOnboardingView()
                 }
             } else {
                 await MainActor.run {
-                    self.showLoginView()
+                    dummyCoordinatorRepository.showLoginView()
                 }
             }
         }
@@ -85,14 +86,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
         window?.backgroundColor = .gray0
-    }
-}
-
-final class AVC: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBlue
-        setNavigationBar(alignment: .left, title: "메인")
     }
 }
 //----------------------------------

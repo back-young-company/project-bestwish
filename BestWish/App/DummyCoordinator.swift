@@ -1,5 +1,5 @@
 //
-//  SampleViewChangeManager.swift
+//  DummyCoordinator.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/13/25.
@@ -7,11 +7,9 @@
 
 import UIKit
 
-final class SampleViewChangeManager {
-    static let shared = SampleViewChangeManager()
-    private init() {}
+final class DummyCoordinator {
 
-    func goOnboardingView() {
+    func showOnboardingView() {
         DispatchQueue.main.async {
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                 let delegate = scene.delegate as? SceneDelegate {
@@ -20,7 +18,7 @@ final class SampleViewChangeManager {
         }
     }
 
-    func goLoginView() {
+    func showLoginView() {
         DispatchQueue.main.async {
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                 let delegate = scene.delegate as? SceneDelegate {
@@ -29,7 +27,7 @@ final class SampleViewChangeManager {
         }
     }
 
-    func goMainView() {
+    func showMainView() {
         DispatchQueue.main.async {
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let delegate = scene.delegate as? SceneDelegate {

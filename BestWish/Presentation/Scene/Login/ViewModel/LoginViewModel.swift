@@ -26,10 +26,15 @@ final class LoginViewModel: ViewModel {
     // MARK: - Private Property
     private let disposeBag = DisposeBag()
     private let useCase: AccountUseCase
+    private let dummyCoordinatorUseCase: DummyCoordinatorUseCase
     private let _action = PublishSubject<Action>()
 
-    init(useCase: AccountUseCase) {
+    init(
+        useCase: AccountUseCase,
+        dummyCoordinatorUseCase: DummyCoordinatorUseCase
+    ) {
         self.useCase = useCase
+        self.dummyCoordinatorUseCase = dummyCoordinatorUseCase
         state = State()
         bindAction()
     }
@@ -39,11 +44,21 @@ final class LoginViewModel: ViewModel {
             switch action {
             case .signInKakao:
                 Task {
-                    try await self.useCase.login(type: .kakao)
+                    let didOnboarding = try await self.useCase.login(type: .kakao)
+                    if didOnboarding {
+                        self.dummyCoordinatorUseCase.showMainView()
+                    } else {
+                        self.dummyCoordinatorUseCase.showOnboardingView()
+                    }
                 }
             case .signInApple:
                 Task {
-                    try await self.useCase.login(type: .apple)
+                    let didOnboarding = try await self.useCase.login(type: .apple)
+                    if didOnboarding {
+                        self.dummyCoordinatorUseCase.showMainView()
+                    } else {
+                        self.dummyCoordinatorUseCase.showOnboardingView()
+                    }
                 }
             }
         }.disposed(by: disposeBag)

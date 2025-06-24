@@ -23,7 +23,7 @@ final class SupabaseOAuthManager: NSObject {
     )
 
     /// Supabase 토근 확인 및 세션 연결
-    func checkLoginState(_ keychain: KeyChainManager) async -> Bool {
+    func checkTokenState(_ keychain: KeyChainManager) async -> Bool {
         // nonisolated read 이므로 await 없이 즉시 반환
         guard
             let accessToken = keychain.read(token: .init(service: .access)),
@@ -79,37 +79,29 @@ final class SupabaseOAuthManager: NSObject {
     }
 
     /// 로그인
-    func signIn(type: SocialType, _ keychain: KeyChainManager) async throws {
-        guard let session = try await oauthSessionSignIn(type: type) else { return }
+    func signIn(type: SocialType, _ keychain: KeyChainManager) async throws -> Bool {
+        guard let session = try await oauthSessionSignIn(type: type) else { return false }
         await keychain.saveAllToken(session: session)
-
-        // FIXME: - 화면이동을 다른곳에서 하기
-        let isNeedOnboarding = await checkOnboardingState()
-        if isNeedOnboarding {
-            SampleViewChangeManager.shared.goMainView()
-        } else {
-            SampleViewChangeManager.shared.goOnboardingView()
-        }
-
+        return await checkOnboardingState()
     }
 
     /// 로그아웃
-    func signOut(_ keychain: KeyChainManager) async throws {
+    func signOut(_ keychain: KeyChainManager) async throws -> Bool {
         do {
             try await client.auth.signOut()
             // 로그아웃 후 키체인 삭제
             Task.detached(priority: .utility) {
                 await keychain.deleteAllToken()
             }
-            // FIXME: - 화면이동을 다른곳에서 하기
-            SampleViewChangeManager.shared.goLoginView()
+            NSLog("Success : signOut")
+            return true
         } catch {
             throw AuthError.signOutFailed(error)
         }
     }
 
     /// 회원 탈퇴
-    func withdraw(_ keyChain: KeyChainManager) async throws {
+    func withdraw(_ keyChain: KeyChainManager) async throws -> Bool {
         let session = try await client.auth.session
         guard
             let rawProvider = session.user.appMetadata["provider"]?.rawValue,
@@ -121,15 +113,15 @@ final class SupabaseOAuthManager: NSObject {
         switch socialProvider {
         case .kakao:
             guard let session = try await signInKakao(),
-                let providerToken = session.providerToken
-                else { return }
+                let providerToken = session.providerToken else {
+                return false
+            }
             NSLog("Success - 1: \(session)")
             try await unlinkKakaoAccount(providerToken)
             NSLog("Success - 2: withdraw")
             try await client.rpc("delete_current_user").execute()
             NSLog("Success - 3: delete supabase")
-            try await signOut(keyChain)
-            NSLog("Success - 4: signOut")
+            return true
 
         case .apple:
             // 애플 AccessToken 요청
@@ -147,11 +139,10 @@ final class SupabaseOAuthManager: NSObject {
             NSLog("Success - 5: withdraw")
             try await client.rpc("delete_current_user").execute()
             NSLog("Success - 6: delete supabase")
-            try await signOut(keyChain)
-            NSLog("Success - 7: signOut")
-
+            return true
+            
         default:
-            break
+            return false
         }
     }
 

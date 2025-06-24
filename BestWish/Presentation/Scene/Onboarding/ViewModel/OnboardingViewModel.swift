@@ -55,19 +55,22 @@ final class OnboardingViewModel: ViewModel {
     private var showPolicyFlag = false
 
     private let useCase: UserInfoUseCase
+    private let dummyCoordinatorUseCase: DummyCoordinatorUseCase
     private let disposeBag = DisposeBag()
 
 
-    init(useCase: UserInfoUseCase) {
+    init(
+        useCase: UserInfoUseCase,
+        dummyCoordinatorUseCase: DummyCoordinatorUseCase
+    ) {
         self.useCase = useCase
-
+        self.dummyCoordinatorUseCase = dummyCoordinatorUseCase
         state = State(
             userInfo: _userInfo.asObservable(),
             isValidNickname: _isValidNickname.asObservable(),
             currentPage: _currentPage.asObservable(),
             showPolicySheet: _showPolicySheet.asObservable()
         )
-
         bindAction()
     }
 
@@ -96,8 +99,8 @@ final class OnboardingViewModel: ViewModel {
             case .uploadUserInfo(let userInfo):
                 Task {
                     await self.updateUserInfo(with: userInfo)
-                    // TODO: MainView로 화면전환
-                    SampleViewChangeManager.shared.goMainView()
+                    // TODO: Coordinator 패턴 적용하기
+                    self.dummyCoordinatorUseCase.showMainView()
                 }
             }
         }.disposed(by: disposeBag)

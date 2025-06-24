@@ -11,17 +11,17 @@ import Foundation
 protocol AccountRepository {
 
 	/// 로그인 확인
-    func checkLoginState() async -> Bool
+    func checkTokenState() async -> Bool
 
 	/// 온보딩 확인
     func checkOnboardingState() async -> Bool
 
 	/// 로그인
-    func login(type: SocialType) async throws
+    func login(type: SocialType) async throws -> Bool
 
 	/// 로그아웃
-    func logout() async throws
+    func logout() async throws -> Bool
 
     /// 회원탈퇴
-    func withdraw() async throws
+    func withdraw() async throws -> Bool
 }
