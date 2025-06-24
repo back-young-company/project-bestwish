@@ -66,15 +66,14 @@ final class LinkSaveViewController: UIViewController {
     }
     
     private func checkProductUrl(_ url: String) {
-        ShareExtensionService.shared
-            .fetchPlatformMetadata(from: url)
-            .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self, onSuccess: { owner, result in
-                let (_, metaData) = result
-                owner.viewModel.action.onNext(.product(metaData))
-            }, onFailure: { owner, error in
-                owner.showBasicAlert(title: "미지원 플랫폼", message: "해당 링크는 지원되지 않는 플랫폼 입니다.")
-            })
-            .disposed(by: disposeBag)
+        Task {
+            do {
+                let (_, metadata) = try await ProductSyncManager.shared.fetchProductSync(from: url)
+                viewModel.action.onNext(.product(metadata))
+            } catch {
+                print("❌ Metadata fetch error: \(error.localizedDescription)")
+                showBasicAlert(title: "미지원 플랫폼", message: "해당 링크는 지원되지 않는 플랫폼 입니다.")
+            }
+        }
     }
 }

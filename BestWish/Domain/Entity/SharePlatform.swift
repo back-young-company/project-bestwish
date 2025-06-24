@@ -8,9 +8,9 @@
 import Foundation
 
 // MARK: - Platform Enum
-enum SharePlatform {
-    case musinsa
-    case zigzag
-    case ably
-    case unknown
+enum SharePlatform: String {
+    case musinsa = "musinsa"
+    case zigzag = "zigzag"
+    case ably = "a-bly"
+    case unknown = "unknown"
 }

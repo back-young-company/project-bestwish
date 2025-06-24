@@ -43,7 +43,7 @@ final class ShareViewController: UIViewController {
         setView()
         bindViewModel()
         bindActions()
-        
+
         extractSharedContent()
     }
 
@@ -52,7 +52,7 @@ final class ShareViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
                 owner.shareView.successConfigure()
-                
+
                 let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
                 sharedDefaults?.set(true, forKey: "AddProduct")
                 sharedDefaults?.synchronize() // (Optional) 최신화 강제
@@ -134,15 +134,14 @@ private extension ShareViewController {
     }
 
     func handleSharedText(_ text: String) {
-        ShareExtensionService.shared
-            .fetchPlatformMetadata(from: text)
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onSuccess: { owner, result in
-                let (_, metadata) = result
-                owner.shareViewModel.action.onNext(.product(metadata))
-            }, onFailure: { owner, error in
+        Task {
+            do {
+                let (_, metadata) = try await ProductSyncManager.shared.fetchProductSync(from: text)
+                shareViewModel.action.onNext(.product(metadata))
+            } catch {
                 print("❌ Metadata fetch error: \(error.localizedDescription)")
-            })
-            .disposed(by: disposeBag)
+                shareView.failureConfigure()
+            }
+        }
     }
 }
