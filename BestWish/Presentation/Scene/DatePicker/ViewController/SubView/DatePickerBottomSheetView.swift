@@ -6,27 +6,33 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
 
+/// DatePicker 하단 바텀 시트 내 화면
 final class DatePickerBottomSheetView: UIView {
 
-    private let stack = VerticalStackView(spacing: 12)
-    let datePicker = UIDatePicker()
-    private let buttonHStackView = HorizontalStackView(spacing: CGFloat(12).fitWidth)
-    let cancelButton = AppButton(type: .cancel)
-    let completeButton = AppButton(type: .complete)
+    // MARK: - Private Property
+    private let _rootVStack = VerticalStackView(spacing: 12)
+    private let _datePicker = UIDatePicker()
+    private let _buttonHStackView = HorizontalStackView(spacing: CGFloat(12).fitWidth)
+    private let _cancelButton = AppButton(type: .cancel)
+    private let _completeButton = AppButton(type: .complete)
+
+    // MARK: - Internal Property
+    var datePicker: UIDatePicker { _datePicker }
+    var cancelButton: AppButton { _cancelButton }
+    var completeButton: AppButton { _completeButton }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
-
 }
 
 private extension DatePickerBottomSheetView {
@@ -39,7 +45,7 @@ private extension DatePickerBottomSheetView {
     func setAttributes() {
         self.backgroundColor = .gray0
 
-        stack.do {
+        _rootVStack.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 12,
@@ -49,12 +55,12 @@ private extension DatePickerBottomSheetView {
             )
         }
 
-        datePicker.do {
+        _datePicker.do {
             $0.datePickerMode = .date
             $0.preferredDatePickerStyle = .wheels
         }
 
-        buttonHStackView.do {
+        _buttonHStackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 12,
@@ -66,23 +72,23 @@ private extension DatePickerBottomSheetView {
     }
 
     func setHierarchy() {
-        self.addSubviews(stack)
-        stack.addArrangedSubviews(datePicker, buttonHStackView)
-        buttonHStackView.addArrangedSubviews(cancelButton, completeButton)
+        self.addSubviews(_rootVStack)
+        _rootVStack.addArrangedSubviews(_datePicker, _buttonHStackView)
+        _buttonHStackView.addArrangedSubviews(_cancelButton, _completeButton)
     }
 
     func setConstraints() {
-        stack.snp.makeConstraints {
+        _rootVStack.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
-        cancelButton.snp.makeConstraints {
+        _cancelButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
-            $0.height.equalTo(54)
+            $0.height.equalTo(CGFloat(54))
         }
 
-        completeButton.snp.makeConstraints {
-            $0.height.equalTo(54)
+        _completeButton.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(54))
         }
     }
 }

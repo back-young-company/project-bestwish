@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import RxSwift
 
 final class PolicyViewController: UIViewController {
@@ -13,7 +14,6 @@ final class PolicyViewController: UIViewController {
     private let viewModel: PolicyViewModel
     private let disposeBag = DisposeBag()
 
-    // MARK: - Initializer, Deinit, requiered
     init(viewModel: PolicyViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -43,11 +43,11 @@ final class PolicyViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.isPrivacySelected
-            .bind(to: policyView.privacyCheckButton.rx.isSelected)
+            .bind(to: policyView.privacyPolicyCheckButton.rx.isSelected)
             .disposed(by: disposeBag)
 
         viewModel.state.isServiceSelected
-            .bind(to: policyView.serviceCheckButton.rx.isSelected)
+            .bind(to: policyView.termsOfUseCheckButton.rx.isSelected)
             .disposed(by: disposeBag)
 
         viewModel.state.isAllSelected
@@ -61,7 +61,7 @@ final class PolicyViewController: UIViewController {
 
     /// pdf 열기 버튼 바인딩
     private func bindPDFButton() {
-        policyView.privacyViewButton.rx.tap
+        policyView.privacyPolicyViewButton.rx.tap
             .subscribe(with: self) { owner, _ in
             let pdfVC = PDFViewController(type: .privacyPolicy)
             if let sheet = pdfVC.sheetPresentationController {
@@ -72,7 +72,7 @@ final class PolicyViewController: UIViewController {
         }
             .disposed(by: disposeBag)
 
-        policyView.serviceViewButton.rx.tap
+        policyView.termsOfUseViewButton.rx.tap
             .subscribe(with: self) { owner, _ in
             let pdfVC = PDFViewController(type: .termsOfUse)
             if let sheet = pdfVC.sheetPresentationController {
@@ -96,13 +96,13 @@ final class PolicyViewController: UIViewController {
 
     /// checkbox 버튼 바인딩
     private func bindCheckboxButton() {
-        policyView.privacyCheckButton.rx.tap
+        policyView.privacyPolicyCheckButton.rx.tap
             .asDriver()
             .map { .privacyCheckboxTapped }
             .drive(viewModel.action)
             .disposed(by: disposeBag)
 
-        policyView.serviceCheckButton.rx.tap
+        policyView.termsOfUseCheckButton.rx.tap
             .asDriver()
             .map { .serviceCheckboxTapped }
             .drive(viewModel.action)

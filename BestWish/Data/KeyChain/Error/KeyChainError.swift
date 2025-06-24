@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 키체인 에러 종류
 enum KeyChainError: AppErrorProtocol {
     case readError(String)
     case saveError

@@ -7,11 +7,15 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
+/// 온보딩 헤더뷰 내 텍스트 모음 
 final class IntroTextStackView: UIView {
 
-    private let rootVStackView = VerticalStackView(spacing: 12)
-    private let titleLabel = UILabel()
-    private let descLabel = UILabel()
+    private let _rootVStackView = VerticalStackView(spacing: 12)
+    private let _titleLabel = UILabel()
+    private let _descLabel = UILabel()
 
     init(title: String, desc: String) {
         super.init(frame: .zero)
@@ -23,9 +27,10 @@ final class IntroTextStackView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// 파라이터로 전달된 정보로 텍스트 설정
     private func configure(title: String, desc: String) {
-        titleLabel.text = title
-        descLabel.text = desc
+        _titleLabel.text = title
+        _descLabel.text = desc
     }
 }
 private extension IntroTextStackView {
@@ -36,41 +41,39 @@ private extension IntroTextStackView {
     }
 
     func setAttributes() {
-
-        rootVStackView.do {
+        _rootVStackView.do {
             $0.alignment = .leading
             $0.distribution = .fill
         }
 
-        titleLabel.do {
+        _titleLabel.do {
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
             $0.font = .font(.pretendardBold, ofSize: 24)
             $0.textColor = .gray900
         }
-        descLabel.do {
+        _descLabel.do {
             $0.font = .font(.pretendardMedium, ofSize: 16)
             $0.textColor = .gray600
         }
     }
 
     func setHierarchy() {
-        self.addSubview(rootVStackView)
-        rootVStackView.addArrangedSubviews(titleLabel, descLabel)
+        self.addSubview(_rootVStackView)
+        _rootVStackView.addArrangedSubviews(_titleLabel, _descLabel)
     }
 
     func setConstraints() {
-        rootVStackView.snp.makeConstraints {
+        _rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
-        titleLabel.snp.makeConstraints {
+        _titleLabel.snp.makeConstraints {
             $0.height.greaterThanOrEqualTo(CGFloat(29).fitHeight)
         }
 
-        descLabel.snp.makeConstraints {
+        _descLabel.snp.makeConstraints {
             $0.height.equalTo(CGFloat(19).fitHeight)
         }
-
     }
 }

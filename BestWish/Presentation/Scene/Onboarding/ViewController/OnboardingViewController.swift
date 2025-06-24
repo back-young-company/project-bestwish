@@ -5,10 +5,11 @@
 //  Created by yimkeul on 6/9/25.
 //
 
-import Foundation
+
 import UIKit
-import RxSwift
+
 import IQKeyboardReturnManager
+import RxSwift
 
 final class OnboardingViewController: UIViewController {
     private let firstView = OnboardingFirstView()
@@ -91,6 +92,7 @@ final class OnboardingViewController: UIViewController {
 
 
 private extension OnboardingViewController {
+    /// 이용약관 바텀 시트 바인딩
     func bindPolicySheet() {
         viewModel.state.showPolicySheet
             .observe(on: MainScheduler.instance)
@@ -101,6 +103,7 @@ private extension OnboardingViewController {
             .disposed(by: disposeBag)
     }
 
+    /// OnboardingFirstView 바인딩
     func bindFirstView() {
         // 성별 바인딩
         firstView.genderSelection.maleButton.rx.tap
@@ -121,22 +124,24 @@ private extension OnboardingViewController {
             .drive(viewModel.action)
             .disposed(by: disposeBag)
 
-        // 생일 바인딩
+        // 생년월일 바인딩
         firstView.birthSelection.dateButton.rx.tap
             .subscribe(with: self) { owner, _ in
+                owner.firstView.configure(isFoucsed: true)
                 let sheetVC = DatePickerBottomSheetViewController()
                 sheetVC.presentationController?.delegate = self
+
                 // 선택된 날짜 콜백
                 sheetVC.onDateSelected = { date in
                     owner.dismiss(animated: true) {
-                        owner.firstView.configure()
+                        owner.firstView.configure(isFoucsed: false)
                     }
                     owner.viewModel.action.onNext(.selectedBirth(date))
                 }
 
                 sheetVC.onCancel = {
                     owner.dismiss(animated: false) {
-                        owner.firstView.configure()
+                        owner.firstView.configure(isFoucsed: false)
                     }
                 }
                 sheetVC.presentDatePickerSheet()
@@ -144,7 +149,7 @@ private extension OnboardingViewController {
             }
             .disposed(by: disposeBag)
     }
-
+    /// OnboardingSecondView 바인딩
     func bindSecondView() {
         // 프로필 사진 바인딩
         let tapGesture = UITapGestureRecognizer()
@@ -180,6 +185,7 @@ private extension OnboardingViewController {
 
     }
 
+    /// Oneboarding 내 화면 이동 버튼 바인딩
     func bindPageButton() {
         firstView.nextPageButton.rx.tap
             .asDriver()
@@ -193,7 +199,7 @@ private extension OnboardingViewController {
             .drive(viewModel.action)
             .disposed(by: disposeBag)
 
-        // TODO: 메인화면으로 이동해야함.
+        // FIXME: 화면 이동 처리 고려
         secondView.completeButton.rx.tap
             .withLatestFrom(viewModel.state.userInfo)
             .subscribe(with: self) { owner, UserInfoModel in
@@ -204,7 +210,7 @@ private extension OnboardingViewController {
     }
 }
 
-
+// MARK: - 화면 포커싱 추적
 extension OnboardingViewController: UIAdaptivePresentationControllerDelegate {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         // 모달이 내려간 시점에 원래 색으로 복구

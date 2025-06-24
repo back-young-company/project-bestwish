@@ -6,27 +6,31 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
+import SnapKit
+import Then
+
+/// 생년월일 선택 화면
 final class BirthSelectionView: UIView {
 
-    private let rootVStackView = VerticalStackView(spacing: 8)
-    private let birthLabel = GroupTitleLabel(title: "생년월일")
-    let dateButton = UIButton()
+    // MARK: - Private Property
+    private let _rootVStackView = VerticalStackView(spacing: 8)
+    private let _birthLabel = GroupTitleLabel(title: "생년월일")
+    private let _dateButton = UIButton()
 
-    private let disposeBag = DisposeBag()
+    // MARK: - Internal Property
+    var dateButton: UIButton { _dateButton }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
 
+    /// 생년월일 선택 버튼에 선택한 날짜 표기 설정
     func configure(title: String?) {
         dateButton.setTitle(title, for: .normal)
     }
@@ -37,11 +41,10 @@ private extension BirthSelectionView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setBindings()
     }
 
     func setAttributes() {
-        dateButton.do {
+        _dateButton.do {
             var config = UIButton.Configuration.plain()
             config.contentInsets = .init(top: 0, leading: 12, bottom: 0, trailing: 12)
             config.titleTextAttributesTransformer =
@@ -66,26 +69,18 @@ private extension BirthSelectionView {
     }
 
     func setHierarchy() {
-        self.addSubviews(rootVStackView)
-        rootVStackView.addArrangedSubviews(birthLabel, dateButton)
+        self.addSubviews(_rootVStackView)
+        _rootVStackView.addArrangedSubviews(_birthLabel, dateButton)
     }
 
     func setConstraints() {
-        rootVStackView.snp.makeConstraints {
+        _rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
-        dateButton.snp.makeConstraints {
-            $0.height.equalTo(48)
+        _dateButton.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(48))
         }
-    }
-
-    func setBindings() {
-        dateButton.rx.tap
-            .subscribe(with: self) { owner, _ in
-            owner.dateButton.layer.borderColor = UIColor.primary300?.cgColor
-        }
-            .disposed(by: disposeBag)
     }
 }
 

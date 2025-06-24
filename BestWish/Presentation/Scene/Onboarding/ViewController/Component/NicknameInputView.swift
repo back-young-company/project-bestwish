@@ -7,19 +7,27 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
+/// 닉네임 입력 화면
 final class NicknameInputView: UIView {
 
-    private let rootVStackView = VerticalStackView(spacing: 12)
-    private let nicknameLabel = GroupTitleLabel(title: "닉네임")
-    let textField = UITextField()
-    let cautionLabel = UILabel()
+    // MARK: - Private Property
+    private let _rootVStackView = VerticalStackView(spacing: 12)
+    private let _nicknameLabel = GroupTitleLabel(title: "닉네임")
+    private let _textField = UITextField()
+    private let _cautionLabel = UILabel()
+
+    // MARK: - Internal Property
+    var textField: UITextField { _textField }
+    var cautionLabel: UILabel { _cautionLabel }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -33,7 +41,7 @@ private extension NicknameInputView {
     }
 
     func setAttributes() {
-        textField.do {
+        _textField.do {
             $0.font = .font(.pretendardMedium, ofSize: 16)
             $0.backgroundColor = .gray0
             $0.layer.borderWidth = 1.5
@@ -43,7 +51,7 @@ private extension NicknameInputView {
             $0.leftViewMode = .always
         }
 
-        cautionLabel.do {
+        _cautionLabel.do {
             $0.text = OnboardingText.secondCaution.value
             $0.font = .font(.pretendardMedium, ofSize: 12)
             $0.textColor = .gray200
@@ -51,25 +59,25 @@ private extension NicknameInputView {
     }
 
     func setHierarchy() {
-        self.addSubview(rootVStackView)
-        rootVStackView.addArrangedSubviews(nicknameLabel, textField, cautionLabel)
+        self.addSubview(_rootVStackView)
+        _rootVStackView.addArrangedSubviews(_nicknameLabel, _textField, _cautionLabel)
     }
 
     func setConstraints() {
-        rootVStackView.snp.makeConstraints {
+        _rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
-        nicknameLabel.snp.makeConstraints {
-            $0.height.equalTo(17)
+        _nicknameLabel.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(17).fitHeight)
         }
 
-        cautionLabel.snp.makeConstraints {
-            $0.height.equalTo(14)
+        _cautionLabel.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(14).fitHeight)
         }
 
-        textField.snp.makeConstraints {
-            $0.height.equalTo(48)
+        _textField.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(48).fitHeight)
         }
     }
 }

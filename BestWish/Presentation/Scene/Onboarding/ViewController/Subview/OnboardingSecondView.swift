@@ -6,45 +6,65 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
 
+/// 온보딩 두번째 화면
 final class OnboardingSecondView: UIView {
-    private let headerView = OnboardingHeaderView(current: 2, total: 2,
-                                                  title: OnboardingText.secondTitle.value,
-                                                  desc: OnboardingText.secondDesc.value)
-    private let profileContainer = UIView()
-    let profileImageView = UIImageView()
 
-    private let nickName2ButtonStackView = VerticalStackView(spacing: CGFloat(160).fitHeight)
-    let nicknameVStackView = NicknameInputView()
-    private let buttonHStackView = HorizontalStackView(spacing: CGFloat(12).fitWidth)
-    let prevButton = AppButton(type: .before)
-    let completeButton = AppButton(type: .complete)
+    // MARK: - Private Property
+    private let _headerView = OnboardingHeaderView(
+        current: 2,
+        total: 2,
+        title: OnboardingText.secondTitle.value,
+        desc: OnboardingText.secondDesc.value
+    )
+    private let _profileContainer = UIView()
+    private let _profileImageView = UIImageView()
+
+    private let _nickName2ButtonStackView = VerticalStackView()
+    private let _nicknameVStackView = NicknameInputView()
+    private let _buttonHStackView = HorizontalStackView(spacing: CGFloat(12).fitWidth)
+    private let _prevButton = AppButton(type: .before)
+    private let _completeButton = AppButton(type: .complete)
+
+    // MARK: - Internal Property
+    var profileImageView: UIImageView { _profileImageView }
+    var nicknameVStackView: NicknameInputView { _nicknameVStackView }
+    var prevButton: AppButton { _prevButton }
+    var completeButton: AppButton { _completeButton }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
 
+    /// 프로필 이미지 크기 재설성
     func configure(imageName: String?) {
         guard let imageName else { return }
-        profileImageView.image = UIImage(named: imageName)?.resize(to: CGSize(width: CGFloat(152).fitHeight, height: CGFloat(152).fitHeight))
+        _profileImageView.image = UIImage(named: imageName)?
+            .resize(
+                to: CGSize(
+                    width: CGFloat(152).fitHeight,
+                    height: CGFloat(152).fitHeight
+                )
+            )
     }
 
+    /// 온보딩 두번째 화면 입력 완료시 설정
+    /// 1. (모든 입력 완료시) 다음 버튼 활성화
+    /// 2. 닉네임 버튼 테두리 설정
+    /// 3. 닉네임 유효성 검사 안내 텍스트 색상 설정
     func configure(isValidNickname: Bool) {
-        // 버튼 활성화
-        completeButton.isEnabled = isValidNickname
-
-        nicknameVStackView.textField.layer.borderColor =
-        isValidNickname ? UIColor.primary300?.cgColor : UIColor.red0?.cgColor
-
-        nicknameVStackView.cautionLabel.textColor = isValidNickname ? .gray200 : .red0
+        _completeButton.isEnabled = isValidNickname
+        _nicknameVStackView.textField.layer.borderColor =
+            isValidNickname ? UIColor.primary300?.cgColor : UIColor.red0?.cgColor
+        _nicknameVStackView.cautionLabel.textColor = isValidNickname ? .gray200 : .red0
     }
 
 }
@@ -59,14 +79,18 @@ private extension OnboardingSecondView {
     func setAttributes() {
         self.backgroundColor = .gray0
 
-        profileImageView.do {
+        _profileImageView.do {
             $0.contentMode = .scaleToFill
             $0.layer.cornerRadius = CGFloat(152).fitHeight / 2
             $0.clipsToBounds = true
             $0.isUserInteractionEnabled = true
         }
 
-        buttonHStackView.do {
+        _nickName2ButtonStackView.do {
+            $0.distribution = .equalSpacing
+        }
+
+        _buttonHStackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 12,
@@ -76,52 +100,48 @@ private extension OnboardingSecondView {
             )
         }
 
-        completeButton.do {
+        _completeButton.do {
             $0.isEnabled = false
         }
     }
 
     func setHierarchy() {
-
-        self.addSubviews(headerView, profileImageView, nickName2ButtonStackView)
-        nickName2ButtonStackView.addArrangedSubviews(nicknameVStackView, buttonHStackView)
-        buttonHStackView.addArrangedSubviews(prevButton, completeButton)
+        self.addSubviews(_headerView, _profileImageView, _nickName2ButtonStackView)
+        _nickName2ButtonStackView.addArrangedSubviews(_nicknameVStackView, _buttonHStackView)
+        _buttonHStackView.addArrangedSubviews(_prevButton, _completeButton)
     }
 
     func setConstraints() {
-
-        headerView.snp.makeConstraints {
+        _headerView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(CGFloat(38).fitHeight)
             $0.leading.trailing.equalToSuperview()
         }
 
-        profileImageView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(24)
+        _profileImageView.snp.makeConstraints {
+            $0.top.equalTo(_headerView.snp.bottom).offset(CGFloat(24))
             $0.size.equalTo(CGFloat(152).fitHeight)
             $0.centerX.equalToSuperview()
         }
 
-        nickName2ButtonStackView.snp.makeConstraints {
-            $0.top.equalTo(profileImageView.snp.bottom).offset(40)
+        _nickName2ButtonStackView.snp.makeConstraints {
+            $0.top.equalTo(_profileImageView.snp.bottom).offset(CGFloat(40))
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalTo(keyboardLayoutGuide.snp.top)
         }
 
-
-        buttonHStackView.snp.makeConstraints {
+        _buttonHStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
         }
 
-        prevButton.snp.makeConstraints {
+        _prevButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
-            $0.height.equalTo(54)
+            $0.height.equalTo(CGFloat(54).fitHeight)
         }
 
-        completeButton.snp.makeConstraints {
-            $0.height.equalTo(54)
+        _completeButton.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(54).fitHeight)
         }
 
     }
-
 }
 

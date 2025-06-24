@@ -6,49 +6,55 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
 
+/// 온보딩 첫번째 화면
 final class OnboardingFirstView: UIView {
 
-    private let headerView = OnboardingHeaderView(current: 1, total: 2,
-                                                  title: OnboardingText.firstTitle.value,
-                                                  desc: OnboardingText.firstDesc.value)
-    private let descGengerLabel = UILabel()
-    private let genderBirthVStackView = VerticalStackView(spacing: 32)
-    let genderSelection = GenderSelectionView()
-    let birthSelection = BirthSelectionView()
-    private let buttonVStackView = VerticalStackView()
-    let nextPageButton = AppButton(type: .next)
+    // MARK: - Private Property
+    private let _headerView = OnboardingHeaderView(
+        current: 1,
+        total: 2,
+        title: OnboardingText.firstTitle.value,
+        desc: OnboardingText.firstDesc.value
+    )
+    private let _descGengerLabel = UILabel()
+    private let _genderBirthVStackView = VerticalStackView(spacing: 32)
+    private let _genderSelection = GenderSelectionView()
+    private let _birthSelection = BirthSelectionView()
+    private let _buttonVStackView = VerticalStackView()
+    private let _nextPageButton = AppButton(type: .next)
+
+    // MARK: - Internal Property
+    var genderSelection: GenderSelectionView { _genderSelection }
+    var birthSelection: BirthSelectionView { _birthSelection }
+    var nextPageButton: AppButton { _nextPageButton }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
 
-    func configure(_ isValid: Bool) {
-        nextPageButton.isEnabled = isValid
-    }
-    private func canNext(_ isValid: Bool) {
-        nextPageButton.isEnabled = isValid
+    /// 생년월일 버튼 선택시 테두리 설정
+    func configure(isFoucsed: Bool) {
+        _birthSelection.dateButton.layer.borderColor = isFoucsed ? UIColor.primary300?.cgColor : UIColor.gray200?.cgColor
     }
 
+    /// 온보딩 첫번째 화면 입력 완료시 설정
+    /// 1. (모든 입력 완료시) 다음 버튼 활성화
+    /// 2. 성별, 생년월일 화면 표시
     func configure(with userInfo: UserInfoModel?) {
         let isValid = userInfo?.gender != nil && userInfo?.birth != nil
-        canNext(isValid)
-        genderSelection.configure(genderIndex: userInfo?.gender)
-        birthSelection.configure(title: userInfo?.birthString)
+        _nextPageButton.isEnabled = isValid
+        _genderSelection.configure(genderIndex: userInfo?.gender)
+        _birthSelection.configure(title: userInfo?.birthString)
     }
-
-    func configure() {
-        birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
-    }
-
 }
 
 private extension OnboardingFirstView {
@@ -61,7 +67,7 @@ private extension OnboardingFirstView {
     func setAttributes() {
         self.backgroundColor = .gray0
 
-        descGengerLabel.do {
+        _descGengerLabel.do {
             $0.text = OnboardingText.firstGender.value
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
@@ -69,7 +75,7 @@ private extension OnboardingFirstView {
             $0.textColor = .gray200
         }
 
-        genderBirthVStackView.do {
+        _genderBirthVStackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 16,
@@ -78,7 +84,7 @@ private extension OnboardingFirstView {
                 right: 20
             )
         }
-        buttonVStackView.do {
+        _buttonVStackView.do {
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
                 top: 12,
@@ -88,40 +94,40 @@ private extension OnboardingFirstView {
             )
         }
 
-        nextPageButton.do {
+        _nextPageButton.do {
             $0.isEnabled = false
         }
     }
 
     func setHierarchy() {
-        self.addSubviews(headerView, descGengerLabel, genderBirthVStackView, buttonVStackView)
-        genderBirthVStackView.addArrangedSubviews(genderSelection, birthSelection)
-        buttonVStackView.addArrangedSubview(nextPageButton)
+        self.addSubviews(_headerView, _descGengerLabel, _genderBirthVStackView, _buttonVStackView)
+        _genderBirthVStackView.addArrangedSubviews(_genderSelection, _birthSelection)
+        _buttonVStackView.addArrangedSubview(_nextPageButton)
     }
 
     func setConstraints() {
-        headerView.snp.makeConstraints {
+        _headerView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(CGFloat(38).fitHeight)
             $0.leading.trailing.equalToSuperview()
         }
 
-        descGengerLabel.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom)
+        _descGengerLabel.snp.makeConstraints {
+            $0.top.equalTo(_headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
 
-        genderBirthVStackView.snp.makeConstraints {
-            $0.top.equalTo(descGengerLabel.snp.bottom).offset(CGFloat(22).fitHeight)
+        _genderBirthVStackView.snp.makeConstraints {
+            $0.top.equalTo(_descGengerLabel.snp.bottom).offset(CGFloat(22).fitHeight)
             $0.leading.trailing.equalToSuperview()
         }
 
-        buttonVStackView.snp.makeConstraints {
+        _buttonVStackView.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
         }
 
-        nextPageButton.snp.makeConstraints {
-            $0.height.equalTo(54)
+        _nextPageButton.snp.makeConstraints {
+            $0.height.equalTo(CGFloat(54).fitHeight)
         }
     }
 }
