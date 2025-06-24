@@ -15,6 +15,7 @@ final class AlertViewController: UIViewController {
     private let type: AlertView.AlertType
     private let alertView: AlertView
     private let disposeBag = DisposeBag()
+    
     private var confirmAction: (() -> Void)? // 확인 버튼 액션 클로저
 
     init(type: AlertView.AlertType, action: (() -> Void)? = nil) {

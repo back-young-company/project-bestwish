@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 import Supabase
 
 /// 위시 리스트 관련 매니저

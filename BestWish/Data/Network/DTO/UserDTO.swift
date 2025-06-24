@@ -79,7 +79,7 @@ struct UserDTO: Codable {
     }
 }
 
-/// 플랫폼  순서 DTO
+/// 플랫폼 순서 DTO
 struct PlatformSequenceDTO: Codable {
     let platformSequence: [Int16]
 

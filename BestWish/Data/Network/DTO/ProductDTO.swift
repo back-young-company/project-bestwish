@@ -34,7 +34,7 @@ struct ProductDTO: Codable {
     }
 }
 
-/// 플랫폼  DTO
+/// 플랫폼 DTO
 struct PlatformDTO: Codable {
     let platform: Int16
 }

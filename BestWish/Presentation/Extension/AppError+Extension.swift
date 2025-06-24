@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// 앱 에러 Alert 설정
+// MARK: - 앱 에러 Alert 설정
 extension AppError {
     var alertTitle: String {
         switch self {
