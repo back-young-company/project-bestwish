@@ -48,8 +48,9 @@ extension SupabaseOAuthManager {
                 .responseData { response in
                 switch response.result {
                 case .success:
-                    NSLog("카카오 회원탈퇴 성공. 상태 코드:", response.response?.statusCode ?? -1)
+                    NSLog("카카오 회원탈퇴 성공. 상태 코드: \(response.response?.statusCode ?? -1)")
                     continuation.resume()
+
                 case .failure(let error):
                     let statusCode = response.response?.statusCode ?? -1
                     let bodyString = response.data.flatMap { String(data: $0, encoding: .utf8) } ?? "응답 바디 없음"

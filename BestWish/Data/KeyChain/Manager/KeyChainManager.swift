@@ -6,20 +6,25 @@
 //
 
 import Foundation
+
 import Supabase
 
+// MARK: – 비동기 저장/삭제 (actor 격리 유지)
 actor KeyChainManager {
-    // MARK: – 비동기 저장/삭제 (actor 격리 유지)
+
+    ///  모든 토큰 저장
     func saveAllToken(session: Supabase.Session) async {
         await save(token: Token(service: .access, value: session.accessToken))
         await save(token: Token(service: .refresh, value: session.refreshToken))
     }
 
+    ///  모든 토큰 삭제
     func deleteAllToken() async {
         await delete(token: Token(service: .access))
         await delete(token: Token(service: .refresh))
     }
 
+    /// 토큰 저장
     private func save(token: Token) async {
         let baseQuery: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
@@ -34,9 +39,10 @@ actor KeyChainManager {
         SecItemAdd(addQuery as CFDictionary, nil)
         let eData = String(data: data, encoding: .utf8) ?? ""
 
-        print("키체인 \(token.service.type) - \(eData.prefix(10)) 저장 성공")
+        NSLog("키체인 \(token.service.type) - \(eData.prefix(10)) 저장 성공")
     }
 
+    /// 토큰 삭제
     private func delete(token: Token) async {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
@@ -45,11 +51,10 @@ actor KeyChainManager {
             kSecAttrAccessGroup: token.sharing
         ]
         SecItemDelete(query as CFDictionary)
-        print("키체인 \(token.service.type) 삭제")
+        NSLog("키체인 \(token.service.type) 삭제")
     }
 
-    // MARK: – 동기 읽기 (nonisolated)
-
+    /// 토큰  읽기
     nonisolated func read(token: Token) -> String? {
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
@@ -67,7 +72,7 @@ actor KeyChainManager {
             else {
             return nil
         }
-        print("키체인 \(token.service.type) 불러오기 성공")
+        NSLog("키체인 \(token.service.type) 불러오기 성공")
         return str
     }
 }

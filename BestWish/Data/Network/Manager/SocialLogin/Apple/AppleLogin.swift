@@ -35,17 +35,34 @@ extension SupabaseOAuthManager {
         }
     }
 
-    /// 애플 AccessToken 요청
-    /// 1) 애플 로그인
-    /// 2) supabase client_secret 요청
-    /// 2) 애플 (code , cinet secret) 로 AccessToken 수령
-    func getAppleAccessToken() async throws -> (String, String) {
-        let (code, _) = try await signInApple()
-        let clientSecret = try await requestSecret()
-        let responseData = try await requestAppleAccessToken(code: code, clientSecret: clientSecret)
-        let acceessToken = try parsingAccessToken(data: responseData)
+    /// Supabase에 Client_Secret 값 요청
+    func requestClientSecret(_ keyChain: KeyChainManager) async throws -> String {
+        guard let token = keyChain.read(token: .init(service: .access)) else {
+            NSLog("ERROR : Supabase AccessToken Read Fail")
+            // FIXME: - 현재 아래 error는 Alert으로 안나오는 현상이 있음.
+            throw KeyChainError.readError("Service : Supabse AccessToken")
+        }
 
-        return (acceessToken, clientSecret)
+        do {
+            let endPoint = "swift-api/generate-client-secret"
+            let response: [String: String] = try await client.functions.invoke(
+                endPoint,
+                options: .init(
+                    method: .get,
+                    headers: ["Authorization": "Bearer \(token)"]
+                )
+            )
+
+            guard let clientSecret = response["client_secret"] else {
+                throw AuthError.supabaseRequestSecretCodeNil
+            }
+
+            return clientSecret
+        }
+        catch {
+            NSLog("ERROR : requestClientSecret")
+            throw AuthError.supabaseRequestSecretCodeFailed(error)
+        }
     }
 
     /// 애플 회원탈퇴
@@ -82,7 +99,7 @@ extension SupabaseOAuthManager {
     }
 
     /// 애플 RestAPI로 AccessToken 요청
-    private func requestAppleAccessToken(code: String, clientSecret: String) async throws -> Data {
+    func requestAppleAccessToken(code: String, clientSecret: String) async throws -> Data {
         do {
             let url = "https://appleid.apple.com/auth/token"
             let clientID = Bundle.main.clientID
@@ -104,56 +121,33 @@ extension SupabaseOAuthManager {
                 .serializingData()
                 .value
         } catch {
+            NSLog("ERROR : requestAppleAccessToken : \(error.localizedDescription) \(code) : \(clientSecret)")
             throw AuthError.appleRequestAccessTokenFailed(error)
         }
     }
 
     /// Data 타입의 AccessToken String으로 파싱
-    private func parsingAccessToken(data: Data) throws -> String {
+    func parsingAccessToken(data: Data) throws -> String {
         let jsonAny = try JSONSerialization.jsonObject(with: data, options: [])
 
         guard
             let json = jsonAny as? [String: Any],
             let accessToken = json["access_token"] as? String
             else {
+            NSLog("Error: parsingAccessToken")
             throw AuthError.encodeParsingTokenError("access_token")
         }
 
         return accessToken
     }
 
-    /// Supabase에 Client_Secret 값 요청
-    private func requestSecret() async throws -> String {
-        guard let token = keychain.read(token: .init(service: .access)) else {
-            throw KeyChainError.readError("service : .access")
-        }
-
-        let endPoint = "swift-api/generate-client-secret"
-
-        do {
-            let response: [String: String] = try await client.functions.invoke(
-                endPoint,
-                options: .init(
-                    method: .get,
-                    headers: ["Authorization": "Bearer \(token)"]
-                )
-            )
-
-            guard let clientSecret = response["client_secret"] else {
-                throw AuthError.supabaseRequestSecretCodeNil
-            }
-
-            return clientSecret
-        } catch {
-            throw AuthError.supabaseRequestSecretCodeFailed(error)
-        }
-    }
 
     /// 애플 로그인용 nonce 생성
     private func generateRandomNonce(length: Int = 32) -> String {
         let characters = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
         var result = ""
         var remainingLength = length
+        
         while remainingLength > 0 {
             let randoms: [UInt8] = (0 ..< 16).map { _ in
                 var random: UInt8 = 0

@@ -90,6 +90,7 @@
 		14B8B6632DF68EEF00B7F5F8 /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Data/KeyChain/Error/KeyChainError.swift,
 				Data/KeyChain/Manager/KeyChainManager.swift,
 				Data/KeyChain/Manager/Token.swift,
 				Data/Network/DTO/AblyResponseDTO.swift,
@@ -114,6 +115,7 @@
 				Domain/Entity/Product.swift,
 				Domain/Entity/ProductMetaData.swift,
 				Domain/Entity/SharePlatform.swift,
+				Domain/Entity/SocialType.swift,
 				Domain/Entity/User.swift,
 				Domain/Error/AppError.swift,
 				Domain/Interface/MetadataFetcherRepository.swift,

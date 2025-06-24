@@ -23,7 +23,7 @@ enum AuthError: AppErrorProtocol {
 
 extension AuthError {
     var errorDescription: String? {
-        "네트워크 오류가 발생했습니다"
+        "인증 오류가 발생했습니다"
     }
 
     var debugDescription: String {
