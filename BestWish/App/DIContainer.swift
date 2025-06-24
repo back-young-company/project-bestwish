@@ -13,6 +13,8 @@ final class DIContainer {
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
+    private let keyChainManager: KeyChainManager
+
     private let coreMLManager: CoreMLManager
     
     private let wishListRepository: WishListRepository
@@ -30,11 +32,12 @@ final class DIContainer {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
         self.supabaseOAuthManager = SupabaseOAuthManager()
+        self.keyChainManager = KeyChainManager()
 
         self.wishListRepository = WishListRepositoryImpl(manager: supabaseManager, userInfoManager: supabaseUserInfoManager)
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
-        self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager)
-        
+        self.accountRepository = AccountRepositoryImpl(manager: supabaseOAuthManager, keycahin: keyChainManager)
+
         self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
         self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
@@ -44,9 +47,8 @@ final class DIContainer {
         self.analysisUseCase = AnalysisUseCaseImpl()
     }
 
-    // TODO: - 수정하기 (with SceneDelegate)
-    func makeSupabaseOAuthManager() -> SupabaseOAuthManager {
-        return SupabaseOAuthManager()
+    func makeAccountRepository() -> AccountRepository {
+        return AccountRepositoryImpl(manager: supabaseOAuthManager, keycahin: keyChainManager)
     }
 
     func makeHomeViewController() -> HomeViewController {

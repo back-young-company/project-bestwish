@@ -43,12 +43,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// Task 구현이 안전하지 않을시 다른 방법 고려 가능
 
         // TODO: - 수정하기 (with DIContainer)
-        let supabaseOAuthManager = DIContainer.shared.makeSupabaseOAuthManager()
+        let repository = DIContainer.shared.makeAccountRepository()
+        
         Task {
-            let isLogin = await supabaseOAuthManager.checkLoginState()
-            if isLogin {
-                let isNeedOnboarding = await supabaseOAuthManager.isNeedOnboarding()
-                if isNeedOnboarding {
+            let didLogin = await repository.checkLoginState()
+            if didLogin {
+                let didOnboarding = await repository.checkOnboardingState()
+                if didOnboarding {
                     self.showMainView()
                 } else {
                     self.showOnboardingView()
