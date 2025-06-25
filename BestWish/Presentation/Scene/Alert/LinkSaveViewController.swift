@@ -10,14 +10,15 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+/// 링크 저장 View Controller
 final class LinkSaveViewController: UIViewController {
-    
-    private let linkSaveView = LinkSaveView()
+
+    // MARK: - Private Property
     private let viewModel: LinkSaveViewModel
-    
-    weak var delegate: HomeViewControllerUpdate?
-    
+    private let linkSaveView = LinkSaveView()
     private let disposeBag = DisposeBag()
+
+    weak var delegate: HomeViewControllerUpdate?
 
     init(viewModel: LinkSaveViewModel) {
         self.viewModel = viewModel
@@ -40,41 +41,50 @@ final class LinkSaveViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        // 상품 저장 완료 시
         viewModel.state.completed
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
-                print("저장 완료!!")
+                NSLog("저장 완료!!")
                 owner.delegate?.updateWishlists()
                 owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
+
+        // 상품 저장 실패 시
+        viewModel.state.error
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "저장 실패", message: "상품 저장에 실패하였습니다.\n다시 시도해 주세요.")
             }
             .disposed(by: disposeBag)
     }
 
     private func bindActions() {
-        linkSaveView.dismiss
-            .bind(with: self) { owner, _ in
-                owner.dismiss(animated: true)
-            }.disposed(by: disposeBag)
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.delegate = self
+        linkSaveView.addGestureRecognizer(tapGesture)
 
-        linkSaveView.getSaveButton.rx.tap
-            .withLatestFrom(linkSaveView.getLinkInputTextField.rx.text.orEmpty) { _, url in
+        Observable.merge(
+            tapGesture.rx.event.map { _ in },
+            linkSaveView.cancelButton.rx.tap.map { }
+        ).bind(with: self) { owner, _ in
+            owner.dismiss(animated: true)
+        }.disposed(by: disposeBag)
+
+        linkSaveView.saveButton.rx.tap
+            .withLatestFrom(linkSaveView.linkInputTextField.rx.text.orEmpty) { _, url in
                 return url
             }
             .bind(with: self) { owner, url in
-                owner.checkProductUrl(url)
+                owner.viewModel.action.onNext(.addProduct(url))
             }.disposed(by: disposeBag)
     }
-    
-    private func checkProductUrl(_ url: String) {
-        ShareExtensionService.shared
-            .fetchPlatformMetadata(from: url)
-            .observe(on: MainScheduler.asyncInstance)
-            .subscribe(with: self, onSuccess: { owner, result in
-                let (_, metaData) = result
-                owner.viewModel.action.onNext(.product(metaData))
-            }, onFailure: { owner, error in
-                owner.showBasicAlert(title: "미지원 플랫폼", message: "해당 링크는 지원되지 않는 플랫폼 입니다.")
-            })
-            .disposed(by: disposeBag)
+}
+
+extension LinkSaveViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let touchLocation = touch.location(in: linkSaveView)
+        return !linkSaveView.linkView.frame.contains(touchLocation)
     }
 }

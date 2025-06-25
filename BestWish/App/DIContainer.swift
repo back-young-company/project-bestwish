@@ -7,46 +7,57 @@
 
 import UIKit
 
+/// 의존성 주입 컨테이너
 final class DIContainer {
+
     static let shared = DIContainer()
 
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
     private let keyChainManager: KeyChainManager
+    private let productSyncManager: ProductSyncManager
     private let coreMLManager: CoreMLManager
 
-    private let wishListRepository: WishListRepository
-    private let userInfoRepository: UserInfoRepository
-
-    private let wishListUseCase: WishListUseCase
     private let accountRepository: AccountRepository
-    private let userInfoUseCase: UserInfoUseCase
-    private let accountUseCase: AccountUseCase
+    private let userInfoRepository: UserInfoRepository
     private let coreMLRepository: CoreMLRepository
+    private let productSyncRepository: ProductSyncRepository
+    private let wishListRepository: WishListRepository
+
+    private let accountUseCase: AccountUseCase
+    private let userInfoUseCase: UserInfoUseCase
     private let coreMLUseCase: CoreMLUseCase
     private let analysisUseCase: AnalysisUseCase
+    private let productSyncUseCase: ProductSyncUseCase
+    private let wishListUseCase: WishListUseCase
 
     private init() {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
         self.supabaseOAuthManager = SupabaseOAuthManager()
         self.keyChainManager = KeyChainManager()
+        self.productSyncManager = ProductSyncManager()
+        self.coreMLManager = CoreMLManager()
 
-        self.wishListRepository = WishListRepositoryImpl(manager: supabaseManager, userInfoManager: supabaseUserInfoManager)
-        self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
         self.accountRepository = AccountRepositoryImpl(
             manager: supabaseOAuthManager,
             keyChain: keyChainManager
         )
-
-        self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
-        self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
-        self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
-        self.coreMLManager = CoreMLManager()
+        self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
         self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
+        self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager)
+        self.wishListRepository = WishListRepositoryImpl(
+            manager: supabaseManager,
+            userInfoManager: supabaseUserInfoManager
+        )
+
+        self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
+        self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
         self.analysisUseCase = AnalysisUseCaseImpl()
+        self.productSyncUseCase = ProductSyncUseCaseImpl(repository: productSyncRepository)
+        self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
     }
 
     func makeAccountRepository() -> AccountRepository {
@@ -56,23 +67,30 @@ final class DIContainer {
         )
     }
 
+    /// 홈 뷰 컨트롤러 생성
     func makeHomeViewController() -> HomeViewController {
         let viewModel = HomeViewModel(useCase: wishListUseCase)
         return HomeViewController(homeViewModel: viewModel)
     }
 
+    /// 플랫폼 편집 뷰 컨트롤러 생성
     func makePlatformEditViewController() -> PlatformEditViewController {
         let viewModel = PlatformEditViewModel(useCase: wishListUseCase)
         return PlatformEditViewController(platformEditViewModel: viewModel)
     }
 
+    /// 위시리스트 편집 뷰 컨트롤러 생성
     func makeWishlistEditViewController() -> WishListEditViewController {
         let viewModel = WishListEditViewModel(useCase: wishListUseCase)
         return WishListEditViewController(wishEditViewModel: viewModel)
     }
 
+    /// 링크 저장 뷰 컨트롤러 생성
     func makeLinkSaveViewController() -> LinkSaveViewController {
-        let viewModel = LinkSaveViewModel(useCase: wishListUseCase)
+        let viewModel = LinkSaveViewModel(
+            wishListUseCase: wishListUseCase,
+            productSyncUseCase: productSyncUseCase
+        )
         return LinkSaveViewController(viewModel: viewModel)
     }
 
@@ -114,7 +132,10 @@ final class DIContainer {
     func makeOnboardingViewController() -> OnboardingViewController {
         let onboardingViewModel = OnboardingViewModel(useCase: userInfoUseCase)
         let policyViewModel = PolicyViewModel()
-        return OnboardingViewController(viewModel: onboardingViewModel, policyViewModel: policyViewModel)
+        return OnboardingViewController(
+            viewModel: onboardingViewModel,
+            policyViewModel: policyViewModel
+        )
     }
 
     /// 카메라 뷰 컨트롤러 생성
@@ -130,7 +151,10 @@ final class DIContainer {
 
     /// 이미지 분석 뷰 컨트롤러 생성
     func makeAnalysisViewController(labelData: [LabelDataModel]) -> AnalaysisViewController {
-        let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
+        let viewModel = AnalysisViewModel(
+            analysisUseCase: analysisUseCase,
+            labelData: labelData
+        )
         return AnalaysisViewController(viewModel: viewModel)
     }
 }

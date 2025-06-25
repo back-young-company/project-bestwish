@@ -201,7 +201,7 @@ final class HomeViewController: UIViewController {
                 case let .platform(platform):
                     return owner.switchDeeplink(platform.platformDeepLink)
                 case let .wishlist(product):
-                    return owner.switchDeeplink(product.productDeepLink)
+                    return owner.switchDeeplink(product.productDeepLink ?? "")
                 case .wishlistEmpty:
                     return
                 }
@@ -242,15 +242,15 @@ private extension HomeViewController {
     /// 외부 플랫폼 전환
     func switchDeeplink(_ link: String) {
         guard let url = URL(string: link) else {
-            print("url 생성 실패")
+            NSLog("url 생성 실패")
             return
         }
 
         UIApplication.shared.open(url) { success in
             if success {
-                print("✅ 앱 전환 성공: \(url.absoluteString)")
+                NSLog("✅ 앱 전환 성공: \(url.absoluteString)")
             } else {
-                print("❌ 앱 전환 실패: \(url.absoluteString)")
+                NSLog("❌ 앱 전환 실패: \(url.absoluteString)")
                 self.showBasicAlert(title: "미지원 플랫폼", message: "해당 플랫폼은 추후 업데이트될 예정입니다.\n감사합니다.")
             }
         }

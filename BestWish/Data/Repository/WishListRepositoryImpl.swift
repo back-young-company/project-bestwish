@@ -51,7 +51,7 @@ final class WishListRepositoryImpl: WishListRepository {
     }
 
     /// 아이템 검색
-    func searchWishListItems(query: String?, platform: Int?) async throws -> [Product] {
+    func searchWishListItems(query: String?, platform: Int?) async throws -> [ProductEntity] {
         do {
             let result = try await manager.searchWishListItems(query: query, platform: platform)
             return try result.map { try convertToProduct(from: $0) }
@@ -72,7 +72,7 @@ final class WishListRepositoryImpl: WishListRepository {
     }
 
     /// 위시 아이템 추가
-    func addProductToWishList(product: ProductMetadata) async throws {
+    func addProductToWishList(product: ProductEntity) async throws {
         do {
             try await manager.addProductToWishList(
                 product: convertToProductDTO(from: product)
@@ -85,44 +85,33 @@ final class WishListRepositoryImpl: WishListRepository {
 
 // MARK: - DTO -> Entity 매핑
 extension WishListRepositoryImpl {
-    /// ProductDTO -> Product  Entity 매핑
-    private func convertToProduct(from dto: ProductDTO) throws -> Product {
-        guard let userID = dto.userID,
-              let platform = dto.platform,
-              let title = dto.title,
-              let price = dto.price,
-              let discountRate = dto.discountRate,
-              let brand = dto.brand,
-              let imagePathURL = dto.imagePathURL
-        else {
-            throw MappingError.productDTOToProduct
-        }
-
-        return Product(
+    /// ProductDTO -> Product Entity 매핑
+    private func convertToProduct(from dto: ProductDTO) throws -> ProductEntity {
+        return ProductEntity(
             id: dto.id,
-            userID: userID,
-            platform: platform,
-            title: title,
-            price: price,
-            discountRate: discountRate,
-            brand: brand,
-            imagePathURL: imagePathURL,
+            userID: dto.userID,
+            platform: dto.platform,
+            title: dto.title,
+            price: dto.price,
+            discountRate: dto.discountRate,
+            brand: dto.brand,
+            imagePathURL: dto.imagePathURL,
             productURL: dto.productURL,
             createdAt: dto.createdAt
         )
     }
 
     /// ProductMetadata -> ProductDTO 매핑
-    private func convertToProductDTO(from entity: ProductMetadata) -> ProductDTO {
+    private func convertToProductDTO(from entity: ProductEntity) -> ProductDTO {
         ProductDTO(
             id: UUID(),
             userID: nil,
             platform: entity.platform,
-            title: entity.productName,
+            title: entity.title,
             price: entity.price,
             discountRate: entity.discountRate,
-            brand: entity.brandName,
-            imagePathURL: entity.imageURL,
+            brand: entity.brand,
+            imagePathURL: entity.imagePathURL,
             productURL: entity.productURL,
             createdAt: nil
         )

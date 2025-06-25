@@ -47,7 +47,7 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
     }
 
     func configure(type: WishListProductItem, isHidden: Bool, isLastRow: Bool? = nil) {
-        _productImageView.kf.setImage(with: URL(string: type.productImageURL)!)
+        _productImageView.kf.setImage(with: URL(string: type.productImageURL ?? "")!)
         _productSaleRateLabel.text = type.productSaleRate
         _productPriceLabel.text = type.productPrice
         _productNameLabel.text = type.productName

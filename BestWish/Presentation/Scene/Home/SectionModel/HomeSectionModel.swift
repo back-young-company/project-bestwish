@@ -48,11 +48,11 @@ struct PlatformItem: Equatable {
 
 /// 위시리스트 Entity
 struct WishListProductItem: Equatable {
-    let uuid: UUID
-    let productImageURL: String
-    let brandName: String
-    let productName: String
-    let productSaleRate: String
-    let productPrice: String
-    let productDeepLink: String
+    let uuid: UUID?
+    let productImageURL: String?
+    let brandName: String?
+    let productName: String?
+    let productSaleRate: String?
+    let productPrice: String?
+    let productDeepLink: String?
 }

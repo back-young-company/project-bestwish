@@ -14,19 +14,25 @@ import RxCocoa
 import SnapKit
 import Then
 
+/// 공유 View Controller
 final class ShareViewController: UIViewController {
 
-    private let shareView = ShareView()
+    // MARK: - Private Property
     private let shareViewModel = ShareViewModel(
-        useCase: WishListUseCaseImpl(
+        wishListUseCase: WishListUseCaseImpl(
             repository: WishListRepositoryImpl(
                 manager: SupabaseManager(),
                 userInfoManager: SupabaseUserInfoManager()
             )
+        ),
+        productSyncUseCase: ProductSyncUseCaseImpl(
+            repository: ProductSyncRepositoryImpl(
+                manager: ProductSyncManager()
+            )
         )
     )
-
-    let disposeBag = DisposeBag()
+    private let shareView = ShareView()
+    private let disposeBag = DisposeBag()
 
 //    init(shareViewModel: ShareViewModel) {
 //        self.shareViewModel = shareViewModel
@@ -43,7 +49,7 @@ final class ShareViewController: UIViewController {
         setView()
         bindViewModel()
         bindActions()
-        
+
         extractSharedContent()
     }
 
@@ -52,7 +58,7 @@ final class ShareViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
                 owner.shareView.successConfigure()
-                
+
                 let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
                 sharedDefaults?.set(true, forKey: "AddProduct")
                 sharedDefaults?.synchronize() // (Optional) 최신화 강제
@@ -63,13 +69,12 @@ final class ShareViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, error in
                 owner.shareView.failureConfigure()
-                print(error)
             }
             .disposed(by: disposeBag)
     }
 
     private func bindActions() {
-        shareView.getShortcutButton.rx.tap
+        shareView.shortcutButton.rx.tap
             .bind(with: self) { owner, _ in
                 if let url = URL(string: "bestwish://open") {
                     owner.extensionContext?.completeRequest(returningItems: [], completionHandler: { _ in
@@ -84,6 +89,7 @@ final class ShareViewController: UIViewController {
     }
 }
 
+// MARK: - ShareViewController 설정
 private extension ShareViewController {
     func setView() {
         setHierarchy()
@@ -104,45 +110,17 @@ private extension ShareViewController {
     }
 }
 
+// MARK: - private 메서드
 private extension ShareViewController {
-    // MARK: - 아래의 메서드들은 ViewModel로 이전
-    // 📥 공유된 콘텐츠를 추출하여 각 provider에 대해 처리
+    /// 공유된 콘텐츠를 추출하여 각 provider에 대해 처리
     func extractSharedContent() {
         guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem] else { return }
 
         for item in extensionItems {
             guard let attachments = item.attachments else { continue }
             for provider in attachments {
-                handleSharedItem(from: provider)
+                self.shareViewModel.action.onNext(.addProduct(provider))
             }
         }
-    }
-
-    // 🔍 provider의 타입에 따라 URL 또는 텍스트로 처리 분기
-    func handleSharedItem(from provider: NSItemProvider) {
-        if provider.hasItemConformingToTypeIdentifier("public.url") {
-            provider.loadItem(forTypeIdentifier: "public.url", options: nil) { [weak self] item, _ in
-                guard let self, let url = item as? URL else { return }
-                self.handleSharedText(url.absoluteString)
-            }
-        } else if provider.hasItemConformingToTypeIdentifier("public.text") {
-            provider.loadItem(forTypeIdentifier: "public.text", options: nil) { [weak self] item, _ in
-                guard let self, let text = item as? String else { return }
-                self.handleSharedText(text)
-            }
-        }
-    }
-
-    func handleSharedText(_ text: String) {
-        ShareExtensionService.shared
-            .fetchPlatformMetadata(from: text)
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self, onSuccess: { owner, result in
-                let (_, metadata) = result
-                owner.shareViewModel.action.onNext(.product(metadata))
-            }, onFailure: { owner, error in
-                print("❌ Metadata fetch error: \(error.localizedDescription)")
-            })
-            .disposed(by: disposeBag)
     }
 }
