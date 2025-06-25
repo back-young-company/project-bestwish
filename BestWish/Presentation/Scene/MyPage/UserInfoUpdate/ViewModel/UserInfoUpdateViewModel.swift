@@ -73,8 +73,8 @@ final class UserInfoUpdateViewModel: ViewModel {
         Task {
             do {
                 let user = try await useCase.getUserInfo()
-                let UserInfoModel = convertUserInfoModel(from: user)
-                _userInfo.accept(UserInfoModel)
+                let userInfoModel = convertUserInfoModel(from: user)
+                _userInfo.accept(userInfoModel)
             } catch {
                 handleError(error)
             }
