@@ -23,7 +23,7 @@ final class PlatformEditViewController: UIViewController {
 
     weak var delegate: HomeViewControllerUpdate?
 
-    lazy var dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
+    private lazy var dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
         cell.configure(type: item)
 

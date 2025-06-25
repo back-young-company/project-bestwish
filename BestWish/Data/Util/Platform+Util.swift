@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Data 레이어에서 사용하기 위한 Extension
 extension PlatformEntity {
     init?(text: String) {
         guard let matchedCase = Self.allCases.first(where: { text.contains($0.title) }) else { return nil }

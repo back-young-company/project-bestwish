@@ -19,7 +19,7 @@ final class HomeViewController: UIViewController {
     private let homeView = HomeView()
     private let disposeBag = DisposeBag()
 
-    lazy var dataSource = RxCollectionViewSectionedReloadDataSource<HomeSectionModel>(
+    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<HomeSectionModel>(
         configureCell: { [weak self] dataSource, collectionView, indexPath, item in
             guard let self else { return UICollectionViewCell() }
 

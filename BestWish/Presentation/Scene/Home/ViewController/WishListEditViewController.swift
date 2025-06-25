@@ -21,7 +21,7 @@ final class WishListEditViewController: UIViewController {
 
     weak var delegate: HomeViewControllerUpdate?
 
-    lazy var dataSource = RxCollectionViewSectionedReloadDataSource<WishListEditSectionModel>(
+    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<WishListEditSectionModel>(
         configureCell: { dataSource, collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: WishListCell.identifier,

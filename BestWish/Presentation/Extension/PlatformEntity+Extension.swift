@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// 외부 플랫폼 열거형
+// MARK: - Presentation 레이어에서 사용하기 위한 Extension
 extension PlatformEntity {
     var platformName: String {
         switch self {
