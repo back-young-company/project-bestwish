@@ -7,6 +7,8 @@
 .AppleDouble
 .LSOverride
 
+*.xcconfig
+
 # Icon must end with two \r
 Icon
 
@@ -90,7 +92,8 @@ playground.xcworkspace
 # Pods/
 # Add this line if you want to avoid checking in source code from the Xcode workspace
 # *.xcworkspace
-
+# SwiftPM
+**/Package.resolved
 # Carthage
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
 # Carthage/Checkouts

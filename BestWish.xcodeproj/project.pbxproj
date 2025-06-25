@@ -7,14 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1419CEB42E0273B0006D62BB /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1419CEB32E0273B0006D62BB /* Supabase */; };
+		14B8B6432DF6861400B7F5F8 /* BestWishShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		14B8B66F2DF691AA00B7F5F8 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B66E2DF691AA00B7F5F8 /* RxSwift */; };
+		14B8B6712DF691B300B7F5F8 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6702DF691B300B7F5F8 /* SnapKit */; };
+		14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
+		14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
+		14C3CB622E026200002F341A /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 14C3CB612E026200002F341A /* RxRelay */; };
+		81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */; };
+		81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 81E50BB32DF93B0E005954F4 /* CropViewController */; };
+		861BAD572DFD2B960043B83E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */; };
+		86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
+		CB4FBCEE2DF6B66B00149D86 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CB4FBCED2DF6B66B00149D86 /* RxDataSources */; };
 		CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6A2DEF363A003242CA /* RxCocoa */; };
 		CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6C2DEF363A003242CA /* RxRelay */; };
 		CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6F2DEF364D003242CA /* SnapKit */; };
 		CBD6BA732DEF3656003242CA /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA722DEF3656003242CA /* Then */; };
 		CBD6BA762DEF370B003242CA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA752DEF370B003242CA /* Kingfisher */; };
+		CBD6BB0B2DEFD165003242CA /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BB0A2DEFD165003242CA /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		14B8B6412DF6861400B7F5F8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 14B8B6382DF6861400B7F5F8;
+			remoteInfo = BestWishShareExtension;
+		};
 		CBD6BA282DEF1B3B003242CA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
@@ -31,14 +51,78 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		14B8B6442DF6861400B7F5F8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				14B8B6432DF6861400B7F5F8 /* BestWishShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestWishShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6BA112DEF1B39003242CA /* BestWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestWishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6BA312DEF1B3B003242CA /* BestWishUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestWishUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CBD6BA392DEF1B3B003242CA /* Exceptions for "BestWish" folder in "BestWish" target */ = {
+		1419CEA72E0271B7006D62BB /* Exceptions for "BestWishShareExtension" folder in "BestWish" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Presentation/Share/ShareViewModel.swift,
+			);
+			target = CBD6BA102DEF1B39003242CA /* BestWish */;
+		};
+		14B8B6482DF6861400B7F5F8 /* Exceptions for "BestWishShareExtension" folder in "BestWishShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
+		};
+		14B8B6632DF68EEF00B7F5F8 /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Data/KeyChain/Manager/KeyChainManager.swift,
+				Data/KeyChain/Manager/Token.swift,
+				Data/Network/DTO/AblyResponseDTO.swift,
+				Data/Network/DTO/ProductDTO.swift,
+				Data/Network/DTO/ProductMetadataDTO.swift,
+				Data/Network/DTO/UserDTO.swift,
+				Data/Network/Error/MappingError.swift,
+				Data/Network/Error/ShareExtensionError.swift,
+				Data/Network/Error/SupabaseError.swift,
+				Data/Network/Manager/Supabase/SupabaseManager.swift,
+				Data/Network/Manager/Supabase/SupabaseTable.swift,
+				Data/Network/Manager/Supabase/SupabaseUserInfoManager.swift,
+				Data/Network/Service/ShareExtension/AblyFetcher.swift,
+				Data/Network/Service/ShareExtension/MusinsaFetcher.swift,
+				Data/Network/Service/ShareExtension/ShareExtensionService.swift,
+				Data/Network/Service/ShareExtension/ZigzagFetcher.swift,
+				Data/Repository/WishListRepositoryImpl.swift,
+				"Data/Util/String+Util.swift",
+				"Data/Util/UIImage+Util.swift",
+				Domain/Entity/Product.swift,
+				Domain/Entity/ProductMetaData.swift,
+				Domain/Entity/SharePlatform.swift,
+				Domain/Entity/User.swift,
+				Domain/Error/AppError.swift,
+				Domain/Interface/MetadataFetcherRepository.swift,
+				Domain/Interface/WishListRepository.swift,
+				Domain/UseCase/WishListUseCase.swift,
+				"Presentation/Extension/Bundle+Extension.swift",
+				Presentation/Interface/ViewModel.swift,
+			);
+			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
+		};
+		81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resource/Info.plist,
@@ -48,10 +132,20 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1419CEA72E0271B7006D62BB /* Exceptions for "BestWishShareExtension" folder in "BestWish" target */,
+				14B8B6482DF6861400B7F5F8 /* Exceptions for "BestWishShareExtension" folder in "BestWishShareExtension" target */,
+			);
+			path = BestWishShareExtension;
+			sourceTree = "<group>";
+		};
 		CBD6BA132DEF1B39003242CA /* BestWish */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CBD6BA392DEF1B3B003242CA /* Exceptions for "BestWish" folder in "BestWish" target */,
+				81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */,
+				14B8B6632DF68EEF00B7F5F8 /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */,
 			);
 			path = BestWish;
 			sourceTree = "<group>";
@@ -69,15 +163,34 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		14B8B6362DF6861400B7F5F8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				14B8B6712DF691B300B7F5F8 /* SnapKit in Frameworks */,
+				14B8B66F2DF691AA00B7F5F8 /* RxSwift in Frameworks */,
+				1419CEB42E0273B0006D62BB /* Supabase in Frameworks */,
+				14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */,
+				14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */,
+				14C3CB622E026200002F341A /* RxRelay in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CBD6BA0E2DEF1B39003242CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */,
+				86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */,
+				81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */,
 				CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */,
+				CBD6BB0B2DEFD165003242CA /* Supabase in Frameworks */,
+				81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */,
 				CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */,
+				CB4FBCEE2DF6B66B00149D86 /* RxDataSources in Frameworks */,
 				CBD6BA732DEF3656003242CA /* Then in Frameworks */,
 				CBD6BA762DEF370B003242CA /* Kingfisher in Frameworks */,
+				861BAD572DFD2B960043B83E /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,12 +211,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		14C3CB582E0261D0002F341A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CBD6BA082DEF1B39003242CA = {
 			isa = PBXGroup;
 			children = (
 				CBD6BA132DEF1B39003242CA /* BestWish */,
 				CBD6BA2A2DEF1B3B003242CA /* BestWishTests */,
 				CBD6BA342DEF1B3B003242CA /* BestWishUITests */,
+				14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */,
+				14C3CB582E0261D0002F341A /* Frameworks */,
 				CBD6BA122DEF1B39003242CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -114,6 +236,7 @@
 				CBD6BA112DEF1B39003242CA /* BestWish.app */,
 				CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */,
 				CBD6BA312DEF1B3B003242CA /* BestWishUITests.xctest */,
+				14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,6 +244,34 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14B8B6472DF6861400B7F5F8 /* Build configuration list for PBXNativeTarget "BestWishShareExtension" */;
+			buildPhases = (
+				14B8B6352DF6861400B7F5F8 /* Sources */,
+				14B8B6362DF6861400B7F5F8 /* Frameworks */,
+				14B8B6372DF6861400B7F5F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */,
+			);
+			name = BestWishShareExtension;
+			packageProductDependencies = (
+				14B8B66E2DF691AA00B7F5F8 /* RxSwift */,
+				14B8B6702DF691B300B7F5F8 /* SnapKit */,
+				14B8B6722DF691BC00B7F5F8 /* Then */,
+				14B8B6782DF6C57000B7F5F8 /* RxCocoa */,
+				14C3CB612E026200002F341A /* RxRelay */,
+				1419CEB32E0273B0006D62BB /* Supabase */,
+			);
+			productName = BestWishShareExtension;
+			productReference = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		CBD6BA102DEF1B39003242CA /* BestWish */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CBD6BA3A2DEF1B3B003242CA /* Build configuration list for PBXNativeTarget "BestWish" */;
@@ -128,10 +279,12 @@
 				CBD6BA0D2DEF1B39003242CA /* Sources */,
 				CBD6BA0E2DEF1B39003242CA /* Frameworks */,
 				CBD6BA0F2DEF1B39003242CA /* Resources */,
+				14B8B6442DF6861400B7F5F8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				14B8B6422DF6861400B7F5F8 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CBD6BA132DEF1B39003242CA /* BestWish */,
@@ -143,6 +296,11 @@
 				CBD6BA6F2DEF364D003242CA /* SnapKit */,
 				CBD6BA722DEF3656003242CA /* Then */,
 				CBD6BA752DEF370B003242CA /* Kingfisher */,
+				CBD6BB0A2DEFD165003242CA /* Supabase */,
+				86F6FD002DF66C8B00CAF678 /* Alamofire */,
+				CB4FBCED2DF6B66B00149D86 /* RxDataSources */,
+				81E50BB32DF93B0E005954F4 /* CropViewController */,
+				81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -201,9 +359,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1640;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
+					14B8B6382DF6861400B7F5F8 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					CBD6BA102DEF1B39003242CA = {
 						CreatedOnToolsVersion = 16.4;
 					};
@@ -223,6 +384,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = CBD6BA082DEF1B39003242CA;
 			minimizedProjectReferenceProxies = 1;
@@ -231,6 +393,11 @@
 				CBD6BA6E2DEF364D003242CA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */,
 				CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
+				81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -240,11 +407,19 @@
 				CBD6BA102DEF1B39003242CA /* BestWish */,
 				CBD6BA262DEF1B3B003242CA /* BestWishTests */,
 				CBD6BA302DEF1B3B003242CA /* BestWishUITests */,
+				14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		14B8B6372DF6861400B7F5F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CBD6BA0F2DEF1B39003242CA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -269,6 +444,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		14B8B6352DF6861400B7F5F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CBD6BA0D2DEF1B39003242CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -293,6 +475,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		14B8B6422DF6861400B7F5F8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
+			targetProxy = 14B8B6412DF6861400B7F5F8 /* PBXContainerItemProxy */;
+		};
 		CBD6BA292DEF1B3B003242CA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CBD6BA102DEF1B39003242CA /* BestWish */;
@@ -306,65 +493,150 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		CBD6BA3B2DEF1B3B003242CA /* Debug */ = {
+		14B8B6452DF6861400B7F5F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BestWish/Resource/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BestWishShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.indck.hyun.BestWish;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		CBD6BA3C2DEF1B3B003242CA /* Release */ = {
+		14B8B6462DF6861400B7F5F8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BestWish/Resource/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BestWishShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.indck.hyun.BestWish;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
+		CBD6BA3B2DEF1B3B003242CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWish/Resource/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BestWish;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCameraUsageDescription = "이미지 분석을 위한 카메라 접근이 필요합니다. 카메라 접근 권한을 허용하시겠습니까?";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MACH_O_TYPE = mh_execute;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		CBD6BA3C2DEF1B3B003242CA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWish/Resource/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BestWish;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSCameraUsageDescription = "이미지 분석을 위한 카메라 접근이 필요합니다. 카메라 접근 권한을 허용하시겠습니까?";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MACH_O_TYPE = mh_execute;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		CBD6BA3D2DEF1B3B003242CA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -395,6 +667,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -412,7 +685,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -425,9 +698,12 @@
 		};
 		CBD6BA3E2DEF1B3B003242CA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -458,6 +734,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -469,7 +746,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -481,14 +758,17 @@
 		};
 		CBD6BA402DEF1B3B003242CA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.indck.hyun.BestWishTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWishTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -499,14 +779,17 @@
 		};
 		CBD6BA412DEF1B3B003242CA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.indck.hyun.BestWishTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWishTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -517,12 +800,16 @@
 		};
 		CBD6BA432DEF1B3B003242CA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.indck.hyun.BestWishUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWishUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -533,12 +820,16 @@
 		};
 		CBD6BA442DEF1B3B003242CA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = kr.ac.indck.hyun.BestWishUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWishUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -550,6 +841,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		14B8B6472DF6861400B7F5F8 /* Build configuration list for PBXNativeTarget "BestWishShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				14B8B6452DF6861400B7F5F8 /* Debug */,
+				14B8B6462DF6861400B7F5F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CBD6BA0C2DEF1B39003242CA /* Build configuration list for PBXProject "BestWish" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -589,6 +889,46 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.1;
+			};
+		};
+		81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TimOliver/TOCropViewController";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.4;
+			};
+		};
+		861BAD552DFD2B960043B83E /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.1;
+			};
+		};
+		86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -621,9 +961,72 @@
 				minimumVersion = 8.3.2;
 			};
 		};
+		CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1419CEB32E0273B0006D62BB /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		14B8B66E2DF691AA00B7F5F8 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		14B8B6702DF691B300B7F5F8 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA6E2DEF364D003242CA /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		14B8B6722DF691BC00B7F5F8 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		14B8B6782DF6C57000B7F5F8 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		14C3CB612E026200002F341A /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+		81E50BB32DF93B0E005954F4 /* CropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = CropViewController;
+		};
+		861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 861BAD552DFD2B960043B83E /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+		86F6FD002DF66C8B00CAF678 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		CB4FBCED2DF6B66B00149D86 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
 		CBD6BA6A2DEF363A003242CA /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
@@ -648,6 +1051,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		CBD6BB0A2DEFD165003242CA /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
