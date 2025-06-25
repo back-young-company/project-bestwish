@@ -10,15 +10,15 @@ import Foundation
 import RxSwift
 
 /// 지그재그 fetcher
-final class ZigzagFetcher: HTMLProductDTOFetcher {
+final class ZigzagFetcher: ProductDTORepository {
     /// 상품 데이터 fetch
-    func fetchProductDTO(ogUrl: URL, extraUrl: URL, html: String) async throws -> ProductDTO {
-        let brand = html.slice(from: "property=\"product:brand\" content=\"", to: "\"")
-        let title = html.slice(from: "property=\"og:title\" content=\"", to: "\"")
-        let image = html.slice(from: "property=\"og:image\" content=\"", to: "\"")
+    func fetchProductDTO(ogUrl: URL?, finalUrl: URL?, html: String?) async throws -> ProductDTO {
+        let brand = html?.slice(from: "property=\"product:brand\" content=\"", to: "\"")
+        let title = html?.slice(from: "property=\"og:title\" content=\"", to: "\"")
+        let image = html?.slice(from: "property=\"og:image\" content=\"", to: "\"")
 
-        guard let json = html.extractNEXTDataJSON() else {
-            throw ShareExtensionError.jsonScriptParsingFailed
+        guard let json = html?.extractNEXTDataJSON() else {
+            throw ProductSyncError.jsonScriptParsingFailed
         }
 
         let deeplinkUrlPattern = #""deeplink_url"\s*:\s*"([^"]+)""#
@@ -28,7 +28,7 @@ final class ZigzagFetcher: HTMLProductDTOFetcher {
         guard let deeplinkUrl = json.firstMatch(for: deeplinkUrlPattern),
               let discountRate = json.firstMatch(for: discountRatePattern),
               let discountPrice = json.firstMatch(for: discountPricePattern) else {
-            throw ShareExtensionError.invalidProductData
+            throw ProductSyncError.invalidProductData
         }
 
         let segments = deeplinkUrl.components(separatedBy: #"\u0026"#)

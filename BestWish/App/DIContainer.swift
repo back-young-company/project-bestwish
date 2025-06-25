@@ -49,22 +49,26 @@ final class DIContainer {
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
         self.analysisUseCase = AnalysisUseCaseImpl()
     }
-    
+
+    /// 홈 뷰 컨트롤러 생성
     func makeHomeViewController() -> HomeViewController {
         let viewModel = HomeViewModel(useCase: wishListUseCase)
         return HomeViewController(homeViewModel: viewModel)
     }
-    
+
+    /// 플랫폼 편집 뷰 컨트롤러 생성
     func makePlatformEditViewController() -> PlatformEditViewController {
         let viewModel = PlatformEditViewModel(useCase: wishListUseCase)
         return PlatformEditViewController(platformEditViewModel: viewModel)
     }
-    
+
+    /// 위시리스트 편집 뷰 컨트롤러 생성
     func makeWishlistEditViewController() -> WishListEditViewController {
         let viewModel = WishListEditViewModel(useCase: wishListUseCase)
         return WishListEditViewController(wishEditViewModel: viewModel)
     }
-    
+
+    /// 링크 저장 뷰 컨트롤러 생성
     func makeLinkSaveViewController() -> LinkSaveViewController {
         let viewModel = LinkSaveViewModel(wishListUseCase: wishListUseCase, productSyncUseCase: productSyncUseCase)
         return LinkSaveViewController(viewModel: viewModel)

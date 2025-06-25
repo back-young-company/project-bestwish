@@ -7,30 +7,36 @@
 
 import Foundation
 
+import RxRelay
 import RxSwift
-import RxCocoa
 
+/// 링크 저장 View Model
 final class LinkSaveViewModel: ViewModel {
+
+    // MARK: - Action
     enum Action {
         case addProduct(String)
     }
-    
+
+    // MARK: - State
     struct State {
         let completed: Observable<Void>
         let error: Observable<Error>
     }
-    
+
+    // MARK: - Internal Property
+    var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+
     private let _completed = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
     
     private let wishListUseCase: WishListUseCase
     private let productSyncUseCase: ProductSyncUseCase
 
-    private let _action = PublishSubject<Action>()
-    var action: AnyObserver<Action> { _action.asObserver() }
-    
-    let state: State
-    
     private let disposeBag = DisposeBag()
     
     init(
@@ -51,26 +57,25 @@ final class LinkSaveViewModel: ViewModel {
             .subscribe(with: self) { owner, action in
                 switch action {
                 case let .addProduct(url):
-                    return owner.productToEntity(url)
+                    return owner.addProductToWishList(url)
                 }
             }
             .disposed(by: disposeBag)
     }
+}
 
-    private func productToEntity(_ text: String) {
+// MARK: - private 메서드
+private extension LinkSaveViewModel {
+    /// 위시리스트 상품 추가
+    func addProductToWishList(_ text: String) {
         Task {
             do {
-                let entity = try await productSyncUseCase.productToEntity(from: text)
-                try await addProductToWishList(product: entity)
+                let entity = try await productSyncUseCase.productDTOToEntity(from: text)
+                try await wishListUseCase.addProductToWishList(product: entity)
                 _completed.accept(())
             } catch {
-                print("❌ Metadata fetch error: \(error.localizedDescription)")
-                // 여기서 에러 넘겨주기
+                _error.accept(error)
             }
         }
-    }
-
-    private func addProductToWishList(product: ProductEntity) async throws {
-        try await self.wishListUseCase.addProductToWishList(product: product)
     }
 }

@@ -10,26 +10,20 @@ import Foundation
 import RxSwift
 
 /// 에이블리 Fetcher
-final class AblyFetcher: ProductDTOFetcher {
+final class AblyFetcher: ProductDTORepository {
     /// 상품 데이터 fetch
-    func fetchProductDTO(ogUrl: URL, extraUrl: URL) async throws -> ProductDTO {
-        let (data, _) = try await URLSession.shared.data(from: extraUrl)
-        guard let html = String(data: data, encoding: .utf8) else {
-            throw ShareExtensionError.dataLoadingFailed
-        }
-        guard let nextDataJSON = html.extractNEXTDataJSON(),
-              let jsonData = nextDataJSON.data(using: .utf8) else {
-            throw ShareExtensionError.jsonScriptParsingFailed
+    func fetchProductDTO(ogUrl: URL?, finalUrl: URL?, html: String?) async throws -> ProductDTO {
+        guard let json = html?.extractNEXTDataJSON(),
+              let jsonData = json.data(using: .utf8) else {
+            throw ProductSyncError.jsonScriptParsingFailed
         }
 
         do {
             let decoded = try JSONDecoder().decode(AblyResponseDTO.self, from: jsonData)
             guard let goods = decoded.props.serverQueryClient.queries.first?.state.data.goods,
                   let sno = goods.sno else {
-                throw ShareExtensionError.invalidProductData
+                throw ProductSyncError.invalidProductData
             }
-
-            let deeplink = "ably://goods/\(sno)"
 
             return ProductDTO(
                 id: nil,
@@ -40,11 +34,11 @@ final class AblyFetcher: ProductDTOFetcher {
                 discountRate: String(goods.priceInfo.discountRate ?? 0),
                 brand: goods.market.name,
                 imagePathURL: goods.coverImages.first,
-                productURL: deeplink,
+                productURL: "ably://goods/\(sno)",
                 createdAt: nil
             )
         } catch {
-            throw ShareExtensionError.jsonDecodingFailed
+            throw ProductSyncError.jsonDecodingFailed
         }
     }
 }

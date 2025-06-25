@@ -10,14 +10,15 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+/// 링크 저장 View Controller
 final class LinkSaveViewController: UIViewController {
-    
-    private let linkSaveView = LinkSaveView()
+
+    // MARK: - Private Property
     private let viewModel: LinkSaveViewModel
-    
-    weak var delegate: HomeViewControllerUpdate?
-    
+    private let linkSaveView = LinkSaveView()
     private let disposeBag = DisposeBag()
+
+    weak var delegate: HomeViewControllerUpdate?
 
     init(viewModel: LinkSaveViewModel) {
         self.viewModel = viewModel
@@ -43,7 +44,7 @@ final class LinkSaveViewController: UIViewController {
         viewModel.state.completed
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
-                print("저장 완료!!")
+                NSLog("저장 완료!!")
                 owner.delegate?.updateWishlists()
                 owner.dismiss(animated: true)
             }

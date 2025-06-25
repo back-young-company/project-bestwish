@@ -14,9 +14,10 @@ import RxCocoa
 import SnapKit
 import Then
 
+/// 공유 View Controller
 final class ShareViewController: UIViewController {
 
-    private let shareView = ShareView()
+    // MARK: - Private Property
     private let shareViewModel = ShareViewModel(
         wishListUseCase: WishListUseCaseImpl(
             repository: WishListRepositoryImpl(
@@ -30,8 +31,8 @@ final class ShareViewController: UIViewController {
             )
         )
     )
-
-    let disposeBag = DisposeBag()
+    private let shareView = ShareView()
+    private let disposeBag = DisposeBag()
 
 //    init(shareViewModel: ShareViewModel) {
 //        self.shareViewModel = shareViewModel
@@ -74,7 +75,7 @@ final class ShareViewController: UIViewController {
     }
 
     private func bindActions() {
-        shareView.getShortcutButton.rx.tap
+        shareView.shortcutButton.rx.tap
             .bind(with: self) { owner, _ in
                 if let url = URL(string: "bestwish://open") {
                     owner.extensionContext?.completeRequest(returningItems: [], completionHandler: { _ in
@@ -89,6 +90,7 @@ final class ShareViewController: UIViewController {
     }
 }
 
+// MARK: - ShareViewController 설정
 private extension ShareViewController {
     func setView() {
         setHierarchy()
@@ -111,8 +113,7 @@ private extension ShareViewController {
 
 // MARK: - private 메서드
 private extension ShareViewController {
-    // MARK: - 아래의 메서드들은 ViewModel로 이전 필요
-    // 📥 공유된 콘텐츠를 추출하여 각 provider에 대해 처리
+    /// 공유된 콘텐츠를 추출하여 각 provider에 대해 처리
     func extractSharedContent() {
         guard let extensionItems = extensionContext?.inputItems as? [NSExtensionItem] else { return }
 

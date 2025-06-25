@@ -37,6 +37,7 @@ final class HomeViewModel: ViewModel {
 
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
+
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
     private let _platformFilter = BehaviorRelay<[(Int, Int)]>(value: [])
     private let _platformSequence = BehaviorRelay<[Int]>(value: [])

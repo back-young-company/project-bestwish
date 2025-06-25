@@ -1,5 +1,5 @@
 //
-//  ShareExtensionError.swift
+//  ProductSyncError.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/10/25.
@@ -7,7 +7,8 @@
 
 import Foundation
 
-enum ShareExtensionError: Error {
+/// 상품 동기 Error
+enum ProductSyncError: Error {
     case invaildURL
     case platformDetectionFailed
     case redirectionFailed

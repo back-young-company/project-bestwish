@@ -20,6 +20,7 @@ struct ProductEntity {
     let productURL: String?
     let createdAt: Date?
 
+    /// ProductEntity -> ProductDTO 변환
     func toDTO() -> ProductDTO {
         return ProductDTO(
             id: id,
@@ -32,18 +33,6 @@ struct ProductEntity {
             imagePathURL: imagePathURL,
             productURL: productURL,
             createdAt: createdAt
-        )
-    }
-
-    func toModel() -> ProductModel {
-        return ProductModel(
-            platform: platform,
-            title: title,
-            price: "\(price?.formattedPrice() ?? "")원",
-            discountRate: discountRate,
-            brand: brand,
-            imagePathURL: URL(string: imagePathURL ?? ""),
-            productURL: URL(string: productURL ?? "")
         )
     }
 }

@@ -84,7 +84,7 @@ private extension ShareViewModel {
     func handleSharedText(_ text: String) {
         Task {
             do {
-                let entity = try await productSyncUseCase.productToEntity(from: text)
+                let entity = try await productSyncUseCase.productDTOToEntity(from: text)
                 try await addProductToWishList(product: entity)
                 _completed.accept(())
             } catch {

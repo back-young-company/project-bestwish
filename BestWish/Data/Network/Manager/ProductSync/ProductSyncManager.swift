@@ -10,28 +10,40 @@ import Foundation
 /// 상품 저장을 위한 ProductSyncManager 클래스
 final class ProductSyncManager {
     /// 외부 플랫폼 상품 fetch 시도
-    func fetchProductSync(from sharedText: String) async throws -> (String, ProductDTO) {
+    func fetchProductSync(from sharedText: String) async throws -> ProductDTO {
         guard let originalUrl = extractURL(from: sharedText) else {
-            throw ShareExtensionError.invaildURL
+            throw ProductSyncError.invaildURL
         }
         
         let platform = detectPlatform(from: sharedText)
         
         switch platform {
         case .musinsa:
-            let finalURL = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await MusinsaFetcher().fetchProductDTO(ogUrl: originalUrl, extraUrl: finalURL)
-            return (originalUrl.absoluteString, metadata)
+            let (finalURL, _) = try await resolveFinalURL(url: originalUrl)
+            let metadata = try await MusinsaFetcher().fetchProductDTO(
+                ogUrl: originalUrl,
+                finalUrl: finalURL,
+                html: nil
+            )
+            return metadata
         case .zigzag:
-            let (finalURL, html) = try await resolveZigzagFinalURL(url: originalUrl)
-            let metadata = try await ZigzagFetcher().fetchProductDTO(ogUrl: originalUrl, extraUrl: finalURL, html: html)
-            return (originalUrl.absoluteString, metadata)
+            let (_, html) = try await resolveZigzagFinalURL(url: originalUrl)
+            let metadata = try await ZigzagFetcher().fetchProductDTO(
+                ogUrl: nil,
+                finalUrl: nil,
+                html: html
+            )
+            return metadata
         case .ably:
-            let finalURL = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await AblyFetcher().fetchProductDTO(ogUrl: originalUrl, extraUrl: finalURL)
-            return (originalUrl.absoluteString, metadata)
+            let (_, html) = try await resolveFinalURL(url: originalUrl)
+            let metadata = try await AblyFetcher().fetchProductDTO(
+                ogUrl: nil,
+                finalUrl: nil,
+                html: html
+            )
+            return metadata
         case .unknown:
-            throw ShareExtensionError.platformDetectionFailed
+            throw ProductSyncError.platformDetectionFailed
         }
     }
 }
@@ -50,7 +62,7 @@ private extension ProductSyncManager {
         return .unknown
     }
 
-    /// 텍스트 내 URL 추출
+    /// 공유 링크 내 불필요한 텍스트를 제외한 순수 상품 URL 추출
     func extractURL(from text: String) -> URL? {
         let detector = try? NSDataDetector(
             types: NSTextCheckingResult.CheckingType.link.rawValue
@@ -64,17 +76,18 @@ private extension ProductSyncManager {
     }
 
     /// URL 요청을 통해 리디렉션된 최종 URL 반환 (공통)
-    func resolveFinalURL(url: URL) async throws -> URL {
+    func resolveFinalURL(url: URL) async throws -> (URL, String) {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.timeoutInterval = 10
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
-        let (_, response) = try await URLSession.shared.data(for: request)
-        if let finalURL = response.url {
-            return finalURL
+        let (data, response) = try await URLSession.shared.data(for: request)
+        if let finalURL = response.url,
+           let html = String(data: data, encoding: .utf8) {
+            return (finalURL, html)
         } else {
-            throw ShareExtensionError.redirectionFailed
+            throw ProductSyncError.redirectionFailed
         }
     }
 
@@ -94,7 +107,7 @@ private extension ProductSyncManager {
            let html = String(data: data, encoding: .utf8) {
             return (finalURL, html)
         } else {
-            throw ShareExtensionError.htmlParsingFailed
+            throw ProductSyncError.htmlParsingFailed
         }
     }
 }
