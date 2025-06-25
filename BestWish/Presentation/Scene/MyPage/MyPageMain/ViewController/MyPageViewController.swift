@@ -108,7 +108,7 @@ final class MyPageViewController: UIViewController {
 
         viewModel.state.isLogOut
             .observe(on: MainScheduler.instance)
-            .bind() { _ in
+            .bind { _ in
                 DummyCoordinator.shared.showLoginView()
             }
             .disposed(by: disposeBag)

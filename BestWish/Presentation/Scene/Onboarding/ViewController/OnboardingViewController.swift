@@ -92,7 +92,7 @@ final class OnboardingViewController: UIViewController {
         /// 온보딩 결과에 따른 화면 이동
         viewModel.state.readyToUseService
             .observe(on: MainScheduler.instance)
-            .bind() { _ in
+            .bind { _ in
                 DummyCoordinator.shared.showMainView()
             }
             .disposed(by: disposeBag)
