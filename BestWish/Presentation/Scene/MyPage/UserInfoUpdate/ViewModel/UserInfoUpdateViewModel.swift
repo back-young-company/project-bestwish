@@ -134,3 +134,12 @@ final class UserInfoUpdateViewModel: ViewModel {
     }
 }
 
+// MARK: - 테스트 전용 메서드
+#if DEBUG
+extension UserInfoUpdateViewModel {
+    /// 유저 정보 초기값 설정
+    func injectIntialUserInfo(_ user: UserInfoModel) {
+        _userInfo.accept(user)
+    }
+}
+#endif
