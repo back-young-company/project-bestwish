@@ -49,6 +49,13 @@ final class LinkSaveViewController: UIViewController {
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
+
+        viewModel.state.error
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "저장 실패", message: "상품 저장에 실패하였습니다.\n다시 시도해 주세요.")
+            }
+            .disposed(by: disposeBag)
     }
 
     private func bindActions() {
@@ -57,8 +64,8 @@ final class LinkSaveViewController: UIViewController {
                 owner.dismiss(animated: true)
             }.disposed(by: disposeBag)
 
-        linkSaveView.getSaveButton.rx.tap
-            .withLatestFrom(linkSaveView.getLinkInputTextField.rx.text.orEmpty) { _, url in
+        linkSaveView.saveButton.rx.tap
+            .withLatestFrom(linkSaveView.linkInputTextField.rx.text.orEmpty) { _, url in
                 return url
             }
             .bind(with: self) { owner, url in

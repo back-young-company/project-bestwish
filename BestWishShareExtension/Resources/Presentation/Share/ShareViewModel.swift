@@ -88,8 +88,7 @@ private extension ShareViewModel {
                 try await addProductToWishList(product: entity)
                 _completed.accept(())
             } catch {
-                print("❌ Metadata fetch error: \(error.localizedDescription)")
-                // 여기서 에러 넘겨주기
+                _error.accept(error)
             }
         }
     }

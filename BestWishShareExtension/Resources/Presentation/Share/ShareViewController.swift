@@ -69,7 +69,6 @@ final class ShareViewController: UIViewController {
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, error in
                 owner.shareView.failureConfigure()
-                print(error)
             }
             .disposed(by: disposeBag)
     }
