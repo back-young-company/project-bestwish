@@ -41,13 +41,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ///         1. 온보딩부터 실행
         ///
         /// Task 구현이 안전하지 않을시 다른 방법 고려 가능
+
+        // TODO: - 수정하기 (with DIContainer)
+        let repository = DIContainer.shared.makeAccountRepository()
+
         Task {
-            let isLogin = await SupabaseOAuthManager.shared.checkLoginState()
-            if isLogin {
-                do {
-                    try await SupabaseOAuthManager.shared.isNeedOnboarding()
-                } catch {
-                    self.showLoginView()
+            let hasToken = await repository.checkTokenState()
+            if hasToken {
+                let didOnboarding = await repository.checkOnboardingState()
+                if didOnboarding {
+                    self.showMainView()
+                } else {
+                    self.showOnboardingView()
                 }
             } else {
                 await MainActor.run {
@@ -67,8 +72,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func showLoginView() {
-        let vm = LoginViewModel()
-        self.window?.rootViewController = LoginViewController(viewModel: vm)
+        self.window?.rootViewController = DIContainer.shared.makeLoginViewController()
         self.window?.makeKeyAndVisible()
     }
 
@@ -81,14 +85,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
         window?.backgroundColor = .gray0
-    }
-}
-
-final class AVC: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBlue
-        setNavigationBar(alignment: .left, title: "메인")
     }
 }
 //----------------------------------

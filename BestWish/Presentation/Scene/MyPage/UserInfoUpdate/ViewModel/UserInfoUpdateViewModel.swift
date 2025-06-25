@@ -17,7 +17,7 @@ final class UserInfoUpdateViewModel: ViewModel {
     enum Action {
         case getUserInfo
         case updateBirth(Date)
-        case updateGender(Int)
+        case updateGender(Gender)
         case saveUserInfo
     }
 
@@ -60,8 +60,8 @@ final class UserInfoUpdateViewModel: ViewModel {
                 owner.getUserInfo()
             case let .updateBirth(date):
                 owner.updateBirth(date)
-            case let .updateGender(genderIndex):
-                owner.updateGender(genderIndex)
+            case let .updateGender(gender):
+                owner.updateGender(gender)
             case .saveUserInfo:
                 owner.saveUserInfo()
             }
@@ -89,9 +89,9 @@ final class UserInfoUpdateViewModel: ViewModel {
     }
 
     /// 성별 업데이트 메서드
-    private func updateGender(_ genderIndex: Int) {
+    private func updateGender(_ gender: Gender) {
         guard var prevInfo = _userInfo.value else { return }
-        prevInfo.updateGender(to: genderIndex)
+        prevInfo.updateGender(to: gender.rawValue)
         _userInfo.accept(prevInfo)
     }
 
@@ -134,3 +134,12 @@ final class UserInfoUpdateViewModel: ViewModel {
     }
 }
 
+// MARK: - 테스트 전용 메서드
+#if DEBUG
+extension UserInfoUpdateViewModel {
+    /// 유저 정보 초기값 설정
+    func injectIntialUserInfo(_ user: UserInfoModel) {
+        _userInfo.accept(user)
+    }
+}
+#endif
