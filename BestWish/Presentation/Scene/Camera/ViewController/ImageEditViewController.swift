@@ -6,24 +6,27 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
-import CropViewController
 
-// MARK: - 이미지 편집 뷰 컨트롤러
+import CropViewController
+import RxCocoa
+import RxSwift
+
+/// 이미지 편집 뷰 컨트롤러
 final class ImageEditViewController: UIViewController {
     
+    // MARK: - Private Property
     private let imageEditView: ImageEditView
     private let cropperVC: CropViewController
     private let viewModel: ImageEditViewModel
     
+    // MARK: - Internal Property
     var onDismiss: (()-> Void)?
     var disposeBag = DisposeBag()
     
     init(image: UIImage, viewModel: ImageEditViewModel) {
         self.viewModel = viewModel
         cropperVC = CropViewController(image: image)
-        imageEditView = ImageEditView(cropView: cropperVC.view, toolbar: cropperVC.toolbar)
+        imageEditView = ImageEditView(_cropView: cropperVC.view, _toolbar: cropperVC.toolbar)
         super.init(nibName: nil, bundle: nil)
         
     }
@@ -37,7 +40,7 @@ final class ImageEditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        setNavigationBar(alignment: .left, title: "이미지 편집")
+        //        setNavigationBar(alignment: .left, title: "이미지 편집")
         setCropViewController()
         setDelegate()
         bindView()
@@ -56,13 +59,13 @@ final class ImageEditViewController: UIViewController {
         cropperVC.aspectRatioPickerButtonHidden = false
         
         addChild(cropperVC)
-        imageEditView.getCropperBackgroundView.addSubview(cropperVC.view)
+        imageEditView.cropperBackgroundView.addSubview(cropperVC.view)
         cropperVC.didMove(toParent: self)
     }
     
     private func bindView() {
         // 분석하기 버튼 터치
-        imageEditView.getDoneButton.rx.tap
+        imageEditView.doneButton.rx.tap
             .subscribe(with: self) { owner, _ in
                 let vc = owner.cropperVC
                 vc.delegate?.cropViewController?(vc, didCropToImage: vc.image, withRect: vc.imageCropFrame, angle: vc.angle)
@@ -70,7 +73,7 @@ final class ImageEditViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // 뒤로가기 버튼 터치
-        imageEditView.getCancelButton.rx.tap
+        imageEditView.cancelButton.rx.tap
             .subscribe(with: self) { owner, _ in
                 let vc = owner.cropperVC
                 vc.delegate?.cropViewController?(vc, didFinishCancelled: true)
@@ -78,8 +81,9 @@ final class ImageEditViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
+        // 라벨 데이터 요청
         viewModel.state.labelData
-            .subscribe(with: self) { owner, labelData in
+            .subscribe(with: self, onNext: { owner, labelData in
                 let vc = DIContainer.shared.makeAnalysisViewController(labelData: labelData)
                 if let sheet = vc.sheetPresentationController {
                     sheet.detents = [
@@ -94,6 +98,9 @@ final class ImageEditViewController: UIViewController {
                 }
                 vc.modalPresentationStyle = .pageSheet
                 owner.present(vc, animated: true)
+            }) { owner, error in
+                guard let error = error as? CoreMLError else { return }
+                NSLog(error.errorDescription ?? "")
             }
             .disposed(by: disposeBag)
     }

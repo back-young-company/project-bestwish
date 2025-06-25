@@ -5,11 +5,12 @@
 //  Created by yimkeul on 6/7/25.
 //
 
-import Foundation
 import UIKit
-import RxSwift
-import RxCocoa
 
+import RxCocoa
+import RxSwift
+
+/// 로그인 View Controller
 final class LoginViewController: UIViewController {
 
     private let loginView = LoginView()
@@ -38,8 +39,28 @@ final class LoginViewController: UIViewController {
     private func bindViewModel() {
         bindKakaoButton()
         bindAppleButton()
-    }
 
+        /// oauth & 온보딩 결과에 따른 화면 이동
+        viewModel.state.readyToUseService
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, state in
+                if state {
+                    DummyCoordinator.shared.showMainView()
+                } else {
+                    DummyCoordinator.shared.showOnboardingView()
+                }
+            }.disposed(by: disposeBag)
+
+        /// oauth & 온보딩 에러시 alert
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "인증 에러", message: error.localizedDescription)
+                NSLog("LoginViewController Error: \(error.debugDescription)")
+            }
+            .disposed(by: disposeBag)
+    }
+    
     private func bindKakaoButton() {
         loginView.kakaoLoginButton.rx.tap
             .asDriver()

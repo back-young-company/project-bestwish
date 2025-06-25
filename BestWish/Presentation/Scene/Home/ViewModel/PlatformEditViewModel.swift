@@ -10,31 +10,34 @@ import Foundation
 import RxSwift
 import RxRelay
 
+/// 플랫폼 View Model
 final class PlatformEditViewModel: ViewModel {
-    
+
+    // MARK: - Action
     enum Action {
         case viewDidLoad
-        case itemMoved([PlatformEdit])
+        case itemMoved([PlatformEditItem])
         case updatePlatformEdit([Int])
     }
-    
+
+    // MARK: - State
     struct State {
         let sections: Observable<[PlatformEditSectionModel]>
         let sendDelegate: Observable<Void>
         let error: Observable<Error>
     }
-    
+
+    // MARK: - Internal Property
+    var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
     private let _action = PublishSubject<Action>()
-    
     private let _sections = BehaviorRelay<[PlatformEditSectionModel]>(value: [])
     private let _sendDelegate = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
-    
+
     private let useCase: WishListUseCase
-    
-    var action: AnyObserver<Action> { _action.asObserver() }
-    let state: State
-    
     private let disposeBag = DisposeBag()
     
     init(useCase: WishListUseCase) {
@@ -82,24 +85,29 @@ final class PlatformEditViewModel: ViewModel {
             }
             .disposed(by: disposeBag)
     }
-    
-    private func getPlatformSequence(isEdit: Bool) async throws -> [PlatformEdit] {
+}
+
+private extension PlatformEditViewModel {
+    /// Supabase 플랫폼 시퀀스 가져오기
+    func getPlatformSequence(isEdit: Bool) async throws -> [PlatformEditItem] {
         let result = try await self.useCase.getPlatformsInWishList(isEdit: isEdit)
         return result.map { tupple in
-            let shopPlatform = ShopPlatform.allCases[tupple.platform]
-            return PlatformEdit(
+            let shopPlatform = PlatformEntity.allCases[tupple.platform]
+            return PlatformEditItem(
                 platformName: shopPlatform.platformName,
-                platformImage: shopPlatform.rawValue,
+                platformImage: shopPlatform.platformImage,
                 platformCount: tupple.count
             )
         }
     }
-    
-    private func updatePlatformSequence(_ sequence: [Int]) async throws {
+
+    /// Supabase 플랫폼 시퀀스 업데이트
+    func updatePlatformSequence(_ sequence: [Int]) async throws {
         try await self.useCase.updatePlatformSequence(to: sequence)
     }
-    
-    private func setDataSources(items: [PlatformEdit]) {
+
+    /// section model 설정 및 전달
+    func setDataSources(items: [PlatformEditItem]) {
         let sections = PlatformEditSectionModel(header: "헤더", items: items)
         _sections.accept([sections])
     }

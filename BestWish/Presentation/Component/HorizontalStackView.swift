@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// 수평 스택 뷰
 final class HorizontalStackView: UIStackView {
     init(spacing: CGFloat = 0) {
         super.init(frame: .zero)

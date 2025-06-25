@@ -5,21 +5,23 @@
 //  Created by 이수현 on 6/9/25.
 //
 
+import MessageUI
 import UIKit
-import RxSwift
+
 import RxCocoa
 import RxDataSources
-import MessageUI
+import RxSwift
 
+/// 마이페이지 ViewController
 final class MyPageViewController: UIViewController {
-    private let myPageView = MyPageView()
     private let viewModel: MyPageViewModel
+    private let myPageView = MyPageView()
     private let disposeBag = DisposeBag()
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<MyPageSection>(
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {
-            case .basic(let type), .seeMore(let type):
-                guard let cell = self.myPageView.getTableView.dequeueReusableCell(
+            case let .basic(type), let .seeMore(type):
+                guard let cell = self.myPageView.tableView.dequeueReusableCell(
                     withIdentifier: MyPageCell.identifier,
                     for: indexPath
                 ) as? MyPageCell else {
@@ -40,7 +42,8 @@ final class MyPageViewController: UIViewController {
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        self.setNavigationBar(alignment: .left, title: "마이페이지")
+
+        setNavigationBar(alignment: .left, title: "마이페이지")
     }
 
     required init?(coder: NSCoder) {
@@ -56,6 +59,7 @@ final class MyPageViewController: UIViewController {
 
         bindViewModel()
         bindView()
+        viewModel.action.onNext(.getSection)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -66,7 +70,7 @@ final class MyPageViewController: UIViewController {
     }
 
     private func bindView() {
-        myPageView.getTableView.rx.itemSelected
+        myPageView.tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
@@ -92,24 +96,33 @@ final class MyPageViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.sections
-            .bind(to: myPageView.getTableView.rx.items(dataSource: dataSource))
+            .bind(to: myPageView.tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
 
         viewModel.state.userInfo
             .observe(on: MainScheduler.instance)
-            .bind(with: self, onNext: { owner, UserInfoDisplay in
-                owner.setHeaderView(userInfo: UserInfoDisplay)
+            .bind(with: self, onNext: { owner, UserInfoModel in
+                owner.setHeaderView(userInfo: UserInfoModel)
             })
+            .disposed(by: disposeBag)
+
+        viewModel.state.isLogOut
+            .observe(on: MainScheduler.instance)
+            .bind { _ in
+                DummyCoordinator.shared.showLoginView()
+            }
             .disposed(by: disposeBag)
 
         viewModel.state.error
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+                NSLog("MyPageViewController Error: \(error.debugDescription)")
             }.disposed(by: disposeBag)
     }
 
-    private func setHeaderView(userInfo: UserInfoDisplay) {
+    /// 테이블 뷰 헤더 뷰 설정
+    private func setHeaderView(userInfo: UserInfoModel) {
         let frame = CGRect(
             x: 0,
             y: 0,
@@ -119,9 +132,9 @@ final class MyPageViewController: UIViewController {
         let header = MyPageHeaderView(frame: frame)
 
         header.configure(user: userInfo)
-        myPageView.getTableView.tableHeaderView = header
+        myPageView.tableView.tableHeaderView = header
 
-        header.getSeeMoreButton.rx.tap
+        header.seeMoreButton.rx.tap
             .bind(with: self) { owner, _ in
                 // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()
@@ -131,10 +144,9 @@ final class MyPageViewController: UIViewController {
     }
 }
 
-//MARK: 문의사항 (메일 띄우기)
-
+// MARK: - 문의사항 (메일 띄우기)
 extension MyPageViewController: MFMailComposeViewControllerDelegate {
-    // 메일 띄우기
+    /// 메일 띄우기
     private func sendQuestion() {
         // 메일 계정 설정 여부 확인
         guard MFMailComposeViewController.canSendMail() else {
@@ -162,6 +174,7 @@ extension MyPageViewController: MFMailComposeViewControllerDelegate {
         present(mailComposer, animated: true)
     }
 
+    /// 삭제 버튼 액션 메서드
     func mailComposeController(
         _ controller: MFMailComposeViewController,
         didFinishWith result: MFMailComposeResult,

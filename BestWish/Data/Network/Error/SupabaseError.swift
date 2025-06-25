@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Supabase CRUD 관련 에러
 enum SupabaseError: AppErrorProtocol {
     case selectError(Error)
     case updateError(Error)
@@ -14,6 +15,7 @@ enum SupabaseError: AppErrorProtocol {
     case insertError(Error)
 }
 
+// MARK: - Supabase Error - Description
 extension SupabaseError {
     var errorDescription: String? {
         "네트워크 오류가 발생했습니다"
@@ -21,13 +23,13 @@ extension SupabaseError {
 
     var debugDescription: String {
         switch self {
-        case .selectError(let error):
+        case let .selectError(error):
             "Select Error: \(error.localizedDescription)"
-        case .updateError(let error):
+        case let .updateError(error):
             "Update Error: \(error.localizedDescription)"
-        case .deleteError(let error):
+        case let .deleteError(error):
             "Delete Error: \(error.localizedDescription)"
-        case .insertError(let error):
+        case let .insertError(error):
             "Insert Error: \(error.localizedDescription)"
         }
     }

@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// 패딩 라벨
 final class PaddingLabel: UILabel {
     private let padding: UIEdgeInsets
 

@@ -7,10 +7,12 @@
 
 import Foundation
 
+/// DTO -> Entity 에러
 enum MappingError: AppErrorProtocol {
     case productDTOToProduct
 }
 
+// MARK: - Mapping Error - Description
 extension MappingError {
     var errorDescription: String? {
         switch self {

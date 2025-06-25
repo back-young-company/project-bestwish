@@ -5,25 +5,24 @@
 //  Created by Quarang on 6/12/25.
 //
 
-import RxSwift
 import RxRelay
+import RxSwift
 
-// MARK: - 이미지 분석 ViewModel
+/// 이미지 분석 ViewModel
 final class AnalysisViewModel: ViewModel {
     
-    private let analysisUseCase: AnalysisUseCase
-    private let disposeBag = DisposeBag()
-    
+    // MARK: - Action
     enum Action {
         case didSelectedSegmentControl(category: String)    // 세그먼트 컨트롤 선택 시
         case didTapAttributeChip(attribute: String)         // 속성 칩 선택 시
         case didSubmitSearchText(keyword: String)           // 검색버튼 터치 시
         case didTapKeywordChip(keyword: String)             // 키워드 칩 선택 시
-        case didTapPlatformChip(platform: Platform)         // 플랫폼 칩 선택 시
+        case didTapPlatformChip(platform: PlatformItem)         // 플랫폼 칩 선택 시
         case didTapResetButton                              // 초기화 버튼 선택 시
         case didTapSearchButton                             // 검색 버튼 선택 시
     }
     
+    // MARK: - State
     struct State {
         let labelDatas: Observable<[AnalysisSectionModel]>
         let segmentIndex: Observable<Int>
@@ -32,24 +31,30 @@ final class AnalysisViewModel: ViewModel {
         let buttonActivation: Observable<Bool>
     }
     
+    // MARK: - Internal Property
+    var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+    
+    // MARK: - Private Property
     private let arr = ["스타일", "상의", "하의", "아우터", "원피스"]
     private var previousCategory = ""                       // 카테고리 비교 용도
     private var currentQuery = BehaviorRelay<String>(value: "")
-    private var currentPlatform = BehaviorRelay<Platform?>(value: nil)
+    private var currentPlatform = BehaviorRelay<PlatformItem?>(value: nil)
     private let topClassFilter: [String: [String]]           // CoreData Model 데이터 정재해서 저장 (큰 카테고리: [속성])
     
     private let _action = PublishSubject<Action>()
+    
     private let _labelData = BehaviorRelay<[AnalysisSectionModel]>(value: [])
     private let _segmentIndex = BehaviorRelay(value: 0)
     private let _deepLink = PublishRelay<String>()
     private let _deepLinkError = PublishRelay<PlatformError>()
     private let _buttonActivation = BehaviorRelay(value: false)
-    var action: AnyObserver<Action> { _action.asObserver() }
     
-    public let state: State
-    private let labelData: [LabelDataDisplay]
+    private let labelData: [LabelDataModel]
+    private let analysisUseCase: AnalysisUseCase
+    private let disposeBag = DisposeBag()
     
-    init(analysisUseCase: AnalysisUseCase, labelData: [LabelDataDisplay]) {
+    init(analysisUseCase: AnalysisUseCase, labelData: [LabelDataModel]) {
         self.analysisUseCase = analysisUseCase
         self.labelData = labelData
         // 불러온 모델 데이터 ViewModel이 실아 있을 동안 전체 저장
@@ -61,19 +66,21 @@ final class AnalysisViewModel: ViewModel {
             "원피스": mapping("원피스"),
         ]
         
-        // 모델 데이터 정제 (일치율 40% 보다 큰 경우)
+        /// 모델 데이터 정제 (일치율 40% 보다 큰 경우)
         func mapping(_ category: String) -> [String]{
+            let emptyKeyword = "해당 카테고리의 키워드를 인식할 수 없습니다."          // 비어 있는 키워드 예외처리를 위함
             let att = labelData.filter { $0.topCategory == category && $0.probability > 40 }.map { $0.attributes }
             return att.isEmpty ? [emptyKeyword] : att
         }
+        
         let analysisSectionModel:[AnalysisSectionModel] = [
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
-            AnalysisSectionModel(header: nil, type: .platform, items: ShopPlatform.allCases.map {
-                .platform(platform: Platform(
+            AnalysisSectionModel(header: nil, type: .platform, items: PlatformEntity.allCases.filter{ $0 != .all }.map {
+                .platform(platform: PlatformItem(
                     platform: $0,
                     platformName: $0.platformName,
-                    platformImage: $0.rawValue,
+                    platformImage: $0.platformImage,
                     platformDeepLink: $0.platformDeepLink
                 ))
             })
@@ -82,11 +89,12 @@ final class AnalysisViewModel: ViewModel {
         // 라벨 데이터 초기 세팅
         self._labelData.accept(analysisSectionModel)
         
-        state = State(labelDatas: _labelData.asObservable(),
-                      segmentIndex: _segmentIndex.asObservable(),
-                      deepLink: _deepLink.asObservable(),
-                      deepLinkError: _deepLinkError.asObservable(),
-                      buttonActivation: _buttonActivation.asObservable()
+        state = State(
+            labelDatas: _labelData.asObservable(),
+            segmentIndex: _segmentIndex.asObservable(),
+            deepLink: _deepLink.asObservable(),
+            deepLinkError: _deepLinkError.asObservable(),
+            buttonActivation: _buttonActivation.asObservable()
         )
         
         bindAction()
@@ -117,6 +125,7 @@ final class AnalysisViewModel: ViewModel {
 }
 
 
+// MARK: - 비즈니스 로직
 private extension AnalysisViewModel {
     
     /// 이미지 분석 후 카테고리에 따라 데이터 방출
@@ -156,7 +165,7 @@ private extension AnalysisViewModel {
     }
     
     /// 플랫폼 선택 이벤트
-    private func selectePlatform(_ platform: Platform) {
+    private func selectePlatform(_ platform: PlatformItem) {
         let models = analysisUseCase.selectePlatform(platform, models: _labelData.value)
         currentPlatform.accept(platform)
         changedKeyword(labelData: models)
@@ -192,11 +201,11 @@ private extension AnalysisViewModel {
         
         switch currentPlatform.value?.platform {
         case .musinsa:
-            platform?.platformDeepLink = ShopPlatform.musinsa.searchResultDeepLink(keyword: query)
+            platform?.platformDeepLink = PlatformEntity.musinsa.searchResultDeepLink(keyword: query)
         case .ably:
-            platform?.platformDeepLink = ShopPlatform.ably.searchResultDeepLink(keyword: query)
+            platform?.platformDeepLink = PlatformEntity.ably.searchResultDeepLink(keyword: query)
         case .zigzag:
-            platform?.platformDeepLink = ShopPlatform.zigzag.searchResultDeepLink(keyword: query)
+            platform?.platformDeepLink = PlatformEntity.zigzag.searchResultDeepLink(keyword: query)
         default: break
         }
         currentPlatform.accept(platform)

@@ -8,23 +8,32 @@
 import UIKit
 
 import SnapKit
+import Then
 
+/// 홈 View
 final class HomeView: UIView {
-    
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
+
+    // MARK: - Private Property
+    private let _collectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
+
+    // MARK: - Internal Property
+    var collectionView: UICollectionView { _collectionView }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setView()
     }
 
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    var getCollectionView: UICollectionView { collectionView }
 }
 
+// MARK: - HomeView 설정
 private extension HomeView {
     func setView() {
         setAttributes()
@@ -35,18 +44,18 @@ private extension HomeView {
     func setAttributes() {
         self.backgroundColor = .white
         
-        collectionView.do {
+        _collectionView.do {
             $0.register(
                 PlatformShortcutCell.self,
                 forCellWithReuseIdentifier: PlatformShortcutCell.identifier
             )
             $0.register(
-                WishlistCell.self,
-                forCellWithReuseIdentifier: WishlistCell.identifier
+                WishListCell.self,
+                forCellWithReuseIdentifier: WishListCell.identifier
             )
             $0.register(
-                WishlistEmptyCell.self,
-                forCellWithReuseIdentifier: WishlistEmptyCell.identifier
+                WishListEmptyCell.self,
+                forCellWithReuseIdentifier: WishListEmptyCell.identifier
             )
             $0.register(
                 PlatformShortcutHeaderView.self,
@@ -54,24 +63,24 @@ private extension HomeView {
                 withReuseIdentifier: PlatformShortcutHeaderView.identifier
             )
             $0.register(
-                WishlistHeaderView.self,
+                WishListHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: WishlistHeaderView.identifier
+                withReuseIdentifier: WishListHeaderView.identifier
             )
             $0.register(
-                WishlistEmptyHeaderView.self,
+                WishListEmptyHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: WishlistEmptyHeaderView.identifier
+                withReuseIdentifier: WishListEmptyHeaderView.identifier
             )
         }
     }
 
     func setHierarchy() {
-        addSubviews(collectionView)
+        addSubviews(_collectionView)
     }
 
     func setConstraints() {
-        collectionView.snp.makeConstraints {
+        _collectionView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide)
             $0.bottom.directionalHorizontalEdges.equalToSuperview()
         }
