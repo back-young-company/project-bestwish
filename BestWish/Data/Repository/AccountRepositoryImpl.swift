@@ -20,19 +20,19 @@ final class AccountRepositoryImpl: AccountRepository {
         self.keyChain = keyChain
     }
 
-	/// 로그인 확인
-    func checkTokenState() async -> Bool {
-        await manager.checkTokenState(keyChain)
+    /// Supabase 세션 연결 확인
+    func checkSupabaseSession() async -> Bool {
+        await manager.checkSupabaseSession(keyChain)
     }
 
 	/// 온보딩 확인
-    func checkOnboardingState() async -> Bool {
-        await manager.checkOnboardingState()
+    func checkOnboardingState() async throws -> Bool {
+        try await manager.checkOnboardingState()
     }
 
     /// 로그인
-    func login(type: SocialType) async throws -> Bool {
-        return try await manager.signIn(type: type, keyChain)
+    func login(type: SocialType) async throws {
+        try await manager.signIn(type: type, keyChain)
     }
 
     /// 로그아웃

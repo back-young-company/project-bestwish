@@ -16,6 +16,7 @@ final class LoginViewController: UIViewController {
     private let loginView = LoginView()
     private let viewModel: LoginViewModel
     private let disposeBag = DisposeBag()
+    private let dummyCoordinator = DummyCoordinator.shared
 
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
@@ -39,8 +40,30 @@ final class LoginViewController: UIViewController {
     private func bindViewModel() {
         bindKakaoButton()
         bindAppleButton()
-    }
 
+        // oauth & 온보딩 결과에 따른 화면 이동
+        viewModel.state.readyToUseService
+            .skip(1)
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, state in
+                if state {
+                    self.dummyCoordinator.showMainView()
+                } else {
+                    self.dummyCoordinator.showOnboardingView()
+                }
+            }.disposed(by: disposeBag)
+
+        // oauth & 온보딩 에러시 alert
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "인증 에러", message: error.localizedDescription)
+                NSLog("LoginViewController Error: \(error.debugDescription)")
+            }
+            .disposed(by: disposeBag)
+    }
+    
     private func bindKakaoButton() {
         loginView.kakaoLoginButton.rx.tap
             .asDriver()

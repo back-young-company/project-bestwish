@@ -41,7 +41,7 @@ extension SupabaseOAuthManager {
         guard let token = keyChain.read(token: .init(service: .access)) else {
             NSLog("ERROR : Supabase AccessToken Read Fail")
             // FIXME: - 현재 아래 error는 Alert으로 안나오는 현상이 있음.
-            throw KeyChainError.readError("Service : Supabse AccessToken")
+            throw KeyChainError.readError
         }
 
         do {

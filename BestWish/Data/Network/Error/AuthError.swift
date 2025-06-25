@@ -18,8 +18,9 @@ enum AuthError: AppErrorProtocol {
     case supabaseRequestSecretCodeNil
     case withdrawFailed(Error)
     case appleDidCompleteFailed
-    case setSessionFailed(Error)
+    case supabaseSetSessionFailed(Error)
     case missProvider
+    case supabaseRequestRoleFailed(Error)
 }
 
 // MARK: - AuthError 케이스 별 텍스트
@@ -30,28 +31,35 @@ extension AuthError {
 
     var debugDescription: String {
         switch self {
+            /// 카카오
         case let .kakaoSignInFailed(error):
             "Kakao SignIn Error: \(error.localizedDescription)"
+
+            /// 애플
         case let .appleSignInFailed(error):
             "Auth Error: \(error.localizedDescription)"
-        case let .signOutFailed(error):
-            "SignOut Error: \(error.localizedDescription)"
         case let .appleRequestAccessTokenFailed(error):
             "Apple Access Token Error: \(error.localizedDescription)"
+        case .appleDidCompleteFailed:
+            "Apple DidCompleted Failed"
         case let .encodeParsingTokenError(field):
             "Encoding Parsing Access Token Error : \(field)"
+
+            /// Supabase
+        case let .supabaseRequestRoleFailed(error):
+            "Supabase Request Role Failed : \(error.localizedDescription)"
         case let .supabaseRequestSecretCodeFailed(error):
             "Supabase Request Client Secret Error : \(error.localizedDescription)"
         case .supabaseRequestSecretCodeNil:
             "Supabase Request Client Secret Return Nil"
-        case let .withdrawFailed(error):
-            "Withdraw Error: \(error.localizedDescription)"
-        case .appleDidCompleteFailed:
-            "Apple DidCompleted Failed"
-        case let .setSessionFailed(error):
+        case let .supabaseSetSessionFailed(error):
             "Supabase Set Session Failed : \(error.localizedDescription)"
         case .missProvider:
             "Missing Provider"
+        case let .signOutFailed(error):
+            "SignOut Error: \(error.localizedDescription)"
+        case let .withdrawFailed(error):
+            "Withdraw Error: \(error.localizedDescription)"
         }
     }
 }

@@ -12,10 +12,10 @@ import Supabase
 
 final class SupabaseOAuthManager: NSObject {
 
-    public var continuation: CheckedContinuation<(String, Supabase.Session), Error>?
-    public weak var presentationWindow: UIWindow?
-    public var kakaoAuthSession: ASWebAuthenticationSession?
-    public var currentNonce: String?
+    weak var presentationWindow: UIWindow?
+    var continuation: CheckedContinuation<(String, Supabase.Session), Error>?
+    var kakaoAuthSession: ASWebAuthenticationSession?
+    var currentNonce: String?
 
     let client = SupabaseClient(
         supabaseURL: Bundle.main.supabaseURL,
@@ -23,15 +23,8 @@ final class SupabaseOAuthManager: NSObject {
     )
 
     /// Supabase 토근 확인 및 세션 연결
-    func checkTokenState(_ keychain: KeyChainManager) async -> Bool {
-        // nonisolated read 이므로 await 없이 즉시 반환
-        guard
-            let accessToken = keychain.read(token: .init(service: .access)),
-            let refreshToken = keychain.read(token: .init(service: .refresh))
-            else {
-            NSLog("KeyChain 읽어오기 실패")
-            return false
-        }
+    func checkSupabaseSession(_ keychain: KeyChainManager) async -> Bool {
+        let (accessToken, refreshToken) = chechTokens(keychain)
 
         let session: Supabase.Session
 
@@ -43,13 +36,13 @@ final class SupabaseOAuthManager: NSObject {
 
             Task.detached(priority: .utility) {
                 await keychain.saveAllToken(session: session)
-                NSLog("토큰 로그인 세션 유지 성공")
+                NSLog("로그인 세션 유지 성공")
             }
             return true
         } catch {
             Task.detached(priority: .utility) {
-                NSLog("토큰 로그인 세션 복원 실패:", error.localizedDescription)
                 await keychain.deleteAllToken()
+                NSLog("로그인 세션 복원 실패: \(AuthError.supabaseSetSessionFailed(error).debugDescription)")
             }
             return false
         }
@@ -58,7 +51,7 @@ final class SupabaseOAuthManager: NSObject {
 
     /// 온보딩 필요 유무 확인
     /// Supabase에서 UserInfo 테이블의 role 값 확인 (USER : GUEST = true : false)
-    func checkOnboardingState() async -> Bool {
+    func checkOnboardingState() async throws -> Bool {
         struct Role: Codable { let role: String }
         do {
             let roles: [Role] = try await client
@@ -72,17 +65,21 @@ final class SupabaseOAuthManager: NSObject {
             NSLog("roles: \(roles.map(\.role))") // ["USER"]
             return role == "USER"
         } catch {
-            NSLog("Supabase Request User Role Failed")
-            return false
+            NSLog(AuthError.supabaseRequestRoleFailed(error).debugDescription)
+            throw AuthError.supabaseRequestRoleFailed(error)
         }
 
     }
 
     /// 로그인
-    func signIn(type: SocialType, _ keychain: KeyChainManager) async throws -> Bool {
-        guard let session = try await oauthSessionSignIn(type: type) else { return false }
-        await keychain.saveAllToken(session: session)
-        return await checkOnboardingState()
+    func signIn(type: SocialType, _ keyChain: KeyChainManager) async throws {
+        let session = try await oauthSessionSignIn(type: type)
+
+        if let session = session {
+            Task.detached(priority: .utility) {
+                await keyChain.saveAllToken(session: session)
+            }
+        }
     }
 
     /// 로그아웃
@@ -144,6 +141,19 @@ final class SupabaseOAuthManager: NSObject {
         default:
             return false
         }
+    }
+
+    /// 키체인에 저장된 supabase token 정보 가져오기
+    private func chechTokens(_ keyChain: KeyChainManager) -> (String, String) {
+        // nonisolated read 이므로 await 없이 즉시 반환
+        guard
+            let accessToken = keyChain.read(token: .init(service: .access)),
+            let refreshToken = keyChain.read(token: .init(service: .refresh))
+            else {
+            NSLog(KeyChainError.readError.debugDescription)
+            return ("","")
+        }
+        return (accessToken, refreshToken)
     }
 
     /// 소셜 로그인 OAUTH 인증

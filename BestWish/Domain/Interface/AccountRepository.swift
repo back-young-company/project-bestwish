@@ -10,14 +10,14 @@ import Foundation
 /// 계정 관련 레포지토리 프로토콜
 protocol AccountRepository {
 
-	/// 로그인 확인
-    func checkTokenState() async -> Bool
+    /// Supabase 세션 연결 확인
+    func checkSupabaseSession() async -> Bool
 
 	/// 온보딩 확인
-    func checkOnboardingState() async -> Bool
+    func checkOnboardingState() async throws -> Bool
 
 	/// 로그인
-    func login(type: SocialType) async throws -> Bool
+    func login(type: SocialType) async throws
 
 	/// 로그아웃
     func logout() async throws -> Bool
