@@ -50,23 +50,14 @@ extension UserInfoRepositoryImpl {
 
     /// UserDTO -> User
     private func convertToUser(from dto: UserDTO) -> User {
-
-        // TODO: 리펙토링하기
-        var provider = ""
-        if dto.authProvider == "apple" {
-            provider = "애플"
-        } else if dto.authProvider == "kakao" {
-            provider = "카카오"
-        }
-        
-        return User(
+        User(
             name: dto.name,
             email: dto.email,
             nickname: dto.nickname,
             gender: dto.gender,
             birth: dto.birth,
             profileImageCode: dto.profileImageCode ?? 0,
-            authProvider: provider
+            authProvider: SocialType(provider: dto.authProvider)?.korean
         )
     }
 }
