@@ -10,7 +10,7 @@ import Foundation
 /// 유저 정보 관련 UseCase 프로토콜
 protocol UserInfoUseCase {
     /// 유저 정보 불러오기
-    func getUserInfo() async throws -> User
+    func getUserInfo() async throws -> UserEntity
 
     /// 유저 정보 업데이트
     func updateUserInfo(
@@ -50,7 +50,7 @@ final class UserInfoUseCaseImpl: UserInfoUseCase {
         self.repository = repository
     }
 
-    func getUserInfo() async throws -> User {
+    func getUserInfo() async throws -> UserEntity {
         try await repository.getUserInfo()
     }
 

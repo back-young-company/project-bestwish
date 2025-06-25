@@ -40,7 +40,7 @@ final class MyPageViewModelTests: XCTestCase {
     func test_getUserInfo_success() {
         // Given
         let expectation = XCTestExpectation(description: #function)
-        let dummyUser = User(
+        let dummyUser = UserEntity(
             name: nil,
             email: "test@test.com",
             nickname: "Test Nickname",
