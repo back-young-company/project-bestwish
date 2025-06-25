@@ -112,12 +112,12 @@ final class UserInfoUpdateViewModelTests: XCTestCase {
             }.disposed(by: disposeBag)
 
         // When
-        let updateGender = 2
+        let updateGender: Gender = .female
         viewModel.action.onNext(.updateGender(updateGender))
         wait(for: [expectation], timeout: 2)
 
         // Then
-        XCTAssertEqual(received?.gender, updateGender)
+        XCTAssertEqual(received?.gender, updateGender.rawValue)
     }
 
     /// 유저 정보 저장 성공 테스트
