@@ -161,10 +161,10 @@ private extension HomeViewModel {
     func getPlatformSequence() async throws -> [PlatformItem] {
         let result = try await self.useCase.getPlatformSequence()
         return result.map { platform in
-            let shopPlatform = ShopPlatform.allCases[platform]
+            let shopPlatform = PlatformEntity.allCases[platform]
             return PlatformItem(
                 platformName: shopPlatform.platformName,
-                platformImage: shopPlatform.rawValue,
+                platformImage: shopPlatform.platformImage,
                 platformDeepLink: shopPlatform.platformDeepLink
             )
         }

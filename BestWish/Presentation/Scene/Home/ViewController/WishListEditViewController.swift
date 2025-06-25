@@ -17,11 +17,43 @@ final class WishListEditViewController: UIViewController {
     // MARK: - Private Property
     private let wishEditViewModel: WishListEditViewModel
     private let wishEditView = WishListEditView()
-
-    // MARK: - Internal Property
     private let disposeBag = DisposeBag()
 
     weak var delegate: HomeViewControllerUpdate?
+
+    lazy var dataSource = RxCollectionViewSectionedReloadDataSource<WishListEditSectionModel>(
+        configureCell: { dataSource, collectionView, indexPath, item in
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: WishListCell.identifier,
+                for: indexPath
+            ) as? WishListCell else { return UICollectionViewCell() }
+            cell.configure(type: item, isHidden: false)
+
+            cell.getEditButton.rx.tap
+                .bind(with: self) { owner, _ in
+                    owner.wishEditViewModel.action.onNext(.delete(item.uuid, indexPath.item))
+                }
+                .disposed(by: cell.disposeBag)
+
+            return cell
+        }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: WishListEditHeaderView.identifier,
+                for: indexPath
+            ) as? WishListEditHeaderView else { return UICollectionReusableView() }
+            let totalItemCount = dataSource.sectionModels.flatMap { $0.items }.count
+
+            headerView.configure(count: totalItemCount)
+
+            headerView.completeButton.rx.tap
+                .bind(with: self) { owner, _ in
+                    owner.wishEditViewModel.action.onNext(.complete)
+                }
+                .disposed(by: headerView.disposeBag)
+
+            return headerView
+        })
 
     init(wishEditViewModel: WishListEditViewModel) {
         self.wishEditViewModel = wishEditViewModel
@@ -45,39 +77,6 @@ final class WishListEditViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        let dataSource = RxCollectionViewSectionedReloadDataSource<WishListEditSectionModel>(
-            configureCell: { dataSource, collectionView, indexPath, item in
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: WishListCell.identifier,
-                    for: indexPath
-                ) as? WishListCell else { return UICollectionViewCell() }
-                cell.configure(type: item, isHidden: false)
-                
-                cell.getEditButton.rx.tap
-                    .bind(with: self) { owner, _ in
-                        owner.wishEditViewModel.action.onNext(.delete(item.uuid, indexPath.item))
-                    }
-                    .disposed(by: cell.disposeBag)
-                
-                return cell
-            }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-                guard let headerView = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: kind,
-                    withReuseIdentifier: WishListEditHeaderView.identifier,
-                    for: indexPath
-                ) as? WishListEditHeaderView else { return UICollectionReusableView() }
-                let totalItemCount = dataSource.sectionModels.flatMap { $0.items }.count
-                headerView.configure(count: totalItemCount)
-                
-                headerView.completeButton.rx.tap
-                    .bind(with: self) { owner, _ in
-                        owner.wishEditViewModel.action.onNext(.complete)
-                    }
-                    .disposed(by: headerView.disposeBag)
-                
-                return headerView
-            })
-        
         wishEditViewModel.state.sections
             .bind(to: wishEditView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)

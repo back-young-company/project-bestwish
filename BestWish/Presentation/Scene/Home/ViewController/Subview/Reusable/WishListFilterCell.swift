@@ -44,7 +44,7 @@ final class WishListFilterCell: UICollectionViewCell, ReuseIdentifier {
         var config = _platformButton.configuration ?? UIButton.Configuration.filled()
         config.cornerStyle = .capsule
         config.titleLineBreakMode = .byTruncatingTail
-        config.attributedTitle = AttributedString(ShopPlatform.allCases[type].platformName, attributes: AttributeContainer([.font: titleFont]))
+        config.attributedTitle = AttributedString(PlatformEntity.allCases[type].platformName, attributes: AttributeContainer([.font: titleFont]))
         
         config.baseForegroundColor = isSelected ? .gray0 : .gray500
         config.baseBackgroundColor = isSelected ? .primary300 : .gray0

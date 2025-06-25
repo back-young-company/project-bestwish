@@ -23,6 +23,17 @@ final class PlatformEditViewController: UIViewController {
 
     weak var delegate: HomeViewControllerUpdate?
 
+    lazy var dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
+        cell.configure(type: item)
+
+        return cell
+    }, canEditRowAtIndexPath: { dataSource, indexPath in
+        return true
+    }, canMoveRowAtIndexPath: { dataSource, indexPath in
+        return true
+    })
+
     init(platformEditViewModel: PlatformEditViewModel) {
         self.platformEditViewModel = platformEditViewModel
         super.init(nibName: nil, bundle: nil)
@@ -50,17 +61,6 @@ final class PlatformEditViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        let dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
-            cell.configure(type: item)
-            
-            return cell
-        }, canEditRowAtIndexPath: { dataSource, indexPath in
-            return true
-        }, canMoveRowAtIndexPath: { dataSource, indexPath in
-            return true
-        })
-        
         platformEditViewModel.state.sections
             .bind(to: platformEditView.tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
@@ -98,7 +98,7 @@ final class PlatformEditViewController: UIViewController {
                 
                 owner.platformEditViewModel.action.onNext(.itemMoved(currentItems))
                 owner.updatedIndices = currentItems.compactMap { item in
-                    ShopPlatform.allCases.firstIndex(where: { $0.platformName == item.platformName })
+                    PlatformEntity.allCases.firstIndex(where: { $0.platformName == item.platformName })
                 }
             }
             .disposed(by: disposeBag)

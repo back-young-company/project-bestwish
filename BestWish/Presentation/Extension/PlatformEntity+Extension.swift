@@ -8,20 +8,7 @@
 import Foundation
 
 /// 외부 플랫폼 열거형
-enum ShopPlatform: String, CaseIterable {
-    case all = "all"
-    case musinsa = "musinsa"
-    case zigzag = "zigzag"
-    case ably = "ably"
-    case kream = "kream"
-    case brandy = "brandy"
-    case tncm = "29cm"
-    case oco = "oco"
-    case fnoz = "4910"
-    case worksout = "worksout"
-    case eql = "eql"
-    case hiver = "hiver"
-    
+extension PlatformEntity {
     var platformName: String {
         switch self {
         case .all:
@@ -50,7 +37,36 @@ enum ShopPlatform: String, CaseIterable {
             return "하이버"
         }
     }
-    
+
+    var platformImage: String {
+        switch self {
+        case .all:
+            return "all"
+        case .musinsa:
+            return "musinsa"
+        case .zigzag:
+            return "zigzag"
+        case .ably:
+            return "ably"
+        case .kream:
+            return "kream"
+        case .brandy:
+            return "brandy"
+        case .tncm:
+            return "29cm"
+        case .oco:
+            return "oco"
+        case .fnoz:
+            return "4910"
+        case .worksout:
+            return "worksout"
+        case .eql:
+            return "eql"
+        case .hiver:
+            return "hiver"
+        }
+    }
+
     var platformDeepLink: String {
         switch self {
         case .musinsa:

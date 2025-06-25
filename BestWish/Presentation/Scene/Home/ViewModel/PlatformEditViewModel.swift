@@ -92,10 +92,10 @@ private extension PlatformEditViewModel {
     func getPlatformSequence(isEdit: Bool) async throws -> [PlatformEditItem] {
         let result = try await self.useCase.getPlatformsInWishList(isEdit: isEdit)
         return result.map { tupple in
-            let shopPlatform = ShopPlatform.allCases[tupple.platform]
+            let shopPlatform = PlatformEntity.allCases[tupple.platform]
             return PlatformEditItem(
                 platformName: shopPlatform.platformName,
-                platformImage: shopPlatform.rawValue,
+                platformImage: shopPlatform.platformImage,
                 platformCount: tupple.count
             )
         }
