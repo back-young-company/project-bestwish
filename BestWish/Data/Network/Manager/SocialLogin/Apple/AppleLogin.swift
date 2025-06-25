@@ -220,7 +220,7 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
                 continuation.resume(returning: (authCodeString, session))
             } catch {
                 NSLog("Supabase 로그인 오류:", error.localizedDescription)
-                continuation.resume(throwing: AuthError.appleSignInFailed(error))
+                continuation.resume(throwing: AuthError.signInFailed(.apple, error))
             }
         }
     }

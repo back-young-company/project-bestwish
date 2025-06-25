@@ -9,8 +9,7 @@ import Foundation
 
 /// 사용자 인증 정보 관련 에러 모음
 enum AuthError: AppErrorProtocol {
-    case kakaoSignInFailed(Error)
-    case appleSignInFailed(Error)
+    case signInFailed(SocialType, Error)
     case signOutFailed(Error)
     case appleRequestAccessTokenFailed(Error)
     case encodeParsingTokenError(String)
@@ -31,13 +30,14 @@ extension AuthError {
 
     var debugDescription: String {
         switch self {
-            /// 카카오
-        case let .kakaoSignInFailed(error):
-            "Kakao SignIn Error: \(error.localizedDescription)"
+        case let .signInFailed(socialType, error):
+            "\(socialType) SignIn Error: \(error.localizedDescription)"
+        case let .signOutFailed(error):
+            "SignOut Error: \(error.localizedDescription)"
+        case let .withdrawFailed(error):
+            "Withdraw Error: \(error.localizedDescription)"
 
             /// 애플
-        case let .appleSignInFailed(error):
-            "Auth Error: \(error.localizedDescription)"
         case let .appleRequestAccessTokenFailed(error):
             "Apple Access Token Error: \(error.localizedDescription)"
         case .appleDidCompleteFailed:
@@ -56,10 +56,7 @@ extension AuthError {
             "Supabase Set Session Failed : \(error.localizedDescription)"
         case .missProvider:
             "Missing Provider"
-        case let .signOutFailed(error):
-            "SignOut Error: \(error.localizedDescription)"
-        case let .withdrawFailed(error):
-            "Withdraw Error: \(error.localizedDescription)"
+
         }
     }
 }

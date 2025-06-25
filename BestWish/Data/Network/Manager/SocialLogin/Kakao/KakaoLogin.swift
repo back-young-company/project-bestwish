@@ -32,7 +32,7 @@ extension SupabaseOAuthManager {
             kakaoAuthSession?.cancel()
             kakaoAuthSession = nil
             NSLog("error: \(error.localizedDescription)")
-            throw AuthError.kakaoSignInFailed(error)
+            throw AuthError.signInFailed(.kakao, error)
         }
     }
 
