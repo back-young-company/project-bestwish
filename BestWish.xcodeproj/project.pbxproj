@@ -104,7 +104,6 @@
 				"Data/Util/Bundle+Util.swift",
 				"Data/Util/Platform+Util.swift",
 				"Data/Util/String+Util.swift",
-				"Data/Util/UIImage+Util.swift",
 				Domain/Entity/PlatformEntity.swift,
 				Domain/Entity/ProductEntity.swift,
 				Domain/Entity/SocialType.swift,
