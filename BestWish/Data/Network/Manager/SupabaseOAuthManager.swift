@@ -12,7 +12,6 @@ import Supabase
 
 final class SupabaseOAuthManager: NSObject {
 
-    weak var presentationWindow: UIWindow?
     var continuation: CheckedContinuation<(String, Supabase.Session), Error>?
     var kakaoAuthSession: ASWebAuthenticationSession?
     var currentNonce: String?
@@ -182,9 +181,9 @@ final class SupabaseOAuthManager: NSObject {
 // MARK: - Login할때 하단으로 부터 웹뷰 제어
 extension SupabaseOAuthManager: ASWebAuthenticationPresentationContextProviding, ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return presentationWindow ?? UIWindow()
+        return  UIWindow()
     }
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        return presentationWindow ?? UIWindow()
+        return  UIWindow()
     }
 }
