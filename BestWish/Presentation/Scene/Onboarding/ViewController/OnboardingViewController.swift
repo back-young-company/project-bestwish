@@ -20,7 +20,6 @@ final class OnboardingViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let onboardingViews: [UIView]
     private let returnManager: IQKeyboardReturnManager = .init()
-    private let dummyCoordinator = DummyCoordinator.shared
 
     init(viewModel: OnboardingViewModel, policyViewModel: PolicyViewModel) {
         self.viewModel = viewModel
@@ -92,10 +91,9 @@ final class OnboardingViewController: UIViewController {
 
         /// 온보딩 결과에 따른 화면 이동
         viewModel.state.readyToUseService
-            .filter { $0 }
             .observe(on: MainScheduler.instance)
-            .bind(with: self) { owner, _ in
-                owner.dummyCoordinator.showMainView()
+            .bind() { _ in
+                DummyCoordinator.shared.showMainView()
             }
             .disposed(by: disposeBag)
 

@@ -32,7 +32,7 @@ final class OnboardingViewModel: ViewModel {
         let isValidNickname: Observable<Bool?>
         let currentPage: Observable<Int>
         let showPolicySheet: Observable<Void>
-        let readyToUseService: Observable<Bool>
+        let readyToUseService: Observable<Void>
         let error: Observable<AppError>
     }
 
@@ -47,7 +47,7 @@ final class OnboardingViewModel: ViewModel {
     private let _isValidNickname = BehaviorRelay<Bool?>(value: nil)
     private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
     private let _showPolicySheet = PublishRelay<Void>()
-    private let _readyToUseService = PublishRelay<Bool>()
+    private let _readyToUseService = PublishRelay<Void>()
     private let _error = PublishSubject<AppError>()
 
     /// 총 페이지수
@@ -124,9 +124,8 @@ final class OnboardingViewModel: ViewModel {
                 nickname: userInfo.nickname,
                 gender: userInfo.gender,
                 birth: userInfo.birth)
-            _readyToUseService.accept(true)
+            _readyToUseService.accept(())
         } catch {
-            _readyToUseService.accept(false)
             handleError(error)
         }
     }

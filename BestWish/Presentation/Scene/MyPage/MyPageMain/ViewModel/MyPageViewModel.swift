@@ -21,7 +21,7 @@ final class MyPageViewModel: ViewModel {
     struct State {
         let sections: Observable<[MyPageSection]>
         let userInfo: Observable<UserInfoModel>
-        let isLogOut: Observable<Bool>
+        let isLogOut: Observable<Void>
         let error: Observable<AppError>
     }
 
@@ -34,7 +34,7 @@ final class MyPageViewModel: ViewModel {
 
     private let _sections = PublishSubject<[MyPageSection]>()
     private let _userInfo = PublishSubject<UserInfoModel>()
-    private let _isLogOut = PublishRelay<Bool>()
+    private let _isLogOut = PublishRelay<Void>()
     private let _error = PublishSubject<AppError>()
 
     private let userInfoUseCase: UserInfoUseCase
@@ -106,9 +106,8 @@ final class MyPageViewModel: ViewModel {
         Task {
             do {
                 try await accountUseCase.logout()
-                _isLogOut.accept(true)
+                _isLogOut.accept(())
             } catch {
-                _isLogOut.accept(false)
                 handleError(error)
             }
         }

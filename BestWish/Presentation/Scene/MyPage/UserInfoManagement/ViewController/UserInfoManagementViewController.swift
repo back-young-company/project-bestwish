@@ -15,7 +15,6 @@ final class UserInfoManagementViewController: UIViewController {
     private let viewModel: UserInfoManagementViewModel
     private let managementView = UserInfoManagementView()
     private let disposeBag = DisposeBag()
-    private let dummyCoordinator = DummyCoordinator.shared
 
     init(viewModel: UserInfoManagementViewModel) {
         self.viewModel = viewModel
@@ -70,10 +69,9 @@ final class UserInfoManagementViewController: UIViewController {
             }.disposed(by: disposeBag)
 
         viewModel.state.isWithdraw
-            .filter { $0 }
             .observe(on: MainScheduler.instance)
-            .bind(with: self) { owner, _ in
-                owner.dummyCoordinator.showLoginView()
+            .bind { _ in
+                DummyCoordinator.shared.showLoginView()
             }.disposed(by: disposeBag)
 
         viewModel.state.error

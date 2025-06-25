@@ -16,7 +16,6 @@ final class LoginViewController: UIViewController {
     private let loginView = LoginView()
     private let viewModel: LoginViewModel
     private let disposeBag = DisposeBag()
-    private let dummyCoordinator = DummyCoordinator.shared
 
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
@@ -46,9 +45,9 @@ final class LoginViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, state in
                 if state {
-                    owner.dummyCoordinator.showMainView()
+                    DummyCoordinator.shared.showMainView()
                 } else {
-                    owner.dummyCoordinator.showOnboardingView()
+                    DummyCoordinator.shared.showOnboardingView()
                 }
             }.disposed(by: disposeBag)
 
