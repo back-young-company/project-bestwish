@@ -37,17 +37,15 @@ final class UserInfoManagementViewModel: ViewModel {
 
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
-    private let dummyCoordinatorUseCase: DummyCoordinatorUseCase
     private let disposeBag = DisposeBag()
+    private let dummyCoordinator = DummyCoordinator.shared
 
     init(
         userInfoUseCase: UserInfoUseCase,
-        accountUseCase: AccountUseCase,
-        dummyCoordinatorUseCase: DummyCoordinatorUseCase
+        accountUseCase: AccountUseCase
     ) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
-        self.dummyCoordinatorUseCase = dummyCoordinatorUseCase
         state = State(
             authProvider: _authProvider.asObservable(),
             error: _error.asObservable()
@@ -88,7 +86,7 @@ final class UserInfoManagementViewModel: ViewModel {
                 if isWithdraw {
                     let isLogOut = try await accountUseCase.logout()
                     if isLogOut {
-                        dummyCoordinatorUseCase.showLoginView()
+                        self.dummyCoordinator.showLoginView()
                     }
                 }
             } catch {

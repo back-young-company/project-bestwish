@@ -9,6 +9,9 @@ import UIKit
 
 final class DummyCoordinator {
 
+    static let shared = DummyCoordinator()
+    private init() { }
+
     func showOnboardingView() {
         DispatchQueue.main.async {
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

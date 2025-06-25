@@ -44,20 +44,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // TODO: - 수정하기 (with DIContainer)
         let repository = DIContainer.shared.makeAccountRepository()
-        let dummyCoordinatorRepository = DIContainer.shared.makeDummyCoordinatorRepository()
 
         Task {
             let hasToken = await repository.checkTokenState()
             if hasToken {
                 let didOnboarding = await repository.checkOnboardingState()
                 if didOnboarding {
-                    dummyCoordinatorRepository.showMainView()
+                    self.showMainView()
                 } else {
-                    dummyCoordinatorRepository.showOnboardingView()
+                    self.showOnboardingView()
                 }
             } else {
                 await MainActor.run {
-                    dummyCoordinatorRepository.showLoginView()
+                    self.showLoginView()
                 }
             }
         }

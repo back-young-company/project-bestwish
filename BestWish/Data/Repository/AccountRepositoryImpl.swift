@@ -11,16 +11,13 @@ import Foundation
 final class AccountRepositoryImpl: AccountRepository {
     private let manager: SupabaseOAuthManager
     private let keyChain: KeyChainManager
-    private let dummyCoordinator: DummyCoordinator
 
     init(
         manager: SupabaseOAuthManager,
-        keyChain: KeyChainManager,
-        dummyCoordinator: DummyCoordinator
+        keyChain: KeyChainManager
     ) {
         self.manager = manager
         self.keyChain = keyChain
-        self.dummyCoordinator = dummyCoordinator
     }
 
 	/// 로그인 확인

@@ -27,18 +27,7 @@ final class DIContainer {
     private let coreMLUseCase: CoreMLUseCase
     private let analysisUseCase: AnalysisUseCase
 
-    // TODO: Coordinator 패턴 적용하기
-    private let dummyCoordinator: DummyCoordinator
-    private let dummyCoordinatorRepository: DummyCoordinatorRepository
-    private let dummyCoordinaterUseCase: DummyCoordinatorUseCase
-
-
     private init() {
-        // TODO: Coordinator 패턴 적용하기
-        self.dummyCoordinator = DummyCoordinator()
-        self.dummyCoordinatorRepository = DummyCoordinatorRepositoryImpl(dummyCoordinator: dummyCoordinator)
-        self.dummyCoordinaterUseCase = DummyCoordinatorUseCaseImpl(repository: dummyCoordinatorRepository)
-
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManager()
         self.supabaseOAuthManager = SupabaseOAuthManager()
@@ -48,8 +37,7 @@ final class DIContainer {
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
         self.accountRepository = AccountRepositoryImpl(
             manager: supabaseOAuthManager,
-            keyChain: keyChainManager,
-            dummyCoordinator: dummyCoordinator
+            keyChain: keyChainManager
         )
 
         self.wishListUseCase = WishListUseCaseImpl(repository: wishListRepository)
@@ -61,17 +49,11 @@ final class DIContainer {
         self.analysisUseCase = AnalysisUseCaseImpl()
     }
 
-    // TODO: Coordinator 패턴 적용하기
     func makeAccountRepository() -> AccountRepository {
         return AccountRepositoryImpl(
             manager: supabaseOAuthManager,
-            keyChain: keyChainManager,
-            dummyCoordinator: dummyCoordinator
+            keyChain: keyChainManager
         )
-    }
-
-    func makeDummyCoordinatorRepository() -> DummyCoordinatorRepository {
-        return DummyCoordinatorRepositoryImpl(dummyCoordinator: dummyCoordinator)
     }
 
     func makeHomeViewController() -> HomeViewController {
@@ -98,8 +80,7 @@ final class DIContainer {
     func makeMyPageViewController() -> MyPageViewController {
         let viewModel = MyPageViewModel(
             userInfoUseCase: userInfoUseCase,
-            accountUseCase: accountUseCase,
-            dummyCoordinatorUseCase: dummyCoordinaterUseCase
+            accountUseCase: accountUseCase
         )
         return MyPageViewController(viewModel: viewModel)
     }
@@ -120,25 +101,18 @@ final class DIContainer {
     func makeUserInfoManagementViewController() -> UserInfoManagementViewController {
         let viewModel = UserInfoManagementViewModel(
             userInfoUseCase: userInfoUseCase,
-            accountUseCase: accountUseCase,
-            dummyCoordinatorUseCase: dummyCoordinaterUseCase
+            accountUseCase: accountUseCase
         )
         return UserInfoManagementViewController(viewModel: viewModel)
     }
 
     func makeLoginViewController() -> LoginViewController {
-        let viewModel = LoginViewModel(
-            useCase: accountUseCase,
-            dummyCoordinatorUseCase: dummyCoordinaterUseCase
-        )
+        let viewModel = LoginViewModel(useCase: accountUseCase)
         return LoginViewController(viewModel: viewModel)
     }
 
     func makeOnboardingViewController() -> OnboardingViewController {
-        let onboardingViewModel = OnboardingViewModel(
-            useCase: userInfoUseCase,
-            dummyCoordinatorUseCase: dummyCoordinaterUseCase
-        )
+        let onboardingViewModel = OnboardingViewModel(useCase: userInfoUseCase)
         let policyViewModel = PolicyViewModel()
         return OnboardingViewController(viewModel: onboardingViewModel, policyViewModel: policyViewModel)
     }
