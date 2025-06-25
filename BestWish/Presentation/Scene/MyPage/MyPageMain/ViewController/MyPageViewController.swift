@@ -106,6 +106,13 @@ final class MyPageViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
+        viewModel.state.isLogOut
+            .observe(on: MainScheduler.instance)
+            .bind { _ in
+                DummyCoordinator.shared.showLoginView()
+            }
+            .disposed(by: disposeBag)
+
         viewModel.state.error
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in

@@ -5,6 +5,7 @@
 //  Created by yimkeul on 6/7/25.
 //
 
+import RxRelay
 import RxSwift
 
 /// 로그인 View Model
@@ -17,7 +18,10 @@ final class LoginViewModel: ViewModel {
     }
 
     // MARK: - State
-    struct State { }
+    struct State {
+        let readyToUseService: Observable<Bool>
+        let error: Observable<AppError>
+    }
 
     // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
@@ -26,38 +30,46 @@ final class LoginViewModel: ViewModel {
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
 
+    private let _readyToUseService = PublishRelay<Bool>()
+    private let _error = PublishSubject<AppError>()
+
     private let useCase: AccountUseCase
     private let disposeBag = DisposeBag()
-    private let dummyCoordinator = DummyCoordinator.shared
 
     init(useCase: AccountUseCase) {
         self.useCase = useCase
-        state = State()
+        state = State(
+            readyToUseService: _readyToUseService.asObservable(),
+            error: _error.asObservable()
+        )
         bindAction()
     }
 
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
-            case .signInKakao:
+            case .signInKakao, .signInApple:
                 Task {
-                    let didOnboarding = try await self.useCase.login(type: .kakao)
-                    if didOnboarding {
-                        self.dummyCoordinator.showMainView()
-                    } else {
-                        self.dummyCoordinator.showOnboardingView()
-                    }
-                }
-            case .signInApple:
-                Task {
-                    let didOnboarding = try await self.useCase.login(type: .apple)
-                    if didOnboarding {
-                        self.dummyCoordinator.showMainView()
-                    } else {
-                        self.dummyCoordinator.showOnboardingView()
+                    do {
+                        let type: SocialType = (action == .signInKakao) ? .kakao : .apple
+                        try await owner.useCase.login(type: type)
+
+                        let didOnboarding = try await owner.useCase.checkOnboardingState()
+                        owner._readyToUseService.accept(didOnboarding)
+                    } catch {
+                        self.handleError(error)
                     }
                 }
             }
         }.disposed(by: disposeBag)
+    }
+
+    /// 에러 핸들링
+    private func handleError(_ error: Error) {
+        if let error = error as? AppError {
+            _error.onNext(error)
+        } else {
+            _error.onNext(AppError.unknown(error))
+        }
     }
 }

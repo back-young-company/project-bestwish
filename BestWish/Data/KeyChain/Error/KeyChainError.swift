@@ -9,20 +9,20 @@ import Foundation
 
 /// 키체인 에러 종류
 enum KeyChainError: AppErrorProtocol {
-    case readError(String)
+    case readError
     case saveError
     case deleteError
 }
 
 extension KeyChainError {
     var errorDescription: String? {
-        "개인정보 오류가 발생했습니다"
+        "보안 오류가 발생했습니다"
     }
 
     var debugDescription: String {
         switch self {
-        case let .readError(detail):
-            "KeyChain Read Error : \(detail)"
+        case .readError:
+            "KeyChain Read Error"
         case .saveError:
             "KeyChain Save Error"
         case .deleteError:
