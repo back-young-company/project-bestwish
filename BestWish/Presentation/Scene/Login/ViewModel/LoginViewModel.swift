@@ -5,27 +5,33 @@
 //  Created by yimkeul on 6/7/25.
 //
 
-import Foundation
 import RxSwift
 
+/// 로그인 View Model
 final class LoginViewModel: ViewModel {
 
-    private let disposeBag = DisposeBag()
-    private let supabaseOAuthManager = SupabaseOAuthManager.shared
-
+    // MARK: - Action
     enum Action {
         case signInKakao
         case signInApple
     }
 
+    // MARK: - State
     struct State { }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
-
     let state: State
 
-    init() {
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+
+    private let useCase: AccountUseCase
+    private let disposeBag = DisposeBag()
+    private let dummyCoordinator = DummyCoordinator.shared
+
+    init(useCase: AccountUseCase) {
+        self.useCase = useCase
         state = State()
         bindAction()
     }
@@ -34,9 +40,23 @@ final class LoginViewModel: ViewModel {
         _action.subscribe(with: self) { owner, action in
             switch action {
             case .signInKakao:
-                SupabaseOAuthManager.shared.signIn(type: .kakao)
+                Task {
+                    let didOnboarding = try await self.useCase.login(type: .kakao)
+                    if didOnboarding {
+                        self.dummyCoordinator.showMainView()
+                    } else {
+                        self.dummyCoordinator.showOnboardingView()
+                    }
+                }
             case .signInApple:
-                SupabaseOAuthManager.shared.signIn(type: .apple)
+                Task {
+                    let didOnboarding = try await self.useCase.login(type: .apple)
+                    if didOnboarding {
+                        self.dummyCoordinator.showMainView()
+                    } else {
+                        self.dummyCoordinator.showOnboardingView()
+                    }
+                }
             }
         }.disposed(by: disposeBag)
     }

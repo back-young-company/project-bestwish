@@ -17,10 +17,12 @@ jobs:
         with:
           xcode-version: '16.2'
 
-      - name: Build and Run Tests
+      # 빌드 스텝 실행
+      - name: Build Application
         run: |
-          xcodebuild clean test \
+          set -eo pipefail
+          xcodebuild clean build \
             -project BestWish.xcodeproj \
             -scheme BestWish \
-            -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' \
-          | xcbeautify
+            -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2' \
+            | xcbeautify

@@ -38,11 +38,14 @@ final class MyPageViewModel: ViewModel {
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
     private let disposeBag = DisposeBag()
+    private let dummyCoordinator = DummyCoordinator.shared
 
-    init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
+    init(
+        userInfoUseCase: UserInfoUseCase,
+        accountUseCase: AccountUseCase
+    ) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
-
         state = State(
             sections: _sections.asObservable(),
             userInfo: _userInfo.asObservable(),
@@ -100,7 +103,10 @@ final class MyPageViewModel: ViewModel {
     private func logout() {
         Task {
             do {
-                try await accountUseCase.logout()
+                let isLogOut = try await accountUseCase.logout()
+                if isLogOut {
+                    self.dummyCoordinator.showLoginView()
+                }
             } catch {
                 handleError(error)
             }

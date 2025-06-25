@@ -5,11 +5,13 @@
 //  Created by yimkeul on 6/16/25.
 //
 
+import PDFKit
 import UIKit
+
 import SnapKit
 import Then
-import PDFKit
 
+/// pdf 종류
 enum PDFType {
     case privacyPolicy // 개인정보 처리 방침
     case termsOfUse // 서비스 이용 약관
@@ -24,27 +26,23 @@ enum PDFType {
     }
 }
 
+/// PDF 컨트롤러
 final class PDFViewController: UIViewController {
 
-    // MARK: - Properties
     private let pdfView = PDFView().then {
         $0.autoScales = true
     }
 
-    // MARK: - Initializer
     init(type: PDFType) {
         super.init(nibName: nil, bundle: nil)
         configure(type: type)
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View Life Cycle
     override func loadView() {
-        // 기본 컨테이너 뷰
         view = UIView()
         view.backgroundColor = .gray0
     }
@@ -54,7 +52,6 @@ final class PDFViewController: UIViewController {
         setupLayout()
     }
 
-    // MARK: - UI Setup
     private func setupLayout() {
         view.addSubview(pdfView)
         pdfView.snp.makeConstraints {
@@ -62,7 +59,6 @@ final class PDFViewController: UIViewController {
         }
     }
 
-    // MARK: - Bind
     private func configure(type: PDFType) {
         guard let url = type.url else { return }
         pdfView.document = PDFDocument(url: url)

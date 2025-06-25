@@ -80,7 +80,7 @@ private extension UserInfoUpdateView {
         _saveButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(54)
+            $0.height.equalTo(CGFloat(54).fitHeight)
         }
     }
 }
