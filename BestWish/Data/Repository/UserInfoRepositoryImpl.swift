@@ -16,7 +16,7 @@ final class UserInfoRepositoryImpl: UserInfoRepository {
     }
 
     /// 유저 정보 불러오기
-    func getUserInfo() async throws -> User {
+    func getUserInfo() async throws -> UserEntity {
         do {
             let result = try await manager.getUserInfo()
             return convertToUser(from: result)
@@ -49,8 +49,8 @@ final class UserInfoRepositoryImpl: UserInfoRepository {
 extension UserInfoRepositoryImpl {
 
     /// UserDTO -> User
-    private func convertToUser(from dto: UserDTO) -> User {
-        User(
+    private func convertToUser(from dto: UserDTO) -> UserEntity {
+        UserEntity(
             name: dto.name,
             email: dto.email,
             nickname: dto.nickname,

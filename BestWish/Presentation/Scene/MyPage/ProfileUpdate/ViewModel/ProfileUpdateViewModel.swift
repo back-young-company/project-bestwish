@@ -120,7 +120,7 @@ final class ProfileUpdateViewModel: ViewModel {
     }
 
     /// User Entity -> UserInfoModel 변환
-    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+    private func convertUserInfoModel(from user: UserEntity) -> UserInfoModel {
         UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,

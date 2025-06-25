@@ -40,7 +40,7 @@ final class UserInfoManagementViewModelTests: XCTestCase {
         // Given
         let expectation = XCTestExpectation(description: #function)
         let authProvider = "kakao"
-        let user = User(
+        let user = UserEntity(
             name: nil,
             email: "test",
             nickname: nil,

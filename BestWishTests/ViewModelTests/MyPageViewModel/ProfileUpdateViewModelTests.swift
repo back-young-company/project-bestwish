@@ -181,8 +181,8 @@ final class ProfileUpdateViewModelTests: XCTestCase {
     }
 
     /// 더미 유저 생성
-    private func makeDummyUser() -> User {
-        User(
+    private func makeDummyUser() -> UserEntity {
+        UserEntity(
             name: nil,
             email: "test@test.com",
             nickname: "Test Nickname",

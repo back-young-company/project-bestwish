@@ -11,25 +11,29 @@ import Foundation
 final class MockAccountUseCase: AccountUseCase {
     var shouldThrow = false
 
-    func login(type: BestWish.SocialType) async throws -> Bool {
+    func checkOnboardingState() async throws -> Bool {
         true
     }
 
-    func logout() async throws -> Bool {
+    func login(type: SocialType) async throws {
+        return
+    }
+
+    func logout() async throws {
         if shouldThrow {
             throw AppError.supabaseError(
                 SupabaseError.deleteError("logout Error")
             )
         }
-        return true
+        return
     }
     
-    func withdraw() async throws -> Bool {
+    func withdraw() async throws{
         if shouldThrow {
             throw AppError.supabaseError(
                 SupabaseError.deleteError("withdraw Error")
             )
         }
-        return true
+        return
     }
 }

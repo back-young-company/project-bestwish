@@ -8,7 +8,7 @@
 import Foundation
 
 /// 유저 엔티티
-struct User {
+struct UserEntity {
     let name: String?
     let email: String
     let nickname: String?

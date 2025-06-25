@@ -9,8 +9,8 @@ import Foundation
 @testable import BestWish
 
 final class MockUserInfoRepository: UserInfoRepository {
-    func getUserInfo() async throws -> User {
-        User(
+    func getUserInfo() async throws -> UserEntity {
+        UserEntity(
             name: nil,
             email: "",
             nickname: nil,
