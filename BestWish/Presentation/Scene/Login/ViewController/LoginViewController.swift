@@ -41,20 +41,18 @@ final class LoginViewController: UIViewController {
         bindKakaoButton()
         bindAppleButton()
 
-        // oauth & 온보딩 결과에 따른 화면 이동
+        /// oauth & 온보딩 결과에 따른 화면 이동
         viewModel.state.readyToUseService
-            .skip(1)
-            .distinctUntilChanged()
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, state in
                 if state {
-                    self.dummyCoordinator.showMainView()
+                    owner.dummyCoordinator.showMainView()
                 } else {
-                    self.dummyCoordinator.showOnboardingView()
+                    owner.dummyCoordinator.showOnboardingView()
                 }
             }.disposed(by: disposeBag)
 
-        // oauth & 온보딩 에러시 alert
+        /// oauth & 온보딩 에러시 alert
         viewModel.state.error
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in

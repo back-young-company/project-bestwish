@@ -20,8 +20,8 @@ protocol AccountRepository {
     func login(type: SocialType) async throws
 
 	/// 로그아웃
-    func logout() async throws -> Bool
+    func logout() async throws
 
     /// 회원탈퇴
-    func withdraw() async throws -> Bool
+    func withdraw() async throws
 }

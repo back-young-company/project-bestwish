@@ -36,12 +36,12 @@ final class AccountRepositoryImpl: AccountRepository {
     }
 
     /// 로그아웃
-    func logout() async throws -> Bool {
-        return try await manager.signOut(keyChain)
+    func logout() async throws {
+        try await manager.signOut(keyChain)
     }
 
     /// 회원탈퇴
-    func withdraw() async throws -> Bool {
+    func withdraw() async throws {
         try await manager.withdraw(keyChain)
     }
 

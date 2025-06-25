@@ -38,6 +38,7 @@ final class MyPageViewController: UIViewController {
             return dataSource.sectionModels[index].footer
         }
     )
+    private let dummyCoordinator = DummyCoordinator.shared
 
     init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
@@ -104,6 +105,14 @@ final class MyPageViewController: UIViewController {
             .bind(with: self, onNext: { owner, UserInfoModel in
                 owner.setHeaderView(userInfo: UserInfoModel)
             })
+            .disposed(by: disposeBag)
+
+        viewModel.state.isLogOut
+            .filter { $0 }
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                owner.dummyCoordinator.showLoginView()
+            }
             .disposed(by: disposeBag)
 
         viewModel.state.error

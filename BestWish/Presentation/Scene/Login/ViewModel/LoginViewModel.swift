@@ -29,12 +29,12 @@ final class LoginViewModel: ViewModel {
 
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
-    private let _readyToUseService = BehaviorRelay<Bool>(value: false)
+
+    private let _readyToUseService = PublishRelay<Bool>()
     private let _error = PublishSubject<AppError>()
 
     private let useCase: AccountUseCase
     private let disposeBag = DisposeBag()
-    private let dummyCoordinator = DummyCoordinator.shared
 
     init(useCase: AccountUseCase) {
         self.useCase = useCase

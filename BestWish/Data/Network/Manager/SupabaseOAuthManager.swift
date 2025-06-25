@@ -83,22 +83,21 @@ final class SupabaseOAuthManager: NSObject {
     }
 
     /// 로그아웃
-    func signOut(_ keychain: KeyChainManager) async throws -> Bool {
+    func signOut(_ keyChain: KeyChainManager) async throws {
         do {
             try await client.auth.signOut()
             // 로그아웃 후 키체인 삭제
             Task.detached(priority: .utility) {
-                await keychain.deleteAllToken()
+                await keyChain.deleteAllToken()
             }
             NSLog("Success : signOut")
-            return true
         } catch {
             throw AuthError.signOutFailed(error)
         }
     }
 
     /// 회원 탈퇴
-    func withdraw(_ keyChain: KeyChainManager) async throws -> Bool {
+    func withdraw(_ keyChain: KeyChainManager) async throws {
         let session = try await client.auth.session
         guard
             let rawProvider = session.user.appMetadata["provider"]?.rawValue,
@@ -111,14 +110,18 @@ final class SupabaseOAuthManager: NSObject {
         case .kakao:
             guard let session = try await signInKakao(),
                 let providerToken = session.providerToken else {
-                return false
+                return
             }
             NSLog("Success - 1: \(session)")
             try await unlinkKakaoAccount(providerToken)
             NSLog("Success - 2: withdraw")
             try await client.rpc("delete_current_user").execute()
             NSLog("Success - 3: delete supabase")
-            return true
+
+            // 회원탈퇴 후 키체인 삭제
+            Task.detached(priority: .utility) {
+                await keyChain.deleteAllToken()
+            }
 
         case .apple:
             // 애플 AccessToken 요청
@@ -136,10 +139,14 @@ final class SupabaseOAuthManager: NSObject {
             NSLog("Success - 5: withdraw")
             try await client.rpc("delete_current_user").execute()
             NSLog("Success - 6: delete supabase")
-            return true
-            
+
+            // 회원탈퇴 후 키체인 삭제
+            Task.detached(priority: .utility) {
+                await keyChain.deleteAllToken()
+            }
+
         default:
-            return false
+            break
         }
     }
 

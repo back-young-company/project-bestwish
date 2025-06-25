@@ -16,10 +16,10 @@ protocol AccountUseCase {
     func login(type: SocialType) async throws
 
     /// 로그아웃
-    func logout() async throws -> Bool
+    func logout() async throws
 
     /// 회원탈퇴
-    func withdraw() async throws -> Bool
+    func withdraw() async throws
 }
 
 /// 계정 정보 관련 UseCase
@@ -41,12 +41,12 @@ final class AccountUseCaseImpl: AccountUseCase {
     }
 
     /// 로그아웃
-    func logout() async throws -> Bool {
+    func logout() async throws {
         try await repository.logout()
     }
 
     /// 회원탈퇴
-    func withdraw() async throws -> Bool {
+    func withdraw() async throws {
         try await repository.withdraw()
     }
 }
