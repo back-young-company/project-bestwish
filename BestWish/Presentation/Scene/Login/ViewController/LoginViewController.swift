@@ -5,11 +5,12 @@
 //  Created by yimkeul on 6/7/25.
 //
 
-import Foundation
 import UIKit
-import RxSwift
-import RxCocoa
 
+import RxCocoa
+import RxSwift
+
+/// 로그인 View Controller
 final class LoginViewController: UIViewController {
 
     private let loginView = LoginView()

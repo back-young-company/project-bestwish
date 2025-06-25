@@ -42,18 +42,20 @@ final class MyPageViewModel: ViewModel {
 
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
-
     private let _error = PublishSubject<AppError>()
     private let _userInfo = PublishSubject<UserInfoModel>()
 
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
     private let disposeBag = DisposeBag()
+    private let dummyCoordinator = DummyCoordinator.shared
 
-    init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
+    init(
+        userInfoUseCase: UserInfoUseCase,
+        accountUseCase: AccountUseCase
+    ) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
-
         state = State(
             userInfo: _userInfo.asObservable(),
             error: _error.asObservable()
@@ -90,7 +92,10 @@ final class MyPageViewModel: ViewModel {
     private func logout() {
         Task {
             do {
-                try await accountUseCase.logout()
+                let isLogOut = try await accountUseCase.logout()
+                if isLogOut {
+                    self.dummyCoordinator.showLoginView()
+                }
             } catch {
                 handleError(error)
             }
