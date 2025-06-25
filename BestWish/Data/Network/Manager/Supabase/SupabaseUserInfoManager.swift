@@ -9,8 +9,21 @@ import Foundation
 
 import Supabase
 
+protocol SupabaseUserInfoManager {
+    /// 유저 정보 불러오기
+    func getUserInfo() async throws -> UserDTO
+    
+    /// 유저 정보 업데이트
+    func updateUserInfo(
+        profileImageCode: Int?,
+        nickname: String?,
+        gender: Int?,
+        birth: Date?
+    ) async throws
+}
+
 /// Supabase 유저 정보 매니저
-final class SupabaseUserInfoManager {
+final class SupabaseUserInfoManagerImpl: SupabaseUserInfoManager {
     private let supabase: SupabaseClient
 
     init() {

@@ -22,7 +22,7 @@ final class ShareViewController: UIViewController {
         wishListUseCase: WishListUseCaseImpl(
             repository: WishListRepositoryImpl(
                 manager: SupabaseManager(),
-                userInfoManager: SupabaseUserInfoManager()
+                userInfoManager: SupabaseUserInfoManagerImpl()
             )
         ),
         productSyncUseCase: ProductSyncUseCaseImpl(
