@@ -77,7 +77,9 @@ final class UserInfoUseCaseTests: XCTestCase {
             "a",
             "AAAAAAAAAAA",
             "테스트테스트테스트테스트",
-            "가"
+            "가",
+            "ㄱ",
+            "가ㄴ"
         ]
 
         // When
