@@ -19,20 +19,4 @@ struct ProductEntity {
     let imagePathURL: String?
     let productURL: String?
     let createdAt: Date?
-
-    /// ProductEntity -> ProductDTO 변환
-    func toDTO() -> ProductDTO {
-        return ProductDTO(
-            id: id,
-            userID: userID,
-            platform: platform,
-            title: title,
-            price: price,
-            discountRate: discountRate,
-            brand: brand,
-            imagePathURL: imagePathURL,
-            productURL: productURL,
-            createdAt: createdAt
-        )
-    }
 }

@@ -11,7 +11,7 @@ import Foundation
 final class ProductSyncManager {
     /// 외부 플랫폼 상품 fetch 시도
     func fetchProductSync(from sharedText: String) async throws -> ProductDTO {
-        guard let originalUrl = extractURL(from: sharedText) else {
+        guard let originalUrl = try extractURL(from: sharedText) else {
             throw ProductSyncError.invaildURL
         }
         
@@ -63,16 +63,20 @@ private extension ProductSyncManager {
     }
 
     /// 공유 링크 내 불필요한 텍스트를 제외한 순수 상품 URL 추출
-    func extractURL(from text: String) -> URL? {
-        let detector = try? NSDataDetector(
-            types: NSTextCheckingResult.CheckingType.link.rawValue
-        )
-        let matches = detector?.matches(
-            in: text,
-            options: [],
-            range: NSRange(location: 0, length: text.utf16.count)
-        )
-        return matches?.first?.url
+    func extractURL(from text: String) throws -> URL? {
+        do {
+            let detector = try NSDataDetector(
+                types: NSTextCheckingResult.CheckingType.link.rawValue
+            )
+            let matches = detector.matches(
+                in: text,
+                options: [],
+                range: NSRange(location: 0, length: text.utf16.count)
+            )
+            return matches.first?.url
+        } catch {
+            throw ProductSyncError.urlExtractionFailed
+        }
     }
 
     /// URL 요청을 통해 리디렉션된 최종 URL 반환 (공통)
@@ -82,11 +86,15 @@ private extension ProductSyncManager {
         request.timeoutInterval = 10
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
 
-        let (data, response) = try await URLSession.shared.data(for: request)
-        if let finalURL = response.url,
-           let html = String(data: data, encoding: .utf8) {
-            return (finalURL, html)
-        } else {
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            if let finalURL = response.url,
+               let html = String(data: data, encoding: .utf8) {
+                return (finalURL, html)
+            } else {
+                throw ProductSyncError.redirectionFailed
+            }
+        } catch {
             throw ProductSyncError.redirectionFailed
         }
     }
@@ -102,11 +110,15 @@ private extension ProductSyncManager {
             forHTTPHeaderField: "User-Agent"
         )
 
-        let (data, response) = try await URLSession.shared.data(for: request)
-        if let finalURL = response.url,
-           let html = String(data: data, encoding: .utf8) {
-            return (finalURL, html)
-        } else {
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            if let finalURL = response.url,
+               let html = String(data: data, encoding: .utf8) {
+                return (finalURL, html)
+            } else {
+                throw ProductSyncError.htmlParsingFailed
+            }
+        } catch {
             throw ProductSyncError.htmlParsingFailed
         }
     }

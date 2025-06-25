@@ -16,7 +16,7 @@ final class WishListEditViewModel: ViewModel {
     // MARK: - Action
     enum Action {
         case viewDidLoad
-        case delete(UUID, Int)
+        case delete(UUID?, Int?)
         case complete
     }
 
@@ -65,10 +65,10 @@ final class WishListEditViewModel: ViewModel {
                         owner._sections.accept([section])
                     }
                 case .delete(let uuid, let item):
-                    owner.uuidArray.append(uuid)
+                    owner.uuidArray.append(uuid ?? UUID())
 
                     var wishlists = owner._sections.value[0].items
-                    wishlists.remove(at: item)
+                    wishlists.remove(at: item ?? 0)
                     let section = WishListEditSectionModel(header: "섹션", items: wishlists)
                     owner._sections.accept([section])
                 case .complete:
@@ -95,12 +95,12 @@ private extension WishListEditViewModel {
         let result = try await self.useCase.searchWishListItems()
         return result.map { item in
             WishListProductItem(
-                uuid: item.id!,
-                productImageURL: item.imagePathURL!,
-                brandName: item.brand!,
-                productName: item.title!,
-                productSaleRate: item.discountRate! + "%",
-                productPrice: item.price!.formattedPrice() + "원",
+                uuid: item.id,
+                productImageURL: item.imagePathURL,
+                brandName: item.brand,
+                productName: item.title,
+                productSaleRate: (item.discountRate ?? "") + "%",
+                productPrice: (item.price?.formattedPrice() ?? "") + "원",
                 productDeepLink: item.productURL ?? ""
             )
         }

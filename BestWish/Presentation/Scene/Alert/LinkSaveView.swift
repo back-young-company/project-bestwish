@@ -21,13 +21,12 @@ final class LinkSaveView: UIView {
     private let _titleLabel = UILabel()
     private let _cancelButton = UIButton()
     private let _linkInputView = UISearchBar()
-    private let _dismiss = PublishSubject<Void>()
-    private let _disposeBag = DisposeBag()
 
     // MARK: - Internal Property
+    var linkView: UIView { _linkView }
     var linkInputTextField: UITextField { _linkInputView.searchTextField }
+    var cancelButton: UIButton { _cancelButton }
     var saveButton: AppButton { _saveButton }
-    var dismiss: Observable<Void> { _dismiss.asObservable() }
 
     init() {
         self._saveButton = AppButton(type: .save)
@@ -47,7 +46,6 @@ private extension LinkSaveView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setBindings()
     }
 
     func setAttributes() {
@@ -131,25 +129,5 @@ private extension LinkSaveView {
             $0.height.equalTo(43)
             $0.bottom.equalToSuperview().offset(-20)
         }
-    }
-
-    func setBindings() {
-        let tapGesture = UITapGestureRecognizer()
-        tapGesture.delegate = self
-        self.addGestureRecognizer(tapGesture)
-
-        Observable.merge(
-            tapGesture.rx.event.map { _ in },
-            _cancelButton.rx.tap.map { }
-        )
-        .subscribe(_dismiss)
-        .disposed(by: _disposeBag)
-    }
-}
-
-extension LinkSaveView: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        let touchLocation = touch.location(in: self)
-        return !_linkView.frame.contains(touchLocation)
     }
 }

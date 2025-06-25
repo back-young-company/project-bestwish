@@ -201,7 +201,7 @@ final class HomeViewController: UIViewController {
                 case let .platform(platform):
                     return owner.switchDeeplink(platform.platformDeepLink)
                 case let .wishlist(product):
-                    return owner.switchDeeplink(product.productDeepLink)
+                    return owner.switchDeeplink(product.productDeepLink ?? "")
                 case .wishlistEmpty:
                     return
                 }

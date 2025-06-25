@@ -41,6 +41,7 @@ final class LinkSaveViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        // 상품 저장 완료 시
         viewModel.state.completed
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
@@ -50,6 +51,7 @@ final class LinkSaveViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
+        // 상품 저장 실패 시
         viewModel.state.error
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, error in
@@ -59,10 +61,16 @@ final class LinkSaveViewController: UIViewController {
     }
 
     private func bindActions() {
-        linkSaveView.dismiss
-            .bind(with: self) { owner, _ in
-                owner.dismiss(animated: true)
-            }.disposed(by: disposeBag)
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.delegate = self
+        linkSaveView.addGestureRecognizer(tapGesture)
+
+        Observable.merge(
+            tapGesture.rx.event.map { _ in },
+            linkSaveView.cancelButton.rx.tap.map { }
+        ).bind(with: self) { owner, _ in
+            owner.dismiss(animated: true)
+        }.disposed(by: disposeBag)
 
         linkSaveView.saveButton.rx.tap
             .withLatestFrom(linkSaveView.linkInputTextField.rx.text.orEmpty) { _, url in
@@ -71,5 +79,12 @@ final class LinkSaveViewController: UIViewController {
             .bind(with: self) { owner, url in
                 owner.viewModel.action.onNext(.addProduct(url))
             }.disposed(by: disposeBag)
+    }
+}
+
+extension LinkSaveViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        let touchLocation = touch.location(in: linkSaveView)
+        return !linkSaveView.linkView.frame.contains(touchLocation)
     }
 }

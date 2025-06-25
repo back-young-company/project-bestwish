@@ -71,6 +71,6 @@ final class WishListUseCaseImpl: WishListUseCase {
 
     /// 위시 아이템 추가
     func addProductToWishList(product: ProductEntity) async throws {
-        try await repository.addProductToWishList(product: product.toDTO())
+        try await repository.addProductToWishList(product: product)
     }
 }

@@ -175,12 +175,12 @@ private extension HomeViewModel {
         let result = try await self.useCase.searchWishListItems(query: query, platform: platform)
         return result.map { item in
             WishListProductItem(
-                uuid: item.id!,
-                productImageURL: item.imagePathURL!,
-                brandName: item.brand!,
-                productName: item.title!,
-                productSaleRate: item.discountRate! + "%",
-                productPrice: item.price!.formattedPrice() + "원",
+                uuid: item.id,
+                productImageURL: item.imagePathURL,
+                brandName: item.brand,
+                productName: item.title,
+                productSaleRate: (item.discountRate ?? "") + "%",
+                productPrice: (item.price?.formattedPrice() ?? "") + "원",
                 productDeepLink: item.productURL ?? ""
             )
         }

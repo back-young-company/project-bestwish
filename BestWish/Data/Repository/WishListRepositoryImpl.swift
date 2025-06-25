@@ -72,10 +72,10 @@ final class WishListRepositoryImpl: WishListRepository {
     }
 
     /// 위시 아이템 추가
-    func addProductToWishList(product: ProductDTO) async throws {
+    func addProductToWishList(product: ProductEntity) async throws {
         do {
             try await manager.addProductToWishList(
-                product: product //convertToProductDTO(from: product)
+                product: convertToProductDTO(from: product)
             )
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
@@ -87,45 +87,31 @@ final class WishListRepositoryImpl: WishListRepository {
 extension WishListRepositoryImpl {
     /// ProductDTO -> Product Entity 매핑
     private func convertToProduct(from dto: ProductDTO) throws -> ProductEntity {
-        guard let id = dto.id,
-              let userID = dto.userID,
-              let platform = dto.platform,
-              let title = dto.title,
-              let price = dto.price,
-              let discountRate = dto.discountRate,
-              let brand = dto.brand,
-              let imagePathURL = dto.imagePathURL,
-              let productURL = dto.productURL,
-              let createdAt = dto.createdAt
-        else {
-            throw MappingError.productDTOToProduct
-        }
-
         return ProductEntity(
-            id: id,
-            userID: userID,
-            platform: platform,
-            title: title,
-            price: price,
-            discountRate: discountRate,
-            brand: brand,
-            imagePathURL: imagePathURL,
-            productURL: productURL,
-            createdAt: createdAt
+            id: dto.id,
+            userID: dto.userID,
+            platform: dto.platform,
+            title: dto.title,
+            price: dto.price,
+            discountRate: dto.discountRate,
+            brand: dto.brand,
+            imagePathURL: dto.imagePathURL,
+            productURL: dto.productURL,
+            createdAt: dto.createdAt
         )
     }
 
     /// ProductMetadata -> ProductDTO 매핑
-    private func convertToProductDTO(from entity: ProductMetadata) -> ProductDTO {
+    private func convertToProductDTO(from entity: ProductEntity) -> ProductDTO {
         ProductDTO(
             id: UUID(),
             userID: nil,
             platform: entity.platform,
-            title: entity.productName,
+            title: entity.title,
             price: entity.price,
             discountRate: entity.discountRate,
-            brand: entity.brandName,
-            imagePathURL: entity.imageURL,
+            brand: entity.brand,
+            imagePathURL: entity.imagePathURL,
             productURL: entity.productURL,
             createdAt: nil
         )

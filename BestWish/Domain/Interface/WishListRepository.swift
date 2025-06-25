@@ -26,5 +26,5 @@ protocol WishListRepository {
     func deleteWishListItem(id: UUID) async throws
 
     /// 위시 아이템 추가
-    func addProductToWishList(product: ProductDTO) async throws
+    func addProductToWishList(product: ProductEntity) async throws
 }
