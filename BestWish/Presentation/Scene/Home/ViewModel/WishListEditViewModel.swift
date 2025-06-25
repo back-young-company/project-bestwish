@@ -99,8 +99,8 @@ private extension WishListEditViewModel {
                 productImageURL: item.imagePathURL!,
                 brandName: item.brand!,
                 productName: item.title!,
-                productSaleRate: "\(item.discountRate)%",
-                productPrice: "\(item.price?.formattedPrice())원",
+                productSaleRate: item.discountRate! + "%",
+                productPrice: item.price!.formattedPrice() + "원",
                 productDeepLink: item.productURL ?? ""
             )
         }

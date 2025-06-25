@@ -70,7 +70,7 @@ private extension LinkSaveViewModel {
     func addProductToWishList(_ text: String) {
         Task {
             do {
-                let entity = try await productSyncUseCase.productDTOToEntity(from: text)
+                let entity = try await productSyncUseCase.sendProductEntity(from: text)
                 try await wishListUseCase.addProductToWishList(product: entity)
                 _completed.accept(())
             } catch {

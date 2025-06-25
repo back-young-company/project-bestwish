@@ -17,7 +17,7 @@ final class ProductSyncRepositoryImpl: ProductSyncRepository {
     }
 
     /// 상품 동기 메서드
-    func syncProduct(from sharedText: String) async throws -> ProductDTO {
-        return try await manager.fetchProductSync(from: sharedText)
+    func syncProduct(from sharedText: String) async throws -> ProductEntity {
+        return try await manager.fetchProductSync(from: sharedText).toEntity()
     }
 }
