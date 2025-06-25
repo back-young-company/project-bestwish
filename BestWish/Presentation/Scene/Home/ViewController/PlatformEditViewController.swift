@@ -23,6 +23,17 @@ final class PlatformEditViewController: UIViewController {
 
     weak var delegate: HomeViewControllerUpdate?
 
+    private lazy var dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
+        cell.configure(type: item)
+
+        return cell
+    }, canEditRowAtIndexPath: { dataSource, indexPath in
+        return true
+    }, canMoveRowAtIndexPath: { dataSource, indexPath in
+        return true
+    })
+
     init(platformEditViewModel: PlatformEditViewModel) {
         self.platformEditViewModel = platformEditViewModel
         super.init(nibName: nil, bundle: nil)
@@ -38,29 +49,22 @@ final class PlatformEditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        setNavigationBar()
-        
+
         bindViewModel()
         bindActions()
         
         platformEditView.tableView.isEditing = true
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        hidesTabBar()
+        self.navigationController?.navigationBar.isHidden = false
+        setNavigationBar(alignment: .center, title: "플랫폼 편집")
+    }
+
     private func bindViewModel() {
-        let dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
-            cell.configure(type: item)
-            
-            return cell
-        }, canEditRowAtIndexPath: { dataSource, indexPath in
-            return true
-        }, canMoveRowAtIndexPath: { dataSource, indexPath in
-            return true
-        })
-        
         platformEditViewModel.state.sections
             .bind(to: platformEditView.tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
@@ -77,12 +81,6 @@ final class PlatformEditViewController: UIViewController {
     private func bindActions() {
         platformEditViewModel.action.onNext(.viewDidLoad)
         
-        platformEditView.backButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.navigationController?.popViewController(animated: true)
-            }
-            .disposed(by: disposeBag)
-        
         platformEditView.tableView.rx.itemMoved
             .withLatestFrom(platformEditViewModel.state.sections) { indexPath, sections in
                 return (indexPath, sections)
@@ -98,14 +96,8 @@ final class PlatformEditViewController: UIViewController {
                 
                 owner.platformEditViewModel.action.onNext(.itemMoved(currentItems))
                 owner.updatedIndices = currentItems.compactMap { item in
-                    ShopPlatform.allCases.firstIndex(where: { $0.platformName == item.platformName })
+                    PlatformEntity.allCases.firstIndex(where: { $0.platformName == item.platformName })
                 }
-            }
-            .disposed(by: disposeBag)
-        
-        platformEditView.headerView.completeButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
             }
             .disposed(by: disposeBag)
         
@@ -124,33 +116,23 @@ final class PlatformEditViewController: UIViewController {
 
 // MARK: - private 메서드 정리
 private extension PlatformEditViewController {
-    /// 네비게이션 바 설정
-    private func setNavigationBar() {
-        self.title = "플랫폼 편집"
-        self.navigationController?.navigationBar.isHidden = false
-
-        let backItem = UIBarButtonItem(customView: platformEditView.backButton)
-        self.navigationItem.leftBarButtonItem = backItem
-
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.titleTextAttributes = [
-            .font: UIFont.font(.pretendardBold, ofSize: 18),
-            .foregroundColor: UIColor.black
-        ]
-        appearance.shadowColor = .clear
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-
     /// 헤더 뷰 설정
     private func setupHeaderView(count: Int) {
-        platformEditView.headerView.configure(count: count)
+        let frame = CGRect(
+            x: 0,
+            y: 0,
+            width: platformEditView.frame.width,
+            height: 40
+        )
+        let header = PlatformEditHeaderView(frame: frame)
+        header.configure(count: count)
+        platformEditView.tableView.tableHeaderView = header
 
-        let targetSize = CGSize(width: view.bounds.width, height: 0)
-        let height = platformEditView.headerView.systemLayoutSizeFitting(targetSize).height
-        platformEditView.headerView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
-        platformEditView.tableView.tableHeaderView = platformEditView.headerView
+        header.completeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
+            }
+            .disposed(by: disposeBag)
     }
 }
 

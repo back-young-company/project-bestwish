@@ -12,27 +12,16 @@ import RxSwift
 final class MyPageViewModel: ViewModel {
     // MARK: - Action
     enum Action {
+        case getSection
         case getUserInfo
         case logout
     }
 
     // MARK: - State
     struct State {
-        let sections: Observable<[MyPageSection]> = Observable.just(
-            MyPageSectionType.allCases.map { type in
-                switch type {
-                case .userInfo:
-                    MyPageSection(header: type.title, items: type.cell.map {
-                        MyPageCellItem.seeMore(type: $0)
-                    })
-                case .help, .setting:
-                    MyPageSection(header: type.title, items: type.cell.map {
-                        MyPageCellItem.basic(type: $0)
-                    })
-                }
-            }
-        )
+        let sections: Observable<[MyPageSection]>
         let userInfo: Observable<UserInfoModel>
+        let isLogOut: Observable<Void>
         let error: Observable<AppError>
     }
 
@@ -43,19 +32,25 @@ final class MyPageViewModel: ViewModel {
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
 
-    private let _error = PublishSubject<AppError>()
+    private let _sections = PublishSubject<[MyPageSection]>()
     private let _userInfo = PublishSubject<UserInfoModel>()
+    private let _isLogOut = PublishRelay<Void>()
+    private let _error = PublishSubject<AppError>()
 
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
     private let disposeBag = DisposeBag()
 
-    init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
+    init(
+        userInfoUseCase: UserInfoUseCase,
+        accountUseCase: AccountUseCase
+    ) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
-
         state = State(
+            sections: _sections.asObservable(),
             userInfo: _userInfo.asObservable(),
+            isLogOut: _isLogOut.asObservable(),
             error: _error.asObservable()
         )
 
@@ -65,12 +60,32 @@ final class MyPageViewModel: ViewModel {
     private func bindAction() {
         _action.bind(with: self) { owner, action in
             switch action {
+            case .getSection:
+                owner.getSection()
             case .getUserInfo:
                 owner.getUserInfo()
             case .logout:
                 owner.logout()
             }
         }.disposed(by: disposeBag)
+    }
+
+    /// 섹션 정보 가져오기
+    private func getSection() {
+        let sections = MyPageSectionType.allCases.map { type in
+            switch type {
+            case .userInfo:
+                MyPageSection(header: type.title, items: type.cell.map {
+                    MyPageCellItem.seeMore(type: $0)
+                })
+            case .help, .setting:
+                MyPageSection(header: type.title, items: type.cell.map {
+                    MyPageCellItem.basic(type: $0)
+                })
+            }
+        }
+        _sections.onNext(sections)
+        _sections.onCompleted()
     }
 
     /// 유저 정보 가져오기
@@ -91,6 +106,7 @@ final class MyPageViewModel: ViewModel {
         Task {
             do {
                 try await accountUseCase.logout()
+                _isLogOut.accept(())
             } catch {
                 handleError(error)
             }
@@ -98,7 +114,7 @@ final class MyPageViewModel: ViewModel {
     }
 
     /// User Entity -> UserInfoModel 변환 메서드
-    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+    private func convertUserInfoModel(from user: UserEntity) -> UserInfoModel {
         UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,

@@ -15,6 +15,7 @@ final class ProfileUpdateView: UIView {
 
     // MARK: - Private Property
     private let _profileImageView = UIImageView()
+    private let _profileEditImageView = UIImageView()
     private let _emailStackView = VerticalStackView(spacing: 12)
     private let _emailLabel = GroupTitleLabel(title: "이메일")
     private let _emailValueLabel = PaddingLabel(top: 0, left: 10, bottom: 0, right: 0)
@@ -70,9 +71,15 @@ private extension ProfileUpdateView {
         self.backgroundColor = .gray0
         _profileImageView.do {
             $0.contentMode = .scaleAspectFit
-            $0.layer.cornerRadius = CGFloat(88).fitWidth / 2
-            $0.clipsToBounds = true
             $0.isUserInteractionEnabled = true
+        }
+
+        _profileEditImageView.do {
+            $0.image = .profileEdit
+            $0.layer.shadowColor = UIColor(hex: "#979797")?.cgColor
+            $0.layer.shadowOpacity = 0.2
+            $0.layer.shadowRadius = 4
+            $0.layer.shadowOffset = CGSize(width: 0, height: 0)
         }
 
         _emailValueLabel.do {
@@ -104,6 +111,7 @@ private extension ProfileUpdateView {
             _nicknameStackView,
             _confirmChangeButton
         )
+        _profileImageView.addSubview(_profileEditImageView)
         _emailStackView.addArrangedSubviews(
             _emailLabel,
             _emailValueLabel
@@ -120,6 +128,11 @@ private extension ProfileUpdateView {
             $0.top.equalTo(safeAreaLayoutGuide).offset(28)
             $0.size.equalTo(CGFloat(88).fitWidth)
             $0.centerX.equalToSuperview()
+        }
+
+        _profileEditImageView.snp.makeConstraints {
+            $0.size.equalTo(CGFloat(32).fitWidth)
+            $0.trailing.bottom.equalToSuperview()
         }
 
         _emailStackView.snp.makeConstraints { 
@@ -143,7 +156,7 @@ private extension ProfileUpdateView {
         _confirmChangeButton.snp.makeConstraints { 
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
-            $0.height.equalTo(54)
+            $0.height.equalTo(CGFloat(54).fitHeight)
         }
     }
 }

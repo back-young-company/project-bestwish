@@ -11,7 +11,7 @@ import Foundation
 protocol UserInfoRepository {
 
     /// 유저 정보 가져오기
-    func getUserInfo() async throws -> User
+    func getUserInfo() async throws -> UserEntity
 
     /// 유저 정보 업데이트
     func updateUserInfo(

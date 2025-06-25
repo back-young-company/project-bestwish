@@ -52,6 +52,7 @@ private extension MyPageCell {
         _seeMoreButton.do {
             $0.setImage(.init(systemName: "chevron.right"), for: .normal)
             $0.tintColor = .gray200
+            $0.isEnabled = false
         }
     }
 

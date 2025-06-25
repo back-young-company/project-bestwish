@@ -40,7 +40,7 @@ extension HomeSectionModel: SectionModelType {
 
 /// 플랫폼 Entity
 struct PlatformItem: Equatable {
-    var platform: ShopPlatform = .musinsa
+    var platform: PlatformEntity?
     let platformName: String
     let platformImage: String
     var platformDeepLink: String
@@ -48,11 +48,11 @@ struct PlatformItem: Equatable {
 
 /// 위시리스트 Entity
 struct WishListProductItem: Equatable {
-    let uuid: UUID
-    let productImageURL: String
-    let brandName: String
-    let productName: String
-    let productSaleRate: String
-    let productPrice: String
-    let productDeepLink: String
+    let uuid: UUID?
+    let productImageURL: String?
+    let brandName: String?
+    let productName: String?
+    let productSaleRate: String?
+    let productPrice: String?
+    let productDeepLink: String?
 }

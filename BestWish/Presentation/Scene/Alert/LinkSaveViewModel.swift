@@ -7,33 +7,44 @@
 
 import Foundation
 
+import RxRelay
 import RxSwift
-import RxCocoa
 
+/// 링크 저장 View Model
 final class LinkSaveViewModel: ViewModel {
+
+    // MARK: - Action
     enum Action {
-        case product(ProductMetadataDTO)
+        case addProduct(String)
     }
-    
+
+    // MARK: - State
     struct State {
         let completed: Observable<Void>
         let error: Observable<Error>
     }
-    
+
+    // MARK: - Internal Property
+    var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
+
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+
     private let _completed = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
     
-    private let useCase: WishListUseCase
-    
-    private let _action = PublishSubject<Action>()
-    var action: AnyObserver<Action> { _action.asObserver() }
-    
-    let state: State
-    
+    private let wishListUseCase: WishListUseCase
+    private let productSyncUseCase: ProductSyncUseCase
+
     private let disposeBag = DisposeBag()
     
-    init(useCase: WishListUseCase) {
-        self.useCase = useCase
+    init(
+        wishListUseCase: WishListUseCase,
+        productSyncUseCase: ProductSyncUseCase
+    ) {
+        self.wishListUseCase = wishListUseCase
+        self.productSyncUseCase = productSyncUseCase
         state = State(
             completed: _completed.asObservable(),
             error: _error.asObservable()
@@ -45,21 +56,26 @@ final class LinkSaveViewModel: ViewModel {
         _action
             .subscribe(with: self) { owner, action in
                 switch action {
-                case .product(let product):
-                    Task {
-                        do {
-                            try await owner.addProductToWishList(product: product.toEntity())
-                            owner._completed.accept(())
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
+                case let .addProduct(url):
+                    return owner.addProductToWishList(url)
                 }
             }
             .disposed(by: disposeBag)
     }
-    
-    private func addProductToWishList(product: ProductMetadata) async throws {
-        try await self.useCase.addProductToWishList(product: product)
+}
+
+// MARK: - private 메서드
+private extension LinkSaveViewModel {
+    /// 위시리스트 상품 추가
+    func addProductToWishList(_ text: String) {
+        Task {
+            do {
+                let entity = try await productSyncUseCase.sendProductEntity(from: text)
+                try await wishListUseCase.addProductToWishList(product: entity)
+                _completed.accept(())
+            } catch {
+                _error.accept(error)
+            }
+        }
     }
 }

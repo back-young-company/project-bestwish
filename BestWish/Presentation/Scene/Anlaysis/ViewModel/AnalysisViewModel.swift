@@ -76,11 +76,11 @@ final class AnalysisViewModel: ViewModel {
         let analysisSectionModel:[AnalysisSectionModel] = [
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
-            AnalysisSectionModel(header: nil, type: .platform, items: ShopPlatform.allCases.filter{ $0 != .all }.map {
+            AnalysisSectionModel(header: nil, type: .platform, items: PlatformEntity.allCases.filter{ $0 != .all }.map {
                 .platform(platform: PlatformItem(
                     platform: $0,
                     platformName: $0.platformName,
-                    platformImage: $0.rawValue,
+                    platformImage: $0.platformImage,
                     platformDeepLink: $0.platformDeepLink
                 ))
             })
@@ -201,11 +201,11 @@ private extension AnalysisViewModel {
         
         switch currentPlatform.value?.platform {
         case .musinsa:
-            platform?.platformDeepLink = ShopPlatform.musinsa.searchResultDeepLink(keyword: query)
+            platform?.platformDeepLink = PlatformEntity.musinsa.searchResultDeepLink(keyword: query)
         case .ably:
-            platform?.platformDeepLink = ShopPlatform.ably.searchResultDeepLink(keyword: query)
+            platform?.platformDeepLink = PlatformEntity.ably.searchResultDeepLink(keyword: query)
         case .zigzag:
-            platform?.platformDeepLink = ShopPlatform.zigzag.searchResultDeepLink(keyword: query)
+            platform?.platformDeepLink = PlatformEntity.zigzag.searchResultDeepLink(keyword: query)
         default: break
         }
         currentPlatform.accept(platform)

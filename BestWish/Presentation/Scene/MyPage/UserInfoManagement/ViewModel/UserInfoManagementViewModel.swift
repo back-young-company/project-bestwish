@@ -22,6 +22,7 @@ final class UserInfoManagementViewModel: ViewModel {
     // MARK: - State
     struct State {
         let authProvider: Observable<String?>
+        let isWithdraw: Observable<Void>
         let error: Observable<AppError>
     }
 
@@ -32,18 +33,23 @@ final class UserInfoManagementViewModel: ViewModel {
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
 
-    private let _error = PublishSubject<AppError>()
     private let _authProvider = PublishSubject<String?>()
+    private let _isWithdraw = PublishRelay<Void>()
+    private let _error = PublishSubject<AppError>()
 
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
     private let disposeBag = DisposeBag()
 
-    init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
+    init(
+        userInfoUseCase: UserInfoUseCase,
+        accountUseCase: AccountUseCase
+    ) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
         state = State(
             authProvider: _authProvider.asObservable(),
+            isWithdraw: _isWithdraw.asObservable(),
             error: _error.asObservable()
         )
 
@@ -79,8 +85,9 @@ final class UserInfoManagementViewModel: ViewModel {
         Task {
             do {
                 try await accountUseCase.withdraw()
+                _isWithdraw.accept(())
             } catch {
-               handleError(error)
+                handleError(error)
             }
         }
     }

@@ -6,19 +6,22 @@
 //
 
 import Foundation
-import Supabase
+
 import Alamofire
+import Supabase
 
+// MARK: - SupabaseOAuth를 활용한 카카오 로그인
 extension SupabaseOAuthManager {
-    func signInKakao() async throws -> Supabase.Session? {
-        guard let redirectURL = Bundle.main.redirectURL else {
-            print("URL Scheme 못가져옴")
-            return nil
-        }
-        do {
-            let session = try await client.auth.signInWithOAuth(provider: Provider.kakao, redirectTo: redirectURL) { [weak self] session in
-                guard let self else { return }
 
+    /// 카카오 로그인
+    func signInKakao() async throws -> Supabase.Session? {
+        let redirectURL = Bundle.main.redirectURL
+        do {
+            let session = try await client.auth.signInWithOAuth(
+                provider: Provider.kakao,
+                redirectTo: redirectURL
+            ) { [weak self] session in
+                guard let self else { return }
                 self.kakaoAuthSession = session
                 session.presentationContextProvider = self
                 session.prefersEphemeralWebBrowserSession = true
@@ -28,11 +31,12 @@ extension SupabaseOAuthManager {
         } catch {
             kakaoAuthSession?.cancel()
             kakaoAuthSession = nil
-            print("error: \(error.localizedDescription)")
-            return nil
+            NSLog("error: \(error.localizedDescription)")
+            throw AuthError.signInFailed(.kakao, error)
         }
     }
 
+    /// 카카오 회원탈퇴
     func unlinkKakaoAccount(_ token: String) async throws {
         try await withCheckedThrowingContinuation { continuation in
             let url = "https://kapi.kakao.com/v1/user/unlink"
@@ -45,15 +49,14 @@ extension SupabaseOAuthManager {
                 .responseData { response in
                 switch response.result {
                 case .success:
-                    print("리프레시 토큰 리보크 성공. 상태 코드:", response.response?.statusCode ?? -1)
-                    let bodyString = response.data.flatMap { String(data: $0, encoding: .utf8) } ?? "응답 바디 없음"
-                    print(bodyString)
-                    continuation.resume() // 성공
-                case .failure(let error):
+                    NSLog("카카오 회원탈퇴 성공. 상태 코드: \(response.response?.statusCode ?? -1)")
+                    continuation.resume()
+
+                case let .failure(error):
                     let statusCode = response.response?.statusCode ?? -1
                     let bodyString = response.data.flatMap { String(data: $0, encoding: .utf8) } ?? "응답 바디 없음"
-                    print("리프레시 토큰 리보크 실패. HTTP \(statusCode), 응답: \(bodyString), 오류: \(error.localizedDescription)")
-                    continuation.resume(throwing: error) // 실패
+                    NSLog("리프레시 토큰 리보크 실패. HTTP \(statusCode), 응답: \(bodyString), 오류: \(error.localizedDescription)")
+                    continuation.resume(throwing: AuthError.withdrawFailed(error))
                 }
             }
         }

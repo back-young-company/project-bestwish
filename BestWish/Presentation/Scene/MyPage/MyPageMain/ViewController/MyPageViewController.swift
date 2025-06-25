@@ -59,6 +59,7 @@ final class MyPageViewController: UIViewController {
 
         bindViewModel()
         bindView()
+        viewModel.action.onNext(.getSection)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -103,6 +104,13 @@ final class MyPageViewController: UIViewController {
             .bind(with: self, onNext: { owner, UserInfoModel in
                 owner.setHeaderView(userInfo: UserInfoModel)
             })
+            .disposed(by: disposeBag)
+
+        viewModel.state.isLogOut
+            .observe(on: MainScheduler.instance)
+            .bind { _ in
+                DummyCoordinator.shared.showLoginView()
+            }
             .disposed(by: disposeBag)
 
         viewModel.state.error

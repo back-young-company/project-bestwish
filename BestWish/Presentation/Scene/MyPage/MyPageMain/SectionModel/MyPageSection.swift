@@ -103,3 +103,8 @@ extension MyPageCellType {
         self == .userInfo
     }
 }
+
+// MARK: - 테스트용
+#if DEBUG
+extension MyPageCellType: CaseIterable { }
+#endif

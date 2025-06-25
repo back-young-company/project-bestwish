@@ -37,6 +37,7 @@ final class HomeViewModel: ViewModel {
 
     // MARK: - Private Property
     private let _action = PublishSubject<Action>()
+
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
     private let _platformFilter = BehaviorRelay<[(Int, Int)]>(value: [])
     private let _platformSequence = BehaviorRelay<[Int]>(value: [])
@@ -160,10 +161,10 @@ private extension HomeViewModel {
     func getPlatformSequence() async throws -> [PlatformItem] {
         let result = try await self.useCase.getPlatformSequence()
         return result.map { platform in
-            let shopPlatform = ShopPlatform.allCases[platform]
+            let shopPlatform = PlatformEntity.allCases[platform]
             return PlatformItem(
                 platformName: shopPlatform.platformName,
-                platformImage: shopPlatform.rawValue,
+                platformImage: shopPlatform.platformImage,
                 platformDeepLink: shopPlatform.platformDeepLink
             )
         }
@@ -178,8 +179,8 @@ private extension HomeViewModel {
                 productImageURL: item.imagePathURL,
                 brandName: item.brand,
                 productName: item.title,
-                productSaleRate: "\(item.discountRate)%",
-                productPrice: "\(item.price.formattedPrice())원",
+                productSaleRate: (item.discountRate ?? "") + "%",
+                productPrice: (item.price?.formattedPrice() ?? "") + "원",
                 productDeepLink: item.productURL ?? ""
             )
         }

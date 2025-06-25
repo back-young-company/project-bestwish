@@ -68,6 +68,12 @@ final class UserInfoManagementViewController: UIViewController {
                 owner.managementView.configure(authProvider: authProvider)
             }.disposed(by: disposeBag)
 
+        viewModel.state.isWithdraw
+            .observe(on: MainScheduler.instance)
+            .bind { _ in
+                DummyCoordinator.shared.showLoginView()
+            }.disposed(by: disposeBag)
+
         viewModel.state.error
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in

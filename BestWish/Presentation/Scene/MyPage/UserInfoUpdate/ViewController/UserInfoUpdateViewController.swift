@@ -53,12 +53,22 @@ final class UserInfoUpdateViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        updateView.genderSelection.selectedGender
-            .distinctUntilChanged()
-            .map { ($0 ?? .nothing).rawValue }
-            .bind(with: self) { owner, genderIndex in
-                owner.viewModel.action.onNext(.updateGender(genderIndex))
-            }
+        updateView.genderSelection.maleButton.rx.tap
+            .asDriver()
+            .map { .updateGender(.male) }
+            .drive(viewModel.action)
+            .disposed(by: disposeBag)
+
+        updateView.genderSelection.femaleButton.rx.tap
+            .asDriver()
+            .map { .updateGender(.female) }
+            .drive(viewModel.action)
+            .disposed(by: disposeBag)
+
+        updateView.genderSelection.nothingButton.rx.tap
+            .asDriver()
+            .map { .updateGender(.nothing) }
+            .drive(viewModel.action)
             .disposed(by: disposeBag)
 
         updateView.saveButton.rx.tap

@@ -7,17 +7,13 @@
 
 import Foundation
 
+/// 에이블리 상품 Response DTO
 struct AblyResponseDTO: Codable {
     let props: Props
 }
 
 struct Props: Codable {
-    let pageProps: PageProps
     let serverQueryClient: ServerQueryClient
-}
-
-struct PageProps: Codable {
-//    let serverQueryClient: ServerQueryClient
 }
 
 struct ServerQueryClient: Codable {

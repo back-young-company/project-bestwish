@@ -17,6 +17,8 @@ protocol AppErrorProtocol: LocalizedError {
 enum AppError: AppErrorProtocol {
     case supabaseError(AppErrorProtocol)
     case mappingError(AppErrorProtocol)
+    case authError(AppErrorProtocol)
+    case keyChainError(AppErrorProtocol)
     case unknown(Error)
 }
 
@@ -25,7 +27,9 @@ extension AppError {
     var errorDescription: String? {
         switch self {
         case let .supabaseError(error),
-             let .mappingError(error):
+             let .mappingError(error),
+             let .authError(error),
+             let .keyChainError(error):
             return error.errorDescription
         case .unknown:
             return "알 수 없는 에러가 발생했습니다."
@@ -35,7 +39,9 @@ extension AppError {
     var debugDescription: String {
         switch self {
         case let .supabaseError(error),
-             let .mappingError(error):
+             let .mappingError(error),
+             let .authError(error),
+             let .keyChainError(error):
             return error.debugDescription
         case let .unknown(error):
             return "unkownError: \(error.localizedDescription)"

@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// 성별 선택 라디오 버튼
 final class RadioButton: UIButton {
 
     init(title: String) {
