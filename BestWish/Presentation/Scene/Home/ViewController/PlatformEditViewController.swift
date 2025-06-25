@@ -49,17 +49,21 @@ final class PlatformEditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        setNavigationBar()
-        
+
         bindViewModel()
         bindActions()
         
         platformEditView.tableView.isEditing = true
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        hidesTabBar()
+        self.navigationController?.navigationBar.isHidden = false
+        setNavigationBar(alignment: .center, title: "플랫폼 편집")
+    }
+
     private func bindViewModel() {
         platformEditViewModel.state.sections
             .bind(to: platformEditView.tableView.rx.items(dataSource: dataSource))
@@ -76,12 +80,6 @@ final class PlatformEditViewController: UIViewController {
     
     private func bindActions() {
         platformEditViewModel.action.onNext(.viewDidLoad)
-        
-        platformEditView.backButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.navigationController?.popViewController(animated: true)
-            }
-            .disposed(by: disposeBag)
         
         platformEditView.tableView.rx.itemMoved
             .withLatestFrom(platformEditViewModel.state.sections) { indexPath, sections in
@@ -124,25 +122,6 @@ final class PlatformEditViewController: UIViewController {
 
 // MARK: - private 메서드 정리
 private extension PlatformEditViewController {
-    /// 네비게이션 바 설정
-    private func setNavigationBar() {
-        self.title = "플랫폼 편집"
-        self.navigationController?.navigationBar.isHidden = false
-
-        let backItem = UIBarButtonItem(customView: platformEditView.backButton)
-        self.navigationItem.leftBarButtonItem = backItem
-
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.titleTextAttributes = [
-            .font: UIFont.font(.pretendardBold, ofSize: 18),
-            .foregroundColor: UIColor.black
-        ]
-        appearance.shadowColor = .clear
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-    }
-
     /// 헤더 뷰 설정
     private func setupHeaderView(count: Int) {
         platformEditView.headerView.configure(count: count)

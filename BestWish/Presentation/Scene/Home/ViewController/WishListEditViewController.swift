@@ -71,11 +71,18 @@ final class WishListEditViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavigationBar()
         bindViewModel()
-        bindActions()
+        wishEditViewModel.action.onNext(.viewDidLoad)
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        hidesTabBar()
+        self.navigationController?.navigationBar.isHidden = false
+        setNavigationBar(alignment: .center, title: "위시리스트 편집")
+    }
+
     private func bindViewModel() {
         wishEditViewModel.state.sections
             .bind(to: wishEditView.collectionView.rx.items(dataSource: dataSource))
@@ -97,16 +104,6 @@ final class WishListEditViewController: UIViewController {
             }
             .disposed(by: disposeBag)
     }
-    
-    private func bindActions() {
-        wishEditViewModel.action.onNext(.viewDidLoad)
-        
-        wishEditView.backButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.navigationController?.popViewController(animated: true)
-            }
-            .disposed(by: disposeBag)
-    }
 }
 
 // MARK: - private 메서드
@@ -116,24 +113,5 @@ private extension WishListEditViewController {
         wishEditView.collectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
             return NSCollectionLayoutSection.createWishlistSection()
         }
-    }
-
-    /// 네비게이션 바 설정
-    private func setNavigationBar() {
-        self.title = "편집"
-        self.navigationController?.navigationBar.isHidden = false
-
-        let backItem = UIBarButtonItem(customView: wishEditView.backButton)
-        self.navigationItem.leftBarButtonItem = backItem
-
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.titleTextAttributes = [
-            .font: UIFont.font(.pretendardBold, ofSize: 18),
-            .foregroundColor: UIColor.black
-        ]
-        appearance.shadowColor = .clear
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
 }

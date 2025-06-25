@@ -81,7 +81,6 @@ final class HomeViewController: UIViewController {
                 headerView.configure(title: "플랫폼 바로가기")
                 headerView.editButton.rx.tap
                     .bind(with: self) { owner, _ in
-                        owner.hidesTabBar()
                         let vc = DIContainer.shared.makePlatformEditViewController()
                         vc.delegate = owner
                         owner.navigationController?.pushViewController(vc, animated: true)
@@ -146,7 +145,6 @@ final class HomeViewController: UIViewController {
 
                     headerView.editButton.rx.tap
                         .bind(with: self) { owner, _ in
-                            owner.hidesTabBar()
                             let vc = DIContainer.shared.makeWishlistEditViewController()
                             vc.delegate = owner
                             owner.navigationController?.pushViewController(vc, animated: true)
@@ -173,19 +171,22 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setNavigationBar(alignment: .center, title: "")
+
         setNotification()
         bindViewModel()
         
         homeViewModel.action.onNext(.getDataSource)
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        showTabBar()
+
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+
         self.navigationController?.navigationBar.isHidden = true
+        showTabBar()
+
     }
-    
+
     private func bindViewModel() {
 
         

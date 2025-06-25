@@ -14,12 +14,10 @@ import Then
 final class PlatformEditView: UIView {
 
     // MARK: - Private Property
-    private let _backButton = UIButton()
     private let _headerView = PlatformEditHeaderView()
     private let _tableView = UITableView()
 
     // MARK: - Internal Property
-    var backButton: UIButton { _backButton }
     var headerView: PlatformEditHeaderView { _headerView }
     var tableView: UITableView { _tableView }
 
@@ -49,14 +47,6 @@ private extension PlatformEditView {
                 PlatformEditCell.self,
                 forCellReuseIdentifier: PlatformEditCell.identifier)
             $0.separatorStyle = .none
-        }
-        
-        _backButton.do {
-            var config = UIButton.Configuration.plain()
-            config.image = UIImage(systemName: "chevron.left")
-            config.contentInsets = .init(top: 2, leading: 6, bottom: 2, trailing: 6)
-            $0.configuration = config
-            $0.tintColor = .black
         }
     }
 
