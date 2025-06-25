@@ -14,11 +14,9 @@ import Then
 final class PlatformEditView: UIView {
 
     // MARK: - Private Property
-    private let _headerView = PlatformEditHeaderView()
     private let _tableView = UITableView()
 
     // MARK: - Internal Property
-    var headerView: PlatformEditHeaderView { _headerView }
     var tableView: UITableView { _tableView }
 
     override init(frame: CGRect) {

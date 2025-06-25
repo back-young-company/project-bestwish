@@ -68,6 +68,7 @@ private extension PlatformEditHeaderView {
         _platformCountLabel.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview().inset(14)
             $0.leading.equalToSuperview().offset(20)
+            $0.height.equalTo(12)
         }
         
         _completeButton.snp.makeConstraints {

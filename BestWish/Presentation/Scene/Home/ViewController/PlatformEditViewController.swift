@@ -101,12 +101,6 @@ final class PlatformEditViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        platformEditView.headerView.completeButton.rx.tap
-            .bind(with: self) { owner, _ in
-                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
-            }
-            .disposed(by: disposeBag)
-        
         platformEditViewModel.state.sendDelegate
             .observe(on: MainScheduler.asyncInstance)
             .bind(with: self) { owner, _ in
@@ -124,12 +118,21 @@ final class PlatformEditViewController: UIViewController {
 private extension PlatformEditViewController {
     /// 헤더 뷰 설정
     private func setupHeaderView(count: Int) {
-        platformEditView.headerView.configure(count: count)
+        let frame = CGRect(
+            x: 0,
+            y: 0,
+            width: platformEditView.frame.width,
+            height: 40
+        )
+        let header = PlatformEditHeaderView(frame: frame)
+        header.configure(count: count)
+        platformEditView.tableView.tableHeaderView = header
 
-        let targetSize = CGSize(width: view.bounds.width, height: 0)
-        let height = platformEditView.headerView.systemLayoutSizeFitting(targetSize).height
-        platformEditView.headerView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: height)
-        platformEditView.tableView.tableHeaderView = platformEditView.headerView
+        header.completeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
+            }
+            .disposed(by: disposeBag)
     }
 }
 
