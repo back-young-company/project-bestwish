@@ -101,7 +101,7 @@ extension WishListRepositoryImpl {
         )
     }
 
-    /// ProductMetadata -> ProductDTO 매핑
+    /// ProductEntity -> ProductDTO 매핑
     private func convertToProductDTO(from entity: ProductEntity) -> ProductDTO {
         ProductDTO(
             id: UUID(),

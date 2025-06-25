@@ -42,7 +42,7 @@ final class ProductSyncManager {
                 html: html
             )
             return metadata
-        case .unknown:
+        default:
             throw ProductSyncError.platformDetectionFailed
         }
     }
@@ -51,15 +51,8 @@ final class ProductSyncManager {
 // MARK: - private 메서드
 private extension ProductSyncManager {
     /// 쇼핑 플랫폼 감지
-    func detectPlatform(from text: String) -> SharePlatform {
-        if text.contains(SharePlatform.musinsa.rawValue) {
-            return .musinsa
-        } else if text.contains(SharePlatform.zigzag.rawValue) {
-            return .zigzag
-        } else if text.contains(SharePlatform.ably.rawValue) {
-            return .ably
-        }
-        return .unknown
+    func detectPlatform(from text: String) -> PlatformEntity? {
+        return PlatformEntity(text: text)
     }
 
     /// 공유 링크 내 불필요한 텍스트를 제외한 순수 상품 URL 추출
