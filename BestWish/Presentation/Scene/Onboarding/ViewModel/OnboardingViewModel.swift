@@ -32,6 +32,8 @@ final class OnboardingViewModel: ViewModel {
         let isValidNickname: Observable<Bool?>
         let currentPage: Observable<Int>
         let showPolicySheet: Observable<Void>
+        let readyToUseService: Observable<Void>
+        let error: Observable<AppError>
     }
 
     // MARK: - Internal Property
@@ -42,9 +44,10 @@ final class OnboardingViewModel: ViewModel {
     private let _action = PublishSubject<Action>()
 
     private let _userInfo = BehaviorRelay<UserInfoModel?> (value: nil)
-    private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
     private let _isValidNickname = BehaviorRelay<Bool?>(value: nil)
+    private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
     private let _showPolicySheet = PublishRelay<Void>()
+    private let _readyToUseService = PublishRelay<Void>()
     private let _error = PublishSubject<AppError>()
 
     /// 총 페이지수
@@ -56,7 +59,6 @@ final class OnboardingViewModel: ViewModel {
 
     private let useCase: UserInfoUseCase
     private let disposeBag = DisposeBag()
-    private let dummyCoordinator = DummyCoordinator.shared
 
     init(useCase: UserInfoUseCase) {
         self.useCase = useCase
@@ -64,7 +66,9 @@ final class OnboardingViewModel: ViewModel {
             userInfo: _userInfo.asObservable(),
             isValidNickname: _isValidNickname.asObservable(),
             currentPage: _currentPage.asObservable(),
-            showPolicySheet: _showPolicySheet.asObservable()
+            showPolicySheet: _showPolicySheet.asObservable(),
+            readyToUseService: _readyToUseService.asObservable(),
+            error: _error.asObservable()
         )
         bindAction()
     }
@@ -94,8 +98,6 @@ final class OnboardingViewModel: ViewModel {
             case .uploadUserInfo(let userInfo):
                 Task {
                     await self.updateUserInfo(with: userInfo)
-                    // TODO: Coordinator 패턴 적용하기
-                    self.dummyCoordinator.showMainView()
                 }
             }
         }.disposed(by: disposeBag)
@@ -122,6 +124,7 @@ final class OnboardingViewModel: ViewModel {
                 nickname: userInfo.nickname,
                 gender: userInfo.gender,
                 birth: userInfo.birth)
+            _readyToUseService.accept(())
         } catch {
             handleError(error)
         }

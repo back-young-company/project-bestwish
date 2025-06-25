@@ -21,6 +21,7 @@ final class MyPageViewModel: ViewModel {
     struct State {
         let sections: Observable<[MyPageSection]>
         let userInfo: Observable<UserInfoModel>
+        let isLogOut: Observable<Void>
         let error: Observable<AppError>
     }
 
@@ -33,12 +34,12 @@ final class MyPageViewModel: ViewModel {
 
     private let _sections = PublishSubject<[MyPageSection]>()
     private let _userInfo = PublishSubject<UserInfoModel>()
+    private let _isLogOut = PublishRelay<Void>()
     private let _error = PublishSubject<AppError>()
 
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
     private let disposeBag = DisposeBag()
-    private let dummyCoordinator = DummyCoordinator.shared
 
     init(
         userInfoUseCase: UserInfoUseCase,
@@ -49,6 +50,7 @@ final class MyPageViewModel: ViewModel {
         state = State(
             sections: _sections.asObservable(),
             userInfo: _userInfo.asObservable(),
+            isLogOut: _isLogOut.asObservable(),
             error: _error.asObservable()
         )
 
@@ -103,10 +105,8 @@ final class MyPageViewModel: ViewModel {
     private func logout() {
         Task {
             do {
-                let isLogOut = try await accountUseCase.logout()
-                if isLogOut {
-                    self.dummyCoordinator.showLoginView()
-                }
+                try await accountUseCase.logout()
+                _isLogOut.accept(())
             } catch {
                 handleError(error)
             }
@@ -114,7 +114,7 @@ final class MyPageViewModel: ViewModel {
     }
 
     /// User Entity -> UserInfoModel 변환 메서드
-    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+    private func convertUserInfoModel(from user: UserEntity) -> UserInfoModel {
         UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,

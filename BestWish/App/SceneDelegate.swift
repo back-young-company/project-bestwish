@@ -46,9 +46,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let repository = DIContainer.shared.makeAccountRepository()
 
         Task {
-            let hasToken = await repository.checkTokenState()
-            if hasToken {
-                let didOnboarding = await repository.checkOnboardingState()
+            let isAliveSession = await repository.checkSupabaseSession()
+            if isAliveSession {
+                let didOnboarding = try await repository.checkOnboardingState()
                 if didOnboarding {
                     self.showMainView()
                 } else {

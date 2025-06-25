@@ -73,8 +73,8 @@ final class UserInfoUpdateViewModel: ViewModel {
         Task {
             do {
                 let user = try await useCase.getUserInfo()
-                let UserInfoModel = convertUserInfoModel(from: user)
-                _userInfo.accept(UserInfoModel)
+                let userInfoModel = convertUserInfoModel(from: user)
+                _userInfo.accept(userInfoModel)
             } catch {
                 handleError(error)
             }
@@ -114,7 +114,7 @@ final class UserInfoUpdateViewModel: ViewModel {
     }
 
     /// User Entity -> UserInfoModel 변환 메서드
-    private func convertUserInfoModel(from user: User) -> UserInfoModel {
+    private func convertUserInfoModel(from user: UserEntity) -> UserInfoModel {
         UserInfoModel(
             profileImageCode: user.profileImageCode,
             email: user.email,

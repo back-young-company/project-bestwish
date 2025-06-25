@@ -11,4 +11,19 @@ import Foundation
 enum SocialType {
     case kakao
     case apple
+
+    init?(provider: String?) {
+        switch provider {
+        case "kakao": self = .kakao
+        case "apple": self = .apple
+        default: return nil
+        }
+    }
+
+    var korean: String {
+        switch self {
+        case .kakao: "카카오"
+        case .apple: "애플"
+        }
+    }
 }

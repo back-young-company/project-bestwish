@@ -22,6 +22,7 @@ final class OnboardingSecondView: UIView {
     )
     private let _profileContainer = UIView()
     private let _profileImageView = UIImageView()
+    private let _profileEditImageView = UIImageView()
 
     private let _nickName2ButtonStackView = VerticalStackView()
     private let _nicknameVStackView = NicknameInputView()
@@ -82,9 +83,15 @@ private extension OnboardingSecondView {
 
         _profileImageView.do {
             $0.contentMode = .scaleToFill
-            $0.layer.cornerRadius = CGFloat(152).fitHeight / 2
-            $0.clipsToBounds = true
             $0.isUserInteractionEnabled = true
+        }
+
+        _profileEditImageView.do {
+            $0.image = .profileEdit
+            $0.layer.shadowColor = UIColor(hex: "#979797")?.cgColor
+            $0.layer.shadowOpacity = 0.2
+            $0.layer.shadowRadius = 4
+            $0.layer.shadowOffset = CGSize(width: 0, height: 0)
         }
 
         _nickName2ButtonStackView.do {
@@ -108,6 +115,7 @@ private extension OnboardingSecondView {
 
     func setHierarchy() {
         self.addSubviews(_headerView, _profileImageView, _nickName2ButtonStackView)
+        _profileImageView.addSubview(_profileEditImageView)
         _nickName2ButtonStackView.addArrangedSubviews(_nicknameVStackView, _buttonHStackView)
         _buttonHStackView.addArrangedSubviews(_prevButton, _completeButton)
     }
@@ -122,6 +130,11 @@ private extension OnboardingSecondView {
             $0.top.equalTo(_headerView.snp.bottom).offset(CGFloat(24))
             $0.size.equalTo(CGFloat(152).fitHeight)
             $0.centerX.equalToSuperview()
+        }
+
+        _profileEditImageView.snp.makeConstraints {
+            $0.size.equalTo(CGFloat(48).fitHeight)
+            $0.trailing.bottom.equalToSuperview()
         }
 
         _nickName2ButtonStackView.snp.makeConstraints {

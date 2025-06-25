@@ -9,14 +9,17 @@ import Foundation
 
 /// 계정 정보 관련 UseCase 프로토콜
 protocol AccountUseCase {
-	/// 로그인	
-	func login(type: SocialType) async throws -> Bool
+    /// 온보딩 유뮤
+    func checkOnboardingState() async throws -> Bool
+    
+    /// 로그인
+    func login(type: SocialType) async throws
 
     /// 로그아웃
-    func logout() async throws -> Bool
+    func logout() async throws
 
     /// 회원탈퇴
-    func withdraw() async throws -> Bool
+    func withdraw() async throws
 }
 
 /// 계정 정보 관련 UseCase
@@ -27,18 +30,23 @@ final class AccountUseCaseImpl: AccountUseCase {
         self.repository = repository
     }
 
-	/// 로그인    
-	func login(type: SocialType) async throws -> Bool {
+    /// 온보딩 유뮤
+    func checkOnboardingState() async throws -> Bool {
+        try await repository.checkOnboardingState()
+    }
+
+    /// 로그인
+    func login(type: SocialType) async throws {
         try await repository.login(type: type)
     }
 
-	/// 로그아웃
-    func logout() async throws -> Bool {
+    /// 로그아웃
+    func logout() async throws {
         try await repository.logout()
     }
 
     /// 회원탈퇴
-    func withdraw() async throws -> Bool {
+    func withdraw() async throws {
         try await repository.withdraw()
     }
 }

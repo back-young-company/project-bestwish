@@ -88,6 +88,23 @@ final class OnboardingViewController: UIViewController {
                 owner.secondView.configure(isValidNickname: isValid)
             }
             .disposed(by: disposeBag)
+
+        /// 온보딩 결과에 따른 화면 이동
+        viewModel.state.readyToUseService
+            .observe(on: MainScheduler.instance)
+            .bind { _ in
+                DummyCoordinator.shared.showMainView()
+            }
+            .disposed(by: disposeBag)
+
+        /// 온보딩 에러시 alert
+        viewModel.state.error
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, error in
+                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
+                NSLog("OnboardingViewController Error: \(error.debugDescription)")
+            }
+            .disposed(by: disposeBag)
     }
 }
 
@@ -200,7 +217,6 @@ private extension OnboardingViewController {
             .drive(viewModel.action)
             .disposed(by: disposeBag)
 
-        // FIXME: 화면 이동 처리 고려
         secondView.completeButton.rx.tap
             .withLatestFrom(viewModel.state.userInfo)
             .subscribe(with: self) { owner, UserInfoModel in

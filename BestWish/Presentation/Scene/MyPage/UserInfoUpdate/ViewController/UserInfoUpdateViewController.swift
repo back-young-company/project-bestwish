@@ -71,8 +71,6 @@ final class UserInfoUpdateViewController: UIViewController {
             .drive(viewModel.action)
             .disposed(by: disposeBag)
 
-
-
         updateView.saveButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.viewModel.action.onNext(.saveUserInfo)

@@ -14,9 +14,9 @@ extension String: @retroactive Error { }
 /// Mock UserInfo Use Case
 final class MockUserInfoUseCase: UserInfoUseCase {
     var shouldThrow = false
-    var user: User?
+    var user: UserEntity?
 
-    func getUserInfo() async throws -> User {
+    func getUserInfo() async throws -> UserEntity {
         if shouldThrow {
             throw AppError.supabaseError(
                 SupabaseError.selectError("getUserInfo Error")
@@ -32,7 +32,7 @@ final class MockUserInfoUseCase: UserInfoUseCase {
                 SupabaseError.selectError("updateUserInfo Error")
             )
         }
-        user = User(
+        user = UserEntity(
             name: nil,
             email: "test",
             nickname: nickname,
