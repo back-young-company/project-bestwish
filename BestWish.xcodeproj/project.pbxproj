@@ -109,7 +109,6 @@
 				Data/Network/Service/ShareExtension/ZigzagFetcher.swift,
 				Data/Repository/WishListRepositoryImpl.swift,
 				"Data/Util/String+Util.swift",
-				"Data/Util/UIImage+Util.swift",
 				Domain/Entity/Product.swift,
 				Domain/Entity/ProductMetaData.swift,
 				Domain/Entity/SharePlatform.swift,
