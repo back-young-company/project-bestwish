@@ -93,8 +93,12 @@ jobs:
           -archivePath "${{ env.XC_ARCHIVE }}" \
           -verbose \
           CODE_SIGN_IDENTITY="${{ env.IOS_APP_CODE_SIGN_IDENTITY }}" \
+          CODE_SIGN_BESTWISH_ENTITLEMENTS="BestWish/BestWish.entitlements" \
+          CODE_SIGN_BESTWISH_SHARE_EXTENSION_ENTITLEMENTS="BestWishShareExtension/BestWishShareExtension.entitlements" \
           PROVISIONING_PROFILE_SPECIFIER="${{ env.IOS_APP_PROVISIONING_PROFILE_SPECIFIER }}" \
           DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM_ID }}" \
+          "BestWish_CODE_SIGN_ENTITLEMENTS=CODE_SIGN_BESTWISH_ENTITLEMENTS"
+          "BestWishShareExtension_CODE_SIGN_ENTITLEMENTS=CODE_SIGN_BESTWISH_SHARE_EXTENSION_ENTITLEMENTS"
           "BestWishShareExtension_CODE_SIGN_IDENTITY=${{ env.IOS_SHARE_EXTENSION_CODE_SIGN_IDENTITY }}" \
           "BestWishShareExtension_PROVISIONING_PROFILE_SPECIFIER=${{ env.IOS_SHARE_EXTENSION_PROVISIONING_PROFILE_SPECIFIER }}" \
           "BestWishShareExtension_DEVELOPMENT_TEAM=${{ env.DEVELOPMENT_TEAM_ID }}"
