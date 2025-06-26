@@ -4,6 +4,7 @@
 //
 //  Created by Quarang on 6/12/25.
 //
+import Foundation
 
 import RxRelay
 import RxSwift
@@ -13,18 +14,19 @@ final class AnalysisViewModel: ViewModel {
     
     // MARK: - Action
     enum Action {
+        case viewDidLoad                                    // View가 로드될 시
         case didSelectedSegmentControl(category: String)    // 세그먼트 컨트롤 선택 시
         case didTapAttributeChip(attribute: String)         // 속성 칩 선택 시
         case didSubmitSearchText(keyword: String)           // 검색버튼 터치 시
         case didTapKeywordChip(keyword: String)             // 키워드 칩 선택 시
-        case didTapPlatformChip(platform: PlatformItem)         // 플랫폼 칩 선택 시
+        case didTapPlatformChip(platform: PlatformItem)     // 플랫폼 칩 선택 시
         case didTapResetButton                              // 초기화 버튼 선택 시
         case didTapSearchButton                             // 검색 버튼 선택 시
     }
     
     // MARK: - State
     struct State {
-        let labelDatas: Observable<[AnalysisSectionModel]>
+        let models: Observable<[AnalysisSectionModel]>
         let segmentIndex: Observable<Int>
         let deepLink: Observable<String>
         let deepLinkError: Observable<PlatformError>
@@ -36,61 +38,56 @@ final class AnalysisViewModel: ViewModel {
     let state: State
     
     // MARK: - Private Property
-    private let arr = ["스타일", "상의", "하의", "아우터", "원피스"]
     private var previousCategory = ""                       // 카테고리 비교 용도
     private var currentQuery = BehaviorRelay<String>(value: "")
     private var currentPlatform = BehaviorRelay<PlatformItem?>(value: nil)
-    private let topClassFilter: [String: [String]]           // CoreData Model 데이터 정재해서 저장 (큰 카테고리: [속성])
     
     private let _action = PublishSubject<Action>()
     
-    private let _labelData = BehaviorRelay<[AnalysisSectionModel]>(value: [])
+    private let _models = BehaviorRelay<[AnalysisSectionModel]>(value: [])
     private let _segmentIndex = BehaviorRelay(value: 0)
     private let _deepLink = PublishRelay<String>()
     private let _deepLinkError = PublishRelay<PlatformError>()
     private let _buttonActivation = BehaviorRelay(value: false)
     
-    private let labelData: [LabelDataModel]
     private let analysisUseCase: AnalysisUseCase
+    private let labelDataModels: [LabelDataModel]
     private let disposeBag = DisposeBag()
     
-    init(analysisUseCase: AnalysisUseCase, labelData: [LabelDataModel]) {
-        self.analysisUseCase = analysisUseCase
-        self.labelData = labelData
-        // 불러온 모델 데이터 ViewModel이 실아 있을 동안 전체 저장
-        topClassFilter = [
-            "스타일": labelData.filter { $0.topCategory == "스타일" }.prefix(3).map { $0.attributes },
-            "상의": mapping("상의"),
-            "하의": mapping("하의"),
-            "아우터": mapping("아우터"),
-            "원피스": mapping("원피스"),
-        ]
-        
-        /// 모델 데이터 정제 (일치율 40% 보다 큰 경우)
-        func mapping(_ category: String) -> [String]{
-            let emptyKeyword = "해당 카테고리의 키워드를 인식할 수 없습니다."          // 비어 있는 키워드 예외처리를 위함
-            let att = labelData.filter { $0.topCategory == category && $0.probability > 40 }.map { $0.attributes }
-            return att.isEmpty ? [emptyKeyword] : att
+    private var keywords: [String] {
+        _models.value[0].items.compactMap {
+            if case let .keyword(keyword) = $0 {
+                return keyword
+            }
+            return nil
         }
-        
-        let analysisSectionModel:[AnalysisSectionModel] = [
-            AnalysisSectionModel(header: nil, type: .keyword, items: []),
-            AnalysisSectionModel(header: topClassFilter.keys.map { String($0) }, type: .attribute, items: []),
-            AnalysisSectionModel(header: nil, type: .platform, items: PlatformEntity.allCases.filter{ $0 != .all }.map {
-                .platform(platform: PlatformItem(
-                    platform: $0,
-                    platformName: $0.platformName,
-                    platformImage: $0.platformImage,
-                    platformDeepLink: $0.platformDeepLink
-                ))
-            })
-        ]
-        
-        // 라벨 데이터 초기 세팅
-        self._labelData.accept(analysisSectionModel)
+    }
+    
+    private var attributes: [String] {
+        _models.value[1].items.compactMap {
+            if case let .attribute(attribute, _) = $0 {
+                return attribute
+            }
+            return nil
+        }
+    }
+    
+    private var platforms: [PlatformItem] {
+        _models.value[2].items.compactMap {
+            if case let .platform(platform, _) = $0 {
+                return platform
+            }
+            return nil
+        }
+    }
+    
+    
+    init(analysisUseCase: AnalysisUseCase, labelData: [LabelDataEntity]) {
+        self.analysisUseCase = analysisUseCase
+        self.labelDataModels = LabelDataModel.convertToModel(for: labelData)
         
         state = State(
-            labelDatas: _labelData.asObservable(),
+            models: _models.asObservable(),
             segmentIndex: _segmentIndex.asObservable(),
             deepLink: _deepLink.asObservable(),
             deepLinkError: _deepLinkError.asObservable(),
@@ -98,13 +95,14 @@ final class AnalysisViewModel: ViewModel {
         )
         
         bindAction()
-        buttonValidation()
     }
     
     /// 각 이벤트 별 이벤트 방출
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
+            case .viewDidLoad:
+                owner.setSectionModel()
             case let .didSelectedSegmentControl(category):
                 owner.setItems(category: category)
             case let .didTapAttributeChip(attribute):
@@ -128,88 +126,142 @@ final class AnalysisViewModel: ViewModel {
 // MARK: - 비즈니스 로직
 private extension AnalysisViewModel {
     
+    /// 섹션 모델 초기화
+    private func setSectionModel() {
+        let analysisSectionModel = [
+            AnalysisSectionModel(header: nil, type: .keyword, items: []),
+            AnalysisSectionModel(header: nil, type: .attribute, items: []),
+            AnalysisSectionModel(header: nil, type: .platform, items: PlatformEntity.allCases.filter{ $0 != .all }.map {
+                .platform(platform: PlatformItem(
+                    platform: $0,
+                    platformName: $0.platformName,
+                    platformImage: $0.platformImage,
+                    platformDeepLink: $0.platformDeepLink
+                ))
+            })
+        ]
+        // 라벨 데이터 초기 세팅
+        _models.accept(analysisSectionModel)
+        buttonValidation()
+    }
+    
     /// 이미지 분석 후 카테고리에 따라 데이터 방출
     private func setItems(category: String) {
         // 이전 카테고리와 비교해서 같은 값이 방출되면 무시
         // RxDataSource에서 이벤트를 무한으로 방출하는 문제를 해결하기 위함
-        if category != previousCategory {
-            previousCategory = category
-            let values = topClassFilter[category] ?? []
-            var currentLabelData = _labelData.value
-            
-            // 이전 방출 데이터를 확인하기 위함
-            let keywords = currentLabelData[0].items.map {
-                guard case let .keyword(keyword) = $0 else { return "" }
-                return keyword
-            }
-            currentLabelData[1].items = values.map {
-                .attribute(attribute: $0, isSelected: keywords.contains($0))
-            }
-            _segmentIndex.accept(arr.firstIndex(where: { $0 == category} ) ?? 0)
-            _labelData.accept(currentLabelData)
+        guard category != previousCategory else { return }
+        previousCategory = category
+        guard var attributes = labelDataModels.first(where: { $0.topCategory == category })?.attributes else { return }
+        
+        if attributes.isEmpty {
+            attributes.append(String.emptyKeyword)
         }
+        // 아이템 체인지
+        changeItem(type: .attribute) {
+            attributes.compactMap {
+                AnalysisItem.attribute(attribute: $0, isSelected: true)
+            }
+        }
+        _segmentIndex.accept(labelDataModels.firstIndex(where: { $0.topCategory == category} ) ?? 0)
     }
     
     /// 키워드 추가 이벤트
     private func addKeyword(_ keyword: String) {
-        let models = analysisUseCase.addKeyword(keyword, models: _labelData.value)
-        changedKeyword(labelData: models)
-        _labelData.accept(models)
+        var keywords = keywords
+        let changedKeywords = analysisUseCase.addKeyword(keyword, keywords: &keywords)
+        
+        // 키워드 추가
+        changeItem(type: .keyword) {
+            changedKeywords.map {
+                .keyword(keyword: $0)
+            }
+        }
+        // 현제 검색어 업데이트
+        currentQuery.accept(keywords.joined(separator: " "))
     }
     
     /// 키워드 삭제 이벤트
     private func deleteKeyword(_ keyword: String) {
-        let models = analysisUseCase.deleteKeyword(keyword, models: _labelData.value)
-        changedKeyword(labelData: models)
-        _labelData.accept(models)
+        var keywords = keywords
+        let changedKeywords = analysisUseCase.deleteKeyword(keyword, keywords: &keywords)
+        
+        // 키워드 추가
+        changeItem(type: .keyword) {
+            changedKeywords.map {
+                .keyword(keyword: $0)
+            }
+        }
+        // 현제 검색어 업데이트
+        currentQuery.accept(keywords.joined(separator: " "))
     }
     
     /// 플랫폼 선택 이벤트
     private func selectePlatform(_ platform: PlatformItem) {
-        let models = analysisUseCase.selectePlatform(platform, models: _labelData.value)
+        changeItem(type: .platform) {
+            platforms.map {
+                .platform(platform: $0, isSelected: $0 == platform)
+            }
+        }
+        // 현제 플랫폼 업데이트
         currentPlatform.accept(platform)
-        changedKeyword(labelData: models)
-        _labelData.accept(models)
     }
     
     /// 초기화
     private func resetKeyword() {
-        let models = analysisUseCase.resetKeyword(models: _labelData.value)
-        _labelData.accept(models)
+        var models = _models.value
+        models[0] = AnalysisSectionModel(header: nil, type: .keyword, items: [])
+        _models.accept(models)
         _segmentIndex.accept(0)
+        
+        currentQuery.accept("")
+        currentPlatform.accept(nil)
     }
     
     /// 플랫폼 이동
     private func movePlatform() {
         do {
-            let link = try analysisUseCase.movePlatform(platform: currentPlatform.value)
+            let query = currentQuery.value
+            let deepLink = currentPlatform.value?.platform?.searchResultDeepLink(keyword: query)
+            
+            let link = try analysisUseCase.movePlatform(deepLink: deepLink)
             _deepLink.accept(link)
         } catch let error  {
             guard let error = error as? PlatformError else { return }
             _deepLinkError.accept(error)
         }
     }
-    
-    /// 키워드 변경 시 현제 쿼리 변경
-    private func changedKeyword(labelData: [AnalysisSectionModel]) {
-        let keyword = labelData[0].items.compactMap { item in
-            if case let .keyword(keyword) = item { return keyword }
-            return nil
-        }
-        let query = keyword.joined(separator: " ")
-        var platform = currentPlatform.value
+}
+
+// MARK: - 내부 메서드
+private extension AnalysisViewModel {
+    /// sectionModel의 데이터를 바꾸는 메서드
+    private func changeItem(type: AnalysisSectionType, completion: () -> [AnalysisItem]) {
+        var models = _models.value
         
-        switch currentPlatform.value?.platform {
-        case .musinsa:
-            platform?.platformDeepLink = PlatformEntity.musinsa.searchResultDeepLink(keyword: query)
-        case .ably:
-            platform?.platformDeepLink = PlatformEntity.ably.searchResultDeepLink(keyword: query)
-        case .zigzag:
-            platform?.platformDeepLink = PlatformEntity.zigzag.searchResultDeepLink(keyword: query)
-        default: break
+        switch type {
+        case .keyword, .attribute:
+            // 키워드 추가
+            if type == .keyword {
+                models[0].items = completion()
+            } else {
+                models[1].items = completion()
+            }
+            
+            let keywords = models[0].items.compactMap {
+                if case let .keyword(keyword) = $0 { return keyword }
+                return nil
+            }
+            // 키워드가 있을 경우
+            models[1].items = models[1].items.compactMap {
+                if case let .attribute(attribute, _) = $0 {
+                    return AnalysisItem.attribute(attribute: attribute, isSelected: !keywords.contains(attribute))
+                }
+                return nil
+            }
+        case .platform:
+            models[2].items = completion()
         }
-        currentPlatform.accept(platform)
-        currentQuery.accept(query)
+        _models.accept(models)
     }
     
     /// 키워드와 플랫폼을 선택 하지 않았을 시 버튼 유효성 검사
