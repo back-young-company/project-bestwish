@@ -56,6 +56,7 @@ jobs:
         security default-keychain -s "$KEYCHAIN"
         security unlock-keychain -p "" "$KEYCHAIN"
         security set-keychain-settings
+        
     - name : Configure Code Signing
       run: |
         gpg -d -o "$DECRYPTED_CERT_FILE_PATH" --pinentry-mode=loopback --passphrase "$CERT_ENCRYPTION_KEY" "$ENCRYPTED_CERT_FILE_PATH"
@@ -71,6 +72,14 @@ jobs:
           UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i "$PROVISION")) # "$PROVISION" 에 따옴표 추가
           cp "$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision" # "$PROVISION" 에 따옴표 추가
         done
+        
+    - name: Configuraion file setting
+      run: |
+        echo "API_KEY = ${{ secrets.CONFIG_API_KEY }}" > BestWish/Config_Release.xcconfig
+        echo "SUPABASE_URL = ${{ secrets.CONFIG_SUPABASE_URL }}" >> BestWish/Config_Release.xcconfig
+        echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_Release.xcconfig
+        echo "SHARING_KEY = ${{ secrets.CONFIG_SHARING_KEY }}" >> BestWish/Config_Release.xcconfig
+        
     - name: Archive app
       run: |
         xcodebuild clean archive -project BestWish.xcodeproj \
