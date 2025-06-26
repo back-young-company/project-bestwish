@@ -154,7 +154,7 @@ private extension AnalysisViewModel {
         guard var attributes = labelDataModels.first(where: { $0.topCategory == category })?.attributes else { return }
         
         if attributes.isEmpty {
-            attributes.append(String.emptyKeyword)
+            attributes.append(EmptyCategoryCase.emptyKeyword.rawValue)
         }
         // 아이템 체인지
         changeItem(type: .attribute) {

@@ -114,7 +114,6 @@
 				Domain/Interface/WishListRepository.swift,
 				Domain/UseCase/ProductSyncUseCase.swift,
 				Domain/UseCase/WishListUseCase.swift,
-				"Presentation/Extension/String+Extension.swift",
 				"Presentation/Extension/UIColor+Extension.swift",
 				"Presentation/Extension/UIFont+Extension.swift",
 				Presentation/Interface/ViewModel.swift,
