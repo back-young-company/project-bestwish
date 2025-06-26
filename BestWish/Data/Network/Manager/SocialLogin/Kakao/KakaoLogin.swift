@@ -11,7 +11,7 @@ import Alamofire
 import Supabase
 
 // MARK: - SupabaseOAuth를 활용한 카카오 로그인
-extension SupabaseOAuthManager {
+extension SupabaseOAuthManagerImpl {
 
     /// 카카오 로그인
     func signInKakao() async throws -> Supabase.Session? {
