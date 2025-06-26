@@ -15,11 +15,13 @@ import UIKit
 extension CGFloat {
     var fitWidth: CGFloat {
         let ratio: CGFloat = UIScreen.main.bounds.width / 375
-        return self * ratio
+        let scaled = self * ratio
+        return self > scaled ? self : scaled
     }
 
     var fitHeight: CGFloat {
         let ratio: CGFloat = UIScreen.main.bounds.height / 812
-        return self * ratio
+        let scaled = self * ratio
+        return self > scaled ? self : scaled
     }
 }

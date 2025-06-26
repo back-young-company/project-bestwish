@@ -7,8 +7,16 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
 final class MyPageView: UIView {
-    private let tableView = UITableView()
+
+    // MARK: - Private Property
+    private let _tableView = UITableView()
+
+    // MARK: - Internal Property
+    var tableView: UITableView { _tableView }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -16,14 +24,12 @@ final class MyPageView: UIView {
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
-
-    var getTableView: UITableView { tableView }
 }
 
+// MARK: - View 설정
 private extension MyPageView {
     func setView() {
         setAttributes()
@@ -49,13 +55,13 @@ private extension MyPageView {
     }
 
     func setHierarchy() {
-        addSubviews(tableView)
+        addSubviews(_tableView)
     }
 
     func setConstraints() {
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide)
-            make.bottom.directionalHorizontalEdges.equalToSuperview()
+        _tableView.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide)
+            $0.bottom.directionalHorizontalEdges.equalToSuperview()
         }
     }
 }

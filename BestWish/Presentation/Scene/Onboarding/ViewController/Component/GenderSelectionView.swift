@@ -7,32 +7,25 @@
 
 
 import UIKit
-import RxSwift
-import RxCocoa
 
-enum Gender: Int, CaseIterable {
-    case male, female, nothing
-    var value: String {
-        switch self {
-        case .male: return "남자"
-        case .female: return "여자"
-        case .nothing: return "선택 안 함"
-        }
-    }
-}
+import SnapKit
+import Then
 
+/// 성벌 션택 화면
 final class GenderSelectionView: UIView {
 
-    // 외부에서 선택 상태를 구독할 수 있도록 Relay 공개
-    let selectedGender = BehaviorRelay<Gender?>(value: nil)
-    private let disposeBag = DisposeBag()
+    // MARK: - Private Property
+    private let _rootVStackView = VerticalStackView(spacing: 8)
+    private let _genderLabel = GroupTitleLabel(title: "성별")
+    private let _radioHStackView = HorizontalStackView(spacing: 24)
+    private let _maleButton = RadioButton(title: Gender.male.value)
+    private let _femaleButton = RadioButton(title: Gender.female.value)
+    private let _nothingButton = RadioButton(title: Gender.nothing.value)
 
-    private let rootVStackView = VerticalStackView(spacing: 8)
-    private let genderLabel = InfoLabel(title: "성별")
-    private let radioHStackView = HorizontalStackView(spacing: 24)
-    private let maleButton = RadioButton(title: Gender.male.value)
-    private let femaleButton = RadioButton(title: Gender.female.value)
-    private let nothingButton = RadioButton(title: Gender.nothing.value)
+    // MARK: - Internal Property
+    var maleButton: RadioButton { _maleButton }
+    var femaleButton: RadioButton { _femaleButton }
+    var nothingButton: RadioButton { _nothingButton }
 
     init() {
         super.init(frame: .zero)
@@ -43,26 +36,32 @@ final class GenderSelectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// 선택한 성별 버튼 이미지 변경
     func configure(genderIndex: Int?) {
-        guard let genderIndex else { return }
-        selectedGender.accept(Gender(rawValue: genderIndex))
+        let selectedGender = genderIndex.flatMap(Gender.init)
+
+        let buttons = [maleButton, femaleButton, nothingButton]
+
+        for (genderCase, button) in zip(Gender.allCases, buttons) {
+            button.isSelected = (genderCase == selectedGender)
+        }
     }
 }
-extension GenderSelectionView {
 
-    private func setView() {
+// MARK: - private 메서드
+private extension GenderSelectionView {
+    func setView() {
         setAttributes()
         setHierarchy()
         setConstraints()
-        bindUI()
     }
 
     func setAttributes() {
-        rootVStackView.do {
+        _rootVStackView.do {
             $0.alignment = .leading
         }
 
-        radioHStackView.do {
+        _radioHStackView.do {
             $0.distribution = .fillProportionally
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
@@ -75,41 +74,27 @@ extension GenderSelectionView {
     }
 
     func setHierarchy() {
-        self.addSubview(rootVStackView)
-        self.rootVStackView.addArrangedSubviews(genderLabel, radioHStackView)
-        self.radioHStackView.addArrangedSubviews(maleButton, femaleButton, nothingButton)
+        self.addSubview(_rootVStackView)
+        self._rootVStackView.addArrangedSubviews(_genderLabel, _radioHStackView)
+        self._radioHStackView.addArrangedSubviews(_maleButton, _femaleButton, _nothingButton)
     }
 
     func setConstraints() {
-        rootVStackView.snp.makeConstraints {
+        _rootVStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
+}
 
-    func bindUI() {
-        // 버튼 탭 → selectedGender 갱신
-        maleButton.rx.tap
-            .map { Gender.male }
-            .bind(to: selectedGender)
-            .disposed(by: disposeBag)
-
-        femaleButton.rx.tap
-            .map { Gender.female }
-            .bind(to: selectedGender)
-            .disposed(by: disposeBag)
-
-        nothingButton.rx.tap
-            .map { Gender.nothing }
-            .bind(to: selectedGender)
-            .disposed(by: disposeBag)
-
-        // selectedGender 구독 → 각 버튼 isSelected 업데이트
-        selectedGender
-            .subscribe(with: self) { owner, gender in
-            owner.maleButton.isSelected = (gender == .male)
-            owner.femaleButton.isSelected = (gender == .female)
-            owner.nothingButton.isSelected = (gender == .nothing)
+// MARK: Gender
+/// 성별 선택 종류
+enum Gender: Int, CaseIterable {
+    case male, female, nothing
+    var value: String {
+        switch self {
+        case .male: return "남자"
+        case .female: return "여자"
+        case .nothing: return "선택 안 함"
         }
-            .disposed(by: disposeBag)
     }
 }

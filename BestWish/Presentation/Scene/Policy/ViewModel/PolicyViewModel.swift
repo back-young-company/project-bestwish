@@ -5,13 +5,11 @@
 //  Created by yimkeul on 6/16/25.
 //
 
-import Foundation
-import RxSwift
 import RxRelay
+import RxSwift
 
+/// 이용약관 ViewModel
 final class PolicyViewModel: ViewModel {
-
-    private let disposeBag = DisposeBag()
 
     // MARK: - Actions
     enum Action {
@@ -27,29 +25,28 @@ final class PolicyViewModel: ViewModel {
         let isAllSelected: Observable<Bool>
     }
 
-    // MARK: - Inputs
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
+    let state: State
 
-    // MARK: - Outputs
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+
     private let _isPrivacySelected = BehaviorRelay<Bool>(value: false)
     private let _isServiceSelected = BehaviorRelay<Bool>(value: false)
     private let _isAllSelected = BehaviorRelay<Bool>(value: false)
 
-    let state: State
+    private let disposeBag = DisposeBag()
 
-    // MARK: - Initializer, Deinit, requiered
     init() {
         state = State(
             isPrivacySelected: _isPrivacySelected.asObservable(),
             isServiceSelected: _isServiceSelected.asObservable(),
             isAllSelected: _isAllSelected.asObservable()
         )
-
         bindAction()
     }
 
-    // MARK: - Bind
     private func bindAction() {
         _action
             .subscribe(with: self) { owner, action in
@@ -60,7 +57,6 @@ final class PolicyViewModel: ViewModel {
                 owner._isAllSelected.accept(
                     newPrivacy && owner._isServiceSelected.value
                 )
-
 
             case .serviceCheckboxTapped:
                 let newService = !owner._isServiceSelected.value
@@ -79,7 +75,4 @@ final class PolicyViewModel: ViewModel {
         }
             .disposed(by: disposeBag)
     }
-
-    // MARK: Methods
-
 }

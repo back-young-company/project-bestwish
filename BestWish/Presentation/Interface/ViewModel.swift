@@ -7,6 +7,7 @@
 
 import RxSwift
 
+/// 앱 내 ViewModel의 프로토콜
 protocol ViewModel {
     associatedtype Action
     associatedtype State

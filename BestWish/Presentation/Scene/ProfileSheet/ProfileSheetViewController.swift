@@ -6,12 +6,15 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
+import RxCocoa
+import RxSwift
+
+/// 프로필 시트 View Controller
 final class ProfileSheetViewController: UIViewController {
     private let profileSheetView = ProfileSheetView()
     private let disposeBag = DisposeBag()
+
     private let selectedIndex: BehaviorRelay<Int>
     var onComplete: ((Int) -> Void)? // 프로필 선택 완료 후 이전 VC에 넘겨줌
 
@@ -37,7 +40,7 @@ final class ProfileSheetViewController: UIViewController {
     private func bindView() {
         // 전체 프로필 이미지 띄우기
         Observable.just(ProfileType.allCases)
-            .bind(to: profileSheetView.getCollectionView.rx.items(
+            .bind(to: profileSheetView.collectionView.rx.items(
                     cellIdentifier: ProfileSheetCell.identifier,
                     cellType: ProfileSheetCell.self
                 )
@@ -47,7 +50,7 @@ final class ProfileSheetViewController: UIViewController {
                 if type.rawValue == selectedIndex.value {
                     let indexPath = IndexPath(row: index, section: 0)
 
-                    profileSheetView.getCollectionView.selectItem(
+                    profileSheetView.collectionView.selectItem(
                         at: indexPath,
                         animated: false,
                         scrollPosition: [] // 자동 스크롤 제거
@@ -57,19 +60,20 @@ final class ProfileSheetViewController: UIViewController {
             }.disposed(by: disposeBag)
 
         // 프로필 선택
-        profileSheetView.getCollectionView.rx.itemSelected
+        profileSheetView.collectionView.rx.itemSelected
             .map { $0.item }
             .bind(to: selectedIndex)
             .disposed(by: disposeBag)
 
         // 완료 버튼
-        profileSheetView.getCompleteButton.rx.tap
+        profileSheetView.completeButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.onComplete?(owner.selectedIndex.value)
                 owner.dismiss(animated: true)
             }.disposed(by: disposeBag)
     }
 
+    /// 프로필 시트 설정
     func presentProfileSheet() {
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.custom(resolver: { _ in CGFloat(182).fitHeight })]

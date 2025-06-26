@@ -7,9 +7,11 @@
 
 import UIKit
 
+/// 닉네임 경고 라벨
 final class CautionLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setAttributes()
     }
     

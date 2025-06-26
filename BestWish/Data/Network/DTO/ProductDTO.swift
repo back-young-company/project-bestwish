@@ -7,8 +7,9 @@
 
 import Foundation
 
+/// 위시리스트 제품 DTO
 struct ProductDTO: Codable {
-    let id: UUID
+    let id: UUID?
     let userID: UUID?
     let platform: Int?
     let title: String?
@@ -31,8 +32,24 @@ struct ProductDTO: Codable {
         case productURL = "product_url"
         case createdAt = "created_at"
     }
+
+    func toEntity() -> ProductEntity {
+        return ProductEntity(
+            id: id,
+            userID: userID,
+            platform: platform,
+            title: title,
+            price: price,
+            discountRate: discountRate,
+            brand: brand,
+            imagePathURL: imagePathURL,
+            productURL: productURL,
+            createdAt: createdAt
+        )
+    }
 }
 
+/// 플랫폼 DTO
 struct PlatformDTO: Codable {
     let platform: Int16
 }

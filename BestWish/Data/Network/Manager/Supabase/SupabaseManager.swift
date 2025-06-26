@@ -6,8 +6,10 @@
 //
 
 import Foundation
+
 import Supabase
 
+/// 위시 리스트 관련 매니저
 final class SupabaseManager {
     private let supabase: SupabaseClient
 
@@ -18,7 +20,7 @@ final class SupabaseManager {
         )
     }
 
-    // 플랫폼 순서 조회
+    /// 플랫폼 순서 조회
     func getPlatformSequence() async throws -> PlatformSequenceDTO {
         do {
             return try await supabase
@@ -33,7 +35,7 @@ final class SupabaseManager {
         }
     }
 
-    // 플랫폼 순서 편집
+    /// 플랫폼 순서 편집
     func updatePlatformSequence(to sequence: [Int16]) async throws {
         do {
             try await supabase
@@ -46,7 +48,7 @@ final class SupabaseManager {
         }
     }
 
-    // 위시 리스트에 포함된 플랫폼 조회
+    /// 위시 리스트에 포함된 플랫폼 조회
     func getPlatformsInWishList(userInfo: UserDTO, isEdit: Bool) async throws -> [(platform: Int, count: Int)] {
         let sequence = userInfo.platformSequence ?? []
         do {
@@ -84,7 +86,7 @@ final class SupabaseManager {
         }
     }
 
-    // 위시 아이템 검색
+    /// 위시 아이템 검색
     func searchWishListItems(query: String?, platform: Int?) async throws -> [ProductDTO] {
         do {
             var builder = try await supabase
@@ -110,7 +112,7 @@ final class SupabaseManager {
         }
     }
 
-    // 위시 아이템 삭제
+    /// 위시 아이템 삭제
     func deleteWishListItem(id: UUID) async throws {
         do {
             try await supabase
@@ -124,7 +126,7 @@ final class SupabaseManager {
         }
     }
 
-    // 위시 아이템 등록
+    /// 위시 아이템 등록
     func addProductToWishList(product: ProductDTO) async throws {
         do {
             let userID = try await supabase.auth.session.user.id

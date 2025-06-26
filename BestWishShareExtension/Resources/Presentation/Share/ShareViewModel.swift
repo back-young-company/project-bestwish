@@ -12,7 +12,7 @@ import RxRelay
 
 final class ShareViewModel: ViewModel {
     enum Action {
-        case product(ProductMetadataDTO)
+        case addProduct(NSItemProvider)
     }
     
     struct State {
@@ -23,8 +23,9 @@ final class ShareViewModel: ViewModel {
     private let _completed = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
     
-    private let useCase: WishListUseCase
-    
+    private let wishListUseCase: WishListUseCase
+    private let productSyncUseCase: ProductSyncUseCase
+
     private let _action = PublishSubject<Action>()
     var action: AnyObserver<Action> { _action.asObserver() }
     
@@ -32,9 +33,13 @@ final class ShareViewModel: ViewModel {
     
     private let disposeBag = DisposeBag()
     
-    init(useCase: WishListUseCase) {
-        self.useCase = useCase
-        
+    init(
+        wishListUseCase: WishListUseCase,
+        productSyncUseCase: ProductSyncUseCase
+    ) {
+        self.wishListUseCase = wishListUseCase
+        self.productSyncUseCase = productSyncUseCase
+
         state = State(
             completed: _completed.asObservable(),
             error: _error.asObservable()
@@ -47,21 +52,44 @@ final class ShareViewModel: ViewModel {
         _action
             .subscribe(with: self) { owner, action in
                 switch action {
-                case .product(let product):
-                    Task {
-                        do {
-                            try await owner.addProductToWishList(product: product.toEntity())
-                            owner._completed.accept(())
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
+                case let .addProduct(provider):
+                    return owner.handleSharedItem(from: provider)
                 }
             }
             .disposed(by: disposeBag)
     }
     
-    private func addProductToWishList(product: ProductMetadata) async throws {
-        try await self.useCase.addProductToWishList(product: product)
+    private func addProductToWishList(product: ProductEntity) async throws {
+        try await self.wishListUseCase.addProductToWishList(product: product)
+
+    }
+}
+
+private extension ShareViewModel {
+    // 🔍 provider의 타입에 따라 URL 또는 텍스트로 처리 분기
+    func handleSharedItem(from provider: NSItemProvider) {
+        if provider.hasItemConformingToTypeIdentifier("public.url") {
+            provider.loadItem(forTypeIdentifier: "public.url", options: nil) { [weak self] item, _ in
+                guard let self, let url = item as? URL else { return }
+                self.handleSharedText(url.absoluteString)
+            }
+        } else if provider.hasItemConformingToTypeIdentifier("public.text") {
+            provider.loadItem(forTypeIdentifier: "public.text", options: nil) { [weak self] item, _ in
+                guard let self, let text = item as? String else { return }
+                self.handleSharedText(text)
+            }
+        }
+    }
+
+    func handleSharedText(_ text: String) {
+        Task {
+            do {
+                let entity = try await productSyncUseCase.sendProductEntity(from: text)
+                try await addProductToWishList(product: entity)
+                _completed.accept(())
+            } catch {
+                _error.accept(error)
+            }
+        }
     }
 }

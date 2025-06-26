@@ -10,33 +10,46 @@ import Foundation
 import RxSwift
 import RxRelay
 
+/// 유저 정보 관리 View Model
 final class UserInfoManagementViewModel: ViewModel {
-    private let userInfoUseCase: UserInfoUseCase
-    private let accountUseCase: AccountUseCase
-    private let disposeBag = DisposeBag()
 
+    // MARK: - Action
     enum Action {
         case getAuthProvider
         case withdraw
     }
 
+    // MARK: - State
     struct State {
         let authProvider: Observable<String?>
+        let isWithdraw: Observable<Void>
         let error: Observable<AppError>
     }
 
-    private let _action = PublishSubject<Action>()
+    // MARK: - Internal Property
     var action: AnyObserver<Action> { _action.asObserver() }
-
-    private let _error = PublishSubject<AppError>()
-    private let _authProvider = PublishSubject<String?>()
     let state: State
 
-    init(userInfoUseCase: UserInfoUseCase, accountUseCase: AccountUseCase) {
+    // MARK: - Private Property
+    private let _action = PublishSubject<Action>()
+
+    private let _authProvider = PublishSubject<String?>()
+    private let _isWithdraw = PublishRelay<Void>()
+    private let _error = PublishSubject<AppError>()
+
+    private let userInfoUseCase: UserInfoUseCase
+    private let accountUseCase: AccountUseCase
+    private let disposeBag = DisposeBag()
+
+    init(
+        userInfoUseCase: UserInfoUseCase,
+        accountUseCase: AccountUseCase
+    ) {
         self.userInfoUseCase = userInfoUseCase
         self.accountUseCase = accountUseCase
         state = State(
             authProvider: _authProvider.asObservable(),
+            isWithdraw: _isWithdraw.asObservable(),
             error: _error.asObservable()
         )
 
@@ -54,6 +67,7 @@ final class UserInfoManagementViewModel: ViewModel {
         }.disposed(by: disposeBag)
     }
 
+    /// SNS 계정 연동 정보 불러오기
     private func getAuthProvider() {
         Task {
             do {
@@ -66,16 +80,19 @@ final class UserInfoManagementViewModel: ViewModel {
         }
     }
 
+    /// 회원 탈퇴
     private func withdraw() {
         Task {
             do {
                 try await accountUseCase.withdraw()
+                _isWithdraw.accept(())
             } catch {
-               handleError(error)
+                handleError(error)
             }
         }
     }
 
+    /// 에러 핸들링
     private func handleError(_ error: Error) {
         if let error = error as? AppError {
             _error.onNext(error)

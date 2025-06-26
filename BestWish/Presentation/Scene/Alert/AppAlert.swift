@@ -7,12 +7,14 @@
 
 import Foundation
 
+// MARK: - Custom Alert Type
 extension AlertView {
     enum AlertType {
         case withdraw, logout
     }
 }
 
+// MARK: - Custom Alert Type Property
 extension AlertView.AlertType {
     var title: String {
         switch self {

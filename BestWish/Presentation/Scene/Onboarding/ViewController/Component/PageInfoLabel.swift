@@ -7,14 +7,14 @@
 
 import UIKit
 
+/// 온보딩 헤더뷰에 사용되는 페이지 라벨
 final class PageInfoView: UILabel {
 
     init(current: Int, total: Int) {
         super.init(frame: .zero)
         setAttributes(current: current, total: total)
     }
-
-    @available(*, unavailable)
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

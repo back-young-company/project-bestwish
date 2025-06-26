@@ -11,22 +11,25 @@ import RxSwift
 import SnapKit
 import Then
 
+/// 링크 저장 View
 final class LinkSaveView: UIView {
-    private let disposeBag = DisposeBag()
-    private let _dismiss = PublishSubject<Void>()
-    var dismiss: Observable<Void> { _dismiss.asObservable() }
-    
-    private let linkView = UIView()
-    private let titleLabel = UILabel()
-    private let cancelButton = UIButton()
-    private let linkInputView = UISearchBar()
-    
-    private let saveButton: AppButton
-    
-    var getLinkInputTextField: UITextField { linkInputView.searchTextField }
+
+    // MARK: - Private Property
+    private let _saveButton: AppButton
+
+    private let _linkView = UIView()
+    private let _titleLabel = UILabel()
+    private let _cancelButton = UIButton()
+    private let _linkInputView = UISearchBar()
+
+    // MARK: - Internal Property
+    var linkView: UIView { _linkView }
+    var linkInputTextField: UITextField { _linkInputView.searchTextField }
+    var cancelButton: UIButton { _cancelButton }
+    var saveButton: AppButton { _saveButton }
 
     init() {
-        saveButton = AppButton(type: .save)
+        self._saveButton = AppButton(type: .save)
 
         super.init(frame: .zero)
 
@@ -36,8 +39,6 @@ final class LinkSaveView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    var getSaveButton: AppButton { saveButton }
 }
 
 private extension LinkSaveView {
@@ -45,26 +46,25 @@ private extension LinkSaveView {
         setAttributes()
         setHierarchy()
         setConstraints()
-        setBindings()
     }
 
     func setAttributes() {
         self.backgroundColor = .black.withAlphaComponent(0.5)
 
-        linkView.do {
+        _linkView.do {
             $0.backgroundColor = .gray0
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
         }
 
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = "링크 저장"
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textAlignment = .center
         }
         
-        cancelButton.do {
+        _cancelButton.do {
             var config = UIButton.Configuration.plain()
             let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
             
@@ -74,7 +74,7 @@ private extension LinkSaveView {
             $0.tintColor = .gray900
         }
 
-        linkInputView.do {
+        _linkInputView.do {
             $0.backgroundImage = UIImage()
             $0.searchTextField.attributedPlaceholder = NSAttributedString(
                 string: "링크를 붙여주세요",
@@ -92,62 +92,42 @@ private extension LinkSaveView {
     }
 
     func setHierarchy() {
-        self.addSubviews(linkView)
-        linkView.addSubviews(titleLabel, cancelButton, linkInputView, saveButton)
+        self.addSubviews(_linkView)
+        _linkView.addSubviews(_titleLabel, _cancelButton, _linkInputView, _saveButton)
     }
 
     func setConstraints() {
-        linkView.snp.makeConstraints {
+        _linkView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
-        titleLabel.snp.makeConstraints {
+        _titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(20)
             $0.leading.equalToSuperview().offset(20)
         }
         
-        cancelButton.snp.makeConstraints {
-            $0.centerY.equalTo(titleLabel)
+        _cancelButton.snp.makeConstraints {
+            $0.centerY.equalTo(_titleLabel)
             $0.trailing.equalToSuperview().offset(-12)
         }
 
-        linkInputView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(25)
+        _linkInputView.snp.makeConstraints {
+            $0.top.equalTo(_titleLabel.snp.bottom).offset(25)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(49)
         }
         
-        linkInputView.searchTextField.snp.makeConstraints {
+        _linkInputView.searchTextField.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalToSuperview()
         }
 
-        saveButton.snp.makeConstraints {
-            $0.top.equalTo(linkInputView.snp.bottom).offset(12)
+        _saveButton.snp.makeConstraints {
+            $0.top.equalTo(_linkInputView.snp.bottom).offset(12)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(43)
             $0.bottom.equalToSuperview().offset(-20)
         }
-    }
-
-    func setBindings() {
-        let tapGesture = UITapGestureRecognizer()
-        tapGesture.delegate = self
-        self.addGestureRecognizer(tapGesture)
-
-        Observable.merge(
-            tapGesture.rx.event.map { _ in },
-            cancelButton.rx.tap.map { }
-        )
-        .subscribe(_dismiss)
-        .disposed(by: disposeBag)
-    }
-}
-
-extension LinkSaveView: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        let touchLocation = touch.location(in: self)
-        return !linkView.frame.contains(touchLocation)
     }
 }

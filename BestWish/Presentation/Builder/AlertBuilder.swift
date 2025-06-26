@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Custum Alert View
 final class AlertBuilder {
     private let baseViewController: UIViewController
     private let alertViewController: AlertViewController
@@ -20,6 +21,7 @@ final class AlertBuilder {
         self.alertViewController = AlertViewController(type: type, action: action)
     }
 
+    /// Custom Alert 띄우기
     func show() {
         alertViewController.modalPresentationStyle = .overFullScreen
         alertViewController.modalTransitionStyle = .crossDissolve

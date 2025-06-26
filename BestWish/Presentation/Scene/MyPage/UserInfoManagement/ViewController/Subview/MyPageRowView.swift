@@ -7,36 +7,41 @@
 
 import UIKit
 
+import SnapKit
+import Then
+
+/// 마이페이지 셀 뷰
 final class MyPageRowView: UIStackView {
     private let type: StackViewType
     private let title: String
     private let subTitle: String
 
-    private let titleLabel = UILabel()
-    private let arrowButton = UIButton()
+    // MARK: - Private Property
+    private let _titleLabel = UILabel()
+    private let _arrowButton = UIButton()
+
+    // MARK: - Internal Property
+    var arrowButton: UIButton { _arrowButton }
 
     init(type: StackViewType, title: String, subTitle: String = "") {
         self.type = type
         self.title = title
         self.subTitle = subTitle
-
         super.init(frame: .zero)
 
         setView()
     }
 
-    @available(*, unavailable)
     required init(coder: NSCoder) {
         fatalError()
     }
 
     func configure(title: String) {
-        titleLabel.text = title
+        _titleLabel.text = title
     }
-
-    var getArrowButton: UIButton { arrowButton }
 }
 
+// MARK: - View 설정
 private extension MyPageRowView {
     func setView() {
         setAttributes()
@@ -48,14 +53,14 @@ private extension MyPageRowView {
         self.axis = .horizontal
         self.distribution = .fill
 
-        titleLabel.do {
+        _titleLabel.do {
             $0.text = title
             $0.textColor = type.titleColor
             $0.font = type.titleFont
             $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
         }
 
-        arrowButton.do {
+        _arrowButton.do {
             var config = UIButton.Configuration.plain()
             config.baseForegroundColor = .gray200
             config.attributedTitle = AttributedString(subTitle, attributes: AttributeContainer([
@@ -76,18 +81,21 @@ private extension MyPageRowView {
     }
 
     func setHierarchy() {
-        self.addArrangedSubviews(titleLabel, arrowButton)
+        self.addArrangedSubviews(_titleLabel, _arrowButton)
     }
 
     func setConstraints() {
-        titleLabel.snp.makeConstraints { make in
+        _titleLabel.snp.makeConstraints { make in
             make.height.equalTo(43)
         }
     }
 }
 
+// MARK: - MyPageRowView: StackViewType 타입 정의
 extension MyPageRowView {
 
+    /// StackViewType
+    /// example: title + subTitle + > 버튼
     enum StackViewType {
         case minimal    // title만
         case button     // title + > 버튼
@@ -97,6 +105,7 @@ extension MyPageRowView {
     }
 }
 
+// MARK: - MyPageRowView: StackViewType 타입 프로퍼티 정의
 extension MyPageRowView.StackViewType {
     var isHiddenSubTitle: Bool {
         switch self {
