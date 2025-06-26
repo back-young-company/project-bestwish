@@ -23,13 +23,20 @@ final class ImageEditViewController: UIViewController {
     var onDismiss: (()-> Void)?
     var disposeBag = DisposeBag()
     
-    init(image: UIImage, viewModel: ImageEditViewModel) {
+    init(imageData: Data, viewModel: ImageEditViewModel) {
+        
         self.viewModel = viewModel
-        cropperVC = CropViewController(image: image)
+        if let image = UIImage(data: imageData) {
+            cropperVC = CropViewController(image: image)
+        } else {
+            cropperVC = CropViewController(image: UIImage())
+        }
+        
         imageEditView = ImageEditView(_cropView: cropperVC.view, _toolbar: cropperVC.toolbar)
         super.init(nibName: nil, bundle: nil)
         
     }
+    
     override func loadView() {
         view = imageEditView
     }
@@ -83,7 +90,7 @@ final class ImageEditViewController: UIViewController {
         
         // 라벨 데이터 요청
         viewModel.state.labelData
-            .subscribe(with: self, onNext: { owner, labelData in
+            .subscribe(with: self, onNext: { owner, labelData in            
                 let vc = DIContainer.shared.makeAnalysisViewController(labelData: labelData)
                 if let sheet = vc.sheetPresentationController {
                     sheet.detents = [
@@ -111,7 +118,8 @@ extension ImageEditViewController: CropViewControllerDelegate {
     
     /// 크롭 이미지 뷰 완료  버튼 호출 시
     func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
-        viewModel.action.onNext(.didTapDoneButton(image))
+        guard let imageData = image.pngData() else { return }
+        viewModel.action.onNext(.didTapDoneButton(imageData: imageData))
     }
     /// 크롭 이미지 뷰 취소 버튼 호출 시
     func cropViewController(_ cropViewController: CropViewController, didFinishCancelled cancelled: Bool) {

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 /// CoreML 레포지토리
 final class CoreMLRepositoryImpl: CoreMLRepository {
@@ -18,9 +17,9 @@ final class CoreMLRepositoryImpl: CoreMLRepository {
     }
     
     /// 라벨 데이터 추출
-    func fetchCoreMLLabelData(image: UIImage) throws -> [LabelData] {
+    func fetchCoreMLLabelData(imageData: Data) throws -> [LabelDataEntity] {
         do {
-            let labels = try manager.fetchCoreMLLabelData(image: image)
+            let labels = try manager.fetchCoreMLLabelData(imageData: imageData)
             return labels
         } catch let error as AppError {
             throw error

@@ -4,13 +4,12 @@
 //
 //  Created by Quarang on 6/17/25.
 //
-
-import UIKit
+import Foundation
 
 /// CoreML 유즈케이스
 protocol CoreMLUseCase {
     /// 라벨 데이터 추출
-    func fetchLabelDataModel(image: UIImage) throws -> [LabelData]
+    func fetchLabelDataModel(imageData: Data) throws -> [LabelDataEntity]
 }
 
 /// CoreML 유즈케이스 구현체
@@ -22,7 +21,7 @@ final class CoreMLUserCaseImpl: CoreMLUseCase {
     }
     
     /// 라벨 데이터 추출
-    func fetchLabelDataModel(image: UIImage) throws -> [LabelData] {
-        return try repository.fetchCoreMLLabelData(image: image)
+    func fetchLabelDataModel(imageData: Data) throws -> [LabelDataEntity] {
+        return try repository.fetchCoreMLLabelData(imageData: imageData)
     }
 }

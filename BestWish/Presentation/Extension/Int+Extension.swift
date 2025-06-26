@@ -2,7 +2,7 @@
 //  Int+Extension.swift
 //  BestWish
 //
-//  Created by 백래훈 on 6/18/25.
+//  Created by Quarang on 6/26/25.
 //
 
 import Foundation

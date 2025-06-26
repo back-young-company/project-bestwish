@@ -8,7 +8,7 @@
 import Foundation
 
 /// 처음 CoreML 모델에서 추출한 데이터
-struct LabelData {
+struct LabelDataEntity {
     let label: String
     let probability: Int
 }

@@ -21,8 +21,6 @@ final class AttributeCell: UICollectionViewCell, ReuseIdentifier {
     // MARK: - Internal Property
     var disposeBag: DisposeBag { _disposeBag }
     
-    private let emptyKeyword = "해당 카테고리의 키워드를 인식할 수 없습니다."
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -42,8 +40,9 @@ final class AttributeCell: UICollectionViewCell, ReuseIdentifier {
     func configure(attribute: String, isSelected: Bool) {
         _attributeLabel.text = attribute
         // 키워드가 비어 있을 시에는 옵션을 설정하지 않음
-        guard attribute != emptyKeyword else {
+        guard attribute != EmptyCategoryCase.emptyKeyword.rawValue else {
             _attributeLabel.backgroundColor = .clear
+            _attributeLabel.textColor = .black
             return
         }
         

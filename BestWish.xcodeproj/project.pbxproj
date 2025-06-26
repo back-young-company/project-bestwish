@@ -104,7 +104,6 @@
 				"Data/Util/Bundle+Util.swift",
 				"Data/Util/Platform+Util.swift",
 				"Data/Util/String+Util.swift",
-				"Data/Util/UIImage+Util.swift",
 				Domain/Entity/PlatformEntity.swift,
 				Domain/Entity/ProductEntity.swift,
 				Domain/Entity/SocialType.swift,
@@ -115,7 +114,6 @@
 				Domain/Interface/WishListRepository.swift,
 				Domain/UseCase/ProductSyncUseCase.swift,
 				Domain/UseCase/WishListUseCase.swift,
-				"Presentation/Extension/String+Extension.swift",
 				"Presentation/Extension/UIColor+Extension.swift",
 				"Presentation/Extension/UIFont+Extension.swift",
 				Presentation/Interface/ViewModel.swift,
@@ -478,7 +476,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -517,11 +515,11 @@
 				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWish/Resource/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BestWish;
+				INFOPLIST_KEY_CFBundleDisplayName = "베스트위시";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "이미지 분석을 위한 카메라 접근이 필요합니다. 카메라 접근 권한을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -534,7 +532,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACH_O_TYPE = mh_execute;
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -559,12 +557,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWish/Resource/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = BestWish;
+				INFOPLIST_KEY_CFBundleDisplayName = "베스트위시";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "이미지 분석을 위한 카메라 접근이 필요합니다. 카메라 접근 권한을 허용하시겠습니까?";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -577,7 +575,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACH_O_TYPE = mh_execute;
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
