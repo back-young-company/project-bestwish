@@ -168,11 +168,11 @@ private extension AnalysisViewModel {
     /// 키워드 추가 이벤트
     private func addKeyword(_ keyword: String) {
         var keywords = keywords
-        let changedKeywords = analysisUseCase.addKeyword(keyword, keywords: &keywords)
+        analysisUseCase.addKeyword(keyword, keywords: &keywords)
         
         // 키워드 추가
         changeItem(type: .keyword) {
-            changedKeywords.map {
+            keywords.map {
                 .keyword(keyword: $0)
             }
         }
@@ -183,11 +183,11 @@ private extension AnalysisViewModel {
     /// 키워드 삭제 이벤트
     private func deleteKeyword(_ keyword: String) {
         var keywords = keywords
-        let changedKeywords = analysisUseCase.deleteKeyword(keyword, keywords: &keywords)
+        analysisUseCase.deleteKeyword(keyword, keywords: &keywords)
         
         // 키워드 추가
         changeItem(type: .keyword) {
-            changedKeywords.map {
+            keywords.map {
                 .keyword(keyword: $0)
             }
         }
@@ -208,11 +208,16 @@ private extension AnalysisViewModel {
     
     /// 초기화
     private func resetKeyword() {
-        var models = _models.value
-        models[0] = AnalysisSectionModel(header: nil, type: .keyword, items: [])
-        _models.accept(models)
-        _segmentIndex.accept(0)
+        var keywords = keywords
+        analysisUseCase.resetKeyword(keywords: &keywords)
         
+        changeItem(type: .keyword) {
+            keywords.map {
+                .keyword(keyword: $0)
+            }
+        }
+        
+        _segmentIndex.accept(0)
         currentQuery.accept("")
         currentPlatform.accept(nil)
     }
