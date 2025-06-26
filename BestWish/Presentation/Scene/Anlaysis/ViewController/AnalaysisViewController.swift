@@ -102,7 +102,7 @@ final class AnalaysisViewController: UIViewController {
                 case let .keyword(keyword):
                     owner.viewModel.action.onNext(.didTapKeywordChip(keyword: keyword))
                 case let .attribute(attribute, _):
-                    guard attribute != String.emptyKeyword else { return }
+                    guard attribute != EmptyCategoryCase.emptyKeyword.rawValue else { return }
                     owner.viewModel.action.onNext(.didTapAttributeChip(attribute: attribute))
                 case let .platform(platform, _):
                     owner.viewModel.action.onNext(.didTapPlatformChip(platform: platform))
