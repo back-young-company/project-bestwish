@@ -60,5 +60,4 @@ final class AccountRepositoryImpl: AccountRepository {
             throw AppError.authError(error)
         }
     }
-
 }
