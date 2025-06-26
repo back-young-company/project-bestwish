@@ -80,6 +80,7 @@ jobs:
         echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_Release.xcconfig
         echo "SHARING_KEY = ${{ secrets.CONFIG_SHARING_KEY }}" >> BestWish/Config_Release.xcconfig
 
+        
         echo "API_KEY = ${{ secrets.CONFIG_API_KEY }}" > BestWish/Config_ShareExtension_Release.xcconfig
         echo "SUPABASE_URL = ${{ secrets.CONFIG_SUPABASE_URL }}" >> BestWish/Config_ShareExtension_Release.xcconfig
         echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_ShareExtension_Release.xcconfig
@@ -92,15 +93,15 @@ jobs:
           -destination "generic/platform=iOS" \
           -archivePath "${{ env.XC_ARCHIVE }}" \
           -verbose \
-          CODE_SIGN_IDENTITY="${{ env.IOS_APP_CODE_SIGN_IDENTITY }}" \
-          PROVISIONING_PROFILE_SPECIFIER="${{ env.IOS_APP_PROVISIONING_PROFILE_SPECIFIER }}" \
-          DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM_ID }}" \
-          \
+          BestWish_CODE_SIGN_IDENTITY="Apple Distribution" \
+          BestWish_DEVELOPMENT_TEAM="3BLN747VAP" \
           BestWish_CODE_SIGN_ENTITLEMENTS="BestWish/BestWish.entitlements" \
+          BestWish_CODE_SIGN_STYLE="Manual" \
+          \
+          BestWishShareExtension_CODE_SIGN_IDENTITY="Apple Distribution" \
+          BestWishShareExtension_DEVELOPMENT_TEAM="3BLN747VAP" \
           BestWishShareExtension_CODE_SIGN_ENTITLEMENTS="BestWishShareExtension/BestWishShareExtension.entitlements" \
-          BestWishShareExtension_CODE_SIGN_IDENTITY="${{ env.IOS_SHARE_EXTENSION_CODE_SIGN_IDENTITY }}" \
-          BestWishShareExtension_PROVISIONING_PROFILE_SPECIFIER="${{ env.IOS_SHARE_EXTENSION_PROVISIONING_PROFILE_SPECIFIER }}" \
-          BestWishShareExtension_DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM_ID }}"
+          BestWishShareExtension_CODE_SIGN_STYLE="Manual"
 
     - name: Export app
       run: |
