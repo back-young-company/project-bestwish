@@ -239,27 +239,24 @@ private extension AnalysisViewModel {
         var models = _models.value
         
         switch type {
-        case .keyword, .attribute:
-            // 키워드 추가
-            if type == .keyword {
-                models[0].items = completion()
-            } else {
-                models[1].items = completion()
-            }
-            
-            let keywords = models[0].items.compactMap {
-                if case let .keyword(keyword) = $0 { return keyword }
-                return nil
-            }
-            // 키워드가 있을 경우
-            models[1].items = models[1].items.compactMap {
-                if case let .attribute(attribute, _) = $0 {
-                    return AnalysisItem.attribute(attribute: attribute, isSelected: !keywords.contains(attribute))
-                }
-                return nil
-            }
+        case .keyword:
+            models[0].items = completion()
+        case .attribute:
+            models[1].items = completion()
         case .platform:
             models[2].items = completion()
+        }
+        // 현재 추가한 키워드 값을 받아와 keywords에 저장
+        let keywords = models[0].items.compactMap {
+            if case let .keyword(keyword) = $0 { return keyword }
+            return nil
+        }
+        // 현재 키워드값이 포함된 속성 칩 UI 업데이트 (보라 <-> 하양)
+        models[1].items = models[1].items.compactMap {
+            if case let .attribute(attribute, _) = $0 {
+                return AnalysisItem.attribute(attribute: attribute, isSelected: !keywords.contains(attribute))
+            }
+            return nil
         }
         _models.accept(models)
     }
