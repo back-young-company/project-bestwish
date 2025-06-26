@@ -5,7 +5,7 @@
 //  Created by 이수현 on 6/5/25.
 //
 
-import UIKit
+import Foundation
 
 /// 의존성 주입 컨테이너
 final class DIContainer {
@@ -144,17 +144,14 @@ final class DIContainer {
     }
 
     /// 이미지 편집 뷰 컨트롤러 생성
-    func makeImageEditController(image: UIImage) -> ImageEditViewController {
+    func makeImageEditController(imageData: Data) -> ImageEditViewController {
         let viewModel = ImageEditViewModel(coreMLUseCase: coreMLUseCase)
-        return ImageEditViewController(image: image, viewModel: viewModel)
+        return ImageEditViewController(imageData: imageData, viewModel: viewModel)
     }
 
     /// 이미지 분석 뷰 컨트롤러 생성
-    func makeAnalysisViewController(labelData: [LabelDataModel]) -> AnalaysisViewController {
-        let viewModel = AnalysisViewModel(
-            analysisUseCase: analysisUseCase,
-            labelData: labelData
-        )
+    func makeAnalysisViewController(labelData: [LabelDataEntity]) -> AnalaysisViewController {
+        let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
         return AnalaysisViewController(viewModel: viewModel)
     }
 }
