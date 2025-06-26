@@ -7,11 +7,8 @@
 
 import Foundation
 
-extension Int {
-    func formattedPrice() -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = ","
-        return formatter.string(from: NSNumber(value: self)) ?? "\(self)"
-    }
+// MARK: - String 확장
+extension String {
+    /// 비어 있는 키워드 예외처리를 위함
+    static let emptyKeyword: String = "해당 카테고리의 키워드를 인식할 수 없습니다."
 }
