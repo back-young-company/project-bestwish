@@ -4,7 +4,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ "release/*" ] # release로 시작하는 브랜치가 push되면 액션 시작
+    branches: [ "release/*", "hotfix/*" ] # release, hotfix로 시작하는 브랜치가 push되면 액션 시작
 
 jobs:
   deploy:
@@ -56,6 +56,7 @@ jobs:
         security default-keychain -s "$KEYCHAIN"
         security unlock-keychain -p "" "$KEYCHAIN"
         security set-keychain-settings
+        
     - name : Configure Code Signing
       run: |
         gpg -d -o "$DECRYPTED_CERT_FILE_PATH" --pinentry-mode=loopback --passphrase "$CERT_ENCRYPTION_KEY" "$ENCRYPTED_CERT_FILE_PATH"
@@ -71,6 +72,20 @@ jobs:
           UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i "$PROVISION")) # "$PROVISION" 에 따옴표 추가
           cp "$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision" # "$PROVISION" 에 따옴표 추가
         done
+        
+    - name: Configuraion file setting
+      run: |
+        echo "API_KEY = ${{ secrets.CONFIG_API_KEY }}" > BestWish/Config_Release.xcconfig
+        echo "SUPABASE_URL = ${{ secrets.CONFIG_SUPABASE_URL }}" >> BestWish/Config_Release.xcconfig
+        echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_Release.xcconfig
+        echo "SHARING_KEY = ${{ secrets.CONFIG_SHARING_KEY }}" >> BestWish/Config_Release.xcconfig
+
+        
+        echo "API_KEY = ${{ secrets.CONFIG_API_KEY }}" > BestWish/Config_ShareExtension_Release.xcconfig
+        echo "SUPABASE_URL = ${{ secrets.CONFIG_SUPABASE_URL }}" >> BestWish/Config_ShareExtension_Release.xcconfig
+        echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_ShareExtension_Release.xcconfig
+        echo "SHARING_KEY = ${{ secrets.CONFIG_SHARING_KEY }}" >> BestWish/Config_ShareExtension_Release.xcconfig
+        
     - name: Archive app
       run: |
         xcodebuild clean archive -project BestWish.xcodeproj \
@@ -78,12 +93,15 @@ jobs:
           -destination "generic/platform=iOS" \
           -archivePath "${{ env.XC_ARCHIVE }}" \
           -verbose \
-          CODE_SIGN_IDENTITY="${{ env.IOS_APP_CODE_SIGN_IDENTITY }}" \
-          PROVISIONING_PROFILE_SPECIFIER="${{ env.IOS_APP_PROVISIONING_PROFILE_SPECIFIER }}" \
-          DEVELOPMENT_TEAM="${{ env.DEVELOPMENT_TEAM_ID }}" \
-          "BestWishShareExtension_CODE_SIGN_IDENTITY=${{ env.IOS_SHARE_EXTENSION_CODE_SIGN_IDENTITY }}" \
-          "BestWishShareExtension_PROVISIONING_PROFILE_SPECIFIER=${{ env.IOS_SHARE_EXTENSION_PROVISIONING_PROFILE_SPECIFIER }}" \
-          "BestWishShareExtension_DEVELOPMENT_TEAM=${{ env.DEVELOPMENT_TEAM_ID }}"
+          BestWish_CODE_SIGN_IDENTITY="Apple Distribution" \
+          BestWish_DEVELOPMENT_TEAM="3BLN747VAP" \
+          BestWish_CODE_SIGN_ENTITLEMENTS="BestWish/BestWish.entitlements" \
+          BestWish_CODE_SIGN_STYLE="Manual" \
+          \
+          BestWishShareExtension_CODE_SIGN_IDENTITY="Apple Distribution" \
+          BestWishShareExtension_DEVELOPMENT_TEAM="3BLN747VAP" \
+          BestWishShareExtension_CODE_SIGN_ENTITLEMENTS="BestWishShareExtension/BestWishShareExtension.entitlements" \
+          BestWishShareExtension_CODE_SIGN_STYLE="Manual"
 
     - name: Export app
       run: |

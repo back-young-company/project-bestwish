@@ -130,7 +130,7 @@ private extension PlatformEditViewController {
 
         header.completeButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.platformEditViewModel.action.onNext(.updatePlatformEdit(owner.updatedIndices))
+                owner.platformEditViewModel.action.onNext(.updatePlatformEdit)
             }
             .disposed(by: disposeBag)
     }
