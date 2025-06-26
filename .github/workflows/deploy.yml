@@ -79,6 +79,11 @@ jobs:
         echo "SUPABASE_URL = ${{ secrets.CONFIG_SUPABASE_URL }}" >> BestWish/Config_Release.xcconfig
         echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_Release.xcconfig
         echo "SHARING_KEY = ${{ secrets.CONFIG_SHARING_KEY }}" >> BestWish/Config_Release.xcconfig
+
+        echo "API_KEY = ${{ secrets.CONFIG_API_KEY }}" > BestWish/Config_ShareExtension_Release.xcconfig
+        echo "SUPABASE_URL = ${{ secrets.CONFIG_SUPABASE_URL }}" >> BestWish/Config_ShareExtension_Release.xcconfig
+        echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_ShareExtension_Release.xcconfig
+        echo "SHARING_KEY = ${{ secrets.CONFIG_SHARING_KEY }}" >> BestWish/Config_ShareExtension_Release.xcconfig
         
     - name: Archive app
       run: |
