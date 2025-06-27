@@ -42,6 +42,14 @@ final class ProductSyncManager {
                 html: html
             )
             return metadata
+        case .kream:
+            let (_, html) = try await resolveFinalURL(url: originalUrl)
+            let metadata = try await KreamFetcher().fetchProductDTO(
+                ogUrl: originalUrl,
+                finalUrl: nil,
+                html: html
+            )
+            return metadata
         default:
             throw ProductSyncError.platformDetectionFailed
         }
