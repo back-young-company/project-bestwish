@@ -20,6 +20,7 @@ extension PlatformEntity {
         case .zigzag: return "zigzag"
         case .ably: return "a-bly"
         case .kream: return "kream"
+        case .brandy: return "brandi"
         default: return "unknown"
         }
     }
