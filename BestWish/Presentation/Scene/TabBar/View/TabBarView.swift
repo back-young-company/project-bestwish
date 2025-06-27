@@ -103,31 +103,27 @@ private extension TabBarView {
         
         tabBar.snp.makeConstraints {
             $0.horizontalEdges.bottom.equalToSuperview()
-            $0.height.equalTo(UIScreen.main.bounds.height < 700 ? 84 : 120)
+            $0.height.equalTo(UIScreen.main.bounds.height < 700 ? 72 : 110)
         }
         
-        let screenHeight = UIScreen.main.bounds.height
-        let baseHeight: CGFloat = 844 // iPhone 14 height for baseline
-        let scaleFactor = screenHeight / baseHeight
-
         _leftItemButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -16)
-            $0.leading.equalToSuperview().inset(48)
-            $0.width.equalTo(64 * scaleFactor)
-            $0.height.equalTo(80 * scaleFactor)
+            $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -10)
+            $0.leading.equalToSuperview().inset(54)
+            $0.width.equalTo(CGFloat(54).fitWidth)
+            $0.height.equalTo(CGFloat(72).fitWidth)
         }
 
         _centerItemButton.snp.makeConstraints {
             $0.centerX.equalTo(tabBar.snp.centerX)
-            $0.centerY.equalTo(tabBar.snp.top).offset(8 * scaleFactor)
-            $0.width.height.equalTo(84 * scaleFactor)
+            $0.centerY.equalTo(tabBar.snp.top).offset(CGFloat(8).fitWidth)
+            $0.width.height.equalTo(CGFloat(72).fitHeight)
         }
 
         _rightItemButton.snp.makeConstraints {
-            $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -16)
-            $0.trailing.equalToSuperview().inset(48)
-            $0.width.equalTo(64 * scaleFactor)
-            $0.height.equalTo(80 * scaleFactor)
+            $0.centerY.equalToSuperview().offset(UIScreen.main.bounds.height < 700 ? 0 : -10)
+            $0.trailing.equalToSuperview().inset(54)
+            $0.width.equalTo(CGFloat(54).fitWidth)
+            $0.height.equalTo(CGFloat(72).fitWidth)
         }
     }
 }
