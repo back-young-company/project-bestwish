@@ -12,12 +12,14 @@ import RxDataSources
 /// 섹션 헤더 정의
 enum HomeHeader: String {
     case platform = "플랫폼 바로가기"
-    case wishlist = "쇼핑몰 위시리스트"
+    case filter = "쇼핑몰 위시리스트"
+    case wishlist
 }
 
 /// 섹션 아이템 케이스 정의
 enum HomeItem: Equatable {
     case platform(PlatformItem)
+    case filter(Int)
     case wishlist(WishListProductItem)
     case wishlistEmpty
 }

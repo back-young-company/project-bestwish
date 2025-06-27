@@ -50,6 +50,10 @@ private extension HomeView {
                 forCellWithReuseIdentifier: PlatformShortcutCell.identifier
             )
             $0.register(
+                WishListFilterCell.self,
+                forCellWithReuseIdentifier: WishListFilterCell.identifier
+            )
+            $0.register(
                 WishListCell.self,
                 forCellWithReuseIdentifier: WishListCell.identifier
             )
@@ -61,6 +65,16 @@ private extension HomeView {
                 PlatformShortcutHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: PlatformShortcutHeaderView.identifier
+            )
+            $0.register(
+                FilterHeaderView.self,
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: FilterHeaderView.identifier
+            )
+            $0.register(
+                MWishListHeaderView.self,
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: MWishListHeaderView.identifier
             )
             $0.register(
                 WishListHeaderView.self,

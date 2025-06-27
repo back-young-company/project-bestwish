@@ -66,21 +66,27 @@ final class HomeViewModel: ViewModel {
     
     private func bind() {
         _action
-            .subscribe(with: self) { owner, action in
+            .subscribe(with: self) {
+                owner,
+                action in
                 switch action {
                 case .getDataSource:
                     Task {
                         do {
-                            // 플랫폼 필터 칩
-                            let platformFilters = try await owner.getPlatformInWishList()
                             // 플랫폼 바로가기
                             let platforms = try await owner.getPlatformSequence()
+                            // 플랫폼 필터 칩
+                            let filters = try await owner.getPlatformInWishList()
                             // 위시리스트
                             let wishLists = try await owner.getWishLists()
                             
-                            owner._platformFilter.accept(platformFilters)
+                            owner._platformFilter.accept(filters)
                             owner._selectedPlatform.accept(0)
-                            owner.setDataSources(platforms: platforms, wishLists: wishLists)
+                            owner.setDataSources(
+                                platforms: platforms,
+                                filters: filters,
+                                wishLists: wishLists
+                            )
                         } catch {
                             owner._error.accept(error)
                         }
@@ -91,9 +97,9 @@ final class HomeViewModel: ViewModel {
                             let platforms = try await owner.getPlatformSequence()
                             
                             let currentSections = owner._sections.value
-                            guard currentSections.count == 2 else { return }
-                            let wishlistsSection = currentSections[1]
-                            
+                            guard currentSections.count == 3 else { return }
+                            let wishlistsSection = currentSections[2]
+
                             let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
                             owner._sections.accept([platformsSection, wishlistsSection])
                         } catch {
@@ -103,11 +109,14 @@ final class HomeViewModel: ViewModel {
                 case .wishlistUpdate:
                     Task {
                         do {
-                            let platformFilters = try await owner.getPlatformInWishList()
+                            // 플랫폼 필터 칩
+                            let filters = try await owner.getPlatformInWishList()
+                            // 위시리스트
                             let wishlists = try await owner.getWishLists()
+
                             let currentSections = owner._sections.value
-                            guard currentSections.count == 2 else { return }
-                            
+                            guard currentSections.count == 3 else { return }
+
                             let platformsSection = currentSections[0].items
                             
                             let platforms: [PlatformItem] = platformsSection.compactMap {
@@ -119,8 +128,12 @@ final class HomeViewModel: ViewModel {
                             
 //                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlists.map { .wishlist($0) })
                             
-                            owner._platformFilter.accept(platformFilters)
-                            owner.setDataSources(platforms: platforms, wishLists: wishlists)
+                            owner._platformFilter.accept(filters)
+                            owner.setDataSources(
+                                platforms: platforms,
+                                filters: filters,
+                                wishLists: wishlists
+                            )
                             
 //                            owner._sections.accept([platformsSection, wishlistsSection])
                         } catch {
@@ -194,12 +207,15 @@ private extension HomeViewModel {
     }
 
     /// section model 설정 및 전달
-    func setDataSources(platforms: [PlatformItem], wishLists: [WishListProductItem]) {
+    func setDataSources(platforms: [PlatformItem], filters: [(Int, Int)], wishLists: [WishListProductItem]) {
         let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
+
+        let filters: [HomeItem] = filters.isEmpty ? [] : filters.map { .filter($0.0) }
+        let filterSection = HomeSectionModel(header: .filter, items: filters)
 
         let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
         let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists)
 
-        _sections.accept([platformsSection, wishlistSection])
+        _sections.accept([platformsSection, filterSection, wishlistSection])
     }
 }

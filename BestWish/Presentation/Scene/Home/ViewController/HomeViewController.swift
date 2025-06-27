@@ -33,6 +33,13 @@ final class HomeViewController: UIViewController {
                 cell.configure(type: platform)
 
                 return cell
+
+            case let .filter(index):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WishListFilterCell.identifier, for: indexPath) as? WishListFilterCell else { return UICollectionViewCell() }
+
+                cell.configure(type: index, isSelected: false)
+                return cell
+
             case let .wishlist(product):
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: WishListCell.identifier,
@@ -87,71 +94,94 @@ final class HomeViewController: UIViewController {
                     }.disposed(by: headerView.disposeBag)
 
                 return headerView
+
+            case .filter:
+                guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: FilterHeaderView.identifier,
+                    for: indexPath
+                ) as? FilterHeaderView else { return UICollectionReusableView() }
+
+                headerView.configure(title: "쇼핑몰 위시리스트")
+                headerView.configure(isHidden: items.isEmpty)
+
+                return headerView
+
             case .wishlist:
-                if items.count == 1 && section.items.first == .wishlistEmpty {
-                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
-                        ofKind: kind,
-                        withReuseIdentifier: WishListEmptyHeaderView.identifier,
-                        for: indexPath
-                    ) as? WishListEmptyHeaderView else { return UICollectionReusableView() }
+                guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: MWishListHeaderView.identifier,
+                    for: indexPath
+                ) as? MWishListHeaderView else { return UICollectionReusableView() }
 
-                    return headerView
-                } else {
-                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
-                        ofKind: kind,
-                        withReuseIdentifier: WishListHeaderView.identifier,
-                        for: indexPath
-                    ) as? WishListHeaderView else { return UICollectionReusableView() }
-                    let totalItemCount = dataSource.sectionModels[1].items.map { $0 }.count
+                headerView.configure(productCount: items.count)
 
-                    self.homeViewModel.state.selectedPlatform
-                        .bind(to: headerView.selectedPlatformRelay)
-                        .disposed(by: headerView.disposeBag)
+                return headerView
 
-                    headerView.configure(title: "쇼핑몰 위시리스트")
-                    headerView.configure(productCount: totalItemCount)
-                    headerView.configure(platforms: self.homeViewModel.state.platformFilter)
-
-                    headerView.searchTextField.rx.text.orEmpty
-                        .bind(with: self) { owner, query in
-                            owner.homeViewModel.action.onNext(.searchQuery(query))
-                        }.disposed(by: headerView.disposeBag)
-
-                    headerView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-                        .withLatestFrom(self.homeViewModel.state.selectedPlatform) { _, index in
-                            return index
-                        }
-                        .bind(with: self) { owner, index in
-                            headerView.searchTextField.resignFirstResponder()
-                            owner.homeViewModel.action.onNext(.filterIndex(index, force: true))
-                        }
-                        .disposed(by: headerView.disposeBag)
-
-                    headerView.selectedPlatformRelay
-                        .bind(with: self) { owner, index in
-                            owner.homeViewModel.action.onNext(.filterIndex(index))
-                        }
-                        .disposed(by: headerView.disposeBag)
-
-                    headerView.linkButton.rx.tap
-                        .bind(with: self) { owner, _ in
-                            let alertViewController = DIContainer.shared.makeLinkSaveViewController()
-                            alertViewController.modalPresentationStyle = .overFullScreen
-                            alertViewController.modalTransitionStyle = .crossDissolve
-                            alertViewController.delegate = owner
-
-                            owner.present(alertViewController, animated: true)
-                        }.disposed(by: headerView.disposeBag)
-
-                    headerView.editButton.rx.tap
-                        .bind(with: self) { owner, _ in
-                            let vc = DIContainer.shared.makeWishlistEditViewController()
-                            vc.delegate = owner
-                            owner.navigationController?.pushViewController(vc, animated: true)
-                        }.disposed(by: headerView.disposeBag)
-
-                    return headerView
-                }
+//                if items.count == 1 && section.items.first == .wishlistEmpty {
+//                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
+//                        ofKind: kind,
+//                        withReuseIdentifier: WishListEmptyHeaderView.identifier,
+//                        for: indexPath
+//                    ) as? WishListEmptyHeaderView else { return UICollectionReusableView() }
+//
+//                    return headerView
+//                } else {
+//                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
+//                        ofKind: kind,
+//                        withReuseIdentifier: WishListHeaderView.identifier,
+//                        for: indexPath
+//                    ) as? WishListHeaderView else { return UICollectionReusableView() }
+//                    let totalItemCount = dataSource.sectionModels[1].items.map { $0 }.count
+//
+//                    self.homeViewModel.state.selectedPlatform
+//                        .bind(to: headerView.selectedPlatformRelay)
+//                        .disposed(by: headerView.disposeBag)
+//
+//                    headerView.configure(title: "쇼핑몰 위시리스트")
+//                    headerView.configure(productCount: totalItemCount)
+//                    headerView.configure(platforms: self.homeViewModel.state.platformFilter)
+//
+//                    headerView.searchTextField.rx.text.orEmpty
+//                        .bind(with: self) { owner, query in
+//                            owner.homeViewModel.action.onNext(.searchQuery(query))
+//                        }.disposed(by: headerView.disposeBag)
+//
+//                    headerView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+//                        .withLatestFrom(self.homeViewModel.state.selectedPlatform) { _, index in
+//                            return index
+//                        }
+//                        .bind(with: self) { owner, index in
+//                            headerView.searchTextField.resignFirstResponder()
+//                            owner.homeViewModel.action.onNext(.filterIndex(index, force: true))
+//                        }
+//                        .disposed(by: headerView.disposeBag)
+//
+//                    headerView.selectedPlatformRelay
+//                        .bind(with: self) { owner, index in
+//                            owner.homeViewModel.action.onNext(.filterIndex(index))
+//                        }
+//                        .disposed(by: headerView.disposeBag)
+//
+//                    headerView.linkButton.rx.tap
+//                        .bind(with: self) { owner, _ in
+//                            let alertViewController = DIContainer.shared.makeLinkSaveViewController()
+//                            alertViewController.modalPresentationStyle = .overFullScreen
+//                            alertViewController.modalTransitionStyle = .crossDissolve
+//                            alertViewController.delegate = owner
+//
+//                            owner.present(alertViewController, animated: true)
+//                        }.disposed(by: headerView.disposeBag)
+//
+//                    headerView.editButton.rx.tap
+//                        .bind(with: self) { owner, _ in
+//                            let vc = DIContainer.shared.makeWishlistEditViewController()
+//                            vc.delegate = owner
+//                            owner.navigationController?.pushViewController(vc, animated: true)
+//                        }.disposed(by: headerView.disposeBag)
+//
+//                    return headerView
+//                }
             }
         })
 
@@ -205,6 +235,8 @@ final class HomeViewController: UIViewController {
                     return owner.switchDeeplink(product.productDeepLink ?? "")
                 case .wishlistEmpty:
                     return
+                case .filter(_):
+                    return
                 }
             }
             .disposed(by: disposeBag)
@@ -233,11 +265,18 @@ private extension HomeViewController {
             switch section.header {
             case .platform:
                 return NSCollectionLayoutSection.createPlatformShortcutSection()
+            case .filter:
+                return NSCollectionLayoutSection.createPlatformFilterSection()
             case .wishlist:
                 let isEmptyState = section.items.count == 1 && section.items.first == .wishlistEmpty
                 return isEmptyState ? NSCollectionLayoutSection.createWishlistEmptySection() : NSCollectionLayoutSection.createWishlistSection()
+
             }
         }
+        homeView.collectionView.collectionViewLayout.register(
+            SectionBackgroundDecorationView.self,
+            forDecorationViewOfKind: SectionBackgroundDecorationView.identifier
+        )
     }
 
     /// 외부 플랫폼 전환

@@ -32,6 +32,7 @@ final class WishListHeaderView: UICollectionReusableView, ReuseIdentifier {
     let selectedPlatformRelay = BehaviorRelay<Int>(value: 0)
     var linkButton: UIButton { _linkButton }
     var editButton: UIButton { _editButton }
+    var searchBar: UISearchBar { _searchBar }
     var searchTextField: UITextField { _searchBar.searchTextField }
     var disposeBag: DisposeBag { _disposeBag }
 
