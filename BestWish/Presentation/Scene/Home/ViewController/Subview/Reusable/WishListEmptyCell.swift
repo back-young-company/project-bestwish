@@ -52,7 +52,7 @@ private extension WishListEmptyCell {
     
     func setAttributes() {
         _emptyImageView.do {
-            $0.image = UIImage(named: "no_product")
+            $0.image = UIImage(named: "noProduct")
             $0.contentMode = .scaleAspectFit
         }
         
