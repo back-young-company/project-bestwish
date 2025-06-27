@@ -17,7 +17,7 @@ final class PlatformEditViewModel: ViewModel {
     enum Action {
         case viewDidLoad
         case itemMoved([PlatformEditItem])
-        case updatePlatformEdit([Int])
+        case updatePlatformEdit
     }
 
     // MARK: - State
@@ -36,6 +36,7 @@ final class PlatformEditViewModel: ViewModel {
     private let _sections = BehaviorRelay<[PlatformEditSectionModel]>(value: [])
     private let _sendDelegate = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
+    private var _updatedIndices = BehaviorRelay<[Int]>(value: [])
 
     private let useCase: WishListUseCase
     private let disposeBag = DisposeBag()
@@ -59,7 +60,9 @@ final class PlatformEditViewModel: ViewModel {
                 case .viewDidLoad:
                     Task {
                         do {
-                            let items = try await owner.getPlatformSequence(isEdit: true)
+                            let items = try await owner.getPlatformFilterSequence(isEdit: true)
+                            let sequence = try await owner.getPlatformSequence()
+                            owner._updatedIndices.accept(sequence)
                             owner.setDataSources(items: items)
                         } catch {
                             owner._error.accept(error)
@@ -69,12 +72,16 @@ final class PlatformEditViewModel: ViewModel {
                     var section = owner._sections.value
                     section[0] = PlatformEditSectionModel(header: "헤더", items: platforms)
                     owner._sections.accept(section)
-                    
-                case .updatePlatformEdit(let indices):
+
+                    let sequence = platforms.compactMap { item in
+                        PlatformEntity.allCases.firstIndex(where: { $0.platformName == item.platformName })
+                    }
+                    owner._updatedIndices.accept(sequence)
+                case .updatePlatformEdit:
                     Task {
                         do {
-                            try await owner.updatePlatformSequence(indices)
-                            let items = try await owner.getPlatformSequence(isEdit: true)
+                            try await owner.updatePlatformSequence(owner._updatedIndices.value)
+                            let items = try await owner.getPlatformFilterSequence(isEdit: true)
                             owner.setDataSources(items: items)
                             owner._sendDelegate.accept(())
                         } catch {
@@ -87,9 +94,15 @@ final class PlatformEditViewModel: ViewModel {
     }
 }
 
+// MARK: - private 메서드
 private extension PlatformEditViewModel {
-    /// Supabase 플랫폼 시퀀스 가져오기
-    func getPlatformSequence(isEdit: Bool) async throws -> [PlatformEditItem] {
+    /// 플랫폼 시퀀스 가져오기
+    func getPlatformSequence() async throws -> [Int] {
+        try await self.useCase.getPlatformSequence()
+    }
+
+    /// 플랫폼 필터 시퀀스 load 후 [PlatformEditItem] 리턴
+    func getPlatformFilterSequence(isEdit: Bool) async throws -> [PlatformEditItem] {
         let result = try await self.useCase.getPlatformsInWishList(isEdit: isEdit)
         return result.map { tupple in
             let shopPlatform = PlatformEntity.allCases[tupple.platform]
@@ -101,7 +114,7 @@ private extension PlatformEditViewModel {
         }
     }
 
-    /// Supabase 플랫폼 시퀀스 업데이트
+    /// 플랫폼 시퀀스 업데이트
     func updatePlatformSequence(_ sequence: [Int]) async throws {
         try await self.useCase.updatePlatformSequence(to: sequence)
     }
