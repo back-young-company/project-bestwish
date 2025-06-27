@@ -77,16 +77,19 @@ extension PlatformEntity {
             return "ably://main"
         case .kream:
             return "https://kream.airbridge.io/home/"
-        case .all, .brandy, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
+        case .brandy:
+            return "https://brandi.onelink.me/8g7c"
+        case .all, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
             return "notFound"
         }
     }
     
+    
     func searchResultDeepLink(keyword: String) -> String {
         switch self {
         case .musinsa:
-            guard let encodedKeyword = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
-            return "https://musinsaapp.page.link/?link=https%3A%2F%2Fwww.musinsa.com%2Fsearch%2Fgoods%3Fkeyword%3D\(encodedKeyword)%26keywordType%3Dpopular%26gf%3DA%26_gf%3DA&apn=com.musinsa.store&isi=1003139529&ibi=com.grab.musinsa&efr=1"
+            guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
+            return "https://musinsaapp.page.link/?link=https%3A%2F%2Fwww.musinsa.com%2Fsearch%2Fgoods%3Fkeyword%3D\(encoded)%26keywordType%3Dpopular%26gf%3DA%26_gf%3DA&apn=com.musinsa.store&isi=1003139529&ibi=com.grab.musinsa&efr=1"
         case .zigzag:
             return "https://zigzag.kr/search?keyword=\(keyword)"
         case .ably:
@@ -94,6 +97,9 @@ extension PlatformEntity {
         case .kream:
             guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
             return "https://kream.airbridge.io/search?keyword=\(encoded)&tab=products&footer=home&deeplink_url=kreamapp%3A%2F%2Fsearch%3Fkeyword%3D\(encoded)%26tab%3Dproducts%26footer%3Dhome&fallback_ios=itunes-appstore&ab_airpage=0&abi_skip_tk=1&airbridge_referrer=airbridge%3Dtrue%26client_id%3D692b8874-5eb9-49a0-a37f-97e31f0eec87%26channel%3Dgoogle%26campaign%3DNEW_%25EC%259E%2590%25EC%2582%25AC%25EB%25AA%2585_%25EC%2588%2598%25EB%258F%2599_MO%26content%3DA.%252B%25EC%259E%2590%25EC%2582%25AC%25EB%25AA%2585_%25EC%2588%2598%25EB%258F%2599%26medium%3Dcpc%26term%3Dkream%26referrer_timestamp%3D1751004482626%26tp_gen_type%3D1221%26keyword%3D\(encoded)%26tab%3Dproducts%26footer%3Dhome%26cta_param_1%3Dweb%2520to%2520app%26cta_param_2%3Dbanner"
+        case .brandy:
+            guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
+            return "https://www.brandi.co.kr/search?q=\(encoded)"
         default: return "notFound"
         }
     }
