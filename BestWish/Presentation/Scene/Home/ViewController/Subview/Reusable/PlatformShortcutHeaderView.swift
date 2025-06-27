@@ -57,7 +57,7 @@ private extension PlatformShortcutHeaderView {
         _bestWishLabel.do {
             $0.text = "BESTWISH"
             $0.textColor = .gray900
-            $0.font = .font(.antonRegular, ofSize: 20)
+            $0.font = .font(.antonRegular, ofSize: 28)
             $0.numberOfLines = 1
         }
         
@@ -82,7 +82,7 @@ private extension PlatformShortcutHeaderView {
         _bestWishLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(9)
             $0.leading.equalToSuperview().offset(8)
-            $0.height.equalTo(20)
+            $0.height.equalTo(28)
         }
         
         _titleLabel.snp.makeConstraints {

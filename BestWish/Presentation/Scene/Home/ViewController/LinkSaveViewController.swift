@@ -73,6 +73,7 @@ final class LinkSaveViewController: UIViewController {
         }.disposed(by: disposeBag)
 
         linkSaveView.saveButton.rx.tap
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
             .withLatestFrom(linkSaveView.linkInputTextField.rx.text.orEmpty) { _, url in
                 return url
             }

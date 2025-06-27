@@ -79,15 +79,16 @@ private extension LinkSaveView {
             $0.searchTextField.attributedPlaceholder = NSAttributedString(
                 string: "링크를 붙여주세요",
                 attributes: [
-                    .foregroundColor: UIColor.gray400 ?? .black, // 원하는 placeholder 색상
+                    .foregroundColor: UIColor.gray400 ?? .black,
                     .font: UIFont.font(.pretendardBold, ofSize: 14)
                 ]
             )
             $0.searchTextField.font = .font(.pretendardBold, ofSize: 14)
             $0.searchTextField.textColor = .gray900
-            let image = UIImage(systemName: "link")?.withRenderingMode(.alwaysTemplate)
+
+            let image = UIImage(named: "link")?.withRenderingMode(.alwaysOriginal)
             $0.setImage(image, for: .search, state: .normal)
-            $0.searchTextField.leftView?.tintColor = .gray200 // 필요 시 색상 설정
+            $0.searchTextField.leftView?.tintColor = .gray200
         }
     }
 

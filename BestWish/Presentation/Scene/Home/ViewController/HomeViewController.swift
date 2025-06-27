@@ -188,8 +188,6 @@ final class HomeViewController: UIViewController {
     }
 
     private func bindViewModel() {
-
-        
         homeView.collectionView.rx.itemSelected
             .withLatestFrom(homeViewModel.state.sections) { indexPath, sections in
                 return (indexPath, sections)
