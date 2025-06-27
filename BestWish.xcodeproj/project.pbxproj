@@ -95,6 +95,7 @@
 				Data/Network/Error/ProductSyncError.swift,
 				Data/Network/Error/SupabaseError.swift,
 				Data/Network/Fetcher/AblyFetcher.swift,
+				Data/Network/Fetcher/BrandiFetcher.swift,
 				Data/Network/Fetcher/KreamFetcher.swift,
 				Data/Network/Fetcher/MusinsaFetcher.swift,
 				Data/Network/Fetcher/ZigzagFetcher.swift,

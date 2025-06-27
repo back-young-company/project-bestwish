@@ -50,6 +50,24 @@ final class ProductSyncManager {
                 html: html
             )
             return metadata
+        case .brandy:
+            // 브랜디 딥링크 URL 변환 → 웹 URL
+            let url: URL
+            
+            if originalUrl.absoluteString.contains("https://www.brandi.co.kr/products") {
+                url = originalUrl
+            } else {
+                let productID = originalUrl.absoluteString.components(separatedBy: "id=").last?.components(separatedBy: "&").first ?? ""
+                url = URL(string: "https://www.brandi.co.kr/products/\(productID)")!
+            }
+            
+            let (_, html) = try await resolveFinalURL(url: url)
+            let metadata = try await BrandiFetcher().fetchProductDTO(
+                ogUrl: originalUrl,
+                finalUrl: nil,
+                html: html
+            )
+            return metadata
         default:
             throw ProductSyncError.platformDetectionFailed
         }
