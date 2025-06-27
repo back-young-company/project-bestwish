@@ -75,7 +75,9 @@ extension PlatformEntity {
             return "zigzag://open/"
         case .ably:
             return "ably://main"
-        case .all, .kream, .brandy, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
+        case .kream:
+            return "https://kream.airbridge.io/home/"
+        case .all, .brandy, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
             return "notFound"
         }
     }
@@ -89,6 +91,9 @@ extension PlatformEntity {
             return "https://zigzag.kr/search?keyword=\(keyword)"
         case .ably:
             return "ably://search?screen_name=SEARCH_RESULT&search_type=POPULAR&query=\(keyword)&airbridge_referrer=airbridge%3Dtrue%26event_uuid%3D466dd3bd-f4b1-467e-a83d-1280ab8d6633%26client_id%3D1e69ec8d-15f6-4006-88df-db431b52f8b4%26channel%3Dairbridge.websdk%26referrer_timestamp%3D1750120734375"
+        case .kream:
+            guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
+            return "https://kream.airbridge.io/search?keyword=\(encoded)&tab=products&footer=home&deeplink_url=kreamapp%3A%2F%2Fsearch%3Fkeyword%3D\(encoded)%26tab%3Dproducts%26footer%3Dhome&fallback_ios=itunes-appstore&ab_airpage=0&abi_skip_tk=1&airbridge_referrer=airbridge%3Dtrue%26client_id%3D692b8874-5eb9-49a0-a37f-97e31f0eec87%26channel%3Dgoogle%26campaign%3DNEW_%25EC%259E%2590%25EC%2582%25AC%25EB%25AA%2585_%25EC%2588%2598%25EB%258F%2599_MO%26content%3DA.%252B%25EC%259E%2590%25EC%2582%25AC%25EB%25AA%2585_%25EC%2588%2598%25EB%258F%2599%26medium%3Dcpc%26term%3Dkream%26referrer_timestamp%3D1751004482626%26tp_gen_type%3D1221%26keyword%3D\(encoded)%26tab%3Dproducts%26footer%3Dhome%26cta_param_1%3Dweb%2520to%2520app%26cta_param_2%3Dbanner"
         default: return "notFound"
         }
     }
