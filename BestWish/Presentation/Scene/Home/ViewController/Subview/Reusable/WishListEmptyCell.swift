@@ -72,11 +72,21 @@ private extension WishListEmptyCell {
         _linkButton.do {
             var config = UIButton.Configuration.plain()
             let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
-
             config.attributedTitle = AttributedString("링크 저장", attributes: AttributeContainer([.font: titleFont]))
             config.baseForegroundColor = .primary200
             config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
             $0.configuration = config
+
+            let handler: UIButton.ConfigurationUpdateHandler = { button in
+                switch button.state {
+                case .highlighted:
+                    button.backgroundColor = .primary50
+                default:
+                    button.backgroundColor = .gray0
+                }
+            }
+            $0.configurationUpdateHandler = handler
+
             $0.layer.cornerRadius = 8
             $0.layer.borderColor = UIColor.primary200?.cgColor
             $0.layer.borderWidth = 1.5
