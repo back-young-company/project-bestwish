@@ -34,19 +34,13 @@ final class ShareViewController: UIViewController {
     private let shareView = ShareView()
     private let disposeBag = DisposeBag()
 
-//    init(shareViewModel: ShareViewModel) {
-//        self.shareViewModel = shareViewModel
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    override func loadView() {
+        view = shareView
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setView()
         bindViewModel()
         bindActions()
 
@@ -74,6 +68,18 @@ final class ShareViewController: UIViewController {
     }
 
     private func bindActions() {
+        // 백그라운드 탭 시 자동으로 공유 화면 내리기
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.cancelsTouchesInView = false
+        shareView.backgroundView.addGestureRecognizer(tapGesture)
+
+        tapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                print(#function)
+                owner.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+            }.disposed(by: disposeBag)
+
+        // 앱 복귀
         shareView.shortcutButton.rx.tap
             .bind(with: self) { owner, _ in
                 if let url = URL(string: "bestwish://open") {
@@ -86,27 +92,6 @@ final class ShareViewController: UIViewController {
                 }
             }
             .disposed(by: disposeBag)
-    }
-}
-
-// MARK: - ShareViewController 설정
-private extension ShareViewController {
-    func setView() {
-        setHierarchy()
-        setConstraints()
-    }
-
-    func setHierarchy() {
-        self.view.backgroundColor = .clear
-        self.view.addSubview(shareView)
-    }
-
-    func setConstraints() {
-        shareView.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview()
-            $0.height.equalTo(300)
-        }
     }
 }
 

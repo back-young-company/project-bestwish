@@ -14,6 +14,8 @@ import Then
 final class ShareView: UIView {
 
     // MARK: - Private Property
+    private let _backgroundView = UIView()
+    private let _contentView = UIView()
     private let _grabBar = UIView()
     private let _completeImage = UIImageView()
     private let _completeLabel = UILabel()
@@ -21,6 +23,7 @@ final class ShareView: UIView {
     private let _shortcutButton = UIButton()
 
     // MARK: - Internal Property
+    var backgroundView: UIView { _backgroundView }
     var shortcutButton: UIButton { _shortcutButton }
 
     override init(frame: CGRect) {
@@ -43,10 +46,20 @@ private extension ShareView {
     }
 
     func setAttributes() {
-        self.backgroundColor = .white
-        self.layer.cornerRadius = 15
-        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        
+
+        _backgroundView.do {
+            // .clear로 하면 터치 이벤트 반응 안 함
+            $0.backgroundColor = .black.withAlphaComponent(0.001)
+            $0.isUserInteractionEnabled = true
+        }
+
+        _contentView.do {
+            $0.backgroundColor = .white
+            $0.layer.cornerRadius = 15
+            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            $0.isUserInteractionEnabled = true
+        }
+
         _grabBar.do {
             $0.backgroundColor = .gray100
             $0.clipsToBounds = true
@@ -87,17 +100,28 @@ private extension ShareView {
     }
 
     func setHierarchy() {
-        self.addSubviews(_grabBar, _completeImage, _completeLabel, _descriptionLabel)
+        self.addSubviews(_backgroundView, _contentView)
+        _contentView.addSubviews(_grabBar, _completeImage, _completeLabel, _descriptionLabel)
     }
 
     func setConstraints() {
+        _backgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+
+        }
+        _contentView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(200)
+        }
+
         _grabBar.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
             $0.centerX.equalToSuperview()
             $0.width.equalTo(50)
             $0.height.equalTo(6)
         }
-        
+
         _completeImage.snp.makeConstraints {
             $0.top.equalTo(_grabBar.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
@@ -114,12 +138,6 @@ private extension ShareView {
             $0.leading.equalTo(_completeImage)
         }
     }
-    
-    func addSubviews(_ views: UIView...) {
-        for view in views {
-            self.addSubview(view)
-        }
-    }
 }
 
 // MARK: - configure 메서드
@@ -132,5 +150,14 @@ extension ShareView {
     func failureConfigure() {
         _completeImage.image = UIImage(systemName: "xmark.circle.fill")
         _completeLabel.text = "저장 실패"
+    }
+}
+
+// MARK: - UIView addSubviews
+extension UIView {
+    func addSubviews(_ views: UIView...) {
+        for view in views {
+            self.addSubview(view)
+        }
     }
 }
