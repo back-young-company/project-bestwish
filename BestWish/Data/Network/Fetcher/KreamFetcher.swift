@@ -24,7 +24,7 @@ final class KreamFetcher: ProductDTORepository {
         return ProductDTO(
             id: nil,
             userID: nil,
-            platform: 1,
+            platform: 4,
             title: title,
             price: price,
             discountRate: nil,
