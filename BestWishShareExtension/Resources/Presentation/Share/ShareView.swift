@@ -75,13 +75,13 @@ private extension ShareView {
         _completeLabel.do {
             $0.text = "저장 중..."
             $0.font = .font(.pretendardBold, ofSize: 18)
-            $0.textColor = .black
+            $0.textColor = .gray900
         }
         
         _descriptionLabel.do {
-            $0.text = "저장이 완료되면 앱으로 다시 돌아가 주세요!"
-            $0.font = .font(.pretendardBold, ofSize: 16)
-            $0.textColor = .black
+            $0.text = "저장이 완료되면 앱으로 다시 돌아가 주세요"
+            $0.font = .font(.pretendardMedium, ofSize: 16)
+            $0.textColor = .gray500
         }
         
         _shortcutButton.do {
