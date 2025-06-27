@@ -19,6 +19,7 @@ extension PlatformEntity {
         case .musinsa: return "musinsa"
         case .zigzag: return "zigzag"
         case .ably: return "a-bly"
+        case .kream: return "kream"
         default: return "unknown"
         }
     }
