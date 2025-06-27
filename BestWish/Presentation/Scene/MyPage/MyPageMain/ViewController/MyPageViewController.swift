@@ -93,6 +93,16 @@ final class MyPageViewController: UIViewController {
                 default: return
                 }
             }.disposed(by: disposeBag)
+
+        // 헤더뷰 셀 선택 바인딩
+        let headerTapGesture = UITapGestureRecognizer()
+        myPageView.tableHeaderView.addGestureRecognizer(headerTapGesture)
+        headerTapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                owner.hidesTabBar()
+                let updateVC = DIContainer.shared.makeProfileUpdateViewController()
+                owner.navigationController?.pushViewController(updateVC, animated: true)
+            }.disposed(by: disposeBag)
     }
 
     private func bindViewModel() {
@@ -102,8 +112,8 @@ final class MyPageViewController: UIViewController {
 
         viewModel.state.userInfo
             .observe(on: MainScheduler.instance)
-            .bind(with: self, onNext: { owner, UserInfoModel in
-                owner.setHeaderView(userInfo: UserInfoModel)
+            .bind(with: self, onNext: { owner, userInfo in
+                owner.myPageView.tableHeaderView.configure(user: userInfo)
             })
             .disposed(by: disposeBag)
 
@@ -119,32 +129,6 @@ final class MyPageViewController: UIViewController {
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
                 NSLog("MyPageViewController Error: \(error.debugDescription)")
-            }.disposed(by: disposeBag)
-    }
-
-    /// 테이블 뷰 헤더 뷰 설정
-    private func setHeaderView(userInfo: UserInfoModel) {
-        let frame = CGRect(
-            x: 0,
-            y: 0,
-            width: myPageView.frame.width,
-            height: CGFloat(96).fitHeight < 96 ? 96 : CGFloat(96).fitHeight
-        )
-        let header = MyPageHeaderView(frame: frame)
-
-        header.configure(user: userInfo)
-        myPageView.tableView.tableHeaderView = header
-        myPageView.tableView.tableHeaderView?.isUserInteractionEnabled = true
-
-
-        // 헤더뷰 셀 선택 바인딩
-        let headerTapGesture = UITapGestureRecognizer()
-        myPageView.tableView.tableHeaderView?.addGestureRecognizer(headerTapGesture)
-        headerTapGesture.rx.event
-            .bind(with: self) { owner, _ in
-                owner.hidesTabBar()
-                let updateVC = DIContainer.shared.makeProfileUpdateViewController()
-                owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)
     }
 }

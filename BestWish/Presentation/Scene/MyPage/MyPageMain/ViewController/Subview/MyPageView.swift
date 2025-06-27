@@ -13,9 +13,11 @@ import Then
 final class MyPageView: UIView {
 
     // MARK: - Private Property
+    private let _tableHeaderView = MyPageHeaderView()
     private let _tableView = UITableView()
 
     // MARK: - Internal Property
+    var tableHeaderView: MyPageHeaderView { _tableHeaderView }
     var tableView: UITableView { _tableView }
 
     override init(frame: CGRect) {
@@ -38,7 +40,11 @@ private extension MyPageView {
     }
 
     func setAttributes() {
-        tableView.do {
+        _tableHeaderView.do {
+            $0.isUserInteractionEnabled = true
+        }
+
+        _tableView.do {
             $0.register(
                 MyPageHeaderView.self,
                 forHeaderFooterViewReuseIdentifier: MyPageHeaderView.identifier
@@ -51,6 +57,9 @@ private extension MyPageView {
             $0.rowHeight = CGFloat(43).fitHeight
             $0.sectionHeaderTopPadding = 16
             $0.sectionFooterHeight = 16
+
+            _tableHeaderView.frame = CGRect(x: 0, y: 0, width: _tableView.bounds.width, height: CGFloat(96).fitHeight)
+            $0.tableHeaderView = _tableHeaderView
         }
     }
 
