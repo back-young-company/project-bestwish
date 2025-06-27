@@ -77,6 +77,7 @@ private extension MyPageHeaderView {
             config.image = .init(systemName: "chevron.right")
             config.baseForegroundColor = .gray900
             $0.configuration = config
+            $0.isUserInteractionEnabled = false
         }
 
         _separatorView.do {

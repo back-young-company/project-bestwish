@@ -70,6 +70,7 @@ final class MyPageViewController: UIViewController {
     }
 
     private func bindView() {
+        // 테이블 뷰 아이템 선택 바인딩
         myPageView.tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 switch MyPageCellType(indexPath: indexPath) {
@@ -133,10 +134,14 @@ final class MyPageViewController: UIViewController {
 
         header.configure(user: userInfo)
         myPageView.tableView.tableHeaderView = header
+        myPageView.tableView.tableHeaderView?.isUserInteractionEnabled = true
 
-        header.seeMoreButton.rx.tap
+
+        // 헤더뷰 셀 선택 바인딩
+        let headerTapGesture = UITapGestureRecognizer()
+        myPageView.tableView.tableHeaderView?.addGestureRecognizer(headerTapGesture)
+        headerTapGesture.rx.event
             .bind(with: self) { owner, _ in
-                // Coordinator 적용 전 임시 코드
                 owner.hidesTabBar()
                 let updateVC = DIContainer.shared.makeProfileUpdateViewController()
                 owner.navigationController?.pushViewController(updateVC, animated: true)
