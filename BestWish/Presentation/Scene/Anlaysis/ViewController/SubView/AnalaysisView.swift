@@ -18,6 +18,7 @@ final class AnalysisView: UIView {
     private let _searchBar = UISearchBar()
     private let _resetButton = AppButton(type: .reset)
     private let _searchButton = AppButton(type: .viewProduct)
+    private let _buttonStackView = HorizontalStackView(spacing: 20)
     private lazy var _collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout)
     
     // MARK: - Internal Property
@@ -88,7 +89,8 @@ private extension AnalysisView {
     }
     
     func setHierarchy() {
-        addSubviews(_titleLabel, _searchBar, _collectionView, _resetButton, _searchButton)
+        addSubviews(_titleLabel, _searchBar, _collectionView, _buttonStackView)
+        _buttonStackView.addSubviews(_resetButton, _searchButton)
     }
     
     func setRegister() {
@@ -113,21 +115,25 @@ private extension AnalysisView {
         _collectionView.snp.makeConstraints {
             $0.top.equalTo(_searchBar.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(_resetButton.snp.top).offset(-10)
+            $0.bottom.equalTo(_buttonStackView.snp.top).offset(-20)
+        }
+        
+        _buttonStackView.snp.makeConstraints {
+            $0.bottom.equalTo(safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(CGFloat(44).fitHeight)
         }
         
         _resetButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
-            $0.height.equalTo(53)
-            $0.width.equalTo(100)
-            $0.bottom.equalToSuperview().offset(-24)
+            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.width.equalTo(95)
         }
         
         _searchButton.snp.makeConstraints {
-            $0.centerY.equalTo(_resetButton)
+            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.leading.equalTo(_resetButton.snp.trailing).offset(12)
             $0.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(53)
-            $0.leading.equalTo(_resetButton.snp.trailing).offset(15)
         }
     }
 }

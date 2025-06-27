@@ -96,7 +96,7 @@ final class ImageEditViewController: UIViewController {
                     sheet.detents = [
                         .medium(),
                         .custom(identifier: .init("mini")) { context in
-                            return context.maximumDetentValue * 0.15
+                            return context.maximumDetentValue * 0.22
                         }
                     ]
                     sheet.selectedDetentIdentifier = .medium
