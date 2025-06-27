@@ -81,6 +81,7 @@ private extension WishListCell {
         _productImageView.do {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
+            $0.contentMode = .scaleAspectFill
         }
         
         _editButton.do {
