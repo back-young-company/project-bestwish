@@ -103,7 +103,7 @@ private extension TabBarView {
         
         tabBar.snp.makeConstraints {
             $0.horizontalEdges.bottom.equalToSuperview()
-            $0.height.equalTo(UIScreen.main.bounds.height < 700 ? 72 : 110)
+            $0.height.equalTo(UIScreen.main.bounds.height < 700 ? 72 : 100)
         }
         
         _leftItemButton.snp.makeConstraints {
