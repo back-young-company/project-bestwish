@@ -86,22 +86,36 @@ private extension ShareView {
         
         _shortcutButton.do {
             var config = UIButton.Configuration.plain()
-            config.imagePadding = 4
-            config.imagePlacement = .trailing
-            let symbolConfig = UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
-            let titleFont = UIFont.font(.pretendardBold, ofSize: 12)
-            
-            config.image = UIImage(systemName: "chevron.right")?.withConfiguration(symbolConfig)
-            config.attributedTitle = AttributedString("바로가기", attributes: AttributeContainer([.font: titleFont]))
+            let titleFont = UIFont.font(.pretendardBold, ofSize: 16)
+            config.attributedTitle = AttributedString("베스트위시 바로가기", attributes: AttributeContainer([.font: titleFont]))
             config.baseForegroundColor = .primary200
-            config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 6, bottom: 6, trailing: 6)
             $0.configuration = config
+
+            let handler: UIButton.ConfigurationUpdateHandler = { button in
+                switch button.state {
+                case .highlighted:
+                    button.backgroundColor = .primary50
+                case .disabled:
+                    button.backgroundColor = .gray50
+                    button.layer.borderWidth = 0
+                default:
+                    button.backgroundColor = .gray0
+                    button.layer.borderWidth = 1.5
+                }
+            }
+            $0.configurationUpdateHandler = handler
+
+            $0.layer.borderColor = UIColor.primary200?.cgColor
+            $0.layer.cornerRadius = 10
+            $0.layer.borderWidth = 1.5
+            $0.clipsToBounds = true
+            $0.isEnabled = false
         }
     }
 
     func setHierarchy() {
         self.addSubviews(_backgroundView, _contentView)
-        _contentView.addSubviews(_grabBar, _completeImage, _completeLabel, _descriptionLabel)
+        _contentView.addSubviews(_grabBar, _completeImage, _completeLabel, _descriptionLabel, _shortcutButton)
     }
 
     func setConstraints() {
@@ -112,7 +126,6 @@ private extension ShareView {
         _contentView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
-            $0.height.equalTo(200)
         }
 
         _grabBar.snp.makeConstraints {
@@ -120,22 +133,28 @@ private extension ShareView {
             $0.centerX.equalToSuperview()
             $0.width.equalTo(50)
             $0.height.equalTo(6)
+            $0.bottom.equalTo(_completeImage.snp.top).offset(-20)
         }
 
         _completeImage.snp.makeConstraints {
-            $0.top.equalTo(_grabBar.snp.bottom).offset(20)
             $0.leading.equalToSuperview().offset(20)
+            $0.bottom.equalTo(_descriptionLabel.snp.top).offset(-4)
         }
         
         _completeLabel.snp.makeConstraints {
             $0.centerY.equalTo(_completeImage)
             $0.leading.equalTo(_completeImage.snp.trailing).offset(8)
-            $0.height.equalTo(18)
         }
         
         _descriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(_completeImage.snp.bottom).offset(12)
-            $0.leading.equalTo(_completeImage)
+            $0.leading.equalTo(_completeLabel)
+            $0.bottom.equalTo(_shortcutButton.snp.top).offset(-24)
+        }
+
+        _shortcutButton.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(40)
+            $0.height.equalTo(43)
         }
     }
 }
@@ -145,6 +164,7 @@ extension ShareView {
     func successConfigure() {
         _completeImage.image = UIImage(named: "complete")
         _completeLabel.text = "저장 완료!"
+        _shortcutButton.isEnabled = true
     }
     
     func failureConfigure() {

@@ -70,7 +70,7 @@ final class ShareViewController: UIViewController {
     private func bindActions() {
         // 백그라운드 탭 시 자동으로 공유 화면 내리기
         let tapGesture = UITapGestureRecognizer()
-        tapGesture.cancelsTouchesInView = false
+        tapGesture.cancelsTouchesInView = true
         shareView.backgroundView.addGestureRecognizer(tapGesture)
 
         tapGesture.rx.event
@@ -79,17 +79,10 @@ final class ShareViewController: UIViewController {
                 owner.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
             }.disposed(by: disposeBag)
 
-        // 앱 복귀
+        // 바로가기 버튼 탭 시 앱 복귀
         shareView.shortcutButton.rx.tap
             .bind(with: self) { owner, _ in
-                if let url = URL(string: "bestwish://open") {
-                    owner.extensionContext?.completeRequest(returningItems: [], completionHandler: { _ in
-                        // 딥링크는 completeRequest 이후 호출해야 효과가 있음
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            _ = owner.extensionContext?.open(url, completionHandler: nil)
-                        }
-                    })
-                }
+                owner.openMainApp()
             }
             .disposed(by: disposeBag)
     }
@@ -107,5 +100,36 @@ private extension ShareViewController {
                 self.shareViewModel.action.onNext(.addProduct(provider))
             }
         }
+    }
+
+    /// Best Wish 앱 딥링크 호출
+    func openMainApp() {
+        if let url = URL(string: "bestwish://home") {
+            if openURLScheme(url) {
+                NSLog("\(Self.self) ✅ URL Scheme open 성공")
+            } else {
+                NSLog("\(Self.self) ❌ URL Scheme open 실패")
+            }
+        } else {
+            NSLog("\(#function) 잘못된 URL")
+        }
+
+        extensionContext?.completeRequest(returningItems: nil)
+    }
+
+    /// UIApplication 접근 후 링크 오픈
+    func openURLScheme(_ url: URL) -> Bool {
+        // Share Extension에서는 UIApplication.shared를 사용할 수 없기 때문에 responder chain을 따라
+        // UIApplication 인스턴스에 접근
+        var responder: UIResponder? = self
+        while responder != nil {
+            if let application = responder as? UIApplication {
+                application.open(url, options: [:], completionHandler: nil)
+                return true
+            }
+            // UIApplication이 아니면, 다음 응답자로 이동
+            responder = responder?.next
+        }
+        return false
     }
 }

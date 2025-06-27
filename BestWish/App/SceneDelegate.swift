@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if url.scheme == "bestwish" {
             // URL 파싱 및 라우팅
-            print("📦 딥링크 URL 수신: \(url.absoluteString)")
+            NSLog("📦 딥링크 URL 수신: \(url.absoluteString)")
         }
     }
 
