@@ -33,6 +33,11 @@ final class DatePickerBottomSheetView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+
+    /// 기본 Date 설정
+    func configure(baseDate: Date?) {
+        _datePicker.date = baseDate ?? Date()
+    }
 }
 
 // MARK: - private 메서드

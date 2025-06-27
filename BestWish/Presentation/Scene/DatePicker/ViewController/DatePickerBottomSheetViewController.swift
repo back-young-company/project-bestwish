@@ -21,9 +21,10 @@ final class DatePickerBottomSheetViewController: UIViewController {
     private let datePickerBottomSheetView = DatePickerBottomSheetView()
     private let disposeBag = DisposeBag()
 
-    init() {
+    init(baseDate: Date? = nil) {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .pageSheet
+        datePickerBottomSheetView.configure(baseDate: baseDate)
     }
 
     required init?(coder: NSCoder) {
