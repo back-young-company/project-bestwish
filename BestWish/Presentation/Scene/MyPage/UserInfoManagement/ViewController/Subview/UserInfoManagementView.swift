@@ -20,7 +20,7 @@ final class UserInfoManagementView: UIView {
     private let _userInfoHorizontalStackView = MyPageRowView(
         type: .maximum,
         title: "회원 정보",
-        subTitle: "변경 하기"
+        subTitle: "변경하기"
     )
     private let _snsInfoStackView = VerticalStackView(spacing: 8)
     private let _snsInfoTitleLabel = GroupTitleLabel(title: "SNS 연결 정보")
