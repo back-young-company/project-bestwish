@@ -112,9 +112,9 @@ final class MyPageViewController: UIViewController {
 
         viewModel.state.userInfo
             .observe(on: MainScheduler.instance)
-            .bind(with: self, onNext: { owner, userInfo in
+            .bind(with: self) { owner, userInfo in
                 owner.myPageView.tableHeaderView.configure(user: userInfo)
-            })
+            }
             .disposed(by: disposeBag)
 
         viewModel.state.isLogOut
