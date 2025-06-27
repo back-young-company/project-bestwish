@@ -16,6 +16,7 @@
 		14C3CB622E026200002F341A /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 14C3CB612E026200002F341A /* RxRelay */; };
 		81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */; };
 		8170B3BA2E0E4E8800FF71CF /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 8170B3B92E0E4E8800FF71CF /* SwiftSoup */; };
+		8170B5F12E0E56A700FF71CF /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 8170B5F02E0E56A700FF71CF /* SwiftSoup */; };
 		81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 81E50BB32DF93B0E005954F4 /* CropViewController */; };
 		861BAD572DFD2B960043B83E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */; };
 		86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
@@ -170,6 +171,7 @@
 				14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */,
 				14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */,
 				14C3CB622E026200002F341A /* RxRelay in Frameworks */,
+				8170B5F12E0E56A700FF71CF /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +258,7 @@
 				14B8B6782DF6C57000B7F5F8 /* RxCocoa */,
 				14C3CB612E026200002F341A /* RxRelay */,
 				1419CEB32E0273B0006D62BB /* Supabase */,
+				8170B5F02E0E56A700FF71CF /* SwiftSoup */,
 			);
 			productName = BestWishShareExtension;
 			productReference = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */;
@@ -948,6 +951,11 @@
 			productName = IQKeyboardManagerSwift;
 		};
 		8170B3B92E0E4E8800FF71CF /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		8170B5F02E0E56A700FF71CF /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
