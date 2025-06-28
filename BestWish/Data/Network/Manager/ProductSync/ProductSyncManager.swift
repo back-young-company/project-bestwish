@@ -84,6 +84,14 @@ final class ProductSyncManager {
                 html: html
             )
             return metadata
+        case .hiver:
+            let (_, html) = try await resolveFinalURL(url: originalUrl)
+            let metadata = try await HiverFetcher().fetchProductDTO(
+                ogUrl: originalUrl,
+                finalUrl: nil,
+                html: html
+            )
+            return metadata
         default:
             throw ProductSyncError.platformDetectionFailed
         }
