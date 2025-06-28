@@ -7,8 +7,6 @@
 
 import Foundation
 
-import RxSwift
-
 /// 에이블리 Fetcher
 final class AblyFetcher: ProductDTORepository {
     /// 상품 데이터 fetch
