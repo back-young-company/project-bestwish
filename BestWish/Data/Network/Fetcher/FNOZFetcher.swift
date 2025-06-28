@@ -19,6 +19,7 @@ final class FNOZFetcher: ProductDTORepository {
         let title = try doc.title()
         let imageURL = try doc.select("img[alt='상품 썸네일'][data-nimg=fill]").first()?.attr("abs:src")
         
+        let productId = ogUrl?.absoluteString.replacingOccurrences(of: "https://4910.kr/goods/", with: "") ?? ""
         
         // 가격
         let price = Int(
@@ -57,7 +58,7 @@ final class FNOZFetcher: ProductDTORepository {
             discountRate: discount,
             brand: brandKor,
             imagePathURL: imageURL,
-            productURL: ogUrl?.absoluteString,
+            productURL: "aglo://webview?url=https://4910.kr/goods/\(productId)",
             createdAt: nil
         )
     }
