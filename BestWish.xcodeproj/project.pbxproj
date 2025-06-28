@@ -97,6 +97,7 @@
 				Data/Network/Fetcher/AblyFetcher.swift,
 				Data/Network/Fetcher/BrandiFetcher.swift,
 				Data/Network/Fetcher/FNOZFetcher.swift,
+				Data/Network/Fetcher/HiverFetcher.swift,
 				Data/Network/Fetcher/KreamFetcher.swift,
 				Data/Network/Fetcher/MusinsaFetcher.swift,
 				Data/Network/Fetcher/TNCMFetcher.swift,
