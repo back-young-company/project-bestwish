@@ -22,6 +22,7 @@ extension PlatformEntity {
         case .kream: return "kream"
         case .brandy: return "brandi"
         case .fnoz: return "4910"
+        case .tncm: return "29cm"
         default: return "unknown"
         }
     }
