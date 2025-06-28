@@ -79,7 +79,9 @@ extension PlatformEntity {
             return "https://kream.airbridge.io/home/"
         case .brandy:
             return "https://brandi.onelink.me/8g7c"
-        case .all, .tncm, .oco, .fnoz, .worksout, .eql, .hiver:
+        case .fnoz:
+            return "aglo://home?airbridge_referrer=airbridge%3Dtrue%26event_uuid%3D8ed4e8ae-1983-41e9-9154-8da059900105%26client_id%3D73e2acf9-488d-48ce-b25d-f9694aaf8fdf%26channel%3Dairbridge.websdk%26referrer_timestamp%3D1751044207184"
+        case .all, .tncm, .oco, .worksout, .eql, .hiver:
             return "notFound"
         }
     }
@@ -100,6 +102,9 @@ extension PlatformEntity {
         case .brandy:
             guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
             return "https://www.brandi.co.kr/search?q=\(encoded)"
+        case .fnoz:
+            guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
+            return "https://4910.kr/search?query=\(encoded)&search_type=DIRECT)"
         default: return "notFound"
         }
     }
