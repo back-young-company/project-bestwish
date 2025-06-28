@@ -68,7 +68,7 @@ final class WishListHeaderView: UICollectionReusableView, ReuseIdentifier {
                 let selectedPlatform = self.selectedPlatformRelay.value
                 let isSelected = (platform == selectedPlatform)
                 
-                cell.configure(type: platform, isSelected: isSelected)
+//                cell.configure(type: platform, isSelected: isSelected)
                 cell.platformButton.rx.tap
                     .bind(with: self) { owner, _ in
                         owner.selectedPlatform = platform

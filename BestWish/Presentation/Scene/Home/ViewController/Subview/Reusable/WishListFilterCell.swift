@@ -38,7 +38,7 @@ final class WishListFilterCell: UICollectionViewCell, ReuseIdentifier {
         _disposeBag = DisposeBag()
     }
 
-    func configure(type: Int, isSelected: Bool) {
+    func configure(type: Int, isSelected: Bool, isFirst: Bool, isLast: Bool) {
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
 
         var config = _platformButton.configuration ?? UIButton.Configuration.filled()
@@ -54,6 +54,13 @@ final class WishListFilterCell: UICollectionViewCell, ReuseIdentifier {
         _platformButton.layer.borderColor = isSelected ? nil : UIColor.gray100?.cgColor
         _platformButton.layer.cornerRadius = isSelected ? 0 : 16.5
         _platformButton.sizeToFit()
+
+        _platformButton.snp.remakeConstraints {
+            $0.verticalEdges.equalToSuperview()
+            $0.leading.equalToSuperview().offset(isFirst ? 20 : 9)
+            $0.trailing.equalToSuperview().offset(isLast ? -20 : 0)
+            $0.height.equalTo(33)
+        }
     }
 }
 
@@ -61,7 +68,7 @@ final class WishListFilterCell: UICollectionViewCell, ReuseIdentifier {
 private extension WishListFilterCell {
     func setView() {
         setHierarchy()
-        setConstraints()
+//        setConstraints()
     }
 
     func setHierarchy() {

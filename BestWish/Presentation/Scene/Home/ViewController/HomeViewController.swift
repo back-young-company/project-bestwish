@@ -31,13 +31,14 @@ final class HomeViewController: UIViewController {
                 ) as? PlatformShortcutCell else { return UICollectionViewCell() }
 
                 cell.configure(type: platform)
-
                 return cell
 
             case let .filter(index):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WishListFilterCell.identifier, for: indexPath) as? WishListFilterCell else { return UICollectionViewCell() }
 
-                cell.configure(type: index, isSelected: false)
+                let isLast = indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1
+
+                cell.configure(type: index, isSelected: false, isFirst: indexPath.item == 0, isLast: isLast)
                 return cell
 
             case let .wishlist(product):
@@ -55,8 +56,8 @@ final class HomeViewController: UIViewController {
                 }()
 
                 cell.configure(type: product, isHidden: true, isLastRow: isLastRow)
-
                 return cell
+
             case .wishlistEmpty:
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: WishListEmptyCell.identifier,
@@ -68,7 +69,6 @@ final class HomeViewController: UIViewController {
                         AlertLinkBuilder(baseViewController: owner).show()
                     }
                     .disposed(by: disposeBag)
-
                 return cell
             }
         }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
@@ -104,6 +104,33 @@ final class HomeViewController: UIViewController {
 
                 headerView.configure(title: "쇼핑몰 위시리스트")
                 headerView.configure(isHidden: items.isEmpty)
+
+                headerView.linkButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        let alertViewController = DIContainer.shared.makeLinkSaveViewController()
+                        alertViewController.modalPresentationStyle = .overFullScreen
+                        alertViewController.modalTransitionStyle = .crossDissolve
+                        alertViewController.delegate = owner
+
+                        owner.present(alertViewController, animated: true)
+                    }.disposed(by: headerView.disposeBag)
+
+                headerView.searchTextField.rx.text.orEmpty
+                    .distinctUntilChanged()
+                    .skip(1) // viewDidLoad 시점 최초 1번은 무시 (충돌 방지)
+                    .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+                    .bind(with: self) { owner, query in
+                        owner.homeViewModel.action.onNext(.searchQuery(query))
+                    }.disposed(by: headerView.disposeBag)
+
+                headerView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+                    .withLatestFrom(self.homeViewModel.state.selectedPlatform) { _, index in
+                        return index
+                    }
+                    .bind(with: self) { owner, index in
+                        headerView.searchTextField.resignFirstResponder()
+                    }
+                    .disposed(by: headerView.disposeBag)
 
                 return headerView
 
@@ -270,13 +297,8 @@ private extension HomeViewController {
             case .wishlist:
                 let isEmptyState = section.items.count == 1 && section.items.first == .wishlistEmpty
                 return isEmptyState ? NSCollectionLayoutSection.createWishlistEmptySection() : NSCollectionLayoutSection.createWishlistSection()
-
             }
         }
-        homeView.collectionView.collectionViewLayout.register(
-            SectionBackgroundDecorationView.self,
-            forDecorationViewOfKind: SectionBackgroundDecorationView.identifier
-        )
     }
 
     /// 외부 플랫폼 전환

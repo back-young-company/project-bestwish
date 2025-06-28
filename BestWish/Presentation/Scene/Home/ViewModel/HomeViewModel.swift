@@ -44,7 +44,9 @@ final class HomeViewModel: ViewModel {
     private let _searchQuery = BehaviorRelay<String>(value: "")
     private let _selectedPlatform = BehaviorRelay<Int>(value: 0)
     private let _error = PublishRelay<Error>()
-    
+
+    private var platformSection: HomeSectionModel?
+
     private var previousIndex = 0
     
     private let useCase: WishListUseCase
@@ -80,11 +82,11 @@ final class HomeViewModel: ViewModel {
                             // 위시리스트
                             let wishLists = try await owner.getWishLists()
                             
-                            owner._platformFilter.accept(filters)
+//                            owner._platformFilter.accept(filters)
                             owner._selectedPlatform.accept(0)
                             owner.setDataSources(
                                 platforms: platforms,
-                                filters: filters,
+                                filters: [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)],
                                 wishLists: wishLists
                             )
                         } catch {
@@ -147,7 +149,7 @@ final class HomeViewModel: ViewModel {
 
                             let searchQuery = owner._searchQuery.value
                             let currentSections = owner._sections.value
-                            guard currentSections.count == 2 else { return }
+                            guard currentSections.count == 3 else { return }
 
                             let platformSection = currentSections[0]
                             let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: index == 0 ? nil : index)
@@ -162,6 +164,43 @@ final class HomeViewModel: ViewModel {
                     }
                 case .searchQuery(let query):
                     owner._searchQuery.accept(query)
+
+                    Task {
+                        do {
+//                            guard force || index != owner.previousIndex else { return }
+
+                            let searchQuery = owner._searchQuery.value
+                            let currentPlatformIndex: Int? = owner._selectedPlatform.value == 0 ? nil : owner._selectedPlatform.value
+                            let filters = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)]
+                            let filterss: [HomeItem] = filters.isEmpty ? [] : filters.map { .filter($0.0) }
+                            let filterSection = HomeSectionModel(header: .filter, items: filterss)
+                            let currentSections = owner._sections.value
+                            guard currentSections.count == 3 else { return }
+
+//                            let platformSection = currentSections[0]
+                            
+                            let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: currentPlatformIndex)
+                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
+
+                            let updatedSections = owner._sections.value.enumerated().map { index, section -> HomeSectionModel in
+                                switch section.header {
+                                case .platform:
+                                    return owner.platformSection ?? section
+                                case .wishlist:
+                                    return wishlistsSection  // 새로 만든 검색 결과 섹션
+                                case .filter:
+                                    return filterSection     // 새로 만든 필터 섹션
+                                }
+                            }
+
+                            owner._sections.accept(updatedSections)
+
+//                            owner._sections.accept([owner._sections.value[0], filterSection, wishlistsSection])
+                        } catch {
+                            owner._error.accept(error)
+                        }
+                    }
+
                 }
             }
             .disposed(by: disposeBag)
@@ -209,9 +248,11 @@ private extension HomeViewModel {
     /// section model 설정 및 전달
     func setDataSources(platforms: [PlatformItem], filters: [(Int, Int)], wishLists: [WishListProductItem]) {
         let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
+        self.platformSection = platformsSection
 
         let filters: [HomeItem] = filters.isEmpty ? [] : filters.map { .filter($0.0) }
         let filterSection = HomeSectionModel(header: .filter, items: filters)
+
 
         let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
         let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists)

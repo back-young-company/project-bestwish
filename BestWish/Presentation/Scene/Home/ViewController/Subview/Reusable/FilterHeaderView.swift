@@ -9,6 +9,7 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
 
 final class FilterHeaderView: UICollectionReusableView, ReuseIdentifier {
     // MARK: - Private Property
@@ -18,6 +19,12 @@ final class FilterHeaderView: UICollectionReusableView, ReuseIdentifier {
     private let _searchBar = UISearchBar()
     private let _hStackView = UIStackView()
     private let _vStackView = UIStackView()
+    private let _disposeBag = DisposeBag()
+
+    // MARK: - Internal Property
+    var linkButton: UIButton { _linkButton }
+    var searchTextField: UISearchTextField { _searchBar.searchTextField }
+    var disposeBag: DisposeBag { _disposeBag }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -57,6 +64,9 @@ private extension FilterHeaderView {
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 16)
             $0.numberOfLines = 1
+
+            $0.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
 
         _linkButton.do {
@@ -71,10 +81,15 @@ private extension FilterHeaderView {
             $0.layer.borderColor = UIColor.primary200?.cgColor
             $0.layer.borderWidth = 1.5
             $0.clipsToBounds = true
+
+            $0.setContentHuggingPriority(.required, for: .horizontal)
+            $0.setContentCompressionResistancePriority(.required, for: .horizontal)
         }
 
         _hStackView.do {
             $0.axis = .horizontal
+            $0.isLayoutMarginsRelativeArrangement = true
+            $0.layoutMargins = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20)
         }
 
         _vStackView.do {
@@ -103,12 +118,10 @@ private extension FilterHeaderView {
 
         _titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
-            $0.leading.equalToSuperview().offset(10)
         }
 
         _linkButton.snp.makeConstraints {
             $0.centerY.equalTo(_titleLabel)
-            $0.trailing.equalToSuperview().offset(-20)
         }
 
         _searchBar.snp.makeConstraints {
