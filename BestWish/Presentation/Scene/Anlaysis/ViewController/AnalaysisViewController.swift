@@ -67,7 +67,7 @@ final class AnalaysisViewController: UIViewController {
                 .bind(with: self) { owner, category in
                     owner.viewModel.action.onNext(.didSelectedSegmentControl(category: category))
                 }
-                .disposed(by: disposeBag)
+                .disposed(by: headerView.disposeBag)
             
             return headerView
         }
@@ -149,7 +149,6 @@ final class AnalaysisViewController: UIViewController {
                         NSLog("❌ 앱 전환 실패: \(url.absoluteString)")
                         return
                     }
-                    NSLog("✅ 앱 전환 성공: \(url.absoluteString)")
                 }
             }
             .disposed(by: disposeBag)
