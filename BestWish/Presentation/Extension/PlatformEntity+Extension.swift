@@ -81,7 +81,9 @@ extension PlatformEntity {
             return "https://brandi.onelink.me/8g7c"
         case .fnoz:
             return "aglo://home?airbridge_referrer=airbridge%3Dtrue%26event_uuid%3D8ed4e8ae-1983-41e9-9154-8da059900105%26client_id%3D73e2acf9-488d-48ce-b25d-f9694aaf8fdf%26channel%3Dairbridge.websdk%26referrer_timestamp%3D1751044207184"
-        case .all, .tncm, .oco, .worksout, .eql, .hiver:
+        case .tncm:
+            return "https://29cm.onelink.me/1080201211"
+        case .all, .oco, .worksout, .eql, .hiver:
             return "notFound"
         }
     }
@@ -105,6 +107,9 @@ extension PlatformEntity {
         case .fnoz:
             guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
             return "https://4910.kr/search?query=\(encoded)&search_type=DIRECT)"
+        case .tncm:
+            guard let encoded = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return "" }
+            return "https://29cm.onelink.me/1080201211?af_js_web=true&af_ss_ver=2_7_3&pid=29cm_mowebtoapp&c=install_mowebtoapp&af_ad=top_banner&is_retargeting=true&af_click_lookback=7d&af_ss_ui=true&af_sub5=https://www.29cm.co.kr/&af_dp=app29cm%3A%2F%2Fweb%2Fhttps%3A%2F%2Fshop.29cm.co.kr%2Fsearch%3Fkeyword%3D\(encoded)%26sort%3DRECOMMEND%26sortOrder%3DDESC%26defaultSort%3DRECOMMEND%26keywordTypes%3D&deep_link_value=app29cm%3A%2F%2Fweb%2Fhttps%3A%2F%2Fshop.29cm.co.kr%2Fsearch%3Fkeyword%3D\(encoded)%26sort%3DRECOMMEND%26sortOrder%3DDESC%26defaultSort%3DRECOMMEND%26keywordTypes%3D&af_web_dp=https%3A%2F%2Fshop.29cm.co.kr%2Fsearch%3Fkeyword%3D\(encoded)%26sort%3DRECOMMEND%26sortOrder%3DDESC%26defaultSort%3DRECOMMEND%26keywordTypes%3D"
         default: return "notFound"
         }
     }
