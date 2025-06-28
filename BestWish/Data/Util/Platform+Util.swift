@@ -21,6 +21,7 @@ extension PlatformEntity {
         case .ably: return "a-bly"
         case .kream: return "kream"
         case .brandy: return "brandi"
+        case .fnoz: return "4910"
         default: return "unknown"
         }
     }
