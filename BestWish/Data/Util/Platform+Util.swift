@@ -23,6 +23,7 @@ extension PlatformEntity {
         case .brandy: return "brandi"
         case .fnoz: return "4910"
         case .tncm: return "29cm"
+        case .hiver: return "hiver"
         default: return "unknown"
         }
     }
