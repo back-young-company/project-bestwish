@@ -109,7 +109,7 @@
 				Data/Repository/ProductSyncRepositoryImpl.swift,
 				Data/Repository/WishListRepositoryImpl.swift,
 				"Data/Util/Bundle+Util.swift",
-				"Data/Util/Platform+Util.swift",
+				"Data/Util/PlatformEntity+Util.swift",
 				"Data/Util/String+Util.swift",
 				Domain/Entity/PlatformEntity.swift,
 				Domain/Entity/ProductEntity.swift,

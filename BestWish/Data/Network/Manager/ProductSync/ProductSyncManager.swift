@@ -16,85 +16,12 @@ final class ProductSyncManager {
         }
         
         let platform = detectPlatform(from: sharedText)
+        let (finalURL, html) = try await resolveFinalURL(type: platform, url: originalUrl)
         
-        switch platform {
-        case .musinsa:
-            let (finalURL, _) = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await MusinsaFetcher().fetchProductDTO(
-                ogUrl: originalUrl,
-                finalUrl: finalURL,
-                html: nil
-            )
-            return metadata
-        case .zigzag:
-            let (_, html) = try await resolveZigzagFinalURL(url: originalUrl)
-            let metadata = try await ZigzagFetcher().fetchProductDTO(
-                ogUrl: nil,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        case .ably:
-            let (_, html) = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await AblyFetcher().fetchProductDTO(
-                ogUrl: nil,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        case .kream:
-            let (_, html) = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await KreamFetcher().fetchProductDTO(
-                ogUrl: originalUrl,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        case .brandy:
-            // 브랜디 딥링크 URL 변환 → 웹 URL
-            let url: URL
-            
-            if originalUrl.absoluteString.contains("https://www.brandi.co.kr/products") {
-                url = originalUrl
-            } else {
-                let productID = originalUrl.absoluteString.components(separatedBy: "id=").last?.components(separatedBy: "&").first ?? ""
-                url = URL(string: "https://www.brandi.co.kr/products/\(productID)")!
-            }
-            
-            let (_, html) = try await resolveFinalURL(url: url)
-            let metadata = try await BrandiFetcher().fetchProductDTO(
-                ogUrl: originalUrl,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        case .tncm:
-            let (_, html) = try await resolveZigzagFinalURL(url: originalUrl)
-            let metadata = try await TNCMFetcher().fetchProductDTO(
-                ogUrl: originalUrl,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        case .fnoz:
-            let (_, html) = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await FNOZFetcher().fetchProductDTO(
-                ogUrl: originalUrl,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        case .hiver:
-            let (_, html) = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await HiverFetcher().fetchProductDTO(
-                ogUrl: originalUrl,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        default:
+        guard let metaData = try await platform?.fetcher?.fetchProductDTO(ogUrl: originalUrl, finalUrl: finalURL, html: html) else {
             throw ProductSyncError.platformDetectionFailed
         }
+        return metaData
     }
 }
 
@@ -123,11 +50,18 @@ private extension ProductSyncManager {
     }
 
     /// URL 요청을 통해 리디렉션된 최종 URL 반환 (공통)
-    func resolveFinalURL(url: URL) async throws -> (URL, String) {
+    func resolveFinalURL(type: PlatformEntity? = nil, url: URL) async throws -> (URL, String) {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.timeoutInterval = 10
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        
+        if type == .zigzag {
+            request.setValue(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+                forHTTPHeaderField: "User-Agent"
+            )
+        }
 
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
@@ -139,30 +73,6 @@ private extension ProductSyncManager {
             }
         } catch {
             throw ProductSyncError.redirectionFailed
-        }
-    }
-
-    /// URL 요청을 통해 리디렉션된 최종 URL과 html 반환 (지그재그)
-    func resolveZigzagFinalURL(url: URL) async throws -> (URL, String) {
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.timeoutInterval = 10
-        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        request.setValue(
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-            forHTTPHeaderField: "User-Agent"
-        )
-
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            if let finalURL = response.url,
-               let html = String(data: data, encoding: .utf8) {
-                return (finalURL, html)
-            } else {
-                throw ProductSyncError.htmlParsingFailed
-            }
-        } catch {
-            throw ProductSyncError.htmlParsingFailed
         }
     }
 }

@@ -27,4 +27,18 @@ extension PlatformEntity {
         default: return "unknown"
         }
     }
+    
+    var fetcher: ProductDTORepository? {
+        switch self {
+        case .musinsa: return MusinsaFetcher()
+        case .ably: return AblyFetcher()
+        case .zigzag: return ZigzagFetcher()
+        case .kream: return KreamFetcher()
+        case .brandy: return BrandiFetcher()
+        case .fnoz: return FNOZFetcher()
+        case .tncm: return TNCMFetcher()
+        case .hiver: return HiverFetcher()
+        default: return nil
+        }
+    }
 }
