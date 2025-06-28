@@ -68,6 +68,14 @@ final class ProductSyncManager {
                 html: html
             )
             return metadata
+        case .fnoz:
+            let (_, html) = try await resolveFinalURL(url: originalUrl)
+            let metadata = try await FNOZFetcher().fetchProductDTO(
+                ogUrl: originalUrl,
+                finalUrl: nil,
+                html: html
+            )
+            return metadata
         default:
             throw ProductSyncError.platformDetectionFailed
         }
