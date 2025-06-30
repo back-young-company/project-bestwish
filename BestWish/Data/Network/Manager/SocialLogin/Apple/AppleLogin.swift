@@ -16,7 +16,7 @@ import Supabase
 extension SupabaseOAuthManagerImpl {
 
     /// 애플 로그인 시도
-    func signInApple() async throws -> (authorizationCode: String, session: Supabase.Session) {
+    func logInApple() async throws -> (authorizationCode: String, session: Supabase.Session) {
         let nonce = generateRandomNonce()
         currentNonce = nonce
         let nonceHash = sha256(nonce)
@@ -220,7 +220,7 @@ extension SupabaseOAuthManagerImpl: ASAuthorizationControllerDelegate {
                 continuation.resume(returning: (authCodeString, session))
             } catch {
                 NSLog("Supabase 로그인 오류:", error.localizedDescription)
-                continuation.resume(throwing: AuthError.signInFailed(.apple, error))
+                continuation.resume(throwing: AuthError.logInFailed(.apple, error))
             }
         }
     }

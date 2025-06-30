@@ -64,7 +64,7 @@ final class LoginViewController: UIViewController {
     private func bindKakaoButton() {
         loginView.kakaoLoginButton.rx.tap
             .asDriver()
-            .map { .signInKakao }
+            .map { .logInKakao }
             .drive(viewModel.action)
             .disposed(by: disposeBag)
     }
@@ -72,7 +72,7 @@ final class LoginViewController: UIViewController {
     private func bindAppleButton() {
         loginView.appleLoginButton.rx.tap
             .asDriver()
-            .map { .signInApple }
+            .map { .logInApple }
             .drive(viewModel.action)
             .disposed(by: disposeBag)
     }

@@ -37,7 +37,7 @@ final class AccountRepositoryImpl: AccountRepository {
     /// 로그인
     func login(type: SocialType) async throws {
         do {
-            try await manager.signIn(type: type, keyChain)
+            try await manager.logIn(type: type, keyChain)
         } catch let error as AuthError {
             throw AppError.authError(error)
         }
@@ -46,7 +46,7 @@ final class AccountRepositoryImpl: AccountRepository {
     /// 로그아웃
     func logout() async throws {
         do {
-            try await manager.signOut(keyChain)
+            try await manager.logOut(keyChain)
         } catch let error as AuthError {
             throw AppError.authError(error)
         }

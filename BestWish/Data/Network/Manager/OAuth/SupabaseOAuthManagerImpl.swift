@@ -72,8 +72,8 @@ final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
     }
 
     /// 로그인
-    func signIn(type: SocialType, _ keyChain: KeyChainManager) async throws {
-        let session = try await oauthSessionSignIn(type: type)
+    func logIn(type: SocialType, _ keyChain: KeyChainManager) async throws {
+        let session = try await oauthSessionLogIn(type: type)
 
         if let session = session {
             Task.detached(priority: .utility) {
@@ -83,7 +83,7 @@ final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
     }
 
     /// 로그아웃
-    func signOut(_ keyChain: KeyChainManager) async throws {
+    func logOut(_ keyChain: KeyChainManager) async throws {
         do {
             try await client.auth.signOut()
             // 로그아웃 후 키체인 삭제
@@ -92,7 +92,7 @@ final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
             }
             NSLog("Success : signOut")
         } catch {
-            throw AuthError.signOutFailed(error)
+            throw AuthError.logOutFailed(error)
         }
     }
 
@@ -108,7 +108,7 @@ final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
 
         switch socialProvider {
         case .kakao:
-            guard let session = try await signInKakao(),
+            guard let session = try await logInKakao(),
                 let providerToken = session.providerToken else {
                 return
             }
@@ -125,7 +125,7 @@ final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
 
         case .apple:
             // 애플 AccessToken 요청
-            let (code, _) = try await signInApple()
+            let (code, _) = try await logInApple()
             NSLog("Success - 1: \(code)")
             let clientSecret = try await requestClientSecret(keyChain)
             NSLog("Success - 2: \(clientSecret)")
@@ -164,14 +164,14 @@ final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
     }
 
     /// 소셜 로그인 OAUTH 인증
-    private func oauthSessionSignIn(type: SocialType) async throws -> Session? {
+    private func oauthSessionLogIn(type: SocialType) async throws -> Session? {
         switch type {
         case .apple:
-            let (_, session) = try await signInApple()
+            let (_, session) = try await logInApple()
             return session
 
         case .kakao:
-            let session = try await signInKakao()
+            let session = try await logInKakao()
             return session
         }
     }

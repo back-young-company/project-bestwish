@@ -19,17 +19,17 @@ protocol SupabaseOAuthManager {
     func checkSignInState() async throws -> Bool
 
     /// 로그인
-    func signIn(type: SocialType, _ keyChain: KeyChainManager) async throws
+    func logIn(type: SocialType, _ keyChain: KeyChainManager) async throws
 
     /// 로그아웃
-    func signOut(_ keyChain: KeyChainManager) async throws
+    func logOut(_ keyChain: KeyChainManager) async throws
 
     /// 회원 탈퇴
     func withdraw(_ keyChain: KeyChainManager) async throws
 
     // MARK: - SupabaseOAuth를 활용한 애플 로그인
     /// 애플 로그인 시도
-    func signInApple() async throws -> (authorizationCode: String, session: Supabase.Session)
+    func logInApple() async throws -> (authorizationCode: String, session: Supabase.Session)
 
     /// Supabase에 Client_Secret 값 요청
     func requestClientSecret(_ keyChain: KeyChainManager) async throws -> String
@@ -46,7 +46,7 @@ protocol SupabaseOAuthManager {
 
     // MARK: - SupabaseOAuth를 활용한 카카오 로그인
     /// 카카오 로그인
-    func signInKakao() async throws -> Supabase.Session?
+    func logInKakao() async throws -> Supabase.Session?
 
     /// 카카오 회원탈퇴
     func unlinkKakaoAccount(_ token: String) async throws
