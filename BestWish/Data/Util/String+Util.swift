@@ -48,7 +48,7 @@ extension String {
         switch type {
         case .kream:
             return "kreamapp://shop/product?id=" + id
-        case .brandy:
+        case .brandi:
             return "https://www.brandi.co.kr/products/" + id
         case .hiver:
             return "https://www.hiver.co.kr/products/" + id
@@ -65,12 +65,12 @@ extension String {
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")
             return "zigzag:///product_detail?browsing_type=INTERNAL_BROWSER\\u0026catalog_product_id=\(productId)\\u0026url=https://store.zigzag.kr/app/catalog/products/\(productId)?catalog_product_id=\(productId)\\u0026shop_id=795\\u0026uau=bdeb5ae3-0a5c-4f58-a7aa-094f7f72f21f\\u0026catalog_product_id=\(productId)"
-        case .brandy:
+        case .brandi:
             let domain = "https://www.brandi.co.kr/products/"
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")
             return "https://www.brandi.co.kr/onelink?type=products&id=\(productId)&shareType=share_pdp_url"
-        case .fnoz:
+        case ._4910:
             let domain = "https://4910.kr/goods/"
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")

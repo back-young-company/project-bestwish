@@ -20,9 +20,9 @@ extension PlatformEntity {
         case .zigzag: return "zigzag"
         case .ably: return "a-bly"
         case .kream: return "kream"
-        case .brandy: return "brandi"
-        case .fnoz: return "4910"
-        case .tncm: return "29cm"
+        case .brandi: return "brandi"
+        case ._4910: return "4910"
+        case ._29cm: return "29cm"
         case .hiver: return "hiver"
         default: return "unknown"
         }
@@ -34,9 +34,9 @@ extension PlatformEntity {
         case .ably: return AblyFetcher()
         case .zigzag: return ZigzagFetcher()
         case .kream: return KreamFetcher()
-        case .brandy: return BrandiFetcher()
-        case .fnoz: return FNOZFetcher()
-        case .tncm: return TNCMFetcher()
+        case .brandi: return BrandiFetcher()
+        case ._4910: return _4910Fetcher()
+        case ._29cm: return _29CMFetcher()
         case .hiver: return HiverFetcher()
         default: return nil
         }

@@ -1,17 +1,17 @@
 //
-//  FNOZFetcher.swift
+//  TNCMFetcher.swift
 //  BestWish
 //
-//  Created by Quarang on 6/28/25.
+//  Created by Quarang on 6/27/25.
 //
 
 import Foundation
 
 import SwiftSoup
 
-/// 4910 페쳐
-final class FNOZFetcher: ProductDTORepository {
-    /// 크림 제품 상세 HTML → ProductDTO 파싱
+/// 29CM 페쳐
+final class _29CMFetcher: ProductDTORepository {
+    /// 29CM 제품 상세 HTML → ProductDTO 파싱
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {
             throw ProductSyncError.htmlParsingFailed
@@ -21,23 +21,25 @@ final class FNOZFetcher: ProductDTORepository {
 
             // SwiftSoup으로 파싱 헤더에 데이터가 있을 때만 가능
             let title = try doc.title()
-            let imageURL = try doc.select("img[alt='상품 썸네일'][data-nimg=fill]").first()?.attr("abs:src")
+            let imageURL = try doc.select("meta[property=og:image]").attr("content")
+            let url = try doc.select("meta[property=al:ios:url]").attr("content")
             
             // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추출
-            let price = html.htmlExtractValue(pattern: #""discounted_price"\s*:\s*(\d+)"#) { Int($0) }
-            let discount = html.htmlExtractValue(pattern: #"\"extra_discount\"\s*:\s*\{[^}]*?"discount_rate"\s*:\s*(\d+)"#) { $0 }
-            let brandKor = html.htmlExtractValue(pattern: #"(?s)"brand"\s*:\s*\{.*?"name"\s*:\s*"([^"]+)""#) { $0 }
+            let nums = html.extractNumbers(inRangeMatching: #"totalDiscountedItemPrice.*?\}"#)
+            let price = nums?.first
+            let discountRate = String(nums?.last ?? 0)
+            let brandKor = html.htmlExtractValue(pattern: #"brandNameKor\\":\\"(.*?)\\""#) { $0 }
             
             return ProductDTO(
                 id: nil,
                 userID: nil,
-                platform: 7,
+                platform: 6,
                 title: title,
                 price: price,
-                discountRate: discount,
+                discountRate: discountRate,
                 brand: brandKor,
                 imagePathURL: imageURL,
-                productURL: deepLink?.absoluteString,
+                productURL: url,
                 createdAt: nil
             )
         } catch {
@@ -46,4 +48,5 @@ final class FNOZFetcher: ProductDTORepository {
     }
 }
 
-// https://4910.kr/goods/43182588
+
+// https://www.29cm.co.kr/products/1951147

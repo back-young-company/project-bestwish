@@ -21,18 +21,12 @@ extension PlatformEntity {
             return "에이블리"
         case .kream:
             return "KREAM"
-        case .brandy:
+        case .brandi:
             return "브랜디"
-        case .tncm:
+        case ._29cm:
             return "29CM"
-        case .oco:
-            return "OCO"
-        case .fnoz:
+        case ._4910:
             return "4910"
-        case .worksout:
-            return "웍스아웃"
-        case .eql:
-            return "EQL"
         case .hiver:
             return "하이버"
         }
@@ -50,18 +44,12 @@ extension PlatformEntity {
             return "ably"
         case .kream:
             return "kream"
-        case .brandy:
-            return "brandy"
-        case .tncm:
+        case .brandi:
+            return "brandi"
+        case ._29cm:
             return "29cm"
-        case .oco:
-            return "oco"
-        case .fnoz:
+        case ._4910:
             return "4910"
-        case .worksout:
-            return "worksout"
-        case .eql:
-            return "eql"
         case .hiver:
             return "hiver"
         }
@@ -77,15 +65,15 @@ extension PlatformEntity {
             return "ably://main"
         case .kream:
             return "https://kream.airbridge.io/home/"
-        case .brandy:
+        case .brandi:
             return "https://brandi.onelink.me/8g7c"
-        case .fnoz:
+        case ._4910:
             return "aglo://home?airbridge_referrer=airbridge%3Dtrue%26event_uuid%3D8ed4e8ae-1983-41e9-9154-8da059900105%26client_id%3D73e2acf9-488d-48ce-b25d-f9694aaf8fdf%26channel%3Dairbridge.websdk%26referrer_timestamp%3D1751044207184"
-        case .tncm:
+        case ._29cm:
             return "https://29cm.onelink.me/1080201211"
         case .hiver:
             return "https://hiver.onelink.me/orq2"
-        case .all, .oco, .worksout, .eql:
+        default:
             return "notFound"
         }
     }
@@ -102,11 +90,11 @@ extension PlatformEntity {
             return "ably://search?screen_name=SEARCH_RESULT&search_type=POPULAR&query=\(keyword)&airbridge_referrer=airbridge%3Dtrue%26event_uuid%3D466dd3bd-f4b1-467e-a83d-1280ab8d6633%26client_id%3D1e69ec8d-15f6-4006-88df-db431b52f8b4%26channel%3Dairbridge.websdk%26referrer_timestamp%3D1750120734375"
         case .kream:
             return "https://kream.airbridge.io/search?keyword=\(encoded)&tab=products&footer=home&deeplink_url=kreamapp%3A%2F%2Fsearch%3Fkeyword%3D\(encoded)%26tab%3Dproducts%26footer%3Dhome&fallback_ios=itunes-appstore&ab_airpage=0&abi_skip_tk=1&airbridge_referrer=airbridge%3Dtrue%26client_id%3D692b8874-5eb9-49a0-a37f-97e31f0eec87%26channel%3Dgoogle%26campaign%3DNEW_%25EC%259E%2590%25EC%2582%25AC%25EB%25AA%2585_%25EC%2588%2598%25EB%258F%2599_MO%26content%3DA.%252B%25EC%259E%2590%25EC%2582%25AC%25EB%25AA%2585_%25EC%2588%2598%25EB%258F%2599%26medium%3Dcpc%26term%3Dkream%26referrer_timestamp%3D1751004482626%26tp_gen_type%3D1221%26keyword%3D\(encoded)%26tab%3Dproducts%26footer%3Dhome%26cta_param_1%3Dweb%2520to%2520app%26cta_param_2%3Dbanner"
-        case .brandy:
+        case .brandi:
             return "https://www.brandi.co.kr/search?q=\(encoded)"
-        case .fnoz:
+        case ._4910:
             return "https://4910.kr/search?query=\(encoded)&search_type=DIRECT)"
-        case .tncm:
+        case ._29cm:
             return "https://29cm.onelink.me/1080201211?af_js_web=true&af_ss_ver=2_7_3&pid=29cm_mowebtoapp&c=install_mowebtoapp&af_ad=top_banner&is_retargeting=true&af_click_lookback=7d&af_ss_ui=true&af_sub5=https://www.29cm.co.kr/&af_dp=app29cm%3A%2F%2Fweb%2Fhttps%3A%2F%2Fshop.29cm.co.kr%2Fsearch%3Fkeyword%3D\(encoded)%26sort%3DRECOMMEND%26sortOrder%3DDESC%26defaultSort%3DRECOMMEND%26keywordTypes%3D&deep_link_value=app29cm%3A%2F%2Fweb%2Fhttps%3A%2F%2Fshop.29cm.co.kr%2Fsearch%3Fkeyword%3D\(encoded)%26sort%3DRECOMMEND%26sortOrder%3DDESC%26defaultSort%3DRECOMMEND%26keywordTypes%3D&af_web_dp=https%3A%2F%2Fshop.29cm.co.kr%2Fsearch%3Fkeyword%3D\(encoded)%26sort%3DRECOMMEND%26sortOrder%3DDESC%26defaultSort%3DRECOMMEND%26keywordTypes%3D"
         case .hiver:
             return "https://www.hiver.co.kr/search?q=\(encoded)"
