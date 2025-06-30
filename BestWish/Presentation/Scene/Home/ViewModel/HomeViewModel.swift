@@ -110,7 +110,7 @@ final class HomeViewModel: ViewModel {
                             
                             let platformsSection = currentSections[0].items
                             
-                            let platforms: [PlatformItem] = platformsSection.compactMap {
+                            let platforms: [PlatformEntity] = platformsSection.compactMap {
                                 if case let .platform(platform) = $0 {
                                     return platform
                                 }
@@ -158,17 +158,13 @@ final class HomeViewModel: ViewModel {
 // MARK: - private 메서드
 private extension HomeViewModel {
     /// Supabase 플랫폼 시퀀스 가져오기
-    func getPlatformSequence() async throws -> [PlatformItem] {
+    func getPlatformSequence() async throws -> [PlatformEntity] {
         let result = try await self.useCase.getPlatformSequence()
         return result.compactMap { platform in
             guard platform <= 8 else { return nil }
             let shopPlatform = PlatformEntity.allCases[platform]
             
-            return PlatformItem(
-                platformName: shopPlatform.platformName,
-                platformImage: shopPlatform.platformImage,
-                platformDeepLink: shopPlatform.platformDeepLink
-            )
+            return shopPlatform
         }
     }
 
@@ -196,7 +192,7 @@ private extension HomeViewModel {
     }
 
     /// section model 설정 및 전달
-    func setDataSources(platforms: [PlatformItem], wishLists: [WishListProductItem]) {
+    func setDataSources(platforms: [PlatformEntity], wishLists: [WishListProductItem]) {
         let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
 
         let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
