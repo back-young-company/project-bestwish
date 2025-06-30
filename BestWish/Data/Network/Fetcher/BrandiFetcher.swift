@@ -6,38 +6,44 @@
 //
 
 import Foundation
+
 import SwiftSoup
 
 /// 브랜디 Fetcher
 final class BrandiFetcher: ProductDTORepository {
-    
     /// 브랜디 제품 상세 HTML → ProductDTO 파싱
-    func fetchProductDTO(ogUrl: URL?, finalUrl: URL?, html: String?) async throws -> ProductDTO {
-        let doc = try SwiftSoup.parse(html ?? "")
-        
-        let title = try doc.title()
-        let imageURL = try doc.select("meta[property=og:image]").attr("content")
-        let brand = ((((try? JSONSerialization.jsonObject(with: (try doc.select("script#prefetch-data").first()?.html().data(using: .utf8) ?? Data()))) as? [String: Any])?["data"] as? [String: Any])?["seller"] as? [String: Any])?["name"] as? String ?? ""
-        let discountRate = ((try? JSONSerialization.jsonObject(with: SwiftSoup.parse(html ?? "").select("script#prefetch-data").first()!.html().data(using: .utf8)!) as? [String: Any])?["data"] as? [String: Any])?["sale_percent"] as? Int ?? 0
-        let price = Int(
-            try doc.select("meta[property=og:title]").attr("content")
-                .components(separatedBy: CharacterSet.decimalDigits.inverted)
-                .joined()
-        )
-        
-        return ProductDTO(
-            id: nil,
-            userID: nil,
-            platform: 5,
-            title: title,
-            price: price,
-            discountRate: "\(discountRate)",
-            brand: brand,
-            imagePathURL: imageURL,
-            productURL: ogUrl?.absoluteString,
-            createdAt: nil
-        )
+    func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
+        guard let html else {
+            throw ProductSyncError.htmlParsingFailed
+        }
+        do {
+            let doc = try SwiftSoup.parse(html)
+            
+            // SwiftSoup으로 파싱 헤더에 데이터가 있을 때만 가능
+            let title = try doc.title()
+            let imageURL = try doc.select("meta[property=og:image]").attr("content")
+            
+            // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추추출
+            let brand = html.htmlExtractValue(pattern: #""seller"\s*:\s*\{[^}]*?"name"\s*:\s*"([^"]+)""#) { $0 }
+            let discountRate = html.htmlExtractValue(pattern: #""sale_percent"\s*:\s*(\d+)"#) { $0 }
+            let price = try doc.select("meta[property=og:title]").attr("content").htmlExtractValue(pattern: #"(\d{1,3}(?:,\d{3})*)"#) { Int($0) }
+            
+            return ProductDTO(
+                id: nil,
+                userID: nil,
+                platform: 5,
+                title: title,
+                price: price ?? 0,
+                discountRate: discountRate,
+                brand: brand,
+                imagePathURL: imageURL,
+                productURL: deepLink?.absoluteString,
+                createdAt: nil
+            )
+        } catch {
+            throw ProductSyncError.dataLoadingFailed
+        }
     }
 }
 
-// https://www.brandi.co.kr/products/174895988?search-word=%EB%B9%84%ED%82%A4%EB%8B%88
+// https://www.brandi.co.kr/products/174895988
