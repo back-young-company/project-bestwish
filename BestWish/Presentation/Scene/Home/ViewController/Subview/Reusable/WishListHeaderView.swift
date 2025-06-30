@@ -62,7 +62,7 @@ final class WishListHeaderView: UICollectionReusableView, ReuseIdentifier {
         _noMatchView.isHidden = isEmpty
     }
 
-    // 위시리스트에는 상품이 있지만 검색 결과가 0개인 경우
+    /// 위시리스트에는 상품이 있지만 검색 결과가 0개인 경우
     func configure(count: Int, isEmpty: Bool) {
         _productCountLabel.text = "\(count)개"
         _noMatchView.isHidden = !isEmpty
@@ -113,6 +113,7 @@ private extension WishListHeaderView {
         _descriptionLabel.do {
             $0.text = "위시리스트를 추가해\n상품을 모아보세요!"
             $0.textColor = .gray600
+            $0.textAlignment = .center
             $0.font = .font(.pretendardMedium, ofSize: 16)
             $0.numberOfLines = 0
         }
