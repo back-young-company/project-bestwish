@@ -6,7 +6,6 @@
 //
 
 import XCTest
-
 import RxSwift
 @testable import BestWish
 
@@ -31,165 +30,192 @@ final class OnboardingViewModelTests: XCTestCase {
 
     /// viewDidAppear 최초 호출 시 정책 시트 방출, 두 번째부터는 방출되지 않아야 함
     func test_viewDidAppear_showPolicy_once() {
-        // Given
         let exp = expectation(description: #function)
         exp.expectedFulfillmentCount = 1
+        var didShowPolicy = false
         viewModel.state.showPolicySheet
-            .subscribe(onNext: { exp.fulfill() })
-            .disposed(by: disposeBag)
-
-        // When
-        viewModel.action.onNext(.viewDidAppear)
-        viewModel.action.onNext(.viewDidAppear)
-
-        // Then
-        wait(for: [exp], timeout: 1.0)
-    }
-
-    /// createUserInfo 호출 시 기본 UserInfoModel(profileImageCode: 0) 방출
-    func test_createUserInfo_emitsDefaultUserInfo() {
-        // Given
-        let exp = expectation(description: #function)
-        var received: UserInfoModel?
-        viewModel.state.userInfo
-            .skip(1)
-            .take(1)
-        .subscribe(onNext: {
-            received = $0
-            exp.fulfill()
-        })
-            .disposed(by: disposeBag)
-
-        // When
-        viewModel.action.onNext(.createUserInfo)
-
-        // Then
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertEqual(received?.profileImageCode, 0)
-    }
-
-    /// 프로필 이미지, 성별, 생년월일 순차 업데이트 시 모두 반영되는지 검증
-    func test_profileGenderBirth_updatesCorrectly() {
-        // Given
-        let exp = expectation(description: #function)
-        exp.expectedFulfillmentCount = 4
-        var received: UserInfoModel?
-
-        viewModel.state.userInfo
-            .skip(1)
-            .take(4)
-        .subscribe(onNext: { model in
-            received = model
-            exp.fulfill()
-        })
-            .disposed(by: disposeBag)
-
-        // When
-        viewModel.action.onNext(.createUserInfo)
-        viewModel.action.onNext(.selectedProfileIndex(5))
-        viewModel.action.onNext(.selectedGender(.female))
-        viewModel.action.onNext(.selectedBirth(Date(timeIntervalSince1970: 1000)))
-
-        // Then
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertEqual(received?.profileImageCode, 5)
-        XCTAssertEqual(received?.gender, Gender.female.rawValue)
-        XCTAssertEqual(received?.birth, Date(timeIntervalSince1970: 1000))
-    }
-
-    /// 닉네임 입력 반영되는지 검증
-    func test_inputNickname() {
-        // Given
-        let exp = expectation(description: #function)
-        let inputNickname = "Hello"
-        var received: UserInfoModel?
-
-
-        // 1) 초기사출(nil), 2) createUserInfo 모델, 3) inputNickname 후 모델 → 세 번째만 받기
-        viewModel.state.userInfo
-            .skip(2)
-            .take(1)
-            .subscribe(onNext: { model in
-                received = model
+            .subscribe(onNext: {
+                didShowPolicy = true
                 exp.fulfill()
             })
             .disposed(by: disposeBag)
 
-        // When
+        viewModel.action.onNext(.viewDidAppear)
+        viewModel.action.onNext(.viewDidAppear)
+
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertTrue(didShowPolicy, "viewDidAppear 시 정책 시트가 한번 방출되어야 합니다.")
+    }
+
+    /// createUserInfo 호출 시 기본 UserInfoModel(profileImageCode: 0) 방출
+    func test_createUserInfo_emitsDefaultUserInfo() {
+        let exp = expectation(description: #function)
+        var received: UserInfoModel?
+        viewModel.state.userInfo
+            .skip(1)
+            .take(1)
+            .subscribe(onNext: {
+                received = $0
+                exp.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.action.onNext(.createUserInfo)
+
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(received?.profileImageCode, 0)
+    }
+
+    /// selectedProfileIndex 호출 시 profileImageCode 업데이트 검증
+    func test_selectedProfileIndex_updatesProfileImageCode() {
+        let exp = expectation(description: #function)
+        var received: UserInfoModel?
+        viewModel.action.onNext(.createUserInfo)
+        viewModel.state.userInfo
+            .skip(1)
+            .take(1)
+            .subscribe(onNext: {
+                received = $0
+                exp.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.action.onNext(.selectedProfileIndex(5))
+
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(received?.profileImageCode, 5)
+    }
+
+    /// selectedGender 호출 시 gender 업데이트 검증
+    func test_selectedGender_updatesGender() {
+        let exp = expectation(description: #function)
+        var received: UserInfoModel?
+        viewModel.action.onNext(.createUserInfo)
+        viewModel.state.userInfo
+            .skip(1)
+            .take(1)
+            .subscribe(onNext: {
+                received = $0
+                exp.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.action.onNext(.selectedGender(.female))
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(received?.gender, Gender.female.rawValue)
+    }
+
+    /// selectedBirth 호출 시 birth 업데이트 검증
+    func test_selectedBirth_updatesBirth() {
+        let exp = expectation(description: #function)
+        var received: UserInfoModel?
+        let testDate = Date(timeIntervalSince1970: 1000)
+        viewModel.action.onNext(.createUserInfo)
+        viewModel.state.userInfo
+            .skip(1)
+            .take(1)
+            .subscribe(onNext: {
+                received = $0
+                exp.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        viewModel.action.onNext(.selectedBirth(testDate))
+
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(received?.birth, testDate)
+    }
+
+    /// 닉네임 입력 반영되는지 검증
+    func test_inputNickname_updatesNickname() {
+        let exp = expectation(description: #function)
+        let inputNickname = "Hello"
+        var received: UserInfoModel?
+
+        viewModel.state.userInfo
+            .skip(2) // 초기(nil), createUserInfo
+            .take(1)
+            .subscribe(onNext: {
+                received = $0
+                exp.fulfill()
+            })
+            .disposed(by: disposeBag)
         viewModel.action.onNext(.createUserInfo)
         viewModel.action.onNext(.inputNickname(inputNickname))
 
-//         Then
         wait(for: [exp], timeout: 1.0)
         XCTAssertEqual(received?.nickname, inputNickname)
-
     }
 
     /// 페이지 이동(next/prev) 경계값 검증
     func test_pageNavigation_bounds() {
-        // Given
         let nextExp = expectation(description: "next page")
         let prevExp = expectation(description: "prev page")
+        var pages: [Int] = []
         viewModel.state.currentPage
             .skip(1)
             .distinctUntilChanged()
             .subscribe(onNext: { page in
-            if page == 1 { nextExp.fulfill() }
-            if page == 0 { prevExp.fulfill() }
-        })
+                pages.append(page)
+                if page == 1 { nextExp.fulfill() }
+                if page == 0 { prevExp.fulfill() }
+            })
             .disposed(by: disposeBag)
 
-        // When
         viewModel.action.onNext(.didTapNextPage)
         viewModel.action.onNext(.didTapNextPage)
         viewModel.action.onNext(.didTapPrevPage)
 
-        // Then
         wait(for: [nextExp, prevExp], timeout: 1.0)
+        XCTAssertEqual(pages, [1, 0], "next/prev 페이지 이동이 올바르게 처리되어야 합니다.")
     }
 
     /// uploadUserInfo 호출 성공 시 readyToUseService 방출
     func test_uploadUserInfo_success() {
-        // Given
         let exp = expectation(description: #function)
+        var didReady = false
         viewModel.state.readyToUseService
-            .subscribe(onNext: { exp.fulfill() })
+            .subscribe(onNext: {
+                didReady = true
+                exp.fulfill()
+            })
             .disposed(by: disposeBag)
         viewModel.state.userInfo
             .skip(1)
             .take(1)
             .subscribe(onNext: { model in
-            self.viewModel.action.onNext(.uploadUserInfo(model ?? UserInfoModel(profileImageCode: 0)))
-        })
+                self.viewModel.action.onNext(.uploadUserInfo(model ?? UserInfoModel(profileImageCode: 0)))
+            })
             .disposed(by: disposeBag)
 
-        // When
         viewModel.action.onNext(.createUserInfo)
 
-        // Then
         wait(for: [exp], timeout: 1.0)
+        XCTAssertTrue(didReady, "uploadUserInfo 성공 시 readyToUseService가 방출되어야 합니다.")
     }
 
     /// uploadUserInfo 호출 실패 시 error 방출
     func test_uploadUserInfo_failure() {
-        // Given
         mockUseCase.shouldThrow = true
         let exp = expectation(description: #function)
+        var didError = false
         viewModel.state.error
-            .subscribe(onNext: { _ in exp.fulfill() })
+            .subscribe(onNext: { _ in
+                didError = true
+                exp.fulfill()
+            })
             .disposed(by: disposeBag)
         viewModel.state.userInfo
             .skip(1)
             .take(1)
             .subscribe(onNext: { model in
-            self.viewModel.action.onNext(.uploadUserInfo(model ?? UserInfoModel(profileImageCode: 0)))
-        })
+                self.viewModel.action.onNext(.uploadUserInfo(model ?? UserInfoModel(profileImageCode: 0)))
+            })
             .disposed(by: disposeBag)
 
-        // When
         viewModel.action.onNext(.createUserInfo)
 
-        // Then
         wait(for: [exp], timeout: 1.0)
+        XCTAssertTrue(didError, "uploadUserInfo 실패 시 error가 방출되어야 합니다.")
     }
 }
