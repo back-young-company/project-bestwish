@@ -7,45 +7,43 @@
 
 import Foundation
 
-import RxSwift
+import SwiftSoup
 
 /// 지그재그 fetcher
 final class ZigzagFetcher: ProductDTORepository {
     /// 상품 데이터 fetch
-    func fetchProductDTO(ogUrl: URL?, finalUrl: URL?, html: String?) async throws -> ProductDTO {
-        let brand = html?.slice(from: "property=\"product:brand\" content=\"", to: "\"")
-        let title = html?.slice(from: "property=\"og:title\" content=\"", to: "\"")
-        let image = html?.slice(from: "property=\"og:image\" content=\"", to: "\"")
-
-        guard let json = html?.extractNEXTDataJSON() else {
-            throw ProductSyncError.jsonScriptParsingFailed
+    func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
+        guard let html else {
+            throw ProductSyncError.htmlParsingFailed
         }
+        
+        do {
+            let doc = try SwiftSoup.parse(html)
+            
+            // SwiftSoup으로 파싱 헤더에 데이터가 있을 때만 가능
+            let title = try doc.title()
+            let imageURL = try doc.select("meta[property=og:image]").attr("content")
+            let brand = try doc.select("meta[property=product:brand]").attr("content")
+            
+            // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추출
+            let discountRate = html.htmlExtractValue(pattern: #""discount_rate"\s*:\s*"?([0-9]+)"?"#) { $0 }
+            let price = html.htmlExtractValue(pattern: #""discount_price"\s*:\s*"?([0-9]+)"?"#) { Int($0) }
+            let deepLinkURL = html.htmlExtractValue(pattern: #""deeplink_url"\s*:\s*"([^"]+)""#) { $0 }
 
-        let deeplinkUrlPattern = #""deeplink_url"\s*:\s*"([^"]+)""#
-        let discountRatePattern = #""discount_rate"\s*:\s*"?([0-9]+)"?"#
-        let discountPricePattern = #""discount_price"\s*:\s*"?([0-9]+)"?"#
-
-        guard let deeplinkUrl = json.firstMatch(for: deeplinkUrlPattern),
-              let discountRate = json.firstMatch(for: discountRatePattern),
-              let discountPrice = json.firstMatch(for: discountPricePattern) else {
-            throw ProductSyncError.invalidProductData
+            return ProductDTO(
+                id: nil,
+                userID: nil,
+                platform: 2,
+                title: title,
+                price: price,
+                discountRate: discountRate,
+                brand: brand,
+                imagePathURL: imageURL,
+                productURL: deepLinkURL ?? deepLink?.absoluteString,
+                createdAt: nil
+            )
+        } catch {
+            throw ProductSyncError.dataLoadingFailed
         }
-
-        let segments = deeplinkUrl.components(separatedBy: #"\u0026"#)
-        let filtered = [0, 2, 3].compactMap { $0 < segments.count ? segments[$0] : nil }
-        let finalDeeplink = filtered.joined(separator: "&")
-
-        return ProductDTO(
-            id: nil,
-            userID: nil,
-            platform: 2,
-            title: title,
-            price: Int(discountPrice),
-            discountRate: discountRate,
-            brand: brand,
-            imagePathURL: image,
-            productURL: finalDeeplink,
-            createdAt: nil
-        )
     }
 }
