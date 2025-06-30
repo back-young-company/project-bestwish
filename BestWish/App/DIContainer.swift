@@ -85,7 +85,7 @@ final class DIContainer {
         return WishListEditViewController(wishEditViewModel: viewModel)
     }
 
-    /// 링크 저장 뷰 컨트롤러 생성
+    /// 상품 추가 뷰 컨트롤러 생성
     func makeLinkSaveViewController() -> LinkSaveViewController {
         let viewModel = LinkSaveViewModel(
             wishListUseCase: wishListUseCase,

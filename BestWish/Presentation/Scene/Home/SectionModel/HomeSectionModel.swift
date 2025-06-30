@@ -19,9 +19,8 @@ enum HomeHeader: String {
 /// 섹션 아이템 케이스 정의
 enum HomeItem: Equatable {
     case platform(PlatformItem)
-    case filter(Int)
+    case filter(Int, Bool)
     case wishlist(WishListProductItem)
-//    case wishlistEmpty
 }
 
 /// 홈 Section Model

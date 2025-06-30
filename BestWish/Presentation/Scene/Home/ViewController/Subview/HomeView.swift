@@ -20,7 +20,6 @@ final class HomeView: UIView {
     )
 
     // MARK: - Internal Property
-    // 레이아웃 정의
     var createLayout: UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, _ in
             switch sectionIndex {
@@ -70,33 +69,19 @@ private extension HomeView {
                 forCellWithReuseIdentifier: WishListCell.identifier
             )
             $0.register(
-                WishListEmptyCell.self,
-                forCellWithReuseIdentifier: WishListEmptyCell.identifier
-            )
-            $0.register(
                 PlatformShortcutHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: PlatformShortcutHeaderView.identifier
             )
             $0.register(
-                FilterHeaderView.self,
+                WishListFilterHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: FilterHeaderView.identifier
-            )
-            $0.register(
-                MWishListHeaderView.self,
-                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: MWishListHeaderView.identifier
+                withReuseIdentifier: WishListFilterHeaderView.identifier
             )
             $0.register(
                 WishListHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: WishListHeaderView.identifier
-            )
-            $0.register(
-                WishListEmptyHeaderView.self,
-                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: WishListEmptyHeaderView.identifier
             )
         }
     }

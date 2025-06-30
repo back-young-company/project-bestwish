@@ -1,5 +1,5 @@
 //
-//  FilterHeaderView.swift
+//  WishListFilterHeaderView.swift
 //  BestWish
 //
 //  Created by 백래훈 on 6/27/25.
@@ -11,7 +11,8 @@ import SnapKit
 import Then
 import RxSwift
 
-final class FilterHeaderView: UICollectionReusableView, ReuseIdentifier {
+final class WishListFilterHeaderView: UICollectionReusableView, ReuseIdentifier {
+    
     // MARK: - Private Property
     private let _separatorView = UIView()
     private let _titleLabel = UILabel()
@@ -47,8 +48,8 @@ final class FilterHeaderView: UICollectionReusableView, ReuseIdentifier {
 
 }
 
-// MARK: - FilterHeaderView 설정
-private extension FilterHeaderView {
+// MARK: - WishListFilterHeaderView 설정
+private extension WishListFilterHeaderView {
     func setView() {
         setAttributes()
         setHierarchy()
@@ -73,7 +74,7 @@ private extension FilterHeaderView {
             var config = UIButton.Configuration.plain()
             let titleFont = UIFont.font(.pretendardBold, ofSize: 12)
 
-            config.attributedTitle = AttributedString("링크 저장", attributes: AttributeContainer([.font: titleFont]))
+            config.attributedTitle = AttributedString("상품 추가", attributes: AttributeContainer([.font: titleFont]))
             config.baseForegroundColor = .primary200
             config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 14, bottom: 6, trailing: 14)
             $0.configuration = config

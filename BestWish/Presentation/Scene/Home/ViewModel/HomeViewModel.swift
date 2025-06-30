@@ -17,7 +17,7 @@ final class HomeViewModel: ViewModel {
     enum Action {
         case getDataSource
         case platformUpdate
-        case wishlistUpdate
+        case wishListUpdate
         case filterIndex(Int)
         case searchQuery(String)
     }
@@ -25,8 +25,6 @@ final class HomeViewModel: ViewModel {
     // MARK: - State
     struct State {
         let sections: Observable<[HomeSectionModel]>
-        let platformFilter: Observable<[(Int, Int)]>
-        let platformSequence: Observable<[Int]>
         let selectedPlatform: Observable<Int>
         let error: Observable<Error>
     }
@@ -39,186 +37,47 @@ final class HomeViewModel: ViewModel {
     private let _action = PublishSubject<Action>()
 
     private let _sections = BehaviorRelay<[HomeSectionModel]>(value: [])
-    private let _platformFilter = BehaviorRelay<[(Int, Int)]>(value: [])
-    private let _platformSequence = BehaviorRelay<[Int]>(value: [])
     private let _searchQuery = BehaviorRelay<String>(value: "")
     private let _selectedPlatform = BehaviorRelay<Int>(value: 0)
     private let _error = PublishRelay<Error>()
 
-    private var platformSection: HomeSectionModel?
-
-//    private let platformSectionRelay = BehaviorRelay<HomeSectionModel?>(value: nil)
-//    private let filterSectionRelay = BehaviorRelay<HomeSectionModel?>(value: nil)
-//    private let wishlistSectionRelay = BehaviorRelay<HomeSectionModel?>(value: nil)
-
-    private var previousIndex = 0
-    
     private let useCase: WishListUseCase
     private let disposeBag = DisposeBag()
-    
+
     init(useCase: WishListUseCase) {
         self.useCase = useCase
-        
+
         state = State(
             sections: _sections.asObservable(),
-            platformFilter: _platformFilter.asObservable(),
-            platformSequence: _platformSequence.asObservable(),
             selectedPlatform: _selectedPlatform.asObservable(),
             error: _error.asObservable()
         )
 
-//        Observable
-//          .combineLatest(platformSectionRelay, filterSectionRelay, wishlistSectionRelay)
-//          .compactMap { [$0, $1, $2].compactMap { $0 } }
-//          .bind(to: _sections)
-//          .disposed(by: disposeBag)
-
         self.bind()
     }
-    
+
     private func bind() {
         _action
-            .subscribe(with: self) {
-                owner,
-                action in
+            .subscribe(with: self) { owner, action in
                 switch action {
                 case .getDataSource:
-                    Task {
-                        do {
-                            // 플랫폼 바로가기
-                            let platforms = try await owner.getPlatformSequence()
-                            // 플랫폼 필터 칩
-                            let filters = try await owner.getPlatformInWishList()
-                            // 위시리스트
-                            let wishLists = try await owner.getWishLists()
-                            
-//                            owner._platformFilter.accept(filters)
-                            owner._selectedPlatform.accept(0)
-                            owner.setDataSources(
-                                platforms: platforms,
-                                filters: filters,
-//                                filters: [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)],
-                                wishLists: wishLists
-                            )
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
+                    owner.setDataSources()
                 case .platformUpdate:
-                    Task {
-                        do {
-                            let platforms = try await owner.getPlatformSequence()
-                            
-                            let currentSections = owner._sections.value
-                            guard currentSections.count == 3 else { return }
-                            let wishlistsSection = currentSections[2]
-
-                            let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
-                            owner._sections.accept([platformsSection, wishlistsSection])
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
-                case .wishlistUpdate:
-                    Task {
-                        do {
-                            // 플랫폼 필터 칩
-                            let filters = try await owner.getPlatformInWishList()
-                            // 위시리스트
-                            let wishlists = try await owner.getWishLists()
-
-                            let currentSections = owner._sections.value
-                            guard currentSections.count == 3 else { return }
-
-                            let platformsSection = currentSections[0].items
-                            
-                            let platforms: [PlatformItem] = platformsSection.compactMap {
-                                if case let .platform(platform) = $0 {
-                                    return platform
-                                }
-                                return nil
-                            }
-                            
-//                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlists.map { .wishlist($0) })
-                            
-                            owner._platformFilter.accept(filters)
-                            owner.setDataSources(
-                                platforms: platforms,
-                                filters: filters,
-                                wishLists: wishlists
-                            )
-                            
-//                            owner._sections.accept([platformsSection, wishlistsSection])
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
+                    owner.platformUpdate()
+                case .wishListUpdate:
+                    owner.wishListUpdate()
                 case let .filterIndex(index):
-                    Task {
-                        do {
-//                            guard force || index != owner.previousIndex else { return }
-
-                            let searchQuery = owner._searchQuery.value
-                            var currentSections = owner._sections.value
-                            guard currentSections.count == 3 else { return }
-
-                            let platformSection = currentSections[0]
-//                            let wishlistProducts: [WishListProductItem] = []
-                            let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: index == 0 ? nil : index)
-                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
-
-                            currentSections[2].items = wishlistProducts.map { .wishlist($0) }
-
-                            owner._selectedPlatform.accept(index)
-                            owner._sections.accept(currentSections)
-//                            owner.previousIndex = index
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
+                    owner.filterTapped(index)
                 case let .searchQuery(query):
                     owner._searchQuery.accept(query)
-
-                    Task {
-                        do {
-//                            guard force || index != owner.previousIndex else { return }
-
-                            let searchQuery = owner._searchQuery.value
-                            let currentPlatformIndex: Int? = owner._selectedPlatform.value == 0 ? nil : owner._selectedPlatform.value
-                            let filters = [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)]
-                            let filterss: [HomeItem] = filters.isEmpty ? [] : filters.map { .filter($0.0) }
-                            let filterSection = HomeSectionModel(header: .filter, items: filterss)
-                            let currentSections = owner._sections.value
-                            guard currentSections.count == 3 else { return }
-
-//                            let platformSection = currentSections[0]
-                            
-                            let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: currentPlatformIndex)
-
-                            var sections = owner._sections.value
-
-//                            var wishlist = sections.value[2]
-                            sections[2].items = wishlistProducts.map { .wishlist($0) }
-
-//                            owner.wishlistSectionRelay.accept(wishlistRelay)
-
-//                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
-//
-//                            owner.wishlistSectionRelay.accept(wishlistsSection)
-
-                            owner._sections.accept(sections)
-                        } catch {
-                            owner._error.accept(error)
-                        }
-                    }
-
+                    owner.queryUpdate(query)
                 }
             }
             .disposed(by: disposeBag)
     }
 }
 
-// MARK: - private 메서드
+// MARK: - useCase 메서드 호출
 private extension HomeViewModel {
     /// Supabase 플랫폼 시퀀스 가져오기
     func getPlatformSequence() async throws -> [PlatformItem] {
@@ -252,25 +111,113 @@ private extension HomeViewModel {
     /// Supabase 위시리스트 필터 가져오기
     func getPlatformInWishList() async throws -> [(Int, Int)] {
         var result = try await self.useCase.getPlatformsInWishList(isEdit: false)
-        result.insert((platform: 0, count: 0), at: 0)
+        if result.isEmpty {
+            return result
+        } else {
+            result.insert((platform: 0, count: 0), at: 0)
+        }
         return result
     }
+}
 
-    /// section model 설정 및 전달
-    func setDataSources(platforms: [PlatformItem], filters: [(Int, Int)], wishLists: [WishListProductItem]) {
-        let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
-//        self.platformSection = platformsSection
-//        self.platformSectionRelay.accept(platformsSection)
+// MARK: - Section Update 메서드
+private extension HomeViewModel {
+    /// section model 설정
+    func setDataSources() {
+        Task {
+            do {
+                let platforms = try await getPlatformSequence()
+                let filters = try await getPlatformInWishList()
+                let wishLists = try await getWishLists()
 
-        let filters: [HomeItem] = filters.isEmpty ? [] : filters.map { .filter($0.0) }
-        let filterSection = HomeSectionModel(header: .filter, items: filters)
-//        self.filterSectionRelay.accept(filterSection)
+                let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
+                let filterSection = HomeSectionModel(header: .filter, items: filters.map { .filter($0.0, $0.0 == 0) })
+                let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists.map { .wishlist($0) })
 
-//        let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
-        let wishLists: [HomeItem] = wishLists.map { .wishlist($0) }
-        let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists)
-//        self.wishlistSectionRelay.accept(wishlistSection)
+                _sections.accept([platformsSection, filterSection, wishlistSection])
+            } catch {
+                _error.accept(error)
+            }
+        }
+    }
 
-        _sections.accept([platformsSection, filterSection, wishlistSection])
+    /// 플랫폼 바로가기 업데이트
+    func platformUpdate() {
+        Task {
+            do {
+                let platforms = try await getPlatformSequence()
+
+                var currentSections = _sections.value
+                currentSections[0].items = platforms.map { .platform($0) }
+
+                _sections.accept(currentSections)
+            } catch {
+                _error.accept(error)
+            }
+        }
+    }
+
+    /// 위시리스트 업데이트
+    func wishListUpdate() {
+        Task {
+            do {
+                let filters = try await getPlatformInWishList()
+                let wishlists = try await getWishLists()
+
+                var currentSections = _sections.value
+                currentSections[1].items = filters.map { .filter($0.0, $0.0 == 0) }
+                currentSections[2].items = wishlists.map { .wishlist($0) }
+
+                _sections.accept(currentSections)
+            } catch {
+                _error.accept(error)
+            }
+        }
+    }
+
+    /// 필터 버튼 탭 (전체, 무신사, 지그재그 등)
+    func filterTapped(_ index: Int) {
+        Task {
+            do {
+                let searchQuery = _searchQuery.value
+                var currentSections = _sections.value
+                let wishlistProducts = try await getWishLists(query: searchQuery, platform: index == 0 ? nil : index)
+
+                let oldFilters = currentSections[1].items
+                let newFilters: [HomeItem] = oldFilters.map {
+                    switch $0 {
+                    case let .filter(filterIndex, _):
+                        return .filter(filterIndex, filterIndex == index)
+                    default:
+                        return $0
+                    }
+                }
+
+                currentSections[1].items = newFilters
+                currentSections[2].items = wishlistProducts.map { .wishlist($0) }
+
+                _selectedPlatform.accept(index)
+                _sections.accept(currentSections)
+            } catch {
+                _error.accept(error)
+            }
+        }
+    }
+
+    /// 검색어가 변경될 때 위시리스트 업데이트
+    func queryUpdate(_ query: String) {
+        Task {
+            do {
+                let currentPlatformIndex: Int? = _selectedPlatform.value == 0 ? nil : _selectedPlatform.value
+                let wishlistProducts = try await getWishLists(query: query, platform: currentPlatformIndex)
+
+                var currentSections = _sections.value
+
+                currentSections[2].items = wishlistProducts.map { .wishlist($0) }
+                _sections.accept(currentSections)
+            } catch {
+                _error.accept(error)
+            }
+        }
     }
 }

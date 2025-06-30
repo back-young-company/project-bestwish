@@ -34,12 +34,12 @@ final class HomeViewController: UIViewController {
 
                 return cell
 
-            case let .filter(index):
+            case let .filter(index, isSelected):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WishListFilterCell.identifier, for: indexPath) as? WishListFilterCell else { return UICollectionViewCell() }
 
                 let isLast = indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1
 
-                cell.configure(type: index, isSelected: false, isFirst: indexPath.item == 0, isLast: isLast)
+                cell.configure(type: index, isSelected: isSelected, isFirst: indexPath.item == 0, isLast: isLast)
 
                 cell.platformButton.rx.tap
                     .bind(with: self) { owner, _ in
@@ -94,9 +94,9 @@ final class HomeViewController: UIViewController {
             case .filter:
                 guard let headerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: FilterHeaderView.identifier,
+                    withReuseIdentifier: WishListFilterHeaderView.identifier,
                     for: indexPath
-                ) as? FilterHeaderView else { return UICollectionReusableView() }
+                ) as? WishListFilterHeaderView else { return UICollectionReusableView() }
 
                 headerView.configure(title: section.header.rawValue)
                 headerView.configure(isHidden: items.isEmpty)
@@ -133,9 +133,9 @@ final class HomeViewController: UIViewController {
             case .wishlist:
                 guard let headerView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
-                    withReuseIdentifier: MWishListHeaderView.identifier,
+                    withReuseIdentifier: WishListHeaderView.identifier,
                     for: indexPath
-                ) as? MWishListHeaderView else { return UICollectionReusableView() }
+                ) as? WishListHeaderView else { return UICollectionReusableView() }
 
                 headerView.configure(isEmpty: dataSource.sectionModels[1].items.isEmpty)
                 headerView.configure(count: items.count, isEmpty: items.isEmpty)
@@ -165,15 +165,15 @@ final class HomeViewController: UIViewController {
         self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func loadView() {
         view = homeView
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -181,7 +181,7 @@ final class HomeViewController: UIViewController {
 
         setNotification()
         bindViewModel()
-        
+
         homeViewModel.action.onNext(.getDataSource)
     }
 
@@ -209,19 +209,12 @@ final class HomeViewController: UIViewController {
                     return owner.switchDeeplink(platform.platformDeepLink)
                 case let .wishlist(product):
                     return owner.switchDeeplink(product.productDeepLink ?? "")
-                case .filter(_):
+                case .filter(_, _):
                     return
                 }
             }
             .disposed(by: disposeBag)
-        
-//        homeViewModel.state.sections
-//            .observe(on: MainScheduler.asyncInstance)
-//            .bind(with: self) { owner, sections in
-//                owner.setCollectionViewLayout(sections)
-//            }
-//            .disposed(by: disposeBag)
-        
+
         homeViewModel.state.sections
             .bind(to: homeView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
@@ -230,23 +223,6 @@ final class HomeViewController: UIViewController {
 
 // MARK: - private 메서드
 private extension HomeViewController {
-    /// 컬렉션 뷰 레이아웃 설정
-    func setCollectionViewLayout(_ sections: [HomeSectionModel]) {
-        homeView.collectionView.collectionViewLayout = UICollectionViewCompositionalLayout { sectionIndex, env -> NSCollectionLayoutSection? in
-            guard sectionIndex < sections.count else { return nil }
-            let section = sections[sectionIndex]
-            
-            switch section.header {
-            case .platform:
-                return NSCollectionLayoutSection.createPlatformShortcutSection()
-            case .filter:
-                return NSCollectionLayoutSection.createPlatformFilterSection()
-            case .wishlist:
-                return NSCollectionLayoutSection.createWishlistSection()
-            }
-        }
-    }
-
     /// 외부 플랫폼 전환
     func switchDeeplink(_ link: String) {
         guard let url = URL(string: link) else {
@@ -274,7 +250,7 @@ extension HomeViewController: HomeViewControllerUpdate {
 
     /// 위시리스트 업데이트
     func updateWishlists() {
-        self.homeViewModel.action.onNext(.wishlistUpdate)
+        self.homeViewModel.action.onNext(.wishListUpdate)
     }
 }
 
