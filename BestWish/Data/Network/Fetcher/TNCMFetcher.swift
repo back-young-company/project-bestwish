@@ -6,57 +6,45 @@
 //
 
 import Foundation
+
 import SwiftSoup
 
 /// 29CM 페쳐
 final class TNCMFetcher: ProductDTORepository {
-    
     /// 29CM 제품 상세 HTML → ProductDTO 파싱
-    func fetchProductDTO(ogUrl: URL?, finalUrl: URL?, html: String?) async throws -> ProductDTO {
-        let html = html ?? ""
-        let doc = try SwiftSoup.parse(html)
-
-        let title = try doc.title()
-        let imageURL = try doc.select("meta[property=og:image]").attr("content")
-        let url = try doc.select("meta[property=al:ios:url]").attr("content")
-
-        // 가격 및 할인율 추출
-        guard let range = html.range(of: #"totalDiscountedItemPrice.*?\}"#, options: .regularExpression) else { throw ProductSyncError.jsonDecodingFailed }
-        let result = String(html[range])
-        
-        
-        let regex = try NSRegularExpression(pattern: "\\d+", options: [])
-        let matches = regex.matches(in: result, options: [], range: NSRange(location: 0, length: result.utf16.count))
-        let numbers = matches.compactMap { match -> Int? in
-            guard let range = Range(match.range, in: result) else { return nil }
-            return Int(result[range])
+    func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
+        guard let html else {
+            throw ProductSyncError.htmlParsingFailed
         }
-        
-        // 브랜드 추출
-        guard let brand_range = html.range(of: #"brandNameKor.*?\,"#, options: .regularExpression) else { throw ProductSyncError.jsonDecodingFailed }
-        let brand_result = String(html[brand_range])
-        
-        let brand_regex = try NSRegularExpression(pattern: #"brandNameKor\\":\\"(.*?)\\""#)
-        guard let match = brand_regex.firstMatch(in: brand_result, options: [], range: NSRange(location: 0, length: brand_result.utf16.count)),
-              let range = Range(match.range(at: 1), in: brand_result) else { throw ProductSyncError.jsonDecodingFailed }
-        
-        // 초기화
-        let price = numbers[0]
-        let discountRate = "\(numbers[1])"
-        let brand = String(brand_result[range])
-        
-        return ProductDTO(
-            id: nil,
-            userID: nil,
-            platform: 6,
-            title: title,
-            price: price,
-            discountRate: discountRate,
-            brand: brand,
-            imagePathURL: imageURL,
-            productURL: url,
-            createdAt: nil
-        )
+        do {
+            let doc = try SwiftSoup.parse(html)
+
+            // SwiftSoup으로 파싱 헤더에 데이터가 있을 때만 가능
+            let title = try doc.title()
+            let imageURL = try doc.select("meta[property=og:image]").attr("content")
+            let url = try doc.select("meta[property=al:ios:url]").attr("content")
+            
+            // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추출
+            let nums = html.extractNumbers(inRangeMatching: #"totalDiscountedItemPrice.*?\}"#)
+            let price = nums?.first
+            let discountRate = String(nums?.last ?? 0)
+            let brandKor = html.htmlExtractValue(pattern: #"brandNameKor\\":\\"(.*?)\\""#) { $0 }
+            
+            return ProductDTO(
+                id: nil,
+                userID: nil,
+                platform: 6,
+                title: title,
+                price: price,
+                discountRate: discountRate,
+                brand: brandKor,
+                imagePathURL: imageURL,
+                productURL: url,
+                createdAt: nil
+            )
+        } catch {
+            throw ProductSyncError.dataLoadingFailed
+        }
     }
 }
 
