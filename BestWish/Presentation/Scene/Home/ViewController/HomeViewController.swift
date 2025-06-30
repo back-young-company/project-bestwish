@@ -187,6 +187,11 @@ final class HomeViewController: UIViewController {
 
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setOnboarding()
+    }
+
     private func bindViewModel() {
         homeView.collectionView.rx.itemSelected
             .withLatestFrom(homeViewModel.state.sections) { indexPath, sections in
@@ -289,6 +294,20 @@ private extension HomeViewController {
         if let bool = sharedDefaults?.bool(forKey: "AddProduct"), bool {
             homeViewModel.action.onNext(.getDataSource)
             sharedDefaults?.set(false, forKey: "AddProduct")
+        }
+    }
+}
+
+// MARK: - Onboarding 설정
+private extension HomeViewController {
+    func setOnboarding() {
+        let onboardingDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
+        if let bool = onboardingDefaults?.bool(forKey: "onboarding"), !bool {
+
+            let vc = DIContainer.shared.makeOnboardingViewController()
+            present(vc, animated: true)
+
+            onboardingDefaults?.set(true, forKey: "onboarding")
         }
     }
 }

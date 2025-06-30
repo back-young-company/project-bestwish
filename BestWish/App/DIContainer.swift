@@ -67,6 +67,12 @@ final class DIContainer {
         )
     }
 
+    /// 온보딩 뷰 컨트롤러 생성
+    func makeOnboardingViewController() -> OnboardingViewController {
+        let viewModel = OnboardingViewModel()
+        return OnboardingViewController(viewModel: viewModel)
+    }
+
     /// 홈 뷰 컨트롤러 생성
     func makeHomeViewController() -> HomeViewController {
         let viewModel = HomeViewModel(useCase: wishListUseCase)
