@@ -82,7 +82,7 @@ private extension SignInSecondView {
         self.backgroundColor = .gray0
 
         _profileImageView.do {
-            $0.contentMode = .scaleToFill
+            $0.contentMode = .scaleAspectFit
             $0.isUserInteractionEnabled = true
         }
 
@@ -149,11 +149,11 @@ private extension SignInSecondView {
 
         _prevButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
 
         _completeButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
 
     }

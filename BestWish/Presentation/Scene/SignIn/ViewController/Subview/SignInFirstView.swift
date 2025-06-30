@@ -128,7 +128,7 @@ private extension SignInFirstView {
         }
 
         _nextPageButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
     }
 }

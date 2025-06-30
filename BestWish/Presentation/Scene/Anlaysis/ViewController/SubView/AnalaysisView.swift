@@ -126,12 +126,12 @@ private extension AnalysisView {
         
         _resetButton.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(20)
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
             $0.width.equalTo(95)
         }
         
         _searchButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
             $0.leading.equalTo(_resetButton.snp.trailing).offset(12)
             $0.trailing.equalToSuperview().inset(20)
         }
