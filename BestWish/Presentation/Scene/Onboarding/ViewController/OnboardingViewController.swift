@@ -34,25 +34,29 @@ final class OnboardingViewController: UIViewController {
         onboardingView.scrollView.delegate = self
         bindView()
         bindViewModel()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        viewModel.action.onNext(.viewDidLayoutSubviews)
+        viewModel.action.onNext(.viewDidLoad)
     }
 
     private func bindView() {
-        // 다음 페이지 버튼 탭 → ViewModel에 액션 전달
+
         onboardingView.pagingButton.rx.tap
-            .asDriver()
-            .map { .didTapNextPage }
-            .drive(viewModel.action)
-            .disposed(by: disposeBag)
+          .withLatestFrom(viewModel.state.currentPage)
+          .observe(on: MainScheduler.instance)
+          .subscribe(with: self) { owner, page in
+              let lastIndex = OnboardingData.allCases.count - 1
+              if page == lastIndex {
+                // 마지막 페이지라면 닫기
+                self.dismiss(animated: true)
+              } else {
+                // 아니면 다음 페이지로
+                self.viewModel.action.onNext(.didTapNextPage)
+              }
+          }
+          .disposed(by: disposeBag)
 
         // 닫기 버튼 탭 → 모달 해제
         onboardingView.closeButton.rx.tap
             .subscribe(with: self) {owner, _ in
-                print("닫기")
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
@@ -60,6 +64,7 @@ final class OnboardingViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.state.pages
+            .take(1)
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, pages in
                 owner.onboardingView.configure(with: pages)
@@ -71,6 +76,7 @@ final class OnboardingViewController: UIViewController {
             .subscribe(with: self) { owner, page in
                 owner.onboardingView.pageController.currentPage = page
                 owner.onboardingView.scrollToPage(page)
+                owner.onboardingView.configureButton(currentPage: page)
             }
             .disposed(by: disposeBag)
     }

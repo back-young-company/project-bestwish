@@ -13,9 +13,9 @@ final class OnboardingViewModel: ViewModel {
 
     // MARK: - Actions
     enum Action {
-        case viewDidLayoutSubviews
+        case viewDidLoad
         case didTapNextPage
-        case didScrollToPage(Int) 
+        case didScrollToPage(Int)
     }
 
     // MARK: - States
@@ -33,7 +33,6 @@ final class OnboardingViewModel: ViewModel {
     private let _action = PublishSubject<Action>()
 
     private let _currentPage = BehaviorRelay<Int>(value: 0)
-    private let _totalPages = OnboardingData.allCases
     private let _pages = PublishRelay<[OnboardingDataInfo]>()
     private let disposeBag = DisposeBag()
 
@@ -48,26 +47,22 @@ final class OnboardingViewModel: ViewModel {
     private func bindAction() {
         _action
             .subscribe(with: self) { owner, action in
-                switch action {
-                case .viewDidLayoutSubviews:
-                    self._pages.accept(OnboardingData.allCases.map { $0.value })
-                case .didTapNextPage:
-                    // 버튼을 눌러서 넘어온 경우
-                    let next = min(
-                        owner._currentPage.value + 1,
-                        owner._totalPages.count - 1
-                    )
-                    owner._currentPage.accept(next)
+            switch action {
+            case .viewDidLoad:
+                let pages = OnboardingData.allCases.map { $0.value }
+                self._pages.accept(pages)
 
-                case .didScrollToPage(let index):
-                    // 스크롤로 넘어온 경우
-                    let next = min(
-                        max(index, 0),
-                        owner._totalPages.count - 1
-                    )
-                    owner._currentPage.accept(next)
-                }
+            case .didTapNextPage:
+                // 버튼을 눌러서 넘어온 경우
+                let next = min(owner._currentPage.value + 1, 4)
+                owner._currentPage.accept(next)
+
+            case .didScrollToPage(let index):
+                // 스크롤로 넘어온 경우
+                let next = min(max(index, 0), 4)
+                owner._currentPage.accept(next)
             }
+        }
             .disposed(by: disposeBag)
     }
 

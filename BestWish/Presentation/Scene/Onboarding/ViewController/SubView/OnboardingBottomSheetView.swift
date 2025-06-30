@@ -57,6 +57,15 @@ final class OnboardingBottomSheetView: UIView {
         _pageController.currentPage = 0
     }
 
+    func configureButton(currentPage: Int) {
+        if currentPage == 4 {
+            _pagingButton.changeButtonType(type: .complete)
+        } else {
+            _pagingButton.changeButtonType(type: .next)
+        }
+    }
+
+
     func scrollToPage(_ index: Int, animated: Bool = true) {
       let x = scrollView.bounds.width * CGFloat(index)
       scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: animated)
