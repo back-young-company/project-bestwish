@@ -35,8 +35,8 @@ final class DIContainer {
     private init() {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
-        self.supabaseOAuthManager = SupabaseOAuthManager()
-        self.keyChainManager = KeyChainManager()
+        self.supabaseOAuthManager = SupabaseOAuthManagerImpl()
+        self.keyChainManager = KeyChainManagerImpl()
         self.productSyncManager = ProductSyncManager()
         self.coreMLManager = CoreMLManager()
 

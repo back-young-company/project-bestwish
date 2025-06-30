@@ -10,7 +10,8 @@ import Foundation
 
 import Supabase
 
-final class SupabaseOAuthManager: NSObject {
+/// OAuthManager 구현부
+final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
 
     var continuation: CheckedContinuation<(String, Supabase.Session), Error>?
     var kakaoAuthSession: ASWebAuthenticationSession?
@@ -179,7 +180,7 @@ final class SupabaseOAuthManager: NSObject {
 
 
 // MARK: - Login할때 하단으로 부터 웹뷰 제어
-extension SupabaseOAuthManager: ASWebAuthenticationPresentationContextProviding, ASAuthorizationControllerPresentationContextProviding {
+extension SupabaseOAuthManagerImpl: ASWebAuthenticationPresentationContextProviding, ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return  UIWindow()
     }

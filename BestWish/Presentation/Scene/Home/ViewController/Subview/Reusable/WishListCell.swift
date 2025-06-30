@@ -72,9 +72,17 @@ private extension WishListCell {
     }
 
     func setAttributes() {
+        contentView.do {
+            $0.layer.shadowColor = UIColor.gray900?.cgColor
+            $0.layer.shadowOpacity = 0.1
+            $0.layer.shadowOffset = CGSize(width: 0, height: 0.5)
+            $0.layer.shadowRadius = 4
+        }
+
         _productImageView.do {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
+            $0.contentMode = .scaleAspectFill
         }
         
         _editButton.do {

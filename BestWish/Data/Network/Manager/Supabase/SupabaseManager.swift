@@ -96,7 +96,10 @@ final class SupabaseManager {
 
             if let query {
                 // ilike: 대소문자 구분 X
-                builder = builder.ilike(ProductAttributes.title.rawValue, pattern: "%\(query)%")
+                let pattern = "%\(query)%"
+                builder = builder.or(
+                    "\(ProductAttributes.title.rawValue).ilike.\(pattern),\(ProductAttributes.brand.rawValue).ilike.\(pattern)"
+                )
             }
 
             if let platform {
