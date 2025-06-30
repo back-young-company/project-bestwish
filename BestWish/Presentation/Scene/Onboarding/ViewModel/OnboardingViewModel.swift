@@ -45,17 +45,10 @@ final class OnboardingViewModel: ViewModel {
 
     private let _userInfo = BehaviorRelay<UserInfoModel?> (value: nil)
     private let _isValidNickname = BehaviorRelay<Bool?>(value: nil)
-    private let _currentPage = BehaviorRelay<Int> (value: OnboardingViewModel.onboardingStartPage)
-    private let _showPolicySheet = PublishRelay<Void>()
+    private let _currentPage = BehaviorRelay<Int> (value: 0)
+    private let _showPolicySheet = PublishSubject<Void>()
     private let _readyToUseService = PublishRelay<Void>()
     private let _error = PublishSubject<AppError>()
-
-    /// 총 페이지수
-    static private let onboardingStartPage = 0
-    static private let onboardingFinishPage = 1
-
-    /// 한 번만 정책 시트를 띄웠는지 추적하는 플래그
-    private var showPolicyFlag = false
 
     private let useCase: UserInfoUseCase
     private let disposeBag = DisposeBag()
@@ -77,7 +70,7 @@ final class OnboardingViewModel: ViewModel {
         _action.subscribe(with: self) { owner, action in
             switch action {
             case .viewDidAppear:
-                owner.updateShowPolicyFlag(with: owner.showPolicyFlag)
+                owner.updateShowPolicyFlag()
             case .createUserInfo:
                 let userInfo = owner.createUserInfoModel()
                 self._userInfo.accept(userInfo)
@@ -88,10 +81,10 @@ final class OnboardingViewModel: ViewModel {
             case .selectedBirth(let date):
                 owner.updateBirth(with: date)
             case .didTapNextPage:
-                let next = min(self._currentPage.value + 1, OnboardingViewModel.onboardingFinishPage)
+                let next = min(self._currentPage.value + 1, 1)
                 self._currentPage.accept(next)
             case .didTapPrevPage:
-                let prev = max(self._currentPage.value - 1, OnboardingViewModel.onboardingStartPage)
+                let prev = max(self._currentPage.value - 1, 0)
                 self._currentPage.accept(prev)
             case .inputNickname(let nickname):
                 owner.updateNickname(with: nickname)
@@ -104,11 +97,9 @@ final class OnboardingViewModel: ViewModel {
     }
 
     /// 이용약관 최초 실행시에만 적용되도록 Flag 변경
-    private func updateShowPolicyFlag(with flag: Bool) {
-        if !flag, self._currentPage.value == Self.onboardingStartPage {
-            showPolicyFlag = !flag
-            _showPolicySheet.accept(())
-        }
+    private func updateShowPolicyFlag() {
+        _showPolicySheet.onNext(())
+        _showPolicySheet.onCompleted()
     }
 
     /// 신규 유저 정보 생성
@@ -172,3 +163,13 @@ final class OnboardingViewModel: ViewModel {
         }
     }
 }
+
+// MARK: - 테스트 전용 메서드
+#if DEBUG
+    extension OnboardingViewModel {
+        /// 유저 정보 초기값 설정
+        func injectIntialUserInfo(_ user: UserInfoModel) {
+            _userInfo.accept(user)
+        }
+    }
+#endif
