@@ -87,7 +87,6 @@
 				Data/KeyChain/Error/KeyChainError.swift,
 				Data/KeyChain/Manager/KeyChainManager.swift,
 				Data/KeyChain/Manager/Token.swift,
-				Data/Network/DTO/AblyResponseDTO.swift,
 				Data/Network/DTO/ProductDTO.swift,
 				Data/Network/DTO/UserDTO.swift,
 				Data/Network/Error/CoreMLError.swift,
