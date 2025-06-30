@@ -17,7 +17,7 @@ enum HomeHeader: String {
 
 /// 섹션 아이템 케이스 정의
 enum HomeItem: Equatable {
-    case platform(PlatformItem)
+    case platform(PlatformEntity)
     case wishlist(WishListProductItem)
     case wishlistEmpty
 }
@@ -36,14 +36,6 @@ extension HomeSectionModel: SectionModelType {
         self = original
         self.items = items
     }
-}
-
-/// 플랫폼 Entity
-struct PlatformItem: Equatable {
-    var platform: PlatformEntity?
-    let platformName: String
-    let platformImage: String
-    var platformDeepLink: String
 }
 
 /// 위시리스트 Entity
