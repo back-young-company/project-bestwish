@@ -11,62 +11,37 @@ import SwiftSoup
 
 /// Hiver 페쳐
 final class HiverFetcher: ProductDTORepository {
-    
     /// 하이버 제품 상세 HTML → ProductDTO 파싱
-    func fetchProductDTO(ogUrl: URL?, finalUrl: URL?, html: String?) async throws -> ProductDTO {
-        let html = html ?? ""
-        let doc = try SwiftSoup.parse(html)
-
-        let title = try doc.title()
-        let imageURL = try doc.select("meta[property=og:image]").attr("content")
-
-        let price = extractValue(html, pattern: #""sale_price"\s*:\s*(\d+)"#, transform: { Int($0) })
-        let discount = extractValue(html, pattern: #""original_sale_percent"\s*:\s*(\d+)"#, transform: { $0 })
-        let sellerName = extractValue(html, pattern: #""seller"\s*:\s*\{[^}]*?"name"\s*:\s*"([^"]+)""#, transform: { $0 })
-        
-        print( ProductDTO(
-            id: nil,
-            userID: nil,
-            platform: 11,
-            title: title,
-            price: price,
-            discountRate: discount,
-            brand: sellerName,
-            imagePathURL: imageURL,
-            productURL: convertToProductURL(from: ogUrl?.absoluteString),
-            createdAt: nil
-        ))
-        
-        throw ProductSyncError.dataLoadingFailed
-    }
-    
-    /// 원링크 -> 사이트 링크 (제대로된 파싱을 위함)
-    private func convertToProductURL(from originalURL: String?) -> String? {
-        guard let url = URLComponents(string: originalURL ?? ""),
-              let queryItems = url.queryItems,
-              let id = queryItems.first(where: { $0.name == "id" })?.value else {
-            return nil
+    func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
+        guard let html else {
+            throw ProductSyncError.htmlParsingFailed
         }
-        return "https://www.hiver.co.kr/products/\(id)"
-    }
-    
-    /// 정해진 패턴으로 데이터를 추출하는 메서드
-    private func extractValue<T>(_ html: String, pattern: String, transform: (String) -> T?) -> T? {
-        if let regex = try? NSRegularExpression(pattern: pattern),
-           let match = regex.firstMatch(in: html, range: NSRange(html.startIndex..., in: html)),
-           let range = Range(match.range(at: 1), in: html) {
-            return transform(String(html[range]))
+        do {
+            let doc = try SwiftSoup.parse(html)
+
+            // SwiftSoup으로 파싱 헤더에 데이터가 있을 때만 가능
+            let title = try doc.title()
+            let imageURL = try doc.select("meta[property=og:image]").attr("content")
+
+            // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추추출
+            let price = html.htmlExtractValue(pattern: #""sale_price"\s*:\s*(\d+)"#, transform: { Int($0) })
+            let discount = html.htmlExtractValue(pattern: #""original_sale_percent"\s*:\s*(\d+)"#, transform: { $0 })
+            let sellerName = html.htmlExtractValue(pattern: #""seller"\s*:\s*\{[^}]*?"name"\s*:\s*"([^"]+)""#, transform: { $0 })
+            
+            return ProductDTO(
+                id: nil,
+                userID: nil,
+                platform: 8,
+                title: title,
+                price: price,
+                discountRate: discount,
+                brand: sellerName,
+                imagePathURL: imageURL,
+                productURL: deepLink?.absoluteString,
+                createdAt: nil
+            )
+        } catch {
+            throw ProductSyncError.dataLoadingFailed
         }
-        return nil
     }
 }
-
-// 앱에서 가져온 상품 링크
-// https://www.hiver.co.kr/onelink?type=products&id=178554124&shareType=share_pdp_url&deep_link_value=hiverapplication://applink/products/178554124
-
-// 사이트에서 가져온 상품 링크
-// https://www.hiver.co.kr/onelink?type=products&id=178554124&shareType=share_pdp_url&deep_link_value=hiverapplication://applink/products/178554124
-
-// 실제 사이트
-// https://www.hiver.co.kr/products/178554124
-
