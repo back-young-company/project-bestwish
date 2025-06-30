@@ -162,7 +162,7 @@ private extension AnalysisViewModel {
     
     /// 키워드 추가 이벤트
     private func addKeyword(_ keyword: String) {
-        var keywords = analysisUseCase.addKeyword(keyword, keywords: keywords)
+        let keywords = analysisUseCase.addKeyword(keyword, keywords: keywords)
         
         // 키워드 추가
         changeItem(type: .keyword) {
@@ -176,7 +176,7 @@ private extension AnalysisViewModel {
     
     /// 키워드 삭제 이벤트
     private func deleteKeyword(_ keyword: String) {
-        var keywords = analysisUseCase.deleteKeyword(keyword, keywords: keywords)
+        let keywords = analysisUseCase.deleteKeyword(keyword, keywords: keywords)
         
         // 키워드 추가
         changeItem(type: .keyword) {
@@ -190,18 +190,26 @@ private extension AnalysisViewModel {
     
     /// 플랫폼 선택 이벤트
     private func selectePlatform(_ platform: PlatformEntity) {
-        changeItem(type: .platform) {
-            platforms.map {
-                .platform(platform: $0, isSelected: $0 == platform)
+        do {
+            
+            let platforms = try analysisUseCase.selectePlatform(platform: platform, platforms: platforms)
+            changeItem(type: .platform) {
+                platforms.map { platform, isSelected in
+                    .platform(platform: platform, isSelected: isSelected)
+                }
             }
+            // 현제 플랫폼 업데이트
+            currentPlatform.accept(platform)
+            
+        } catch let error {
+            guard let error = error as? PlatformError else { return }
+            print(error.rawValue)
         }
-        // 현제 플랫폼 업데이트
-        currentPlatform.accept(platform)
     }
     
     /// 초기화
     private func resetKeyword() {
-        var keywords = analysisUseCase.resetKeyword(keywords: keywords)
+        let keywords = analysisUseCase.resetKeyword(keywords: keywords)
         
         changeItem(type: .keyword) {
             keywords.map {

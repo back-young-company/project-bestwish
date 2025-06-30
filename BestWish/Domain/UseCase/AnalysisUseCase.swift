@@ -8,11 +8,13 @@
 /// 이미지 분석 유즈 케이스
 protocol AnalysisUseCase {
     /// 키워드 추가 이벤트
-    func addKeyword(_ keyword: String, keywords: inout [String])
+    func addKeyword(_ keyword: String, keywords: [String]) -> [String]
     /// 키워드 삭제 이벤트
-    func deleteKeyword(_ keyword: String, keywords: inout [String])
+    func deleteKeyword(_ keyword: String, keywords: [String]) -> [String]
+    /// 플랫폼 선택 이벤트
+    func selectePlatform(platform: PlatformEntity, platforms: [PlatformEntity]) throws -> [(PlatformEntity, Bool)]
     /// 키워드 초기화 이벤트
-    func resetKeyword(keywords: inout [String])
+    func resetKeyword(keywords: [String]) -> [String]
     /// 플랫폼 이동
     func movePlatform(deepLink: String?) throws -> String
 }
@@ -21,26 +23,40 @@ protocol AnalysisUseCase {
 final class AnalysisUseCaseImpl: AnalysisUseCase {
     
     /// 키워드 추가 이벤트
-    func addKeyword(_ keyword: String, keywords: inout [String]) {
+    func addKeyword(_ keyword: String, keywords: [String]) -> [String] {
+        var keywords = keywords
         if !keywords.contains(keyword) {
             keywords.append(keyword)
         }
+        return keywords
     }
     
     /// 키워드 삭제 이벤트
-    func deleteKeyword(_ keyword: String, keywords: inout [String]) {
+    func deleteKeyword(_ keyword: String, keywords: [String]) -> [String] {
+        var keywords = keywords
         keywords.removeAll(where: { $0 == keyword })
+        return keywords
     }
     
     /// 키워드 초기화 이벤트
-    func resetKeyword(keywords: inout [String]) {
+    func resetKeyword(keywords: [String]) -> [String] {
+        var keywords = keywords
         keywords.removeAll()
+        return keywords
+    }
+    
+    /// 플랫폼 초기화 이벤트
+    func selectePlatform(platform: PlatformEntity, platforms: [PlatformEntity]) throws -> [(PlatformEntity, Bool)] {
+        var platforms = platforms.map { (platform: $0, isSelected: false) }
+        guard let index = platforms.firstIndex(where: { $0.platform == platform }) else { throw PlatformError.platformNotFound }
+        platforms[index].isSelected = true
+        return platforms
     }
     
     /// 플랫폼 이동
     func movePlatform(deepLink: String?) throws -> String {
         guard let deepLink else {
-            throw PlatformError.notFoundDeepLink
+            throw PlatformError.deepLinknotFound
         }
         if deepLink != "notFound" {
             return deepLink
