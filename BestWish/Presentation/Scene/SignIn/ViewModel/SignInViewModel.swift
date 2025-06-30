@@ -73,7 +73,7 @@ final class SignInViewModel: ViewModel {
                 owner.updateShowPolicyFlag()
             case .createUserInfo:
                 let userInfo = owner.createUserInfoModel()
-                self._userInfo.accept(userInfo)
+                owner._userInfo.accept(userInfo)
             case .selectedProfileIndex(let index):
                 owner.updateProfileImage(with: index)
             case .selectedGender(let gender):
@@ -82,15 +82,15 @@ final class SignInViewModel: ViewModel {
                 owner.updateBirth(with: date)
             case .didTapNextPage:
                 let next = min(self._currentPage.value + 1, 1)
-                self._currentPage.accept(next)
+                owner._currentPage.accept(next)
             case .didTapPrevPage:
                 let prev = max(self._currentPage.value - 1, 0)
-                self._currentPage.accept(prev)
+                owner._currentPage.accept(prev)
             case .inputNickname(let nickname):
                 owner.updateNickname(with: nickname)
             case .uploadUserInfo(let userInfo):
                 Task {
-                    await self.updateUserInfo(with: userInfo)
+                    await owner.updateUserInfo(with: userInfo)
                 }
             }
         }.disposed(by: disposeBag)

@@ -13,6 +13,7 @@ import RxSwift
 
 /// 회원가입 View Controller
 final class SignInViewController: UIViewController {
+
     private let viewModel: SignInViewModel
     private let policyViewModel: PolicyViewModel
     private let firstView = SignInFirstView()
@@ -115,7 +116,7 @@ private extension SignInViewController {
         viewModel.state.showPolicySheet
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, _ in
-                let policyVC = PolicyViewController(viewModel: self.policyViewModel)
+                let policyVC = PolicyViewController(viewModel: owner.policyViewModel)
                 owner.present(policyVC, animated: true)
             }
             .disposed(by: disposeBag)
@@ -147,7 +148,7 @@ private extension SignInViewController {
             .subscribe(with: self) { owner, _ in
                 owner.firstView.configure(isFoucsed: true)
                 let sheetVC = DatePickerBottomSheetViewController()
-                sheetVC.presentationController?.delegate = self
+                sheetVC.presentationController?.delegate = owner
 
                 // 선택된 날짜 콜백
                 sheetVC.onDateSelected = { date in
@@ -178,8 +179,8 @@ private extension SignInViewController {
                 guard let userInfo else { return }
                 let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
                 profileSheetVC.presentProfileSheet()
-                profileSheetVC.onComplete = { [weak self] selectedIndex in
-                    self?.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
+                profileSheetVC.onComplete = { selectedIndex in
+                    owner.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
                 }
                 owner.present(profileSheetVC, animated: true)
             }
@@ -219,9 +220,9 @@ private extension SignInViewController {
 
         secondView.completeButton.rx.tap
             .withLatestFrom(viewModel.state.userInfo)
-            .subscribe(with: self) { owner, UserInfoModel in
-                guard let UserInfoModel else { return }
-                owner.viewModel.action.onNext(.uploadUserInfo(UserInfoModel))
+            .subscribe(with: self) { owner, userInfoModel in
+                guard let userInfoModel else { return }
+                owner.viewModel.action.onNext(.uploadUserInfo(userInfoModel))
             }
             .disposed(by: disposeBag)
     }
