@@ -31,22 +31,28 @@ final class OnboardingViewModelTests: XCTestCase {
 
     /// viewDidAppear 최초 호출 시 정책 시트 방출, 두 번째부터는 방출되지 않아야 함
     func test_viewDidAppear_showPolicy_once() {
+        // Given
         let exp = expectation(description: #function)
-        exp.expectedFulfillmentCount = 1
-        var didShowPolicy = false
+        var emissionCount = 0
+
         viewModel.state.showPolicySheet
             .subscribe(onNext: {
-                didShowPolicy = true
+                emissionCount += 1
                 exp.fulfill()
             })
             .disposed(by: disposeBag)
 
-        viewModel.action.onNext(.viewDidAppear)
-        viewModel.action.onNext(.viewDidAppear)
+        // When
+        viewModel.action.onNext(.viewDidAppear) // 1st: emit + complete
+        viewModel.action.onNext(.viewDidAppear) // 2nd: no emit (이미 completed)
 
+        // Then
         wait(for: [exp], timeout: 1.0)
-        XCTAssertTrue(didShowPolicy, "viewDidAppear 시 정책 시트가 한번 방출되어야 합니다.")
+        XCTAssertEqual(emissionCount, 1,
+                       "viewDidAppear를 여러 번 호출해도 정책 시트는 한 번만 방출되어야 합니다.")
     }
+
+
 
     /// createUserInfo 호출 시 기본 UserInfoModel(profileImageCode: 0) 방출
     func test_createUserInfo_emitsDefaultUserInfo() {
@@ -60,8 +66,8 @@ final class OnboardingViewModelTests: XCTestCase {
                 exp.fulfill()
             })
             .disposed(by: disposeBag)
-
-        viewModel.action.onNext(.createUserInfo)
+        let dummyUserInfo = makeDummyUserInfoModel()
+        viewModel.injectIntialUserInfo(dummyUserInfo)
 
         wait(for: [exp], timeout: 1.0)
         XCTAssertEqual(received?.profileImageCode, 0)
@@ -71,7 +77,9 @@ final class OnboardingViewModelTests: XCTestCase {
     func test_selectedProfileIndex_updatesProfileImageCode() {
         let exp = expectation(description: #function)
         var received: UserInfoModel?
-        viewModel.action.onNext(.createUserInfo)
+        let dummyUserInfo = makeDummyUserInfoModel()
+        viewModel.injectIntialUserInfo(dummyUserInfo)
+
         viewModel.state.userInfo
             .skip(1)
             .take(1)
@@ -91,7 +99,9 @@ final class OnboardingViewModelTests: XCTestCase {
     func test_selectedGender_updatesGender() {
         let exp = expectation(description: #function)
         var received: UserInfoModel?
-        viewModel.action.onNext(.createUserInfo)
+        let dummyUserInfo = makeDummyUserInfoModel()
+        viewModel.injectIntialUserInfo(dummyUserInfo)
+
         viewModel.state.userInfo
             .skip(1)
             .take(1)
@@ -111,7 +121,9 @@ final class OnboardingViewModelTests: XCTestCase {
         let exp = expectation(description: #function)
         var received: UserInfoModel?
         let testDate = Date(timeIntervalSince1970: 1000)
-        viewModel.action.onNext(.createUserInfo)
+        let dummyUserInfo = makeDummyUserInfoModel()
+        viewModel.injectIntialUserInfo(dummyUserInfo)
+
         viewModel.state.userInfo
             .skip(1)
             .take(1)
@@ -141,7 +153,9 @@ final class OnboardingViewModelTests: XCTestCase {
                 exp.fulfill()
             })
             .disposed(by: disposeBag)
-        viewModel.action.onNext(.createUserInfo)
+        let dummyUserInfo = makeDummyUserInfoModel()
+        viewModel.injectIntialUserInfo(dummyUserInfo)
+
         viewModel.action.onNext(.inputNickname(inputNickname))
 
         wait(for: [exp], timeout: 1.0)
@@ -153,6 +167,9 @@ final class OnboardingViewModelTests: XCTestCase {
         let nextExp = expectation(description: "next page")
         let prevExp = expectation(description: "prev page")
         var pages: [Int] = []
+        nextExp.expectedFulfillmentCount = 2 // 기대하는 호출 값 테스트
+        prevExp.expectedFulfillmentCount = 1
+
         viewModel.state.currentPage
             .skip(1)
             .distinctUntilChanged()
@@ -163,33 +180,41 @@ final class OnboardingViewModelTests: XCTestCase {
             })
             .disposed(by: disposeBag)
 
-        viewModel.action.onNext(.didTapNextPage)
-        viewModel.action.onNext(.didTapNextPage)
-        viewModel.action.onNext(.didTapPrevPage)
+        // 액션 시퀀스: Next → Next(무시) → Prev → Prev(무시) → Prev(무시) → Next
+        viewModel.action.onNext(.didTapNextPage) // pages = [1], nextExp #1
+        viewModel.action.onNext(.didTapNextPage) // 중복(1→1) 무시
+        viewModel.action.onNext(.didTapPrevPage) // pages = [1, 0], prevExp
+        viewModel.action.onNext(.didTapPrevPage) // 중복(0→0) 무시
+        viewModel.action.onNext(.didTapPrevPage) // 중복 무시
+        viewModel.action.onNext(.didTapNextPage) // pages = [1, 0, 1], nextExp #2
 
         wait(for: [nextExp, prevExp], timeout: 1.0)
-        XCTAssertEqual(pages, [1, 0], "next/prev 페이지 이동이 올바르게 처리되어야 합니다.")
+        XCTAssertEqual(pages, [1, 0, 1], "next/prev 페이지 이동이 올바르게 처리되어야 합니다.")
     }
 
     /// uploadUserInfo 호출 성공 시 readyToUseService 방출
     func test_uploadUserInfo_success() {
         let exp = expectation(description: #function)
         var didReady = false
+        let dummyUserInfo = makeDummyUserInfoModel()
+
         viewModel.state.readyToUseService
             .subscribe(onNext: {
                 didReady = true
                 exp.fulfill()
             })
             .disposed(by: disposeBag)
+
         viewModel.state.userInfo
             .skip(1)
             .take(1)
             .subscribe(onNext: { model in
-                self.viewModel.action.onNext(.uploadUserInfo(model ?? UserInfoModel(profileImageCode: 0)))
+                self.viewModel.action.onNext(.uploadUserInfo(model ?? dummyUserInfo))
             })
             .disposed(by: disposeBag)
 
-        viewModel.action.onNext(.createUserInfo)
+
+        viewModel.injectIntialUserInfo(dummyUserInfo)
 
         wait(for: [exp], timeout: 1.0)
         XCTAssertTrue(didReady, "uploadUserInfo 성공 시 readyToUseService가 방출되어야 합니다.")
@@ -200,6 +225,8 @@ final class OnboardingViewModelTests: XCTestCase {
         mockUseCase.shouldThrow = true
         let exp = expectation(description: #function)
         var didError = false
+        let dummyUserInfo = makeDummyUserInfoModel()
+
         viewModel.state.error
             .subscribe(onNext: { _ in
                 didError = true
@@ -210,7 +237,7 @@ final class OnboardingViewModelTests: XCTestCase {
             .skip(1)
             .take(1)
             .subscribe(onNext: { model in
-                self.viewModel.action.onNext(.uploadUserInfo(model ?? UserInfoModel(profileImageCode: 0)))
+                self.viewModel.action.onNext(.uploadUserInfo(model ?? dummyUserInfo))
             })
             .disposed(by: disposeBag)
 
@@ -218,5 +245,10 @@ final class OnboardingViewModelTests: XCTestCase {
 
         wait(for: [exp], timeout: 1.0)
         XCTAssertTrue(didError, "uploadUserInfo 실패 시 error가 방출되어야 합니다.")
+    }
+
+    /// 더미 유저 정보 모델 생성
+    private func makeDummyUserInfoModel() -> UserInfoModel {
+        return UserInfoModel(profileImageCode: 0)
     }
 }
