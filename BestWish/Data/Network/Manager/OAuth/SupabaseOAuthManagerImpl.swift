@@ -49,9 +49,9 @@ final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
 
     }
 
-    /// 온보딩 필요 유무 확인
+    /// 회원가입 필요 유무 확인
     /// Supabase에서 UserInfo 테이블의 role 값 확인 (USER : GUEST = true : false)
-    func checkOnboardingState() async throws -> Bool {
+    func checkSignInState() async throws -> Bool {
         struct Role: Codable { let role: String }
         do {
             let roles: [Role] = try await client

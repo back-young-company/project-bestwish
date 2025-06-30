@@ -1,5 +1,5 @@
 //
-//  OnboardingViewModel.swift
+//  SignInViewModel.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/9/25.
@@ -10,8 +10,8 @@ import Foundation
 import RxRelay
 import RxSwift
 
-/// 온보딩 View Model
-final class OnboardingViewModel: ViewModel {
+/// 회원가입 View Model
+final class SignInViewModel: ViewModel {
 
     // MARK: - Action
     enum Action {

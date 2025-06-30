@@ -129,11 +129,11 @@ final class DIContainer {
         return LoginViewController(viewModel: viewModel)
     }
 
-    func makeOnboardingViewController() -> OnboardingViewController {
-        let onboardingViewModel = OnboardingViewModel(useCase: userInfoUseCase)
+    func makeSignInViewController() -> SignInViewController {
+        let signInViewModel = SignInViewModel(useCase: userInfoUseCase)
         let policyViewModel = PolicyViewModel()
-        return OnboardingViewController(
-            viewModel: onboardingViewModel,
+        return SignInViewController(
+            viewModel: signInViewModel,
             policyViewModel: policyViewModel
         )
     }

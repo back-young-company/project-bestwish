@@ -1,12 +1,12 @@
 //
-//  OnboardingText.swift
+//  SignInText.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/11/25.
 //
 
-/// 온보딩에 사용되는 텍스트 모음
-enum OnboardingText {
+/// 회원가입에 사용되는 텍스트 모음
+enum SignInText {
     case firstTitle
     case firstDesc
     case firstGender

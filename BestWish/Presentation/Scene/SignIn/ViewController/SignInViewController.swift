@@ -1,5 +1,5 @@
 //
-//  OnboardingViewController.swift
+//  SignInViewController.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/9/25.
@@ -11,20 +11,20 @@ import UIKit
 import IQKeyboardReturnManager
 import RxSwift
 
-/// 온보딩 View Controller
-final class OnboardingViewController: UIViewController {
-    private let viewModel: OnboardingViewModel
+/// 회원가입 View Controller
+final class SignInViewController: UIViewController {
+    private let viewModel: SignInViewModel
     private let policyViewModel: PolicyViewModel
-    private let firstView = OnboardingFirstView()
-    private let secondView = OnboardingSecondView()
+    private let firstView = SignInFirstView()
+    private let secondView = SignInSecondView()
     private let disposeBag = DisposeBag()
-    private let onboardingViews: [UIView]
+    private let signInViews: [UIView]
     private let returnManager: IQKeyboardReturnManager = .init()
 
-    init(viewModel: OnboardingViewModel, policyViewModel: PolicyViewModel) {
+    init(viewModel: SignInViewModel, policyViewModel: PolicyViewModel) {
         self.viewModel = viewModel
         self.policyViewModel = policyViewModel
-        self.onboardingViews = [firstView, secondView]
+        self.signInViews = [firstView, secondView]
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -58,17 +58,17 @@ final class OnboardingViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        /// 온보딩 순서 바인딩
+        /// 회원가입 순서 바인딩
         viewModel.state.currentPage
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, page in
-                owner.view = owner.onboardingViews[page]
+                owner.view = owner.signInViews[page]
             }
             .disposed(by: disposeBag)
 
-        /// 온보딩 1 바인딩
+        /// 회원가입 1 바인딩
         /// - firstView.configure(생일 선택, 버튼 활성화)
-        /// 온보딩 2 바인딩
+        /// 회원가입 2 바인딩
         /// - 프로필 사진 바인딩
         viewModel.state.userInfo
             .distinctUntilChanged()
@@ -89,7 +89,7 @@ final class OnboardingViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        /// 온보딩 결과에 따른 화면 이동
+        /// 회원가입 결과에 따른 화면 이동
         viewModel.state.readyToUseService
             .observe(on: MainScheduler.instance)
             .bind { _ in
@@ -97,19 +97,19 @@ final class OnboardingViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
-        /// 온보딩 에러시 alert
+        /// 회원가입 에러시 alert
         viewModel.state.error
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
-                NSLog("OnboardingViewController Error: \(error.debugDescription)")
+                NSLog("signInViewController Error: \(error.debugDescription)")
             }
             .disposed(by: disposeBag)
     }
 }
 
 // MARK: - private 메서드
-private extension OnboardingViewController {
+private extension SignInViewController {
     /// 이용약관 바텀 시트 바인딩
     func bindPolicySheet() {
         viewModel.state.showPolicySheet
@@ -121,7 +121,7 @@ private extension OnboardingViewController {
             .disposed(by: disposeBag)
     }
 
-    /// OnboardingFirstView 바인딩
+    /// signInFirstView 바인딩
     func bindFirstView() {
         // 성별 바인딩
         firstView.genderSelection.maleButton.rx.tap
@@ -167,7 +167,7 @@ private extension OnboardingViewController {
             }
             .disposed(by: disposeBag)
     }
-    /// OnboardingSecondView 바인딩
+    /// signInSecondView 바인딩
     func bindSecondView() {
         // 프로필 사진 바인딩
         let tapGesture = UITapGestureRecognizer()
@@ -228,7 +228,7 @@ private extension OnboardingViewController {
 }
 
 // MARK: - 화면 포커싱 추적
-extension OnboardingViewController: UIAdaptivePresentationControllerDelegate {
+extension SignInViewController: UIAdaptivePresentationControllerDelegate {
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         // 모달이 내려간 시점에 원래 색으로 복구
         firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor

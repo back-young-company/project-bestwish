@@ -1,5 +1,5 @@
 //
-//  OnboardingSecondView.swift
+//  SignInSecondView.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/12/25.
@@ -10,15 +10,15 @@ import UIKit
 import SnapKit
 import Then
 
-/// 온보딩 두번째 화면
-final class OnboardingSecondView: UIView {
+/// 회원가입 두번째 화면
+final class SignInSecondView: UIView {
 
     // MARK: - Private Property
-    private let _headerView = OnboardingHeaderView(
+    private let _headerView = SignInHeaderView(
         current: 2,
         total: 2,
-        title: OnboardingText.secondTitle.value,
-        desc: OnboardingText.secondDesc.value
+        title: SignInText.secondTitle.value,
+        desc: SignInText.secondDesc.value
     )
     private let _profileContainer = UIView()
     private let _profileImageView = UIImageView()
@@ -57,7 +57,7 @@ final class OnboardingSecondView: UIView {
             )
     }
 
-    /// 온보딩 두번째 화면 입력 완료시 설정
+    /// 회원가입 두번째 화면 입력 완료시 설정
     /// 1. (모든 입력 완료시) 다음 버튼 활성화
     /// 2. 닉네임 버튼 테두리 설정
     /// 3. 닉네임 유효성 검사 안내 텍스트 색상 설정
@@ -71,7 +71,7 @@ final class OnboardingSecondView: UIView {
 }
 
 // MARK: - private 메서드
-private extension OnboardingSecondView {
+private extension SignInSecondView {
     func setView() {
         setAttributes()
         setHierarchy()

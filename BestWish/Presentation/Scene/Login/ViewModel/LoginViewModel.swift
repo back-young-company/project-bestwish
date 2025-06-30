@@ -54,8 +54,8 @@ final class LoginViewModel: ViewModel {
                         let type: SocialType = (action == .signInKakao) ? .kakao : .apple
                         try await owner.useCase.login(type: type)
 
-                        let didOnboarding = try await owner.useCase.checkOnboardingState()
-                        owner._readyToUseService.accept(didOnboarding)
+                        let didSignIn = try await owner.useCase.checkSignInState()
+                        owner._readyToUseService.accept(didSignIn)
                     } catch {
                         self.handleError(error)
                     }

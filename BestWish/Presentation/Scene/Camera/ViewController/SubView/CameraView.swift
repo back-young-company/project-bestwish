@@ -15,8 +15,8 @@ import Then
 final class CameraView: UIView {
     
     // MARK: - Private Property
-    private let _onboardingImageView = UIImageView()
-    private let _onboardingBackgroundView = UIView()
+    private let _signInImageView = UIImageView()
+    private let _signInBackgroundView = UIView()
     private let _previewBackGroundView = UIView()
     private let _homeButton = UIBarButtonItem()
     private let _previewLayer = AVCaptureVideoPreviewLayer()     // 실시간 카메라 프리뷰 화면을 보여주는 레이어
@@ -48,15 +48,15 @@ final class CameraView: UIView {
         )
     }
     
-    /// 온보딩 뷰 2초동안 표시
+    /// 회원가입 뷰 2초동안 표시
     public func showToast() {
         UIView.animate(withDuration: 0.3, animations: {
-            self._onboardingBackgroundView.alpha = 1.0
+            self._signInBackgroundView.alpha = 1.0
         }) { _ in
             UIView.animate(withDuration: 0.5, delay: 2.0, options: [], animations: {
-                self._onboardingBackgroundView.alpha = 0.0
+                self._signInBackgroundView.alpha = 0.0
             }) { _ in
-                self._onboardingBackgroundView.removeFromSuperview()
+                self._signInBackgroundView.removeFromSuperview()
             }
         }
     }
@@ -77,12 +77,12 @@ private extension CameraView {
             $0.tintColor = .black
         }
         
-        _onboardingBackgroundView.do {
+        _signInBackgroundView.do {
             $0.backgroundColor = .black.withAlphaComponent(0.5)
             $0.alpha = 0
         }
         
-        _onboardingImageView.do {
+        _signInImageView.do {
             $0.image = UIImage(named: "photo_frame")
             $0.contentMode = .scaleAspectFit
             $0.alpha = 1
@@ -90,8 +90,8 @@ private extension CameraView {
     }
     
     func setHierarchy() {
-        addSubviews(_previewBackGroundView, _onboardingBackgroundView)
-        _onboardingBackgroundView.addSubview(_onboardingImageView)
+        addSubviews(_previewBackGroundView, _signInBackgroundView)
+        _signInBackgroundView.addSubview(_signInImageView)
     }
     
     func setConstraints() {
@@ -100,11 +100,11 @@ private extension CameraView {
             $0.horizontalEdges.bottom.equalToSuperview()
         }
         
-        _onboardingBackgroundView.snp.makeConstraints {
+        _signInBackgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
-        _onboardingImageView.snp.makeConstraints {
+        _signInImageView.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.width.equalTo(CGFloat(250).fitWidth)
             $0.height.equalTo(CGFloat(300).fitWidth)

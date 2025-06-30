@@ -25,10 +25,10 @@ final class AccountRepositoryImpl: AccountRepository {
         await manager.checkSupabaseSession(keyChain)
     }
 
-	/// 온보딩 확인
-    func checkOnboardingState() async throws -> Bool {
+	/// 회원가입 확인
+    func checkSignInState() async throws -> Bool {
         do {
-            return try await manager.checkOnboardingState()
+            return try await manager.checkSignInState()
         } catch let error as AuthError {
             throw AppError.authError(error)
         }

@@ -14,9 +14,9 @@ protocol SupabaseOAuthManager {
     /// Supabase 토근 확인 및 세션 연결
     func checkSupabaseSession(_ keychain: KeyChainManager) async -> Bool
 
-    /// 온보딩 필요 유무 확인
+    /// 회원가입 필요 유무 확인
     /// Supabase에서 UserInfo 테이블의 role 값 확인 (USER : GUEST = true : false)
-    func checkOnboardingState() async throws -> Bool
+    func checkSignInState() async throws -> Bool
 
     /// 로그인
     func signIn(type: SocialType, _ keyChain: KeyChainManager) async throws

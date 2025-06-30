@@ -18,7 +18,7 @@ final class MockSupabaseOAuthManager: SupabaseOAuthManager {
         true
     }
     
-    func checkOnboardingState() async throws -> Bool {
+    func checkSignInState() async throws -> Bool {
         if shouldThrow {
             throw AuthError.appleDidCompleteFailed
         }
