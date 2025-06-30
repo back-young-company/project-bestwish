@@ -11,14 +11,16 @@ import Foundation
 final class ProductSyncManager {
     /// 외부 플랫폼 상품 fetch 시도
     func fetchProductSync(from sharedText: String) async throws -> ProductDTO {
-        guard let originalUrl = try extractURL(from: sharedText) else {
+        guard let originalUrl = try extractURL(from: sharedText),
+              let platform = detectPlatform(from: sharedText),
+              let productURL = URL(string: originalUrl.absoluteString.convertDeepLinkToProductURL(platform)),
+              let deepLink = URL(string: originalUrl.absoluteString.convertProductURLToDeepLink(platform)) else {
             throw ProductSyncError.invaildURL
         }
         
-        let platform = detectPlatform(from: sharedText)
-        let (finalURL, html) = try await resolveFinalURL(type: platform, url: originalUrl)
+        let html = try await requsetHTML(url: productURL)
         
-        guard let metaData = try await platform?.fetcher?.fetchProductDTO(ogUrl: originalUrl, finalUrl: finalURL, html: html) else {
+        guard let metaData = try await platform.fetcher?.fetchProductDTO(deepLink: deepLink, productURL: productURL, html: html) else {
             throw ProductSyncError.platformDetectionFailed
         }
         return metaData
@@ -50,27 +52,21 @@ private extension ProductSyncManager {
     }
 
     /// URL 요청을 통해 리디렉션된 최종 URL 반환 (공통)
-    func resolveFinalURL(type: PlatformEntity? = nil, url: URL) async throws -> (URL, String) {
+    func requsetHTML(url: URL) async throws -> String {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.timeoutInterval = 10
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        
-        if type == .zigzag {
-            request.setValue(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-                forHTTPHeaderField: "User-Agent"
-            )
-        }
+        request.setValue(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+            forHTTPHeaderField: "User-Agent"
+        )
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            if let finalURL = response.url,
-               let html = String(data: data, encoding: .utf8) {
-                return (finalURL, html)
-            } else {
-                throw ProductSyncError.redirectionFailed
-            }
+            let (data, _) = try await URLSession.shared.data(for: request)
+            guard let html = String(data: data, encoding: .utf8) else { throw ProductSyncError.redirectionFailed }
+            
+            return html
         } catch {
             throw ProductSyncError.redirectionFailed
         }
