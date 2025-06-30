@@ -31,6 +31,7 @@ final class HomeViewController: UIViewController {
                 ) as? PlatformShortcutCell else { return UICollectionViewCell() }
 
                 cell.configure(type: platform)
+
                 return cell
 
             case let .filter(index):
@@ -39,6 +40,13 @@ final class HomeViewController: UIViewController {
                 let isLast = indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1
 
                 cell.configure(type: index, isSelected: false, isFirst: indexPath.item == 0, isLast: isLast)
+
+                cell.platformButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        owner.homeViewModel.action.onNext(.filterIndex(index))
+                    }
+                    .disposed(by: cell.disposeBag)
+
                 return cell
 
             case let .wishlist(product):
@@ -56,20 +64,9 @@ final class HomeViewController: UIViewController {
                 }()
 
                 cell.configure(type: product, isHidden: true, isLastRow: isLastRow)
+
                 return cell
 
-            case .wishlistEmpty:
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: WishListEmptyCell.identifier,
-                    for: indexPath
-                ) as? WishListEmptyCell else { return UICollectionViewCell() }
-
-                cell.linkButton.rx.tap
-                    .bind(with: self) { owner, _ in
-                        AlertLinkBuilder(baseViewController: owner).show()
-                    }
-                    .disposed(by: disposeBag)
-                return cell
             }
         }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
             guard let self else { return UICollectionReusableView() }
@@ -85,14 +82,13 @@ final class HomeViewController: UIViewController {
                     for: indexPath
                 ) as? PlatformShortcutHeaderView else { return UICollectionReusableView() }
 
-                headerView.configure(title: "플랫폼 바로가기")
+                headerView.configure(title: section.header.rawValue)
                 headerView.editButton.rx.tap
                     .bind(with: self) { owner, _ in
                         let vc = DIContainer.shared.makePlatformEditViewController()
                         vc.delegate = owner
                         owner.navigationController?.pushViewController(vc, animated: true)
                     }.disposed(by: headerView.disposeBag)
-
                 return headerView
 
             case .filter:
@@ -102,7 +98,7 @@ final class HomeViewController: UIViewController {
                     for: indexPath
                 ) as? FilterHeaderView else { return UICollectionReusableView() }
 
-                headerView.configure(title: "쇼핑몰 위시리스트")
+                headerView.configure(title: section.header.rawValue)
                 headerView.configure(isHidden: items.isEmpty)
 
                 headerView.linkButton.rx.tap
@@ -118,7 +114,7 @@ final class HomeViewController: UIViewController {
                 headerView.searchTextField.rx.text.orEmpty
                     .distinctUntilChanged()
                     .skip(1) // viewDidLoad 시점 최초 1번은 무시 (충돌 방지)
-                    .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
+                    .debounce(.milliseconds(500), scheduler: MainScheduler.asyncInstance)
                     .bind(with: self) { owner, query in
                         owner.homeViewModel.action.onNext(.searchQuery(query))
                     }.disposed(by: headerView.disposeBag)
@@ -141,74 +137,27 @@ final class HomeViewController: UIViewController {
                     for: indexPath
                 ) as? MWishListHeaderView else { return UICollectionReusableView() }
 
-                headerView.configure(productCount: items.count)
+                headerView.configure(isEmpty: dataSource.sectionModels[1].items.isEmpty)
+                headerView.configure(count: items.count, isEmpty: items.isEmpty)
+
+                headerView.linkButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        let alertViewController = DIContainer.shared.makeLinkSaveViewController()
+                        alertViewController.modalPresentationStyle = .overFullScreen
+                        alertViewController.modalTransitionStyle = .crossDissolve
+                        alertViewController.delegate = owner
+
+                        owner.present(alertViewController, animated: true)
+                    }.disposed(by: headerView.disposeBag)
+
+                headerView.editButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        let vc = DIContainer.shared.makeWishlistEditViewController()
+                        vc.delegate = owner
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }.disposed(by: headerView.disposeBag)
 
                 return headerView
-
-//                if items.count == 1 && section.items.first == .wishlistEmpty {
-//                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
-//                        ofKind: kind,
-//                        withReuseIdentifier: WishListEmptyHeaderView.identifier,
-//                        for: indexPath
-//                    ) as? WishListEmptyHeaderView else { return UICollectionReusableView() }
-//
-//                    return headerView
-//                } else {
-//                    guard let headerView = collectionView.dequeueReusableSupplementaryView(
-//                        ofKind: kind,
-//                        withReuseIdentifier: WishListHeaderView.identifier,
-//                        for: indexPath
-//                    ) as? WishListHeaderView else { return UICollectionReusableView() }
-//                    let totalItemCount = dataSource.sectionModels[1].items.map { $0 }.count
-//
-//                    self.homeViewModel.state.selectedPlatform
-//                        .bind(to: headerView.selectedPlatformRelay)
-//                        .disposed(by: headerView.disposeBag)
-//
-//                    headerView.configure(title: "쇼핑몰 위시리스트")
-//                    headerView.configure(productCount: totalItemCount)
-//                    headerView.configure(platforms: self.homeViewModel.state.platformFilter)
-//
-//                    headerView.searchTextField.rx.text.orEmpty
-//                        .bind(with: self) { owner, query in
-//                            owner.homeViewModel.action.onNext(.searchQuery(query))
-//                        }.disposed(by: headerView.disposeBag)
-//
-//                    headerView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-//                        .withLatestFrom(self.homeViewModel.state.selectedPlatform) { _, index in
-//                            return index
-//                        }
-//                        .bind(with: self) { owner, index in
-//                            headerView.searchTextField.resignFirstResponder()
-//                            owner.homeViewModel.action.onNext(.filterIndex(index, force: true))
-//                        }
-//                        .disposed(by: headerView.disposeBag)
-//
-//                    headerView.selectedPlatformRelay
-//                        .bind(with: self) { owner, index in
-//                            owner.homeViewModel.action.onNext(.filterIndex(index))
-//                        }
-//                        .disposed(by: headerView.disposeBag)
-//
-//                    headerView.linkButton.rx.tap
-//                        .bind(with: self) { owner, _ in
-//                            let alertViewController = DIContainer.shared.makeLinkSaveViewController()
-//                            alertViewController.modalPresentationStyle = .overFullScreen
-//                            alertViewController.modalTransitionStyle = .crossDissolve
-//                            alertViewController.delegate = owner
-//
-//                            owner.present(alertViewController, animated: true)
-//                        }.disposed(by: headerView.disposeBag)
-//
-//                    headerView.editButton.rx.tap
-//                        .bind(with: self) { owner, _ in
-//                            let vc = DIContainer.shared.makeWishlistEditViewController()
-//                            vc.delegate = owner
-//                            owner.navigationController?.pushViewController(vc, animated: true)
-//                        }.disposed(by: headerView.disposeBag)
-//
-//                    return headerView
-//                }
             }
         })
 
@@ -260,20 +209,18 @@ final class HomeViewController: UIViewController {
                     return owner.switchDeeplink(platform.platformDeepLink)
                 case let .wishlist(product):
                     return owner.switchDeeplink(product.productDeepLink ?? "")
-                case .wishlistEmpty:
-                    return
                 case .filter(_):
                     return
                 }
             }
             .disposed(by: disposeBag)
         
-        homeViewModel.state.sections
-            .observe(on: MainScheduler.asyncInstance)
-            .bind(with: self) { owner, sections in
-                owner.setCollectionViewLayout(sections)
-            }
-            .disposed(by: disposeBag)
+//        homeViewModel.state.sections
+//            .observe(on: MainScheduler.asyncInstance)
+//            .bind(with: self) { owner, sections in
+//                owner.setCollectionViewLayout(sections)
+//            }
+//            .disposed(by: disposeBag)
         
         homeViewModel.state.sections
             .bind(to: homeView.collectionView.rx.items(dataSource: dataSource))
@@ -295,8 +242,7 @@ private extension HomeViewController {
             case .filter:
                 return NSCollectionLayoutSection.createPlatformFilterSection()
             case .wishlist:
-                let isEmptyState = section.items.count == 1 && section.items.first == .wishlistEmpty
-                return isEmptyState ? NSCollectionLayoutSection.createWishlistEmptySection() : NSCollectionLayoutSection.createWishlistSection()
+                return NSCollectionLayoutSection.createWishlistSection()
             }
         }
     }

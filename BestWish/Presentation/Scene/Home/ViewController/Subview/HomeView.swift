@@ -14,12 +14,24 @@ import Then
 final class HomeView: UIView {
 
     // MARK: - Private Property
-    private let _collectionView = UICollectionView(
+    private lazy var _collectionView = UICollectionView(
         frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
+        collectionViewLayout: createLayout
     )
 
     // MARK: - Internal Property
+    // 레이아웃 정의
+    var createLayout: UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ in
+            switch sectionIndex {
+            case 0: return NSCollectionLayoutSection.createPlatformShortcutSection()
+            case 1: return NSCollectionLayoutSection.createPlatformFilterSection()
+            default: return NSCollectionLayoutSection.createWishlistSection()
+            }
+        }
+        return layout
+    }
+
     var collectionView: UICollectionView { _collectionView }
 
     override init(frame: CGRect) {

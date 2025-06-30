@@ -18,7 +18,7 @@ final class HomeViewModel: ViewModel {
         case getDataSource
         case platformUpdate
         case wishlistUpdate
-        case filterIndex(Int, force: Bool = false)
+        case filterIndex(Int)
         case searchQuery(String)
     }
 
@@ -47,6 +47,10 @@ final class HomeViewModel: ViewModel {
 
     private var platformSection: HomeSectionModel?
 
+//    private let platformSectionRelay = BehaviorRelay<HomeSectionModel?>(value: nil)
+//    private let filterSectionRelay = BehaviorRelay<HomeSectionModel?>(value: nil)
+//    private let wishlistSectionRelay = BehaviorRelay<HomeSectionModel?>(value: nil)
+
     private var previousIndex = 0
     
     private let useCase: WishListUseCase
@@ -62,7 +66,13 @@ final class HomeViewModel: ViewModel {
             selectedPlatform: _selectedPlatform.asObservable(),
             error: _error.asObservable()
         )
-        
+
+//        Observable
+//          .combineLatest(platformSectionRelay, filterSectionRelay, wishlistSectionRelay)
+//          .compactMap { [$0, $1, $2].compactMap { $0 } }
+//          .bind(to: _sections)
+//          .disposed(by: disposeBag)
+
         self.bind()
     }
     
@@ -86,7 +96,8 @@ final class HomeViewModel: ViewModel {
                             owner._selectedPlatform.accept(0)
                             owner.setDataSources(
                                 platforms: platforms,
-                                filters: [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)],
+                                filters: filters,
+//                                filters: [(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (7, 0)],
                                 wishLists: wishLists
                             )
                         } catch {
@@ -142,27 +153,30 @@ final class HomeViewModel: ViewModel {
                             owner._error.accept(error)
                         }
                     }
-                case .filterIndex(let index, let force):
+                case let .filterIndex(index):
                     Task {
                         do {
-                            guard force || index != owner.previousIndex else { return }
+//                            guard force || index != owner.previousIndex else { return }
 
                             let searchQuery = owner._searchQuery.value
-                            let currentSections = owner._sections.value
+                            var currentSections = owner._sections.value
                             guard currentSections.count == 3 else { return }
 
                             let platformSection = currentSections[0]
+//                            let wishlistProducts: [WishListProductItem] = []
                             let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: index == 0 ? nil : index)
                             let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
 
+                            currentSections[2].items = wishlistProducts.map { .wishlist($0) }
+
                             owner._selectedPlatform.accept(index)
-                            owner._sections.accept([platformSection, wishlistsSection])
-                            owner.previousIndex = index
+                            owner._sections.accept(currentSections)
+//                            owner.previousIndex = index
                         } catch {
                             owner._error.accept(error)
                         }
                     }
-                case .searchQuery(let query):
+                case let .searchQuery(query):
                     owner._searchQuery.accept(query)
 
                     Task {
@@ -180,22 +194,19 @@ final class HomeViewModel: ViewModel {
 //                            let platformSection = currentSections[0]
                             
                             let wishlistProducts = try await owner.getWishLists(query: searchQuery, platform: currentPlatformIndex)
-                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
 
-                            let updatedSections = owner._sections.value.enumerated().map { index, section -> HomeSectionModel in
-                                switch section.header {
-                                case .platform:
-                                    return owner.platformSection ?? section
-                                case .wishlist:
-                                    return wishlistsSection  // 새로 만든 검색 결과 섹션
-                                case .filter:
-                                    return filterSection     // 새로 만든 필터 섹션
-                                }
-                            }
+                            var sections = owner._sections.value
 
-                            owner._sections.accept(updatedSections)
+//                            var wishlist = sections.value[2]
+                            sections[2].items = wishlistProducts.map { .wishlist($0) }
 
-//                            owner._sections.accept([owner._sections.value[0], filterSection, wishlistsSection])
+//                            owner.wishlistSectionRelay.accept(wishlistRelay)
+
+//                            let wishlistsSection = HomeSectionModel(header: .wishlist, items: wishlistProducts.map { .wishlist($0) })
+//
+//                            owner.wishlistSectionRelay.accept(wishlistsSection)
+
+                            owner._sections.accept(sections)
                         } catch {
                             owner._error.accept(error)
                         }
@@ -248,14 +259,17 @@ private extension HomeViewModel {
     /// section model 설정 및 전달
     func setDataSources(platforms: [PlatformItem], filters: [(Int, Int)], wishLists: [WishListProductItem]) {
         let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
-        self.platformSection = platformsSection
+//        self.platformSection = platformsSection
+//        self.platformSectionRelay.accept(platformsSection)
 
         let filters: [HomeItem] = filters.isEmpty ? [] : filters.map { .filter($0.0) }
         let filterSection = HomeSectionModel(header: .filter, items: filters)
+//        self.filterSectionRelay.accept(filterSection)
 
-
-        let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
+//        let wishLists: [HomeItem] = wishLists.isEmpty ? [.wishlistEmpty] : wishLists.map { .wishlist($0) }
+        let wishLists: [HomeItem] = wishLists.map { .wishlist($0) }
         let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists)
+//        self.wishlistSectionRelay.accept(wishlistSection)
 
         _sections.accept([platformsSection, filterSection, wishlistSection])
     }
