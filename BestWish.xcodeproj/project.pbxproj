@@ -98,6 +98,7 @@
 				Data/Network/Fetcher/AblyFetcher.swift,
 				Data/Network/Fetcher/BrandiFetcher.swift,
 				Data/Network/Fetcher/HiverFetcher.swift,
+				Data/Network/Fetcher/Interface/ProductDTOFetcher.swift,
 				Data/Network/Fetcher/KreamFetcher.swift,
 				Data/Network/Fetcher/MusinsaFetcher.swift,
 				Data/Network/Fetcher/ZigzagFetcher.swift,
@@ -115,7 +116,6 @@
 				Domain/Entity/SocialType.swift,
 				Domain/Entity/User.swift,
 				Domain/Error/AppError.swift,
-				Domain/Interface/ProductDTORepository.swift,
 				Domain/Interface/ProductSyncRepository.swift,
 				Domain/Interface/WishListRepository.swift,
 				Domain/UseCase/ProductSyncUseCase.swift,
@@ -452,7 +452,7 @@
 				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
@@ -488,7 +488,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -527,7 +527,7 @@
 				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWish/Resource/Info.plist;
@@ -569,7 +569,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;

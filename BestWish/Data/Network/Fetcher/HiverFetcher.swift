@@ -10,7 +10,7 @@ import Foundation
 import SwiftSoup
 
 /// Hiver 페쳐
-final class HiverFetcher: ProductDTORepository {
+final class HiverFetcher: ProductDTOFetcher {
     /// 하이버 제품 상세 HTML → ProductDTO 파싱
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {

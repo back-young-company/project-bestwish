@@ -10,7 +10,7 @@ import Foundation
 import SwiftSoup
 
 /// 지그재그 fetcher
-final class ZigzagFetcher: ProductDTORepository {
+final class ZigzagFetcher: ProductDTOFetcher {
     /// 상품 데이터 fetch
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {

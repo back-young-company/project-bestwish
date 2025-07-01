@@ -10,7 +10,7 @@ import Foundation
 import SwiftSoup
 
 /// 크림 페쳐
-final class KreamFetcher: ProductDTORepository {
+final class KreamFetcher: ProductDTOFetcher {
     /// 크림 제품 상세 HTML → ProductDTO 파싱
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {

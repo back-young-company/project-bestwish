@@ -10,7 +10,7 @@ import Foundation
 import SwiftSoup
 
 /// 에이블리 Fetcher
-final class AblyFetcher: ProductDTORepository {
+final class AblyFetcher: ProductDTOFetcher {
     /// 상품 데이터 fetch
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {

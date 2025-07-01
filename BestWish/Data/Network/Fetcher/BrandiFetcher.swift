@@ -10,7 +10,7 @@ import Foundation
 import SwiftSoup
 
 /// 브랜디 Fetcher
-final class BrandiFetcher: ProductDTORepository {
+final class BrandiFetcher: ProductDTOFetcher {
     /// 브랜디 제품 상세 HTML → ProductDTO 파싱
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {
