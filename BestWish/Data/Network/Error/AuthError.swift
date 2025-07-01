@@ -9,8 +9,8 @@ import Foundation
 
 /// 사용자 인증 정보 관련 에러 모음
 enum AuthError: AppErrorProtocol {
-    case signInFailed(SocialType, Error)
-    case signOutFailed(Error)
+    case logInFailed(SocialType, Error)
+    case logOutFailed(Error)
     case appleRequestAccessTokenFailed(Error)
     case encodeParsingTokenError(String)
     case supabaseRequestSecretCodeFailed(Error)
@@ -30,9 +30,9 @@ extension AuthError {
 
     var debugDescription: String {
         switch self {
-        case let .signInFailed(socialType, error):
+        case let .logInFailed(socialType, error):
             "\(socialType) SignIn Error: \(error.localizedDescription)"
-        case let .signOutFailed(error):
+        case let .logOutFailed(error):
             "SignOut Error: \(error.localizedDescription)"
         case let .withdrawFailed(error):
             "Withdraw Error: \(error.localizedDescription)"

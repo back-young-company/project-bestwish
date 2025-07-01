@@ -27,14 +27,14 @@ final class AccountRepositoryTests: XCTestCase {
         repository = nil
     }
 
-    /// 온보딩 상태 확인 실패 테스트
-    func test_checkOnboardingState_failure() async {
+    /// 회원가입 상태 확인 실패 테스트
+    func test_checkSignInState_failure() async {
         // Given
         oAuthManager.shouldThrow = true
 
         // When / Then
         do {
-            _ = try await repository.checkOnboardingState()
+            _ = try await repository.checkSignInState()
             XCTFail("Unexpected Success")
         } catch {
             guard let appError = error as? AppError else {

@@ -48,7 +48,7 @@ final class CameraView: UIView {
         )
     }
     
-    /// 온보딩 뷰 2초동안 표시
+    /// 회원가입 뷰 2초동안 표시
     public func showToast() {
         UIView.animate(withDuration: 0.3, animations: {
             self._onboardingBackgroundView.alpha = 1.0

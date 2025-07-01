@@ -14,7 +14,7 @@ import Supabase
 extension SupabaseOAuthManagerImpl {
 
     /// 카카오 로그인
-    func signInKakao() async throws -> Supabase.Session? {
+    func logInKakao() async throws -> Supabase.Session? {
         let redirectURL = Bundle.main.redirectURL
         do {
             let session = try await client.auth.signInWithOAuth(
@@ -32,7 +32,7 @@ extension SupabaseOAuthManagerImpl {
             kakaoAuthSession?.cancel()
             kakaoAuthSession = nil
             NSLog("error: \(error.localizedDescription)")
-            throw AuthError.signInFailed(.kakao, error)
+            throw AuthError.logInFailed(.kakao, error)
         }
     }
 

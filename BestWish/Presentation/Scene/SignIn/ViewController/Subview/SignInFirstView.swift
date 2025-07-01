@@ -1,5 +1,5 @@
 //
-//  OnboardingFirstView.swift
+//  SignInFirstView.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/11/25.
@@ -10,15 +10,15 @@ import UIKit
 import SnapKit
 import Then
 
-/// 온보딩 첫번째 화면
-final class OnboardingFirstView: UIView {
+/// 회원가입 첫번째 화면
+final class SignInFirstView: UIView {
 
     // MARK: - Private Property
-    private let _headerView = OnboardingHeaderView(
+    private let _headerView = SignInHeaderView(
         current: 1,
         total: 2,
-        title: OnboardingText.firstTitle.value,
-        desc: OnboardingText.firstDesc.value
+        title: SignInText.firstTitle.value,
+        desc: SignInText.firstDesc.value
     )
     private let _descGengerLabel = UILabel()
     private let _genderBirthVStackView = VerticalStackView(spacing: 32)
@@ -46,7 +46,7 @@ final class OnboardingFirstView: UIView {
         _birthSelection.dateButton.layer.borderColor = isFoucsed ? UIColor.primary300?.cgColor : UIColor.gray200?.cgColor
     }
 
-    /// 온보딩 첫번째 화면 입력 완료시 설정
+    /// 회원가입 첫번째 화면 입력 완료시 설정
     /// 1. (모든 입력 완료시) 다음 버튼 활성화
     /// 2. 성별, 생년월일 화면 표시
     func configure(with userInfo: UserInfoModel?) {
@@ -58,7 +58,7 @@ final class OnboardingFirstView: UIView {
 }
 
 // MARK: - private 메서드
-private extension OnboardingFirstView {
+private extension SignInFirstView {
     func setView() {
         setAttributes()
         setHierarchy()
@@ -69,7 +69,7 @@ private extension OnboardingFirstView {
         self.backgroundColor = .gray0
 
         _descGengerLabel.do {
-            $0.text = OnboardingText.firstGender.value
+            $0.text = SignInText.firstGender.value
             $0.numberOfLines = 0
             $0.lineBreakMode = .byWordWrapping
             $0.font = .font(.pretendardMedium, ofSize: 12)
@@ -128,7 +128,7 @@ private extension OnboardingFirstView {
         }
 
         _nextPageButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
     }
 }

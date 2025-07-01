@@ -20,7 +20,7 @@ final class CautionLabel: UILabel {
     }
 
     private func setAttributes() {
-        text = OnboardingText.secondCaution.value
+        text = SignInText.secondCaution.value
         font = .font(.pretendardMedium, ofSize: 12)
         textColor = .gray200
     }

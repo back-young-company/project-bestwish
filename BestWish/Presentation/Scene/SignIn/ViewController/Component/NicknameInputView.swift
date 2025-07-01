@@ -53,7 +53,7 @@ private extension NicknameInputView {
         }
 
         _cautionLabel.do {
-            $0.text = OnboardingText.secondCaution.value
+            $0.text = SignInText.secondCaution.value
             $0.font = .font(.pretendardMedium, ofSize: 12)
             $0.textColor = .gray200
         }

@@ -28,16 +28,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             guard let windowScene = (scene as? UIWindowScene) else { return }
             /// 서비스 이용순서
             /// 1. 소셜 로그인 성공 유무 판단 -> checkLoginState (기기 내의 supabase의 연결할 토큰확인 (키체인으로 저장)
-            ///     a. 로그인 성공시 -> checkOnboardingState (supabase public.UserInfo 테이블에서 role 값 확인하기 ( GUEST = 온보딩 실패 / USER = 온보딩 성공)
-            ///         i. 온보딩 성공유무 판단
+            ///     a. 로그인 성공시 -> checkSignInState (supabase public.UserInfo 테이블에서 role 값 확인하기 ( GUEST = 회원가입 실패 / USER = 회원가입 성공)
+            ///         i. 회원가입 성공유무 판단
             ///     b. 로그인 실패시
             ///         i. 로그인 재시도
             ///
             /// a. 로그인 성공시
-            ///     i. 온보딩 성공시
+            ///     i. 회원가입 성공시
             ///         1. 홈화면 실행
-            ///     ii.온보딩 실패시
-            ///         1. 온보딩부터 실행
+            ///     ii.회원가입 실패시
+            ///         1. 회원가입부터 실행
             ///
             /// Task 구현이 안전하지 않을시 다른 방법 고려 가능
 
@@ -68,13 +68,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
                 if isAlive {
                     do {
-                        let didOnboarding = try await repo.checkOnboardingState()
+                        let didSignIn = try await repo.checkSignInState()
                         await MainActor.run {
                             splashView.removeFromSuperview()
-                            if didOnboarding {
+                            if didSignIn {
                                 self.showMainView()
                             } else {
-                                self.showOnboardingView()
+                                self.showSignInView()
                             }
                         }
                     } catch {
@@ -94,8 +94,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // 나중에 지울 코드
     //----------------------------------
-    func showOnboardingView() {
-        let nav = UINavigationController(rootViewController: DIContainer.shared.makeOnboardingViewController())
+    func showSignInView() {
+        let nav = UINavigationController(rootViewController: DIContainer.shared.makeSignInViewController())
         nav.setNavigationBarHidden(true, animated: true)
         self.window?.rootViewController = nav
         self.window?.makeKeyAndVisible()

@@ -238,7 +238,7 @@ private extension PolicyBottomSheetView {
         _completeButton.snp.makeConstraints {
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(12)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
     }
 }
