@@ -26,7 +26,7 @@ extension UIViewController {
         appearance.configureWithOpaqueBackground()
         appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
         appearance.titleTextAttributes = [
-            .font: UIFont.font(.pretendardBold, ofSize: 18),
+            .font: UIFont.font(.pretendardBold, ofSize: 20),
             .foregroundColor: UIColor.gray900 ?? .black
         ]
         appearance.shadowColor = .clear
@@ -39,7 +39,7 @@ extension UIViewController {
             let label = UILabel()
             label.text = title
             label.textColor = .black
-            label.font = .font(.pretendardBold, ofSize: 18)
+            label.font = .font(.pretendardBold, ofSize: 20)
             let leftBarItem = UIBarButtonItem(customView: label)
             self.navigationItem.setLeftBarButton(leftBarItem, animated: true)
         case .center:

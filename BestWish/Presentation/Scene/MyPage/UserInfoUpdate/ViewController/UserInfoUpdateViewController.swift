@@ -41,8 +41,10 @@ final class UserInfoUpdateViewController: UIViewController {
 
     private func bindView() {
         updateView.birthSelection.dateButton.rx.tap
-            .bind(with: self) { owner, _ in
-                let sheetVC = DatePickerBottomSheetViewController()
+            .withLatestFrom(viewModel.state.userInfo)
+            .map { $0?.birth }
+            .bind(with: self) { owner, selectedBirth in
+                let sheetVC = DatePickerBottomSheetViewController(baseDate: selectedBirth)
                 sheetVC.onDateSelected =  { selectedDate in
                     owner.viewModel.action.onNext(.updateBirth(selectedDate))
                     sheetVC.dismiss(animated: true)

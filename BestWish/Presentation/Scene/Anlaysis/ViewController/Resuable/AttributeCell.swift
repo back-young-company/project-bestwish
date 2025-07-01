@@ -21,8 +21,6 @@ final class AttributeCell: UICollectionViewCell, ReuseIdentifier {
     // MARK: - Internal Property
     var disposeBag: DisposeBag { _disposeBag }
     
-    private let emptyKeyword = "해당 카테고리의 키워드를 인식할 수 없습니다."
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -42,8 +40,9 @@ final class AttributeCell: UICollectionViewCell, ReuseIdentifier {
     func configure(attribute: String, isSelected: Bool) {
         _attributeLabel.text = attribute
         // 키워드가 비어 있을 시에는 옵션을 설정하지 않음
-        guard attribute != emptyKeyword else {
+        guard attribute != EmptyCategoryCase.emptyKeyword.rawValue else {
             _attributeLabel.backgroundColor = .clear
+            _attributeLabel.textColor = .black
             return
         }
         
@@ -51,6 +50,11 @@ final class AttributeCell: UICollectionViewCell, ReuseIdentifier {
         _attributeLabel.font = titleFont
         _attributeLabel.backgroundColor = isSelected ? .primary300 : .gray0
         _attributeLabel.textColor = isSelected ? .gray0 : .gray900
+        
+        // 라벨이 레이아웃된 뒤 즉시 코너 반경을 갱신해 첫 렌더링에서도 캡슐 모양 유지
+        _attributeLabel.layoutIfNeeded()
+        _attributeLabel.layer.cornerRadius = _attributeLabel.bounds.height / 2
+        _attributeLabel.layer.masksToBounds = true
     }
 }
 
@@ -68,8 +72,6 @@ private extension AttributeCell {
             $0.textColor = .gray900
             $0.backgroundColor = .gray0
             $0.textAlignment = .center
-            $0.layer.cornerRadius = 15
-            $0.layer.masksToBounds = true
         }
     }
     

@@ -13,6 +13,10 @@ import UIKit
 /// 디자인 너비, 높이 크기 확인
 /// SnapKit.make.width.equalT(oCGFloat(너비).fitWidth) , SnapKit.make.height.equalTo(CGFloat(높이).fitHeight)
 extension CGFloat {
+    static var isSESize: Bool {
+        UIScreen.main.bounds.height < 812
+    }
+
     var fitWidth: CGFloat {
         let ratio: CGFloat = UIScreen.main.bounds.width / 375
         let scaled = self * ratio

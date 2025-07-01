@@ -5,7 +5,7 @@
 //  Created by 이수현 on 6/5/25.
 //
 
-import UIKit
+import Foundation
 
 /// 의존성 주입 컨테이너
 final class DIContainer {
@@ -35,8 +35,8 @@ final class DIContainer {
     private init() {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
-        self.supabaseOAuthManager = SupabaseOAuthManager()
-        self.keyChainManager = KeyChainManager()
+        self.supabaseOAuthManager = SupabaseOAuthManagerImpl()
+        self.keyChainManager = KeyChainManagerImpl()
         self.productSyncManager = ProductSyncManager()
         self.coreMLManager = CoreMLManager()
 
@@ -67,6 +67,12 @@ final class DIContainer {
         )
     }
 
+    /// 온보딩 뷰 컨트롤러 생성
+    func makeOnboardingViewController() -> OnboardingViewController {
+        let viewModel = OnboardingViewModel()
+        return OnboardingViewController(viewModel: viewModel)
+    }
+
     /// 홈 뷰 컨트롤러 생성
     func makeHomeViewController() -> HomeViewController {
         let viewModel = HomeViewModel(useCase: wishListUseCase)
@@ -85,7 +91,7 @@ final class DIContainer {
         return WishListEditViewController(wishEditViewModel: viewModel)
     }
 
-    /// 링크 저장 뷰 컨트롤러 생성
+    /// 상품 추가 뷰 컨트롤러 생성
     func makeLinkSaveViewController() -> LinkSaveViewController {
         let viewModel = LinkSaveViewModel(
             wishListUseCase: wishListUseCase,
@@ -129,11 +135,11 @@ final class DIContainer {
         return LoginViewController(viewModel: viewModel)
     }
 
-    func makeOnboardingViewController() -> OnboardingViewController {
-        let onboardingViewModel = OnboardingViewModel(useCase: userInfoUseCase)
+    func makeSignInViewController() -> SignInViewController {
+        let signInViewModel = SignInViewModel(useCase: userInfoUseCase)
         let policyViewModel = PolicyViewModel()
-        return OnboardingViewController(
-            viewModel: onboardingViewModel,
+        return SignInViewController(
+            viewModel: signInViewModel,
             policyViewModel: policyViewModel
         )
     }
@@ -144,17 +150,14 @@ final class DIContainer {
     }
 
     /// 이미지 편집 뷰 컨트롤러 생성
-    func makeImageEditController(image: UIImage) -> ImageEditViewController {
+    func makeImageEditController(imageData: Data) -> ImageEditViewController {
         let viewModel = ImageEditViewModel(coreMLUseCase: coreMLUseCase)
-        return ImageEditViewController(image: image, viewModel: viewModel)
+        return ImageEditViewController(imageData: imageData, viewModel: viewModel)
     }
 
     /// 이미지 분석 뷰 컨트롤러 생성
-    func makeAnalysisViewController(labelData: [LabelDataModel]) -> AnalaysisViewController {
-        let viewModel = AnalysisViewModel(
-            analysisUseCase: analysisUseCase,
-            labelData: labelData
-        )
+    func makeAnalysisViewController(labelData: [LabelDataEntity]) -> AnalaysisViewController {
+        let viewModel = AnalysisViewModel(analysisUseCase: analysisUseCase, labelData: labelData)
         return AnalaysisViewController(viewModel: viewModel)
     }
 }

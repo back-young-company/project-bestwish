@@ -34,7 +34,7 @@ final class PlatformShortcutCell: UICollectionViewCell, ReuseIdentifier {
         _platformImageView.image = nil
     }
 
-  func configure(type: PlatformItem, isSelected: Bool = false) {
+  func configure(type: PlatformEntity, isSelected: Bool = false) {
         _platformTitleLabel.text = type.platformName
         _platformImageView.image = UIImage(named: type.platformImage)
         

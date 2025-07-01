@@ -13,10 +13,10 @@ import Alamofire
 import Supabase
 
 // MARK: - SupabaseOAuth를 활용한 애플 로그인
-extension SupabaseOAuthManager {
+extension SupabaseOAuthManagerImpl {
 
     /// 애플 로그인 시도
-    func signInApple() async throws -> (authorizationCode: String, session: Supabase.Session) {
+    func logInApple() async throws -> (authorizationCode: String, session: Supabase.Session) {
         let nonce = generateRandomNonce()
         currentNonce = nonce
         let nonceHash = sha256(nonce)
@@ -175,7 +175,7 @@ extension SupabaseOAuthManager {
 }
 
 // MARK: - 애플 로그인(Face,지문 인식) 완료 후 동작
-extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
+extension SupabaseOAuthManagerImpl: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         guard
             let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
@@ -220,7 +220,7 @@ extension SupabaseOAuthManager: ASAuthorizationControllerDelegate {
                 continuation.resume(returning: (authCodeString, session))
             } catch {
                 NSLog("Supabase 로그인 오류:", error.localizedDescription)
-                continuation.resume(throwing: AuthError.signInFailed(.apple, error))
+                continuation.resume(throwing: AuthError.logInFailed(.apple, error))
             }
         }
     }

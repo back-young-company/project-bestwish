@@ -25,24 +25,39 @@ final class AccountRepositoryImpl: AccountRepository {
         await manager.checkSupabaseSession(keyChain)
     }
 
-	/// 온보딩 확인
-    func checkOnboardingState() async throws -> Bool {
-        try await manager.checkOnboardingState()
+	/// 회원가입 확인
+    func checkSignInState() async throws -> Bool {
+        do {
+            return try await manager.checkSignInState()
+        } catch let error as AuthError {
+            throw AppError.authError(error)
+        }
     }
 
     /// 로그인
     func login(type: SocialType) async throws {
-        try await manager.signIn(type: type, keyChain)
+        do {
+            try await manager.logIn(type: type, keyChain)
+        } catch let error as AuthError {
+            throw AppError.authError(error)
+        }
     }
 
     /// 로그아웃
     func logout() async throws {
-        try await manager.signOut(keyChain)
+        do {
+            try await manager.logOut(keyChain)
+        } catch let error as AuthError {
+            throw AppError.authError(error)
+        }
     }
 
     /// 회원탈퇴
     func withdraw() async throws {
-        try await manager.withdraw(keyChain)
+        do {
+            try await manager.withdraw(keyChain)
+        } catch let error as AuthError {
+            throw AppError.authError(error)
+        }
     }
-
 }

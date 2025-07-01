@@ -68,18 +68,21 @@ final class ShareViewModel: ViewModel {
 private extension ShareViewModel {
     // 🔍 provider의 타입에 따라 URL 또는 텍스트로 처리 분기
     func handleSharedItem(from provider: NSItemProvider) {
-        if provider.hasItemConformingToTypeIdentifier("public.url") {
-            provider.loadItem(forTypeIdentifier: "public.url", options: nil) { [weak self] item, _ in
-                guard let self, let url = item as? URL else { return }
-                self.handleSharedText(url.absoluteString)
-            }
-        } else if provider.hasItemConformingToTypeIdentifier("public.text") {
-            provider.loadItem(forTypeIdentifier: "public.text", options: nil) { [weak self] item, _ in
-                guard let self, let text = item as? String else { return }
-                self.handleSharedText(text)
+            if provider.hasItemConformingToTypeIdentifier("public.url") {
+                provider.loadItem(forTypeIdentifier: "public.url", options: nil) { [weak self] item, _ in
+                    guard let self, let url = item as? URL else { return }
+                    self.handleSharedText(url.absoluteString)
+                }
+            } else if provider.hasItemConformingToTypeIdentifier("public.text") {
+                provider.loadItem(forTypeIdentifier: "public.text", options: nil) { [weak self] item, _ in
+                    guard let self, let text = item as? String else { return }
+
+                    // ✅ URL 형식만 처리 → 크림 텍스트 무시됨
+                    guard !text.hasPrefix("[KREAM]") else { return }
+                    self.handleSharedText(text)
+                }
             }
         }
-    }
 
     func handleSharedText(_ text: String) {
         Task {

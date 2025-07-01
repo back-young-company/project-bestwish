@@ -33,6 +33,11 @@ final class DatePickerBottomSheetView: UIView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+
+    /// 기본 Date 설정
+    func configure(baseDate: Date?) {
+        _datePicker.date = baseDate ?? Date()
+    }
 }
 
 // MARK: - private 메서드
@@ -85,11 +90,11 @@ private extension DatePickerBottomSheetView {
 
         _cancelButton.snp.makeConstraints {
             $0.width.equalTo(CGFloat(80).fitWidth)
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
 
         _completeButton.snp.makeConstraints {
-            $0.height.equalTo(CGFloat(54).fitHeight)
+            $0.height.equalTo(CGFloat(53).fitHeight)
         }
     }
 }

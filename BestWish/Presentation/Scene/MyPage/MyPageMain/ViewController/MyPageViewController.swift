@@ -70,6 +70,7 @@ final class MyPageViewController: UIViewController {
     }
 
     private func bindView() {
+        // 테이블 뷰 아이템 선택 바인딩
         myPageView.tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
                 switch MyPageCellType(indexPath: indexPath) {
@@ -85,12 +86,25 @@ final class MyPageViewController: UIViewController {
                 case .privacyPolicy:
                     let nextVC = PDFViewController(type: .privacyPolicy)
                     self.present(nextVC, animated: true)
+                case .onboarding:
+                    let nextVC = DIContainer.shared.makeOnboardingViewController()
+                    self.present(nextVC, animated: true)
                 case .logout:
                     AlertBuilder(baseViewController: self, type: .logout) {
                         owner.viewModel.action.onNext(.logout)
                     }.show()
                 default: return
                 }
+            }.disposed(by: disposeBag)
+
+        // 헤더뷰 셀 선택 바인딩
+        let headerTapGesture = UITapGestureRecognizer()
+        myPageView.tableHeaderView.addGestureRecognizer(headerTapGesture)
+        headerTapGesture.rx.event
+            .bind(with: self) { owner, _ in
+                owner.hidesTabBar()
+                let updateVC = DIContainer.shared.makeProfileUpdateViewController()
+                owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)
     }
 
@@ -101,9 +115,9 @@ final class MyPageViewController: UIViewController {
 
         viewModel.state.userInfo
             .observe(on: MainScheduler.instance)
-            .bind(with: self, onNext: { owner, UserInfoModel in
-                owner.setHeaderView(userInfo: UserInfoModel)
-            })
+            .bind(with: self) { owner, userInfo in
+                owner.myPageView.tableHeaderView.configure(user: userInfo)
+            }
             .disposed(by: disposeBag)
 
         viewModel.state.isLogOut
@@ -118,28 +132,6 @@ final class MyPageViewController: UIViewController {
             .bind(with: self) { owner, error in
                 owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
                 NSLog("MyPageViewController Error: \(error.debugDescription)")
-            }.disposed(by: disposeBag)
-    }
-
-    /// 테이블 뷰 헤더 뷰 설정
-    private func setHeaderView(userInfo: UserInfoModel) {
-        let frame = CGRect(
-            x: 0,
-            y: 0,
-            width: myPageView.frame.width,
-            height: CGFloat(96).fitHeight < 96 ? 96 : CGFloat(96).fitHeight
-        )
-        let header = MyPageHeaderView(frame: frame)
-
-        header.configure(user: userInfo)
-        myPageView.tableView.tableHeaderView = header
-
-        header.seeMoreButton.rx.tap
-            .bind(with: self) { owner, _ in
-                // Coordinator 적용 전 임시 코드
-                owner.hidesTabBar()
-                let updateVC = DIContainer.shared.makeProfileUpdateViewController()
-                owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)
     }
 }

@@ -13,8 +13,8 @@ final class LoginViewModel: ViewModel {
 
     // MARK: - Action
     enum Action {
-        case signInKakao
-        case signInApple
+        case logInKakao
+        case logInApple
     }
 
     // MARK: - State
@@ -48,14 +48,14 @@ final class LoginViewModel: ViewModel {
     private func bindAction() {
         _action.subscribe(with: self) { owner, action in
             switch action {
-            case .signInKakao, .signInApple:
+            case .logInKakao, .logInApple:
                 Task {
                     do {
-                        let type: SocialType = (action == .signInKakao) ? .kakao : .apple
+                        let type: SocialType = (action == .logInKakao) ? .kakao : .apple
                         try await owner.useCase.login(type: type)
 
-                        let didOnboarding = try await owner.useCase.checkOnboardingState()
-                        owner._readyToUseService.accept(didOnboarding)
+                        let didSignIn = try await owner.useCase.checkSignInState()
+                        owner._readyToUseService.accept(didSignIn)
                     } catch {
                         self.handleError(error)
                     }

@@ -16,14 +16,18 @@ import Then
 final class WishListCell: UICollectionViewCell, ReuseIdentifier {
 
     // MARK: - Private Property
+    private let _shadowContainerView = UIView()
     private let _productImageView = UIImageView()
     private let _editButton = UIButton()
     private let _productSaleRateLabel = UILabel()
     private let _productPriceLabel = UILabel()
-    private let _hStackView = UIStackView()
+    private let _hStackView = HorizontalStackView(spacing: 4)
     private let _productNameLabel = UILabel()
     private let _brandNameLabel = UILabel()
-    private let _vStackView = UIStackView()
+    private let _vStackView = VerticalStackView(spacing: 4)
+    private let _platformImageView = UIImageView()
+    private let _platformNameLabel = UILabel()
+    private let _platformHStack = HorizontalStackView(spacing: 4)
     private var _disposeBag = DisposeBag()
 
     // MARK: - Internal Property
@@ -39,7 +43,7 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -47,13 +51,30 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
     }
 
     func configure(type: WishListProductItem, isHidden: Bool, isLastRow: Bool? = nil) {
-        _productImageView.kf.setImage(with: URL(string: type.productImageURL ?? "")!)
+        guard let url = URL(string: type.productImageURL ?? "") else { return }
+
         _productSaleRateLabel.text = type.productSaleRate
         _productPriceLabel.text = type.productPrice
         _productNameLabel.text = type.productName
         _brandNameLabel.text = type.brandName
         _editButton.isHidden = isHidden
+        _platformImageView.image = UIImage(named: type.platformImage ?? "")
+        _platformNameLabel.text = type.platformName
         
+        _productSaleRateLabel.isHidden = type.productSaleRate == "0%"
+        _productImageView.kf.setImage(with: url) { [weak self] result in
+            guard let self else { return }
+
+            switch result {
+            case .success(let value):
+                let imageWithBackground = value.image.withBackground()
+                self._productImageView.image = imageWithBackground
+                self._shadowContainerView.updateShadowPath()
+            case .failure(let error):
+                NSLog(#function + "\(error.localizedDescription)")
+            }
+        }
+
         _vStackView.snp.remakeConstraints {
             $0.top.equalTo(_productImageView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview()
@@ -71,9 +92,18 @@ private extension WishListCell {
     }
 
     func setAttributes() {
+        _shadowContainerView.do {
+            $0.layer.cornerRadius = 12
+            $0.layer.shadowColor = UIColor.gray900?.cgColor
+            $0.layer.shadowOpacity = 0.1
+            $0.layer.shadowOffset = CGSize(width: 0, height: 1)
+            $0.layer.shadowRadius = 4
+        }
+
         _productImageView.do {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
+            $0.contentMode = .scaleAspectFill
         }
         
         _editButton.do {
@@ -96,8 +126,6 @@ private extension WishListCell {
         }
         
         _hStackView.do {
-            $0.axis = .horizontal
-            $0.spacing = 4
             $0.alignment = .center
         }
         
@@ -112,25 +140,38 @@ private extension WishListCell {
         }
         
         _vStackView.do {
-            $0.axis = .vertical
-            $0.spacing = 4
             $0.alignment = .leading
+        }
+        
+        _platformNameLabel.do {
+            $0.textColor = .gray500
+            $0.font = .font(.pretendardBold, ofSize: 10)
         }
     }
 
     func setHierarchy() {
-        self.contentView.addSubviews(_productImageView, _editButton, _vStackView)
-        _vStackView.addArrangedSubviews(_hStackView, _productNameLabel, _brandNameLabel)
+        self.contentView.addSubviews(_shadowContainerView, _editButton, _vStackView)
+        _shadowContainerView.addSubview(_productImageView)
+        _platformHStack.addArrangedSubviews(_platformImageView, _platformNameLabel)
         _hStackView.addArrangedSubviews(_productSaleRateLabel, _productPriceLabel)
+        _vStackView.addArrangedSubviews(_platformHStack, _hStackView, _productNameLabel, _brandNameLabel)
     }
 
     func setConstraints() {
-        _productImageView.snp.makeConstraints {
+        _shadowContainerView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(_productImageView.snp.width)
+            $0.height.equalTo(_shadowContainerView.snp.width)
+          }
+
+        _productImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
-        
+
+        _platformImageView.snp.makeConstraints {
+            $0.size.equalTo(16)
+        }
+
         _editButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.trailing.equalToSuperview().offset(-10)

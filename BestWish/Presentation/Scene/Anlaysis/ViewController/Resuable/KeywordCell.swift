@@ -43,6 +43,11 @@ final class KeywordCell: UICollectionViewCell, ReuseIdentifier {
         let titleFont = UIFont.font(.pretendardBold, ofSize: 14)
         _keywordLabel.font = titleFont
         _keywordLabel.text = keyword
+        
+        // 라벨이 레이아웃된 뒤 즉시 코너 반경을 갱신해 첫 렌더링에서도 캡슐 모양 유지
+        _keywordLabel.layoutIfNeeded()
+        _keywordLabel.layer.cornerRadius = _keywordLabel.bounds.height / 2
+        _keywordLabel.layer.masksToBounds = true
     }
 }
 

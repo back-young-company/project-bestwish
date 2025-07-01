@@ -33,10 +33,25 @@ final class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBar(alignment: .left, title: "라이브 캡쳐")
+        setNavigationBar(alignment: .left, title: "패션 캡쳐")
         navigationItem.rightBarButtonItem = cameraView.homeButton
         bindViewModel()
+    }
+    
+    /// 뷰가 보일 떄마다 이벤트 방출
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel.action.onNext(.viewDidLoad)
+    }
+    
+    /// 뷰가 사라질 때마다 카메라 세션 종료 및 삭제
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        globalQueue.async { [weak self] in
+            guard let self else { return }
+            self.session?.stopRunning()
+            self.session = nil
+        }
     }
     
     private func bindViewModel() {
@@ -51,7 +66,7 @@ final class CameraViewController: UIViewController {
     
     /// 카메라 실행 메서드 (호출 시 레이어에 카메라 화면 추가 및 실시간 카메라 프리뷰 기능)
     private func setUpCamera() {
-                                                    
+        
         guard let device = AVCaptureDevice.default(for: .video) else { return }         // 기본 카메라 장비(비디오)로 설정
         
         do {
@@ -101,7 +116,8 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
     
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(with image: UIImage) {
-        let imageEditVC = DIContainer.shared.makeImageEditController(image: image)
+        guard let imageData = image.pngData() else { return }
+        let imageEditVC = DIContainer.shared.makeImageEditController(imageData: imageData)
         imageEditVC.onDismiss = { [weak self] in
             guard let self else { return }
             self.globalQueue.async {

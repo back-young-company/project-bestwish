@@ -11,40 +11,19 @@ import Foundation
 final class ProductSyncManager {
     /// 외부 플랫폼 상품 fetch 시도
     func fetchProductSync(from sharedText: String) async throws -> ProductDTO {
-        guard let originalUrl = try extractURL(from: sharedText) else {
+        guard let originalUrl = try extractURL(from: sharedText),
+              let platform = detectPlatform(from: sharedText),
+              let productURL = URL(string: originalUrl.absoluteString.convertDeepLinkToProductURL(platform)),
+              let deepLink = URL(string: originalUrl.absoluteString.convertProductURLToDeepLink(platform)) else {
             throw ProductSyncError.invaildURL
         }
         
-        let platform = detectPlatform(from: sharedText)
+        let html = try await requestHTML(platform: platform, url: productURL)
         
-        switch platform {
-        case .musinsa:
-            let (finalURL, _) = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await MusinsaFetcher().fetchProductDTO(
-                ogUrl: originalUrl,
-                finalUrl: finalURL,
-                html: nil
-            )
-            return metadata
-        case .zigzag:
-            let (_, html) = try await resolveZigzagFinalURL(url: originalUrl)
-            let metadata = try await ZigzagFetcher().fetchProductDTO(
-                ogUrl: nil,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        case .ably:
-            let (_, html) = try await resolveFinalURL(url: originalUrl)
-            let metadata = try await AblyFetcher().fetchProductDTO(
-                ogUrl: nil,
-                finalUrl: nil,
-                html: html
-            )
-            return metadata
-        default:
+        guard let metaData = try await platform.fetcher?.fetchProductDTO(deepLink: deepLink, productURL: productURL, html: html) else {
             throw ProductSyncError.platformDetectionFailed
         }
+        return metaData
     }
 }
 
@@ -73,46 +52,26 @@ private extension ProductSyncManager {
     }
 
     /// URL 요청을 통해 리디렉션된 최종 URL 반환 (공통)
-    func resolveFinalURL(url: URL) async throws -> (URL, String) {
+    func requestHTML(platform: PlatformEntity, url: URL) async throws -> String {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.timeoutInterval = 10
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        
+        if platform != .kream {
+            request.setValue(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+                forHTTPHeaderField: "User-Agent"
+            )
+        }
 
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            if let finalURL = response.url,
-               let html = String(data: data, encoding: .utf8) {
-                return (finalURL, html)
-            } else {
-                throw ProductSyncError.redirectionFailed
-            }
+            let (data, _) = try await URLSession.shared.data(for: request)
+            guard let html = String(data: data, encoding: .utf8) else { throw ProductSyncError.redirectionFailed }
+            
+            return html
         } catch {
             throw ProductSyncError.redirectionFailed
-        }
-    }
-
-    /// URL 요청을 통해 리디렉션된 최종 URL과 html 반환 (지그재그)
-    func resolveZigzagFinalURL(url: URL) async throws -> (URL, String) {
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.timeoutInterval = 10
-        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        request.setValue(
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-            forHTTPHeaderField: "User-Agent"
-        )
-
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            if let finalURL = response.url,
-               let html = String(data: data, encoding: .utf8) {
-                return (finalURL, html)
-            } else {
-                throw ProductSyncError.htmlParsingFailed
-            }
-        } catch {
-            throw ProductSyncError.htmlParsingFailed
         }
     }
 }

@@ -8,17 +8,14 @@
 import Foundation
 
 /// 외부 플랫폼 Entity
-enum PlatformEntity: CaseIterable {
+enum PlatformEntity: Int, CaseIterable {
     case all
     case musinsa
     case zigzag
     case ably
     case kream
-    case brandy
-    case tncm
-    case oco
-    case fnoz
-    case worksout
-    case eql
+    case brandi
+    case _29cm
+    case _4910
     case hiver
 }

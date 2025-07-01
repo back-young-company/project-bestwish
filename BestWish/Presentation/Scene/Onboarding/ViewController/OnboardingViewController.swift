@@ -2,235 +2,93 @@
 //  OnboardingViewController.swift
 //  BestWish
 //
-//  Created by yimkeul on 6/9/25.
+//  Created by yimkeul on 6/30/25.
 //
-
 
 import UIKit
 
-import IQKeyboardReturnManager
 import RxSwift
 
 /// 온보딩 View Controller
 final class OnboardingViewController: UIViewController {
     private let viewModel: OnboardingViewModel
-    private let policyViewModel: PolicyViewModel
-    private let firstView = OnboardingFirstView()
-    private let secondView = OnboardingSecondView()
+    private let onboardingView = OnboardingBottomSheetView()
     private let disposeBag = DisposeBag()
-    private let onboardingViews: [UIView]
-    private let returnManager: IQKeyboardReturnManager = .init()
 
-    init(viewModel: OnboardingViewModel, policyViewModel: PolicyViewModel) {
+    init(viewModel: OnboardingViewModel) {
         self.viewModel = viewModel
-        self.policyViewModel = policyViewModel
-        self.onboardingViews = [firstView, secondView]
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .fullScreen
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        viewModel.action.onNext(.viewDidAppear)
-        viewModel.action.onNext(.createUserInfo)
-    }
-
-
     override func loadView() {
-        view = firstView
+        view = onboardingView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        returnManager.lastTextInputViewReturnKeyType = .done
+        onboardingView.scrollView.delegate = self
         bindView()
         bindViewModel()
+        viewModel.action.onNext(.viewDidLoad)
     }
 
     private func bindView() {
-        bindPolicySheet()
-        bindFirstView()
-        bindSecondView()
-        bindPageButton()
+
+        onboardingView.pagingButton.rx.tap
+            .withLatestFrom(viewModel.state.currentPage)
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, page in
+            let lastIndex = OnboardingData.allCases.count - 1
+            if page == lastIndex {
+                // 마지막 페이지라면 닫기
+                owner.dismiss(animated: true)
+            } else {
+                // 아니면 다음 페이지로
+                owner.viewModel.action.onNext(.didTapNextPage)
+            }
+        }
+            .disposed(by: disposeBag)
+
+        // 닫기 버튼 탭 → 모달 해제
+        onboardingView.closeButton.rx.tap
+            .subscribe(with: self) { owner, _ in
+            owner.dismiss(animated: true)
+        }
+            .disposed(by: disposeBag)
     }
 
     private func bindViewModel() {
-        /// 온보딩 순서 바인딩
+        viewModel.state.pages
+            .take(1)
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, pages in
+            owner.onboardingView.configure(with: pages)
+        }
+            .disposed(by: disposeBag)
+
         viewModel.state.currentPage
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, page in
-                owner.view = owner.onboardingViews[page]
-            }
-            .disposed(by: disposeBag)
-
-        /// 온보딩 1 바인딩
-        /// - firstView.configure(생일 선택, 버튼 활성화)
-        /// 온보딩 2 바인딩
-        /// - 프로필 사진 바인딩
-        viewModel.state.userInfo
-            .distinctUntilChanged()
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, userInfo in
-                owner.firstView.configure(with: userInfo)
-                owner.secondView.configure(imageName: userInfo?.profileImageName)
-            }
-            .disposed(by: disposeBag)
-
-        /// 닉네임 유효성 검사 바인딩
-        /// secondView.configure(textField,caution 색상, 버튼 활성화)
-        viewModel.state.isValidNickname
-            .compactMap { $0 }
-            .observe(on: MainScheduler.instance)
-            .bind(with: self) { owner, isValid in
-                owner.secondView.configure(isValidNickname: isValid)
-            }
-            .disposed(by: disposeBag)
-
-        /// 온보딩 결과에 따른 화면 이동
-        viewModel.state.readyToUseService
-            .observe(on: MainScheduler.instance)
-            .bind { _ in
-                DummyCoordinator.shared.showMainView()
-            }
-            .disposed(by: disposeBag)
-
-        /// 온보딩 에러시 alert
-        viewModel.state.error
-            .observe(on: MainScheduler.instance)
-            .bind(with: self) { owner, error in
-                owner.showBasicAlert(title: "네트워크 에러", message: error.localizedDescription)
-                NSLog("OnboardingViewController Error: \(error.debugDescription)")
-            }
+            owner.onboardingView.pageController.currentPage = page
+            owner.onboardingView.scrollToPage(page)
+            owner.onboardingView.configureButton(currentPage: page)
+        }
             .disposed(by: disposeBag)
     }
 }
 
-// MARK: - private 메서드
-private extension OnboardingViewController {
-    /// 이용약관 바텀 시트 바인딩
-    func bindPolicySheet() {
-        viewModel.state.showPolicySheet
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, _ in
-                let policyVC = PolicyViewController(viewModel: self.policyViewModel)
-                owner.present(policyVC, animated: true)
-            }
-            .disposed(by: disposeBag)
-    }
 
-    /// OnboardingFirstView 바인딩
-    func bindFirstView() {
-        // 성별 바인딩
-        firstView.genderSelection.maleButton.rx.tap
-            .asDriver()
-            .map { .selectedGender(.male) }
-            .drive(viewModel.action)
-            .disposed(by: disposeBag)
+// MARK: - UIScrollViewDelegate
+extension OnboardingViewController: UIScrollViewDelegate {
 
-        firstView.genderSelection.femaleButton.rx.tap
-            .asDriver()
-            .map { .selectedGender(.female) }
-            .drive(viewModel.action)
-            .disposed(by: disposeBag)
-
-        firstView.genderSelection.nothingButton.rx.tap
-            .asDriver()
-            .map { .selectedGender(.nothing) }
-            .drive(viewModel.action)
-            .disposed(by: disposeBag)
-
-        // 생년월일 바인딩
-        firstView.birthSelection.dateButton.rx.tap
-            .subscribe(with: self) { owner, _ in
-                owner.firstView.configure(isFoucsed: true)
-                let sheetVC = DatePickerBottomSheetViewController()
-                sheetVC.presentationController?.delegate = self
-
-                // 선택된 날짜 콜백
-                sheetVC.onDateSelected = { date in
-                    owner.dismiss(animated: true) {
-                        owner.firstView.configure(isFoucsed: false)
-                    }
-                    owner.viewModel.action.onNext(.selectedBirth(date))
-                }
-
-                sheetVC.onCancel = {
-                    owner.dismiss(animated: false) {
-                        owner.firstView.configure(isFoucsed: false)
-                    }
-                }
-                sheetVC.presentDatePickerSheet()
-                owner.present(sheetVC, animated: true)
-            }
-            .disposed(by: disposeBag)
-    }
-    /// OnboardingSecondView 바인딩
-    func bindSecondView() {
-        // 프로필 사진 바인딩
-        let tapGesture = UITapGestureRecognizer()
-        secondView.profileImageView.addGestureRecognizer(tapGesture)
-        tapGesture.rx.event
-            .withLatestFrom(viewModel.state.userInfo)
-            .bind(with: self) { owner, userInfo in
-                guard let userInfo else { return }
-                let profileSheetVC = ProfileSheetViewController(selectedIndex: userInfo.profileImageCode)
-                profileSheetVC.presentProfileSheet()
-                profileSheetVC.onComplete = { [weak self] selectedIndex in
-                    self?.viewModel.action.onNext(.selectedProfileIndex(selectedIndex))
-                }
-                owner.present(profileSheetVC, animated: true)
-            }
-            .disposed(by: disposeBag)
-
-        // 닉네임 바인딩
-        secondView.nicknameVStackView.textField.rx.text.orEmpty
-            .skip(2)
-            .distinctUntilChanged()
-            .debounce(.microseconds(300), scheduler: MainScheduler.instance)
-            .bind(with: self) { owner, nickname in
-                owner.viewModel.action.onNext(.inputNickname(nickname))
-            }
-            .disposed(by: disposeBag)
-
-        secondView.nicknameVStackView.textField.rx.controlEvent(.editingDidBegin)
-            .subscribe(with: self) { owner, _ in
-                owner.secondView.nicknameVStackView.textField.layer.borderColor = UIColor.primary300?.cgColor
-            }
-            .disposed(by: disposeBag)
-
-    }
-
-    /// Oneboarding 내 화면 이동 버튼 바인딩
-    func bindPageButton() {
-        firstView.nextPageButton.rx.tap
-            .asDriver()
-            .map { .didTapNextPage }
-            .drive(viewModel.action)
-            .disposed(by: disposeBag)
-
-        secondView.prevButton.rx.tap
-            .asDriver()
-            .map { .didTapPrevPage }
-            .drive(viewModel.action)
-            .disposed(by: disposeBag)
-
-        secondView.completeButton.rx.tap
-            .withLatestFrom(viewModel.state.userInfo)
-            .subscribe(with: self) { owner, UserInfoModel in
-                guard let UserInfoModel else { return }
-                owner.viewModel.action.onNext(.uploadUserInfo(UserInfoModel))
-            }
-            .disposed(by: disposeBag)
-    }
-}
-
-// MARK: - 화면 포커싱 추적
-extension OnboardingViewController: UIAdaptivePresentationControllerDelegate {
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        // 모달이 내려간 시점에 원래 색으로 복구
-        firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
+    // 뷰모델에 스크롤 종료 시점 전달
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageIndex = Int(scrollView.contentOffset.x / scrollView.bounds.width)
+        viewModel.action.onNext(.didScrollToPage(pageIndex))
     }
 }

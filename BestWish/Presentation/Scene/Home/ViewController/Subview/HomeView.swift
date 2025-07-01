@@ -14,12 +14,23 @@ import Then
 final class HomeView: UIView {
 
     // MARK: - Private Property
-    private let _collectionView = UICollectionView(
+    private lazy var _collectionView = UICollectionView(
         frame: .zero,
-        collectionViewLayout: UICollectionViewFlowLayout()
+        collectionViewLayout: createLayout
     )
 
     // MARK: - Internal Property
+    var createLayout: UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, _ in
+            switch sectionIndex {
+            case 0: return NSCollectionLayoutSection.createPlatformShortcutSection()
+            case 1: return NSCollectionLayoutSection.createPlatformFilterSection()
+            default: return NSCollectionLayoutSection.createWishlistSection()
+            }
+        }
+        return layout
+    }
+
     var collectionView: UICollectionView { _collectionView }
 
     override init(frame: CGRect) {
@@ -50,12 +61,12 @@ private extension HomeView {
                 forCellWithReuseIdentifier: PlatformShortcutCell.identifier
             )
             $0.register(
-                WishListCell.self,
-                forCellWithReuseIdentifier: WishListCell.identifier
+                WishListFilterCell.self,
+                forCellWithReuseIdentifier: WishListFilterCell.identifier
             )
             $0.register(
-                WishListEmptyCell.self,
-                forCellWithReuseIdentifier: WishListEmptyCell.identifier
+                WishListCell.self,
+                forCellWithReuseIdentifier: WishListCell.identifier
             )
             $0.register(
                 PlatformShortcutHeaderView.self,
@@ -63,14 +74,14 @@ private extension HomeView {
                 withReuseIdentifier: PlatformShortcutHeaderView.identifier
             )
             $0.register(
+                WishListFilterHeaderView.self,
+                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: WishListFilterHeaderView.identifier
+            )
+            $0.register(
                 WishListHeaderView.self,
                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                 withReuseIdentifier: WishListHeaderView.identifier
-            )
-            $0.register(
-                WishListEmptyHeaderView.self,
-                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: WishListEmptyHeaderView.identifier
             )
         }
     }

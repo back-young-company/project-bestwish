@@ -13,67 +13,67 @@ import RxSwift
 /// 이미지 분석 후 검색 뷰 컨트롤러
 final class AnalaysisViewController: UIViewController {
     
+    // MARK: - Private Property
     private let viewModel: AnalysisViewModel
     private let analysisView = AnalysisView()
     private let disposeBag = DisposeBag()
     
-    /// 비어 있는 키워드 예외처리를 위함
-    private let emptyKeyword = "해당 카테고리의 키워드를 인식할 수 없습니다."
-    
     // 데이터 소스
     private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<AnalysisSectionModel>(
-            configureCell: { (dataSource, collectionView, indexPath, item) in
-                switch item {
-                case let .keyword(keyword):
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: KeywordCell.identifier,
-                        for: indexPath
-                    ) as? KeywordCell else { return UICollectionViewCell() }
-                    cell.configure(keyword: keyword)
-                    return cell
-                    
-                case let .attribute(attribute, isSelected):
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: AttributeCell.identifier,
-                        for: indexPath
-                    ) as? AttributeCell else { return UICollectionViewCell() }
-                    cell.configure(attribute: attribute, isSelected: isSelected)
-                    return cell
-                    
-                case let .platform(platform, isSelected):
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: PlatformShortcutCell.identifier,
-                        for: indexPath
-                    ) as? PlatformShortcutCell else { return UICollectionViewCell() }
-                    cell.configure(type: platform, isSelected: isSelected)
-                    return cell
-                }
-            }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
-                guard let self, indexPath.section == 1 else { return UICollectionReusableView() }
-                guard let headerView = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: kind,
-                    withReuseIdentifier: SegmentControlHeaderView.identifier,
+        configureCell: { (dataSource, collectionView, indexPath, item) in
+            switch item {
+            case let .keyword(keyword):
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: KeywordCell.identifier,
                     for: indexPath
-                ) as? SegmentControlHeaderView else {
-                    return UICollectionReusableView()
+                ) as? KeywordCell else { return UICollectionViewCell() }
+                cell.configure(keyword: keyword)
+                return cell
+                
+            case let .attribute(attribute, isSelected):
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: AttributeCell.identifier,
+                    for: indexPath
+                ) as? AttributeCell else { return UICollectionViewCell() }
+                cell.configure(attribute: attribute, isSelected: isSelected)
+                return cell
+                
+            case let .platform(platform, isSelected):
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: PlatformShortcutCell.identifier,
+                    for: indexPath
+                ) as? PlatformShortcutCell else { return UICollectionViewCell() }
+                cell.configure(type: platform, isSelected: isSelected)
+                return cell
+            }
+        }, configureSupplementaryView: { [weak self] dataSource, collectionView, kind, indexPath in
+            guard let self, indexPath.section == 1 else { return UICollectionReusableView() }
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: SegmentControlHeaderView.identifier,
+                for: indexPath
+            ) as? SegmentControlHeaderView else {
+                return UICollectionReusableView()
+            }
+            // ViewModeml과 SegmentControl의 index 바인딩
+            self.viewModel.state.segmentIndex
+                .bind(to: headerView.classSegmentControl.rx.selectedSegmentIndex)
+                .disposed(by: headerView.disposeBag)
+            
+            // SegmentControl 변경에 따른 이벤트 방출
+            headerView.classSegmentControl.rx.selectedSegmentIndex
+                .distinctUntilChanged()
+                .compactMap { index in headerView.classSegmentControl.titleForSegment(at: index) }
+                .bind(with: self) { owner, category in
+                    owner.viewModel.action.onNext(.didSelectedSegmentControl(category: category))
                 }
-                // 세그먼트 컨트롤 타이틀 데이터를 이벤트로 방출
-                headerView.classSegmentControl.rx.selectedSegmentIndex
-                    .distinctUntilChanged()
-                    .map { index in headerView.classSegmentControl.titleForSegment(at: index) ?? "" }
-                    .bind(with: self) { owner, category in
-                        owner.viewModel.action.onNext(.didSelectedSegmentControl(category: category))
-                    }
-                    .disposed(by: headerView.disposeBag)
-                
-                self.viewModel.state.segmentIndex
-                    .bind(to: headerView.classSegmentControl.rx.selectedSegmentIndex)
-                    .disposed(by: headerView.disposeBag)
-                
-                return headerView
-            })
+                .disposed(by: headerView.disposeBag)
+            
+            return headerView
+        }
+    )
     
-
+    
     init(viewModel: AnalysisViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -90,10 +90,11 @@ final class AnalaysisViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindView()
+        bindViewModel()
+        viewModel.action.onNext(.viewDidLoad)
     }
     
-    private func bindView() {
+    private func bindViewModel() {
         // 모델 선택 시 이벤트 방출
         analysisView.collectionView.rx.modelSelected(AnalysisItem.self)
             .subscribe(with: self) { owner, item in
@@ -101,7 +102,7 @@ final class AnalaysisViewController: UIViewController {
                 case let .keyword(keyword):
                     owner.viewModel.action.onNext(.didTapKeywordChip(keyword: keyword))
                 case let .attribute(attribute, _):
-                    guard attribute != owner.emptyKeyword else { return }
+                    guard attribute != EmptyCategoryCase.emptyKeyword.rawValue else { return }
                     owner.viewModel.action.onNext(.didTapAttributeChip(attribute: attribute))
                 case let .platform(platform, _):
                     owner.viewModel.action.onNext(.didTapPlatformChip(platform: platform))
@@ -133,7 +134,7 @@ final class AnalaysisViewController: UIViewController {
             .disposed(by: disposeBag)
         
         // 라벨 데이터 컬렉션 뷰에 바인딩
-        viewModel.state.labelDatas
+        viewModel.state.models
             .bind(to: analysisView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
@@ -148,7 +149,6 @@ final class AnalaysisViewController: UIViewController {
                         NSLog("❌ 앱 전환 실패: \(url.absoluteString)")
                         return
                     }
-                    NSLog("✅ 앱 전환 성공: \(url.absoluteString)")
                 }
             }
             .disposed(by: disposeBag)

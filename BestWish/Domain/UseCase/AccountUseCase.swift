@@ -9,8 +9,8 @@ import Foundation
 
 /// 계정 정보 관련 UseCase 프로토콜
 protocol AccountUseCase {
-    /// 온보딩 유뮤
-    func checkOnboardingState() async throws -> Bool
+    /// 회원가입 유뮤
+    func checkSignInState() async throws -> Bool
     
     /// 로그인
     func login(type: SocialType) async throws
@@ -30,9 +30,9 @@ final class AccountUseCaseImpl: AccountUseCase {
         self.repository = repository
     }
 
-    /// 온보딩 유뮤
-    func checkOnboardingState() async throws -> Bool {
-        try await repository.checkOnboardingState()
+    /// 회원가입 유뮤
+    func checkSignInState() async throws -> Bool {
+        try await repository.checkSignInState()
     }
 
     /// 로그인
