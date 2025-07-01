@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import Then
 
-/// 링크 저장 View
+/// 상품 추가 View
 final class LinkSaveView: UIView {
 
     // MARK: - Private Property
@@ -58,7 +58,7 @@ private extension LinkSaveView {
         }
 
         _titleLabel.do {
-            $0.text = "링크 저장"
+            $0.text = "상품 추가"
             $0.textColor = .gray900
             $0.font = .font(.pretendardBold, ofSize: 18)
             $0.textAlignment = .center
