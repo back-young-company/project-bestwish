@@ -5,6 +5,10 @@
 //  Created by 이수현 on 6/5/25.
 //
 
+import BestWishData
+import BestWishDomain
+import BestWishPresentation
+
 import Foundation
 
 /// 의존성 주입 컨테이너

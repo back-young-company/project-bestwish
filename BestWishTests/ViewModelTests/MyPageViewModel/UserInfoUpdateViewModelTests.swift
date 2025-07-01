@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 @testable import BestWish
 
-import RxSwift
+internal import RxSwift
 
 /// 유저 정보 업데이트 뷰 모델 테스트
 final class UserInfoUpdateViewModelTests: XCTestCase {

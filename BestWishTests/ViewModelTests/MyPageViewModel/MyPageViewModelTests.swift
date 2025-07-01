@@ -9,7 +9,7 @@ import Foundation
 import XCTest
 @testable import BestWish
 
-import RxSwift
+internal import RxSwift
 
 /// 마이페이지 메인 뷰 모델 테스트 클래스
 final class MyPageViewModelTests: XCTestCase {

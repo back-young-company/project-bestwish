@@ -5,10 +5,11 @@
 //  Created by 백래훈 on 6/14/25.
 //
 
+import BestWishPresentation
 import UIKit
 
-import SnapKit
-import Then
+internal import SnapKit
+internal import Then
 
 /// 공유 View
 final class ShareView: UIView {
