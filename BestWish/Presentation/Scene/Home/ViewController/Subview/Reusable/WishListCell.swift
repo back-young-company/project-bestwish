@@ -54,6 +54,7 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
         _productNameLabel.text = type.productName
         _brandNameLabel.text = type.brandName
         _editButton.isHidden = isHidden
+        _productSaleRateLabel.isHidden = type.productSaleRate == "0%"
         
         _vStackView.snp.remakeConstraints {
             $0.top.equalTo(_productImageView.snp.bottom).offset(8)
