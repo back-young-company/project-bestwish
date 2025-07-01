@@ -15,6 +15,8 @@
 		14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
 		14C3CB622E026200002F341A /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 14C3CB612E026200002F341A /* RxRelay */; };
 		81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */; };
+		8170B3BA2E0E4E8800FF71CF /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 8170B3B92E0E4E8800FF71CF /* SwiftSoup */; };
+		8170B5F12E0E56A700FF71CF /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 8170B5F02E0E56A700FF71CF /* SwiftSoup */; };
 		81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 81E50BB32DF93B0E005954F4 /* CropViewController */; };
 		861BAD572DFD2B960043B83E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */; };
 		86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
@@ -85,16 +87,20 @@
 				Data/KeyChain/Error/KeyChainError.swift,
 				Data/KeyChain/Manager/KeyChainManager.swift,
 				Data/KeyChain/Manager/Token.swift,
-				Data/Network/DTO/AblyResponseDTO.swift,
 				Data/Network/DTO/ProductDTO.swift,
 				Data/Network/DTO/UserDTO.swift,
 				Data/Network/Error/CoreMLError.swift,
 				Data/Network/Error/MappingError.swift,
 				Data/Network/Error/ProductSyncError.swift,
 				Data/Network/Error/SupabaseError.swift,
-				Data/Network/Manager/ProductSync/Fetcher/AblyFetcher.swift,
-				Data/Network/Manager/ProductSync/Fetcher/MusinsaFetcher.swift,
-				Data/Network/Manager/ProductSync/Fetcher/ZigzagFetcher.swift,
+				Data/Network/Fetcher/_29CMFetcher.swift,
+				Data/Network/Fetcher/_4910Fetcher.swift,
+				Data/Network/Fetcher/AblyFetcher.swift,
+				Data/Network/Fetcher/BrandiFetcher.swift,
+				Data/Network/Fetcher/HiverFetcher.swift,
+				Data/Network/Fetcher/KreamFetcher.swift,
+				Data/Network/Fetcher/MusinsaFetcher.swift,
+				Data/Network/Fetcher/ZigzagFetcher.swift,
 				Data/Network/Manager/ProductSync/ProductSyncManager.swift,
 				Data/Network/Manager/Supabase/SupabaseManager.swift,
 				Data/Network/Manager/Supabase/SupabaseTable.swift,
@@ -102,7 +108,7 @@
 				Data/Repository/ProductSyncRepositoryImpl.swift,
 				Data/Repository/WishListRepositoryImpl.swift,
 				"Data/Util/Bundle+Util.swift",
-				"Data/Util/Platform+Util.swift",
+				"Data/Util/PlatformEntity+Util.swift",
 				"Data/Util/String+Util.swift",
 				Domain/Entity/PlatformEntity.swift,
 				Domain/Entity/ProductEntity.swift,
@@ -169,6 +175,7 @@
 				14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */,
 				14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */,
 				14C3CB622E026200002F341A /* RxRelay in Frameworks */,
+				8170B5F12E0E56A700FF71CF /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,6 +188,7 @@
 				81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */,
 				CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */,
 				CBD6BB0B2DEFD165003242CA /* Supabase in Frameworks */,
+				8170B3BA2E0E4E8800FF71CF /* SwiftSoup in Frameworks */,
 				81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */,
 				CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */,
 				CB4FBCEE2DF6B66B00149D86 /* RxDataSources in Frameworks */,
@@ -254,6 +262,7 @@
 				14B8B6782DF6C57000B7F5F8 /* RxCocoa */,
 				14C3CB612E026200002F341A /* RxRelay */,
 				1419CEB32E0273B0006D62BB /* Supabase */,
+				8170B5F02E0E56A700FF71CF /* SwiftSoup */,
 			);
 			productName = BestWishShareExtension;
 			productReference = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */;
@@ -288,6 +297,7 @@
 				CB4FBCED2DF6B66B00149D86 /* RxDataSources */,
 				81E50BB32DF93B0E005954F4 /* CropViewController */,
 				81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */,
+				8170B3B92E0E4E8800FF71CF /* SwiftSoup */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -358,6 +368,7 @@
 				CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 				81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -825,6 +836,14 @@
 				minimumVersion = 8.0.1;
 			};
 		};
+		8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.8;
+			};
+		};
 		81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/TOCropViewController";
@@ -934,6 +953,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		8170B3B92E0E4E8800FF71CF /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		8170B5F02E0E56A700FF71CF /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 		81E50BB32DF93B0E005954F4 /* CropViewController */ = {
 			isa = XCSwiftPackageProductDependency;

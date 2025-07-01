@@ -160,8 +160,10 @@ private extension HomeViewModel {
     /// Supabase 플랫폼 시퀀스 가져오기
     func getPlatformSequence() async throws -> [PlatformItem] {
         let result = try await self.useCase.getPlatformSequence()
-        return result.map { platform in
+        return result.compactMap { platform in
+            guard platform <= 8 else { return nil }
             let shopPlatform = PlatformEntity.allCases[platform]
+            
             return PlatformItem(
                 platformName: shopPlatform.platformName,
                 platformImage: shopPlatform.platformImage,

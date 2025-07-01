@@ -14,11 +14,8 @@ enum PlatformEntity: CaseIterable {
     case zigzag
     case ably
     case kream
-    case brandy
-    case tncm
-    case oco
-    case fnoz
-    case worksout
-    case eql
+    case brandi
+    case _29cm
+    case _4910
     case hiver
 }
