@@ -26,15 +26,15 @@ final class BrandiFetcher: ProductDTORepository {
             // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추추출
             let brand = html.htmlExtractValue(pattern: #""seller"\s*:\s*\{[^}]*?"name"\s*:\s*"([^"]+)""#) { $0 }
             let discountRate = html.htmlExtractValue(pattern: #""sale_percent"\s*:\s*(\d+)"#) { $0 }
-            let price = try doc.select("meta[property=og:title]").attr("content").htmlExtractValue(pattern: #"(\d{1,3}(?:,\d{3})*)"#) { Int($0) }
+            let price = try doc.select("meta[property=og:title]").attr("content").htmlExtractValue(pattern: #"(\d{1,3}(?:,\d{3})*)원"#) { Int($0.replacingOccurrences(of: ",", with: "")) }
             
             return ProductDTO(
                 id: nil,
                 userID: nil,
                 platform: 5,
                 title: title,
-                price: price ?? 0,
-                discountRate: discountRate,
+                price: price,
+                discountRate: discountRate ?? "0",
                 brand: brand,
                 imagePathURL: imageURL,
                 productURL: deepLink?.absoluteString,
