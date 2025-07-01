@@ -20,10 +20,13 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
     private let _editButton = UIButton()
     private let _productSaleRateLabel = UILabel()
     private let _productPriceLabel = UILabel()
-    private let _hStackView = UIStackView()
+    private let _hStackView = HorizontalStackView(spacing: 4)
     private let _productNameLabel = UILabel()
     private let _brandNameLabel = UILabel()
-    private let _vStackView = UIStackView()
+    private let _vStackView = VerticalStackView(spacing: 4)
+    private let _platformImageView = UIImageView()
+    private let _platformNameLabel = UILabel()
+    private let _platformHStack = HorizontalStackView(spacing: 4)
     private var _disposeBag = DisposeBag()
 
     // MARK: - Internal Property
@@ -39,7 +42,7 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -54,6 +57,9 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
         _productNameLabel.text = type.productName
         _brandNameLabel.text = type.brandName
         _editButton.isHidden = isHidden
+        _platformImageView.image = UIImage(named: type.platformImage ?? "")
+        _platformNameLabel.text = type.platformName
+        
         _productSaleRateLabel.isHidden = type.productSaleRate == "0%"
         
         _vStackView.snp.remakeConstraints {
@@ -61,6 +67,8 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().offset(isLastRow ?? false ? -80 : 0)
         }
+        
+        _productImageView.updateShadowPath()
     }
 }
 
@@ -79,7 +87,7 @@ private extension WishListCell {
             $0.layer.shadowOffset = CGSize(width: 0, height: 0.5)
             $0.layer.shadowRadius = 4
         }
-
+    
         _productImageView.do {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
@@ -106,8 +114,6 @@ private extension WishListCell {
         }
         
         _hStackView.do {
-            $0.axis = .horizontal
-            $0.spacing = 4
             $0.alignment = .center
         }
         
@@ -122,19 +128,27 @@ private extension WishListCell {
         }
         
         _vStackView.do {
-            $0.axis = .vertical
-            $0.spacing = 4
             $0.alignment = .leading
+        }
+        
+        _platformNameLabel.do {
+            $0.textColor = .gray500
+            $0.font = .font(.pretendardBold, ofSize: 10)
         }
     }
 
     func setHierarchy() {
         self.contentView.addSubviews(_productImageView, _editButton, _vStackView)
-        _vStackView.addArrangedSubviews(_hStackView, _productNameLabel, _brandNameLabel)
+        _platformHStack.addArrangedSubviews(_platformImageView, _platformNameLabel)
+        _vStackView.addArrangedSubviews(_platformHStack, _hStackView, _productNameLabel, _brandNameLabel)
         _hStackView.addArrangedSubviews(_productSaleRateLabel, _productPriceLabel)
     }
 
     func setConstraints() {
+        _platformImageView.snp.makeConstraints {
+            $0.size.equalTo(16)
+        }
+        
         _productImageView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
