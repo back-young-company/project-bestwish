@@ -28,7 +28,7 @@ extension PlatformEntity {
         }
     }
     
-    var fetcher: ProductDTORepository? {
+    var fetcher: ProductDTOFetcher? {
         switch self {
         case .musinsa: return MusinsaFetcher()
         case .ably: return AblyFetcher()

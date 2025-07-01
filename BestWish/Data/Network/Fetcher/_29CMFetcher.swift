@@ -10,7 +10,7 @@ import Foundation
 import SwiftSoup
 
 /// 29CM 페쳐
-final class _29CMFetcher: ProductDTORepository {
+final class _29CMFetcher: ProductDTOFetcher {
     /// 29CM 제품 상세 HTML → ProductDTO 파싱
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {

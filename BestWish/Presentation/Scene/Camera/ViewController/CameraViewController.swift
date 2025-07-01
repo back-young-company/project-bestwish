@@ -33,7 +33,7 @@ final class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setNavigationBar(alignment: .left, title: "라이브 캡쳐")
+        setNavigationBar(alignment: .left, title: "패션 캡쳐")
         navigationItem.rightBarButtonItem = cameraView.homeButton
         bindViewModel()
     }
