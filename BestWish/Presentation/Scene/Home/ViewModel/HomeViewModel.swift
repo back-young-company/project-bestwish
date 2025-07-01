@@ -179,7 +179,9 @@ private extension HomeViewModel {
                 productName: item.title,
                 productSaleRate: (item.discountRate ?? "") + "%",
                 productPrice: (item.price?.formattedPrice() ?? "") + "원",
-                productDeepLink: item.productURL ?? ""
+                productDeepLink: item.productURL ?? "",
+                platformImage: PlatformEntity(index: item.platform ?? 0)?.platformImage ?? "",
+                platformName: PlatformEntity(index: item.platform ?? 0)?.platformName ?? ""
             )
         }
     }
