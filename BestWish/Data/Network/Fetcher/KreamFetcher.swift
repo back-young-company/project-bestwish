@@ -32,7 +32,7 @@ final class KreamFetcher: ProductDTORepository {
                 platform: 4,
                 title: title,
                 price: price,
-                discountRate: nil,
+                discountRate: "0",
                 brand: brand,
                 imagePathURL: imageURL,
                 productURL: deepLink?.absoluteString,

@@ -32,7 +32,7 @@ final class MusinsaFetcher: ProductDTORepository {
                 platform: 1,
                 title: title,
                 price: price,
-                discountRate: discountRate,
+                discountRate: discountRate ?? "0",
                 brand: brand,
                 imagePathURL: imageURL,
                 productURL: deepLink?.absoluteString,
