@@ -19,6 +19,7 @@ enum AppError: AppErrorProtocol {
     case mappingError(AppErrorProtocol)
     case authError(AppErrorProtocol)
     case keyChainError(AppErrorProtocol)
+    case coreMLError(AppErrorProtocol)
     case unknown(Error)
 }
 
@@ -29,7 +30,8 @@ extension AppError {
         case let .supabaseError(error),
              let .mappingError(error),
              let .authError(error),
-             let .keyChainError(error):
+             let .keyChainError(error),
+             let .coreMLError(error):
             return error.errorDescription
         case .unknown:
             return "알 수 없는 에러가 발생했습니다."
@@ -41,7 +43,8 @@ extension AppError {
         case let .supabaseError(error),
              let .mappingError(error),
              let .authError(error),
-             let .keyChainError(error):
+             let .keyChainError(error),
+             let .coreMLError(error):
             return error.debugDescription
         case let .unknown(error):
             return "unkownError: \(error.localizedDescription)"

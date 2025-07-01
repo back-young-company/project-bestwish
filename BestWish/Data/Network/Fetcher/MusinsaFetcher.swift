@@ -29,10 +29,10 @@ final class MusinsaFetcher: ProductDTORepository {
             return ProductDTO(
                 id: nil,
                 userID: nil,
-                platform: 3,
+                platform: 1,
                 title: title,
                 price: price,
-                discountRate: discountRate,
+                discountRate: discountRate ?? "0",
                 brand: brand,
                 imagePathURL: imageURL,
                 productURL: deepLink?.absoluteString,

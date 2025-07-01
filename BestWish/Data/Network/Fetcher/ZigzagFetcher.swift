@@ -36,7 +36,7 @@ final class ZigzagFetcher: ProductDTORepository {
                 platform: 2,
                 title: title,
                 price: price,
-                discountRate: discountRate,
+                discountRate: discountRate ?? "0",
                 brand: brand,
                 imagePathURL: imageURL,
                 productURL: deepLinkURL ?? deepLink?.absoluteString,

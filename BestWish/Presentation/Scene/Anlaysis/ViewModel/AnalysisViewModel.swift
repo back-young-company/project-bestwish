@@ -14,14 +14,14 @@ final class AnalysisViewModel: ViewModel {
     
     // MARK: - Action
     enum Action {
-        case viewDidLoad                                    // View가 로드될 시
-        case didSelectedSegmentControl(category: String)    // 세그먼트 컨트롤 선택 시
-        case didTapAttributeChip(attribute: String)         // 속성 칩 선택 시
-        case didSubmitSearchText(keyword: String)           // 검색버튼 터치 시
-        case didTapKeywordChip(keyword: String)             // 키워드 칩 선택 시
-        case didTapPlatformChip(platform: PlatformItem)     // 플랫폼 칩 선택 시
-        case didTapResetButton                              // 초기화 버튼 선택 시
-        case didTapSearchButton                             // 검색 버튼 선택 시
+        case viewDidLoad                                            // View가 로드될 시
+        case didSelectedSegmentControl(category: String)            // 세그먼트 컨트롤 선택 시
+        case didTapAttributeChip(attribute: String)                 // 속성 칩 선택 시
+        case didSubmitSearchText(keyword: String)                   // 검색버튼 터치 시
+        case didTapKeywordChip(keyword: String)                     // 키워드 칩 선택 시
+        case didTapPlatformChip(platform: PlatformEntity)           // 플랫폼 칩 선택 시
+        case didTapResetButton                                      // 초기화 버튼 선택 시
+        case didTapSearchButton                                     // 검색 버튼 선택 시
     }
     
     // MARK: - State
@@ -40,7 +40,7 @@ final class AnalysisViewModel: ViewModel {
     // MARK: - Private Property
     private var previousCategory = ""                       // 카테고리 비교 용도
     private var currentQuery = BehaviorRelay<String>(value: "")
-    private var currentPlatform = BehaviorRelay<PlatformItem?>(value: nil)
+    private var currentPlatform = BehaviorRelay<PlatformEntity?>(value: nil)
     
     private let _action = PublishSubject<Action>()
     
@@ -72,7 +72,7 @@ final class AnalysisViewModel: ViewModel {
         }
     }
     
-    private var platforms: [PlatformItem] {
+    private var platforms: [PlatformEntity] {
         _models.value[2].items.compactMap {
             if case let .platform(platform, _) = $0 {
                 return platform
@@ -132,12 +132,7 @@ private extension AnalysisViewModel {
             AnalysisSectionModel(header: nil, type: .keyword, items: []),
             AnalysisSectionModel(header: nil, type: .attribute, items: []),
             AnalysisSectionModel(header: nil, type: .platform, items: PlatformEntity.allCases.filter{ $0 != .all }.map {
-                .platform(platform: PlatformItem(
-                    platform: $0,
-                    platformName: $0.platformName,
-                    platformImage: $0.platformImage,
-                    platformDeepLink: $0.platformDeepLink
-                ))
+                .platform(platform: $0)
             })
         ]
         // 라벨 데이터 초기 세팅
@@ -167,8 +162,7 @@ private extension AnalysisViewModel {
     
     /// 키워드 추가 이벤트
     private func addKeyword(_ keyword: String) {
-        var keywords = keywords
-        analysisUseCase.addKeyword(keyword, keywords: &keywords)
+        let keywords = analysisUseCase.addKeyword(keyword, keywords: keywords)
         
         // 키워드 추가
         changeItem(type: .keyword) {
@@ -182,8 +176,7 @@ private extension AnalysisViewModel {
     
     /// 키워드 삭제 이벤트
     private func deleteKeyword(_ keyword: String) {
-        var keywords = keywords
-        analysisUseCase.deleteKeyword(keyword, keywords: &keywords)
+        let keywords = analysisUseCase.deleteKeyword(keyword, keywords: keywords)
         
         // 키워드 추가
         changeItem(type: .keyword) {
@@ -196,20 +189,27 @@ private extension AnalysisViewModel {
     }
     
     /// 플랫폼 선택 이벤트
-    private func selectePlatform(_ platform: PlatformItem) {
-        changeItem(type: .platform) {
-            platforms.map {
-                .platform(platform: $0, isSelected: $0 == platform)
+    private func selectePlatform(_ platform: PlatformEntity) {
+        do {
+            
+            let platforms = try analysisUseCase.selectePlatform(platform: platform, platforms: platforms)
+            changeItem(type: .platform) {
+                platforms.map { platform, isSelected in
+                    .platform(platform: platform, isSelected: isSelected)
+                }
             }
+            // 현제 플랫폼 업데이트
+            currentPlatform.accept(platform)
+            
+        } catch let error {
+            guard let error = error as? PlatformError else { return }
+            print(error.rawValue)
         }
-        // 현제 플랫폼 업데이트
-        currentPlatform.accept(platform)
     }
     
     /// 초기화
     private func resetKeyword() {
-        var keywords = keywords
-        analysisUseCase.resetKeyword(keywords: &keywords)
+        let keywords = analysisUseCase.resetKeyword(keywords: keywords)
         
         changeItem(type: .keyword) {
             keywords.map {
@@ -226,7 +226,7 @@ private extension AnalysisViewModel {
     private func movePlatform() {
         do {
             let query = currentQuery.value
-            let deepLink = currentPlatform.value?.platform?.searchResultDeepLink(keyword: query)
+            let deepLink = currentPlatform.value?.searchResultDeepLink(keyword: query)
             
             let link = try analysisUseCase.movePlatform(deepLink: deepLink)
             _deepLink.accept(link)

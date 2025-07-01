@@ -25,7 +25,7 @@ final class _4910Fetcher: ProductDTORepository {
             
             // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추출
             let price = html.htmlExtractValue(pattern: #""discounted_price"\s*:\s*(\d+)"#) { Int($0) }
-            let discount = html.htmlExtractValue(pattern: #"\"extra_discount\"\s*:\s*\{[^}]*?"discount_rate"\s*:\s*(\d+)"#) { $0 }
+            let discountRate = html.htmlExtractValue(pattern: #"\"extra_discount\"\s*:\s*\{[^}]*?"discount_rate"\s*:\s*(\d+)"#) { $0 }
             let brandKor = html.htmlExtractValue(pattern: #"(?s)"brand"\s*:\s*\{.*?"name"\s*:\s*"([^"]+)""#) { $0 }
             
             return ProductDTO(
@@ -34,7 +34,7 @@ final class _4910Fetcher: ProductDTORepository {
                 platform: 7,
                 title: title,
                 price: price,
-                discountRate: discount,
+                discountRate: discountRate ?? "0",
                 brand: brandKor,
                 imagePathURL: imageURL,
                 productURL: deepLink?.absoluteString,

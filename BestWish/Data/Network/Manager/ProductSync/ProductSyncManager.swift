@@ -18,7 +18,7 @@ final class ProductSyncManager {
             throw ProductSyncError.invaildURL
         }
         
-        let html = try await requsetHTML(url: productURL)
+        let html = try await requestHTML(platform: platform, url: productURL)
         
         guard let metaData = try await platform.fetcher?.fetchProductDTO(deepLink: deepLink, productURL: productURL, html: html) else {
             throw ProductSyncError.platformDetectionFailed
@@ -52,15 +52,18 @@ private extension ProductSyncManager {
     }
 
     /// URL 요청을 통해 리디렉션된 최종 URL 반환 (공통)
-    func requsetHTML(url: URL) async throws -> String {
+    func requestHTML(platform: PlatformEntity, url: URL) async throws -> String {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.timeoutInterval = 10
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-        request.setValue(
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
-            forHTTPHeaderField: "User-Agent"
-        )
+        
+        if platform != .kream {
+            request.setValue(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+                forHTTPHeaderField: "User-Agent"
+            )
+        }
 
         do {
             let (data, _) = try await URLSession.shared.data(for: request)

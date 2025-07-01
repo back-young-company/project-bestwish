@@ -80,17 +80,11 @@ final class HomeViewModel: ViewModel {
 // MARK: - useCase 메서드 호출
 private extension HomeViewModel {
     /// Supabase 플랫폼 시퀀스 가져오기
-    func getPlatformSequence() async throws -> [PlatformItem] {
+    func getPlatformSequence() async throws -> [PlatformEntity] {
         let result = try await self.useCase.getPlatformSequence()
         return result.compactMap { platform in
             guard platform <= 8 else { return nil }
-            let shopPlatform = PlatformEntity.allCases[platform]
-            
-            return PlatformItem(
-                platformName: shopPlatform.platformName,
-                platformImage: shopPlatform.platformImage,
-                platformDeepLink: shopPlatform.platformDeepLink
-            )
+            return PlatformEntity.allCases[platform]
         }
     }
 
@@ -105,7 +99,9 @@ private extension HomeViewModel {
                 productName: item.title,
                 productSaleRate: (item.discountRate ?? "") + "%",
                 productPrice: (item.price?.formattedPrice() ?? "") + "원",
-                productDeepLink: item.productURL ?? ""
+                productDeepLink: item.productURL ?? "",
+                platformImage: PlatformEntity(index: item.platform ?? 0)?.platformImage ?? "",
+                platformName: PlatformEntity(index: item.platform ?? 0)?.platformName ?? ""
             )
         }
     }

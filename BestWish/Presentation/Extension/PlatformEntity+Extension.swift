@@ -9,6 +9,11 @@ import Foundation
 
 // MARK: - Presentation 레이어에서 사용하기 위한 Extension
 extension PlatformEntity {
+    
+    init?(index: Int) {
+        self = Self.allCases[index]
+    }
+    
     var platformName: String {
         switch self {
         case .all:

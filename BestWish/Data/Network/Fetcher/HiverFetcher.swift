@@ -25,7 +25,7 @@ final class HiverFetcher: ProductDTORepository {
 
             // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추추출
             let price = html.htmlExtractValue(pattern: #""sale_price"\s*:\s*(\d+)"#, transform: { Int($0) })
-            let discount = html.htmlExtractValue(pattern: #""original_sale_percent"\s*:\s*(\d+)"#, transform: { $0 })
+            let discountRate = html.htmlExtractValue(pattern: #""original_sale_percent"\s*:\s*(\d+)"#, transform: { $0 })
             let sellerName = html.htmlExtractValue(pattern: #""seller"\s*:\s*\{[^}]*?"name"\s*:\s*"([^"]+)""#, transform: { $0 })
             
             return ProductDTO(
@@ -34,7 +34,7 @@ final class HiverFetcher: ProductDTORepository {
                 platform: 8,
                 title: title,
                 price: price,
-                discountRate: discount,
+                discountRate: discountRate ?? "0",
                 brand: sellerName,
                 imagePathURL: imageURL,
                 productURL: deepLink?.absoluteString,

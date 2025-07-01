@@ -19,6 +19,7 @@ extension AppError {
             "알 수 없는 에러"
         case .authError(_), .keyChainError(_):
             "인증 에러"
+        default: ""
         }
     }
 }

@@ -106,7 +106,7 @@ final class ImageEditViewController: UIViewController {
                 vc.modalPresentationStyle = .pageSheet
                 owner.present(vc, animated: true)
             }) { owner, error in
-                guard let error = error as? CoreMLError else { return }
+                guard let error = error as? AppError else { return }
                 NSLog(error.errorDescription ?? "")
             }
             .disposed(by: disposeBag)
