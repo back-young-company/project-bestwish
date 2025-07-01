@@ -78,7 +78,7 @@ private extension ShareViewModel {
                     guard let self, let text = item as? String else { return }
 
                     // ✅ URL 형식만 처리 → 크림 텍스트 무시됨
-                    guard text.hasPrefix("[KREAM]") else { return }
+                    guard !text.hasPrefix("[KREAM]") else { return }
                     self.handleSharedText(text)
                 }
             }
