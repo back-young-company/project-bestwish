@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// 에이블리 Fetcher
 final class AblyFetcher: ProductDTOFetcher {

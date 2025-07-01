@@ -7,6 +7,7 @@
 
 import BestWishDomain
 import UIKit
+import BestWishDomain
 
 internal import Kingfisher
 internal import SnapKit

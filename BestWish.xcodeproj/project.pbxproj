@@ -13,7 +13,7 @@
 		14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
 		14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
 		14C3CB622E026200002F341A /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 14C3CB612E026200002F341A /* RxRelay */; };
-		CB387E0B2E13AF2900E29D1C /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E0A2E13AF2900E29D1C /* TOCropViewController */; };
+		CB27AB902E13F7C400E5CDC3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */; };
 		CB387E0F2E13AFFB00E29D1C /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E0E2E13AFFB00E29D1C /* CropViewController */; };
 		CB387E122E13B01000E29D1C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */; };
 		CB387E142E13B02E00E29D1C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E132E13B02E00E29D1C /* IQKeyboardManagerSwift */; };
@@ -40,26 +40,19 @@
 			remoteGlobalIDString = 14B8B6382DF6861400B7F5F8;
 			remoteInfo = BestWishShareExtension;
 		};
-		CB27B3D82E13FFD200E5CDC3 /* PBXContainerItemProxy */ = {
+		CB27AB882E13F77E00E5CDC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = CBC7E9472E1263E500F6288C;
 			remoteInfo = BestWishData;
 		};
-		CB27B3DA2E13FFD200E5CDC3 /* PBXContainerItemProxy */ = {
+		CB27AB8A2E13F77E00E5CDC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
 			remoteInfo = BestWishDomain;
-		};
-		CB27B3DC2E13FFD200E5CDC3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CBC7E9B42E12715800F6288C;
-			remoteInfo = BestWishPresentation;
 		};
 		CBC7E99B2E1269C000F6288C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -193,49 +186,6 @@
 			);
 			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
 		};
-		CBC7E9522E1263F600F6288C /* Exceptions for "BestWishData" folder in "BestWishShareExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Data/KeyChain/Error/KeyChainError.swift,
-				Data/KeyChain/Manager/KeyChainManager.swift,
-				Data/KeyChain/Manager/Token.swift,
-				Data/Network/DTO/AblyResponseDTO.swift,
-				Data/Network/DTO/ProductDTO.swift,
-				Data/Network/DTO/UserDTO.swift,
-				Data/Network/Error/CoreMLError.swift,
-				Data/Network/Error/MappingError.swift,
-				Data/Network/Error/ProductSyncError.swift,
-				Data/Network/Error/SupabaseError.swift,
-				Data/Network/Manager/ProductSync/Fetcher/AblyFetcher.swift,
-				Data/Network/Manager/ProductSync/Fetcher/MusinsaFetcher.swift,
-				Data/Network/Manager/ProductSync/Fetcher/ZigzagFetcher.swift,
-				Data/Network/Manager/ProductSync/ProductSyncManager.swift,
-				Data/Network/Manager/Supabase/SupabaseManager.swift,
-				Data/Network/Manager/Supabase/SupabaseTable.swift,
-				Data/Network/Manager/Supabase/SupabaseUserInfoManager.swift,
-				Data/Repository/ProductSyncRepositoryImpl.swift,
-				Data/Repository/WishListRepositoryImpl.swift,
-				"Data/Util/Bundle+Util.swift",
-				"Data/Util/Platform+Util.swift",
-				"Data/Util/String+Util.swift",
-			);
-			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
-		};
-		CBC7E9842E12663400F6288C /* Exceptions for "BestWishDomain" folder in "BestWishShareExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Domain/Entity/PlatformEntity.swift,
-				Domain/Entity/ProductEntity.swift,
-				Domain/Entity/SocialType.swift,
-				Domain/Entity/UserEntity.swift,
-				Domain/Error/AppError.swift,
-				Domain/Interface/ProductSyncRepository.swift,
-				Domain/Interface/WishListRepository.swift,
-				Domain/UseCase/ProductSyncUseCase.swift,
-				Domain/UseCase/WishListUseCase.swift,
-			);
-			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
-		};
 		CBC7E9C62E12716B00F6288C /* Exceptions for "BestWishPresentation" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -364,7 +314,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB387E0B2E13AF2900E29D1C /* TOCropViewController in Frameworks */,
 				CB387E122E13B01000E29D1C /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,9 +400,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				CB27B3D92E13FFD200E5CDC3 /* PBXTargetDependency */,
-				CB27B3DB2E13FFD200E5CDC3 /* PBXTargetDependency */,
-				CB27B3DD2E13FFD200E5CDC3 /* PBXTargetDependency */,
+				CB27AB892E13F77E00E5CDC3 /* PBXTargetDependency */,
+				CB27AB8B2E13F77E00E5CDC3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */,
@@ -675,6 +623,7 @@
 				CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 				CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -787,20 +736,15 @@
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
 			targetProxy = 14B8B6412DF6861400B7F5F8 /* PBXContainerItemProxy */;
 		};
-		CB27B3D92E13FFD200E5CDC3 /* PBXTargetDependency */ = {
+		CB27AB892E13F77E00E5CDC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CBC7E9472E1263E500F6288C /* BestWishData */;
-			targetProxy = CB27B3D82E13FFD200E5CDC3 /* PBXContainerItemProxy */;
+			targetProxy = CB27AB882E13F77E00E5CDC3 /* PBXContainerItemProxy */;
 		};
-		CB27B3DB2E13FFD200E5CDC3 /* PBXTargetDependency */ = {
+		CB27AB8B2E13F77E00E5CDC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
-			targetProxy = CB27B3DA2E13FFD200E5CDC3 /* PBXContainerItemProxy */;
-		};
-		CB27B3DD2E13FFD200E5CDC3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
-			targetProxy = CB27B3DC2E13FFD200E5CDC3 /* PBXContainerItemProxy */;
+			targetProxy = CB27AB8A2E13F77E00E5CDC3 /* PBXContainerItemProxy */;
 		};
 		CBC7E99C2E1269C000F6288C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1529,6 +1473,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.8;
+			};
+		};
 		CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
@@ -1622,6 +1574,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 		CB387E0A2E13AF2900E29D1C /* TOCropViewController */ = {
 			isa = XCSwiftPackageProductDependency;

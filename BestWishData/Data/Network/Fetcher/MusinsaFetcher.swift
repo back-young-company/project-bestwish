@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// 무신사 Fetcher
 final class MusinsaFetcher: ProductDTOFetcher {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// 지그재그 fetcher
 final class ZigzagFetcher: ProductDTOFetcher {

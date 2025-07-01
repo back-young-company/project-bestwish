@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// 29CM 페쳐
 final class _29CMFetcher: ProductDTOFetcher {

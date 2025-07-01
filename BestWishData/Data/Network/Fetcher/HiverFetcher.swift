@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// Hiver 페쳐
 final class HiverFetcher: ProductDTOFetcher {

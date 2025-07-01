@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// 4910 페쳐
 final class _4910Fetcher: ProductDTOFetcher {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// 크림 페쳐
 final class KreamFetcher: ProductDTOFetcher {
