@@ -30,7 +30,7 @@ final class TabBarViewController: UIViewController {
     private var childrenFrame: CGRect {
         var height = UIScreen.main.bounds.height
         if !isHiddenTabBar.value {
-            height -= height < 700 ? 60 : 90
+            height -= height < 700 ? 50 : 80
         }
         return CGRect(
             x: 0,
