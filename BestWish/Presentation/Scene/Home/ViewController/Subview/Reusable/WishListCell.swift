@@ -80,8 +80,6 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview().offset(isLastRow ?? false ? -80 : 0)
         }
-        
-        _productImageView.updateShadowPath()
     }
 }
 
