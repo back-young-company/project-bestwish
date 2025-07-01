@@ -13,8 +13,8 @@ protocol AccountRepository {
     /// Supabase 세션 연결 확인
     func checkSupabaseSession() async -> Bool
 
-	/// 온보딩 확인
-    func checkOnboardingState() async throws -> Bool
+	/// 회원가입 확인
+    func checkSignInState() async throws -> Bool
 
 	/// 로그인
     func login(type: SocialType) async throws

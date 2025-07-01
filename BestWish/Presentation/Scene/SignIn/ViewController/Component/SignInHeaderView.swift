@@ -1,5 +1,5 @@
 //
-//  OnboardingHeaderView.swift
+//  SignInHeaderView.swift
 //  BestWish
 //
 //  Created by yimkeul on 6/11/25.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-/// 온보딩 헤더 영역
-final class OnboardingHeaderView: UIView {
+/// 회원가입 헤더 영역
+final class SignInHeaderView: UIView {
 
     private let _rootVStackView = VerticalStackView(spacing: 12)
     private let _pageInfoLabel: PageInfoView
@@ -29,7 +29,7 @@ final class OnboardingHeaderView: UIView {
 }
 
 // MARK: - private 메서드
-private extension OnboardingHeaderView {
+private extension SignInHeaderView {
     func setView() {
         setAttributes()
         setHierarchy()

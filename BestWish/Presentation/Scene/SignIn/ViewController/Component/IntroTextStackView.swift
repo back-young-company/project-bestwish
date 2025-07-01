@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-/// 온보딩 헤더뷰 내 텍스트 모음 
+/// 회원가입 헤더뷰 내 텍스트 모음 
 final class IntroTextStackView: UIView {
 
     private let _rootVStackView = VerticalStackView(spacing: 12)

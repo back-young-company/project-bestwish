@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// 온보딩 헤더뷰에 사용되는 페이지 라벨
+/// 회원가입 헤더뷰에 사용되는 페이지 라벨
 final class PageInfoView: UILabel {
 
     init(current: Int, total: Int) {

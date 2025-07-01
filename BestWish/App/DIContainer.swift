@@ -67,6 +67,12 @@ final class DIContainer {
         )
     }
 
+    /// 온보딩 뷰 컨트롤러 생성
+    func makeOnboardingViewController() -> OnboardingViewController {
+        let viewModel = OnboardingViewModel()
+        return OnboardingViewController(viewModel: viewModel)
+    }
+
     /// 홈 뷰 컨트롤러 생성
     func makeHomeViewController() -> HomeViewController {
         let viewModel = HomeViewModel(useCase: wishListUseCase)
@@ -85,7 +91,7 @@ final class DIContainer {
         return WishListEditViewController(wishEditViewModel: viewModel)
     }
 
-    /// 링크 저장 뷰 컨트롤러 생성
+    /// 상품 추가 뷰 컨트롤러 생성
     func makeLinkSaveViewController() -> LinkSaveViewController {
         let viewModel = LinkSaveViewModel(
             wishListUseCase: wishListUseCase,
@@ -129,11 +135,11 @@ final class DIContainer {
         return LoginViewController(viewModel: viewModel)
     }
 
-    func makeOnboardingViewController() -> OnboardingViewController {
-        let onboardingViewModel = OnboardingViewModel(useCase: userInfoUseCase)
+    func makeSignInViewController() -> SignInViewController {
+        let signInViewModel = SignInViewModel(useCase: userInfoUseCase)
         let policyViewModel = PolicyViewModel()
-        return OnboardingViewController(
-            viewModel: onboardingViewModel,
+        return SignInViewController(
+            viewModel: signInViewModel,
             policyViewModel: policyViewModel
         )
     }

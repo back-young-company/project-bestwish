@@ -86,6 +86,9 @@ final class MyPageViewController: UIViewController {
                 case .privacyPolicy:
                     let nextVC = PDFViewController(type: .privacyPolicy)
                     self.present(nextVC, animated: true)
+                case .onboarding:
+                    let nextVC = DIContainer.shared.makeOnboardingViewController()
+                    self.present(nextVC, animated: true)
                 case .logout:
                     AlertBuilder(baseViewController: self, type: .logout) {
                         owner.viewModel.action.onNext(.logout)

@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-/// 링크 저장 View Controller
+/// 상품 추가 View Controller
 final class LinkSaveViewController: UIViewController {
 
     // MARK: - Private Property
@@ -73,7 +73,7 @@ final class LinkSaveViewController: UIViewController {
         }.disposed(by: disposeBag)
 
         linkSaveView.saveButton.rx.tap
-            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.instance)
+            .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
             .withLatestFrom(linkSaveView.linkInputTextField.rx.text.orEmpty) { _, url in
                 return url
             }

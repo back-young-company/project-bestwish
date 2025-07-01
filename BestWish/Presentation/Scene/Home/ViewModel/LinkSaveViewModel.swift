@@ -10,7 +10,7 @@ import Foundation
 import RxRelay
 import RxSwift
 
-/// 링크 저장 View Model
+/// 상품 추가 View Model
 final class LinkSaveViewModel: ViewModel {
 
     // MARK: - Action

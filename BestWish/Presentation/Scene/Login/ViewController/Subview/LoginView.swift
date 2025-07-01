@@ -5,30 +5,37 @@
 //  Created by yimkeul on 6/7/25.
 //
 
+import AuthenticationServices
 import UIKit
+
 import SnapKit
 import Then
-import AuthenticationServices
 
+/// 로그인 화면
 final class LoginView: UIView {
 
-    private let loginLogoImageView = UIImageView()
-    private let buttonVStackView = VerticalStackView(spacing: 12)
-    let kakaoLoginButton = UIButton()
-    let appleLoginButton = UIButton()
+    // MARK: - Private Property
+    private let _loginLogoImageView = UIImageView()
+    private let _buttonVStackView = VerticalStackView(spacing: 12)
+    private let _kakaoLoginButton = UIButton()
+    private let _appleLoginButton = UIButton()
+
+    // MARK: - Internal Property
+    var kakaoLoginButton: UIButton { _kakaoLoginButton }
+    var appleLoginButton: UIButton { _appleLoginButton }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setView()
     }
 
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError()
     }
 
 }
 
+// MARK: - private 메서드
 private extension LoginView {
     func setView() {
         setAttributes()
@@ -39,12 +46,12 @@ private extension LoginView {
     func setAttributes() {
         self.backgroundColor = .primary300
 
-        loginLogoImageView.do {
+        _loginLogoImageView.do {
             $0.image = UIImage(named: "loginLogo")?
                 .resize(to:CGSize(width: CGFloat(375).fitWidth, height: CGFloat(130).fitHeight))
         }
 
-        buttonVStackView.do {
+        _buttonVStackView.do {
             $0.alignment = .center
             $0.isLayoutMarginsRelativeArrangement = true
             $0.layoutMargins = UIEdgeInsets(
@@ -55,13 +62,13 @@ private extension LoginView {
             )
         }
 
-        kakaoLoginButton.do {
+        _kakaoLoginButton.do {
             $0.setImage(UIImage(named: "kakaoLogin"), for: .normal)
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
         }
 
-        appleLoginButton.do {
+        _appleLoginButton.do {
             $0.setImage(UIImage(named: "appleLogin"), for: .normal)
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
@@ -69,18 +76,18 @@ private extension LoginView {
     }
 
     func setHierarchy() {
-        self.addSubviews(loginLogoImageView, buttonVStackView)
-        buttonVStackView.addArrangedSubviews(kakaoLoginButton, appleLoginButton)
+        self.addSubviews(_loginLogoImageView, _buttonVStackView)
+        _buttonVStackView.addArrangedSubviews(_kakaoLoginButton, _appleLoginButton)
     }
 
     func setConstraints() {
-        loginLogoImageView.snp.makeConstraints {
+        _loginLogoImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(safeAreaLayoutGuide.snp.top)
                 .offset(CGFloat(132).fitHeight)
         }
 
-        buttonVStackView.snp.makeConstraints {
+        _buttonVStackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide).inset(CGFloat(110).fitHeight)
         }

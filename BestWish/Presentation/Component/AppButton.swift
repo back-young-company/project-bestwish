@@ -16,7 +16,7 @@ import Then
 /// private let button = AppButton(type: .analyze)
 /// ```
 final class AppButton: UIButton {
-    private let type: ButtonType
+    private var type: ButtonType
     private let fontSize: CGFloat
 
     override var isHighlighted: Bool {
@@ -41,6 +41,11 @@ final class AppButton: UIButton {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func changeButtonType(type: ButtonType) {
+        self.type = type
+        setView()
     }
 }
 

@@ -58,7 +58,8 @@ extension MyPageSectionType {
             [
                 MyPageCellType.question,
                 MyPageCellType.termsOfUse,
-                MyPageCellType.privacyPolicy
+                MyPageCellType.privacyPolicy,
+                MyPageCellType.onboarding
             ]
         case .setting:
             [MyPageCellType.logout]
@@ -72,6 +73,7 @@ enum MyPageCellType {
     case question
     case termsOfUse
     case privacyPolicy
+    case onboarding
     case logout
 
     init?(indexPath: IndexPath) {
@@ -80,6 +82,7 @@ enum MyPageCellType {
         case (1, 0): self = .question
         case (1, 1): self = .termsOfUse
         case (1, 2): self = .privacyPolicy
+        case (1, 3): self = .onboarding
         case (2, 0): self = .logout
         default: return nil
         }
@@ -94,7 +97,9 @@ extension MyPageCellType {
         case .question: "문의사항"
         case .termsOfUse: "서비스 이용 약관"
         case .privacyPolicy: "개인정보 처리 방침"
+        case .onboarding: "서비스 가이드"
         case .logout: "로그아웃"
+
         }
     }
 

@@ -12,7 +12,7 @@ import Foundation
 final class MockAccountUseCase: AccountUseCase {
     var shouldThrow = false
 
-    func checkOnboardingState() async throws -> Bool {
+    func checkSignInState() async throws -> Bool {
         true
     }
 
