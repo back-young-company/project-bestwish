@@ -16,6 +16,7 @@ import Then
 final class WishListCell: UICollectionViewCell, ReuseIdentifier {
 
     // MARK: - Private Property
+    private let _shadowContainerView = UIView()
     private let _productImageView = UIImageView()
     private let _editButton = UIButton()
     private let _productSaleRateLabel = UILabel()
@@ -51,7 +52,7 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
 
     func configure(type: WishListProductItem, isHidden: Bool, isLastRow: Bool? = nil) {
         guard let url = URL(string: type.productImageURL ?? "") else { return }
-        _productImageView.kf.setImage(with: url)
+
         _productSaleRateLabel.text = type.productSaleRate
         _productPriceLabel.text = type.productPrice
         _productNameLabel.text = type.productName
@@ -61,7 +62,19 @@ final class WishListCell: UICollectionViewCell, ReuseIdentifier {
         _platformNameLabel.text = type.platformName
         
         _productSaleRateLabel.isHidden = type.productSaleRate == "0%"
-        
+        _productImageView.kf.setImage(with: url) { [weak self] result in
+            guard let self else { return }
+
+            switch result {
+            case .success(let value):
+                let imageWithBackground = value.image.withBackground()
+                self._productImageView.image = imageWithBackground
+                self._shadowContainerView.updateShadowPath()
+            case .failure(let error):
+                NSLog(#function + "\(error.localizedDescription)")
+            }
+        }
+
         _vStackView.snp.remakeConstraints {
             $0.top.equalTo(_productImageView.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview()
@@ -81,13 +94,14 @@ private extension WishListCell {
     }
 
     func setAttributes() {
-        contentView.do {
+        _shadowContainerView.do {
+            $0.layer.cornerRadius = 12
             $0.layer.shadowColor = UIColor.gray900?.cgColor
             $0.layer.shadowOpacity = 0.1
-            $0.layer.shadowOffset = CGSize(width: 0, height: 0.5)
+            $0.layer.shadowOffset = CGSize(width: 0, height: 1)
             $0.layer.shadowRadius = 4
         }
-    
+
         _productImageView.do {
             $0.clipsToBounds = true
             $0.layer.cornerRadius = 12
@@ -138,23 +152,28 @@ private extension WishListCell {
     }
 
     func setHierarchy() {
-        self.contentView.addSubviews(_productImageView, _editButton, _vStackView)
+        self.contentView.addSubviews(_shadowContainerView, _editButton, _vStackView)
+        _shadowContainerView.addSubview(_productImageView)
         _platformHStack.addArrangedSubviews(_platformImageView, _platformNameLabel)
-        _vStackView.addArrangedSubviews(_platformHStack, _hStackView, _productNameLabel, _brandNameLabel)
         _hStackView.addArrangedSubviews(_productSaleRateLabel, _productPriceLabel)
+        _vStackView.addArrangedSubviews(_platformHStack, _hStackView, _productNameLabel, _brandNameLabel)
     }
 
     func setConstraints() {
+        _shadowContainerView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(_shadowContainerView.snp.width)
+          }
+
+        _productImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
         _platformImageView.snp.makeConstraints {
             $0.size.equalTo(16)
         }
-        
-        _productImageView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(_productImageView.snp.width)
-        }
-        
+
         _editButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(10)
             $0.trailing.equalToSuperview().offset(-10)
