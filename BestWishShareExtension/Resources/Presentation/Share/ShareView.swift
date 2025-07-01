@@ -79,7 +79,7 @@ private extension ShareView {
         }
         
         _descriptionLabel.do {
-            $0.text = "저장이 완료되면 앱으로 다시 돌아가 주세요"
+            $0.text = "저장이 완료되면 앱으로 다시 돌아가 주세요."
             $0.font = .font(.pretendardMedium, ofSize: 16)
             $0.textColor = .gray500
         }

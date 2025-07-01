@@ -119,6 +119,7 @@
 				Presentation/Interface/ViewModel.swift,
 				Presentation/Model/ProductModel.swift,
 				"Resource/Fonts/Pretendard-Bold.otf",
+				"Resource/Fonts/Pretendard-Medium.otf",
 			);
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
 		};
