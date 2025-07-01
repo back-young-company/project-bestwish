@@ -5,7 +5,6 @@
 //  Created by 백래훈 on 6/14/25.
 //
 
-import BestWishPresentation
 import UIKit
 
 internal import SnapKit

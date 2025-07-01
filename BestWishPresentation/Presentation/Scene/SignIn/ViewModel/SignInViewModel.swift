@@ -12,7 +12,7 @@ internal import RxRelay
 internal import RxSwift
 
 /// 회원가입 View Model
-final class SignInViewModel: ViewModel {
+public final class SignInViewModel: ViewModel {
 
     // MARK: - Action
     enum Action {
@@ -54,7 +54,7 @@ final class SignInViewModel: ViewModel {
     private let useCase: UserInfoUseCase
     private let disposeBag = DisposeBag()
 
-    init(useCase: UserInfoUseCase) {
+    public init(useCase: UserInfoUseCase) {
         self.useCase = useCase
         state = State(
             userInfo: _userInfo.asObservable(),

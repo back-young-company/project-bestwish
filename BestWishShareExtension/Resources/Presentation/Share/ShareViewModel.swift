@@ -6,7 +6,6 @@
 //
 
 import BestWishDomain
-import BestWishPresentation
 import Foundation
 
 internal import RxSwift

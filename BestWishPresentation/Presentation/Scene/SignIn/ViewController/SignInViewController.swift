@@ -12,7 +12,7 @@ internal import IQKeyboardReturnManager
 internal import RxSwift
 
 /// 회원가입 View Controller
-final class SignInViewController: UIViewController {
+public final class SignInViewController: UIViewController {
 
     private let viewModel: SignInViewModel
     private let policyViewModel: PolicyViewModel
@@ -22,7 +22,7 @@ final class SignInViewController: UIViewController {
     private let signInViews: [UIView]
     private let returnManager: IQKeyboardReturnManager = .init()
 
-    init(viewModel: SignInViewModel, policyViewModel: PolicyViewModel) {
+    public init(viewModel: SignInViewModel, policyViewModel: PolicyViewModel) {
         self.viewModel = viewModel
         self.policyViewModel = policyViewModel
         self.signInViews = [firstView, secondView]
@@ -33,18 +33,18 @@ final class SignInViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidAppear(_ animated: Bool) {
+    public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.action.onNext(.viewDidAppear)
         viewModel.action.onNext(.createUserInfo)
     }
 
 
-    override func loadView() {
+    public override func loadView() {
         view = firstView
     }
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         returnManager.lastTextInputViewReturnKeyType = .done
         bindView()
@@ -230,7 +230,7 @@ private extension SignInViewController {
 
 // MARK: - 화면 포커싱 추적
 extension SignInViewController: UIAdaptivePresentationControllerDelegate {
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         // 모달이 내려간 시점에 원래 색으로 복구
         firstView.birthSelection.dateButton.layer.borderColor = UIColor.gray200?.cgColor
     }

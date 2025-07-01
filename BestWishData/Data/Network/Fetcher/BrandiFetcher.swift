@@ -7,7 +7,7 @@
 
 import Foundation
 
-import SwiftSoup
+internal import SwiftSoup
 
 /// 브랜디 Fetcher
 final class BrandiFetcher: ProductDTOFetcher {
