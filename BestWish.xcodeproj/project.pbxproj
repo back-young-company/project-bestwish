@@ -23,6 +23,8 @@
 		CB259A122E15432600632E12 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6442E1402B100E5CDC3 /* TOCropViewController */; };
 		CB259A132E15432600632E12 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */; };
 		CB259A142E15432600632E12 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6482E1402B100E5CDC3 /* SwiftSoup */; };
+		CB259C6D2E1544B200632E12 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CB259C6C2E1544B200632E12 /* RxCocoa */; };
+		CB259C6F2E1544B200632E12 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB259C6E2E1544B200632E12 /* RxSwift */; };
 		CB27AB902E13F7C400E5CDC3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */; };
 		CB387E0F2E13AFFB00E29D1C /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E0E2E13AFFB00E29D1C /* CropViewController */; };
 		CB387E142E13B02E00E29D1C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E132E13B02E00E29D1C /* IQKeyboardManagerSwift */; };
@@ -48,6 +50,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 14B8B6382DF6861400B7F5F8;
 			remoteInfo = BestWishShareExtension;
+		};
+		CB259C662E15447B00632E12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9472E1263E500F6288C;
+			remoteInfo = BestWishData;
+		};
+		CB259C682E15447B00632E12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
+			remoteInfo = BestWishDomain;
+		};
+		CB259C6A2E15447B00632E12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9B42E12715800F6288C;
+			remoteInfo = BestWishPresentation;
 		};
 		CB27AB882E13F77E00E5CDC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -324,6 +347,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB259C6F2E1544B200632E12 /* RxSwift in Frameworks */,
+				CB259C6D2E1544B200632E12 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -562,6 +587,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				CB259C672E15447B00632E12 /* PBXTargetDependency */,
+				CB259C692E15447B00632E12 /* PBXTargetDependency */,
+				CB259C6B2E15447B00632E12 /* PBXTargetDependency */,
 				CBD6BA292DEF1B3B003242CA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -569,6 +597,8 @@
 			);
 			name = BestWishTests;
 			packageProductDependencies = (
+				CB259C6C2E1544B200632E12 /* RxCocoa */,
+				CB259C6E2E1544B200632E12 /* RxSwift */,
 			);
 			productName = BestWishTests;
 			productReference = CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */;
@@ -737,6 +767,21 @@
 			isa = PBXTargetDependency;
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
 			targetProxy = 14B8B6412DF6861400B7F5F8 /* PBXContainerItemProxy */;
+		};
+		CB259C672E15447B00632E12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+			targetProxy = CB259C662E15447B00632E12 /* PBXContainerItemProxy */;
+		};
+		CB259C692E15447B00632E12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
+			targetProxy = CB259C682E15447B00632E12 /* PBXContainerItemProxy */;
+		};
+		CB259C6B2E15447B00632E12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
+			targetProxy = CB259C6A2E15447B00632E12 /* PBXContainerItemProxy */;
 		};
 		CB27AB892E13F77E00E5CDC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1576,6 +1621,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		CB259C6C2E1544B200632E12 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		CB259C6E2E1544B200632E12 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
 		};
 		CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */ = {
 			isa = XCSwiftPackageProductDependency;
