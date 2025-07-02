@@ -273,7 +273,7 @@ extension AppCoordinator: CameraFlowDelegate {
 extension AppCoordinator: ImageEditFlowDelegate {
     /// 뒤로가기 버튼 터치
     func didTapCancelButton() {
-        navigationController.dismiss(animated: false)
+        cameraNavigation?.viewControllers.last?.dismiss(animated: false)
     }
 
     /// 라벨데이터 요청 완료
