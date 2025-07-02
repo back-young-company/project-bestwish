@@ -193,8 +193,12 @@ ex) feature/#4-home-ui
 - [CI/CD 관련](https://quarang.tistory.com/113)
 
 이수현
+- [Clean Architecture 구조에서의 Error 설계에 대한 고찰](https://soo-hyn.tistory.com/153)
 
 이세준
+- [키보드 UI 관련](https://buly.kr/7QMM3rN)
+- [OAuth 관련](https://velog.io/@yimkeul/Supabase-Auth)
+- [메모리 누수 관련](https://buly.kr/jZYms2)
 
 ## Usage
 ```
