@@ -83,6 +83,7 @@ public final class ImageEditViewController: UIViewController {
         
         // 뒤로가기 버튼 터치
         imageEditView.cancelButton.rx.tap
+            .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, _ in
                 let vc = owner.cropperVC
                 vc.delegate?.cropViewController?(vc, didFinishCancelled: true)

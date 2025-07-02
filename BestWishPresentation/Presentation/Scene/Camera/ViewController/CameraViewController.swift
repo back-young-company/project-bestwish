@@ -21,9 +21,10 @@ public final class CameraViewController: UIViewController {
     public weak var flowDelegate: CameraFlowDelegate? // 화면 이동 딜리게이트
 
     private var session: AVCaptureSession?                      // 카메라 입력, 출력을 연결하는 세션 객체
-    private let output = AVCapturePhotoOutput()                 // 사진 촬영을 담당하는 출력 객체
+    private var output = AVCapturePhotoOutput()                 // 사진 촬영을 담당하는 출력 객체
     private var currentCameraPosition: AVCaptureDevice.Position = .back
-    private let globalQueue = DispatchQueue(label: "BestWish.globalQueue", qos: .userInteractive)
+    private let mainQueue = DispatchQueue.main
+    private let serialQueue = DispatchQueue(label: "BestWish.globalQueue")
     
     // MARK: - Internal Property
     var getHeaderHomeButton: UIBarButtonItem { return cameraView.homeButton }
@@ -42,13 +43,14 @@ public final class CameraViewController: UIViewController {
     /// 뷰가 보일 떄마다 이벤트 방출
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        output = AVCapturePhotoOutput()
         viewModel.action.onNext(.viewDidLoad)
     }
     
     /// 뷰가 사라질 때마다 카메라 세션 종료 및 삭제
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        globalQueue.async { [weak self] in
+        mainQueue.async { [weak self] in
             guard let self else { return }
             self.session?.stopRunning()
             self.session = nil
@@ -83,9 +85,12 @@ public final class CameraViewController: UIViewController {
             cameraView.previewLayer.videoGravity = .resizeAspectFill
             
             // 카메라 세션 시작
-            globalQueue.async { session.startRunning() }
+            serialQueue.async { session.startRunning() }
             
-            self.session = session
+            mainQueue.async { [weak self] in
+                self?.session = session
+            }
+            
         } catch {
             NSLog("카메라 설정 에러\(error)")
         }
@@ -110,19 +115,24 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
                 image = UIImage(cgImage: cgImage, scale: image.scale, orientation: .leftMirrored)
             }
         }
+        mainQueue.async { [weak self] in
+            self?.session?.stopRunning()
+            self?.presentImageCropper(with: image)
+        }
         
-        session?.stopRunning()
-        presentImageCropper(with: image)
+        
     }
     
     /// 이미지 크로퍼 뷰 present
     public func presentImageCropper(with image: UIImage) {
         guard let imageData = image.pngData() else { return }
-        flowDelegate?.presentImageCropper(
-            imageData: imageData,
-            session: session,
-            queue: globalQueue
-        )
+        self.flowDelegate?.presentImageCropper(imageData: imageData) { [weak self] in
+            guard let self else { return }
+            self.serialQueue.async {
+                self.session?.startRunning()
+            }
+        }
+        
 //        let imageEditVC = DIContainer.shared.makeImageEditController(imageData: imageData)
 //        imageEditVC.onDismiss = { [weak self] in
 //            guard let self else { return }

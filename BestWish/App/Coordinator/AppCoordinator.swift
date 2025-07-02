@@ -156,16 +156,11 @@ final class AppCoordinator {
     /// 이미지 편집 뷰 띄우기
     func showImageCropperView(
         imageData: Data,
-        session: AVCaptureSession?,
-        queue: DispatchQueue
+        completion: @escaping () -> Void
     )  {
         let imageEditVC = diContainer.makeImageEditController(imageData: imageData)
         imageEditVC.flowDelegate = self
-        imageEditVC.onDismiss = {
-            queue.async {
-                session?.startRunning()
-            }
-        }
+        imageEditVC.onDismiss = completion
 
         let navVC = UINavigationController(rootViewController: imageEditVC)
         navVC.modalPresentationStyle = .fullScreen
@@ -262,10 +257,9 @@ extension AppCoordinator: CameraFlowDelegate {
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(
         imageData: Data,
-        session: AVCaptureSession?,
-        queue: DispatchQueue
+        completion: @escaping () -> Void
     ) {
-        showImageCropperView(imageData: imageData, session: session, queue: queue)
+        showImageCropperView(imageData: imageData, completion: completion)
     }
 }
 

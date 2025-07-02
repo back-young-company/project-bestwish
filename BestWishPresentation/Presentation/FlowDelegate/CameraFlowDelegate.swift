@@ -13,7 +13,6 @@ public protocol CameraFlowDelegate: AnyObject {
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(
         imageData: Data,
-        session: AVCaptureSession?,
-        queue: DispatchQueue
-    ) 
+        completion: @escaping () -> Void
+    )
 }
