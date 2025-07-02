@@ -23,7 +23,22 @@
       width="150"
     />
   </a>
-
+  <a href="https://www.instagram.com/bestwish___official">
+    <img
+      alt="인스타"
+      src="./image-assets/인스타그램.png"
+      height="50"
+      width="150"
+    />
+  </a>
+    <a href="mailto:bycompany02@gmail.com">
+    <img
+      alt="이메일"
+      src="./image-assets/지메일.png"
+      height="50"
+      width="150"
+    />
+  </a>
 
 
 ---- 
@@ -186,10 +201,10 @@ ex) feature/#4-home-ui
 - [UIButton 가변 너비 & 줄바꿈 문제: titleLineBreakMode로 해결!](https://rb-ios.tistory.com/20)
 
 유영웅
-- [카메라 관련](https://quarang.tistory.com/110)
-- [이미지 분석뷰 관련](https://quarang.tistory.com/111)
-- [CoreML 관련](https://quarang.tistory.com/112)
-- [CI/CD 관련](https://quarang.tistory.com/113)
+- [카메라가 계속 켜진다..? 세션과 생명주기를 알아보자!](https://quarang.tistory.com/110)
+- [아니 Rx를 쓰면 무한루프가 따라온다고 ㅋㅋ 무한루프 방지하기](https://quarang.tistory.com/111)
+- ["인간시대 끝이 도래했다" - CoreML](https://quarang.tistory.com/112)
+- [이거 이렇게 자동화 하는거 아닌데~ - CI/CD 관련](https://quarang.tistory.com/113)
 
 이수현
 - [Clean Architecture 구조에서의 Error 설계에 대한 고찰](https://soo-hyn.tistory.com/153)
