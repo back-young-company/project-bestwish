@@ -51,12 +51,13 @@ final class CameraView: UIView {
     /// 회원가입 뷰 2초동안 표시
     public func showToast() {
         UIView.animate(withDuration: 0.3, animations: {
+            self._onboardingBackgroundView.isHidden = false
             self._onboardingBackgroundView.alpha = 1.0
         }) { _ in
             UIView.animate(withDuration: 0.5, delay: 2.0, options: [], animations: {
                 self._onboardingBackgroundView.alpha = 0.0
             }) { _ in
-                self._onboardingBackgroundView.removeFromSuperview()
+                self._onboardingBackgroundView.isHidden = true
             }
         }
     }
