@@ -5,9 +5,10 @@
 //  Created by 이수현 on 6/24/25.
 //
 
+@testable import BestWishDomain
+@testable import BestWishPresentation
 import Foundation
 import XCTest
-@testable import BestWish
 
 internal import RxSwift
 
