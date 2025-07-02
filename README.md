@@ -82,7 +82,7 @@
 
 
 ## 🛠️ Architecture
-<img src="./image-assets/아키텍쳐.png">
+<img src="./image-assets/architecture.png">
 
 
 ## ⚙️ Skills
