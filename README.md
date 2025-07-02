@@ -1,7 +1,7 @@
 # BEST WISH  <img src="./image-assets/ICON.png" width="100" align=left>
 ### 다양한 쇼핑 플랫폼의 위시리스트를 통합 관리 서비스
 
-<img src="./image-assets/표지.png">
+<img src="./image-assets/cover.png">
 
 > 바로가기 
 
@@ -16,7 +16,7 @@
   <a href="https://linktr.ee/bestwish___official">
     <img
       alt="Linktree"
-      src="image-assets/링크트리.png"
+      src="./image-assets/linktree.png"
       height="50"
       width="150"
     />
@@ -24,7 +24,7 @@
   <a href="https://www.instagram.com/bestwish___official">
     <img
       alt="인스타"
-      src="image-assets/인스타그램.png"
+      src="./image-assets/insta.png"
       height="50"
       width="150"
     />
@@ -32,7 +32,7 @@
     <a href="mailto:bycompany02@gmail.com">
     <img
       alt="이메일"
-      src="image-assets/지메일.png"
+      src="./image-assets/gmail.png"
       height="50"
       width="150"
     />
@@ -59,14 +59,14 @@
 ## 💫 MVP
 <table>
   <tr>
-    <td><img src="./image-assets/홈화면.png" width="300" /></td>
-    <td><img src="./image-assets/상품추가.png" width="300" /></td>
-    <td><img src="./image-assets/공유하기.png" width="300" /></td>
+    <td><img src="./image-assets/home.png" width="300" /></td>
+    <td><img src="./image-assets/product_add.png" width="300" /></td>
+    <td><img src="./image-assets/sharing.png" width="300" /></td>
   </tr>
   <tr>
-    <td><img src="./image-assets/위시리스트 편집.png" width="300" /></td>
-    <td><img src="./image-assets/패션 캡쳐.png" width="300" /></td>
-    <td><img src="./image-assets/키워드 추천.png" width="300" /></td>
+    <td><img src="./image-assets/wishlist_edit.png" width="300" /></td>
+    <td><img src="./image-assets/fashion_capture.png" width="300" /></td>
+    <td><img src="./image-assets/keyword_recommend.png" width="300" /></td>
   </tr>
 </table>
 
@@ -121,8 +121,8 @@ docs: README나 WIKI 등의 문서 개정
 
 comment: 필요한 주석 추가 및 변경
 design: 오로지 화면.레이아웃 조정
-rename:    파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우
-remove:    파일을 삭제하는 작업만 수행한 경우
+rename: 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우
+remove: 파일을 삭제하는 작업만 수행한 경우
 
 -------------------------------------
 
@@ -192,10 +192,10 @@ ex) feature/#4-home-ui
 
 |로직|플로우차트|
 |:---:|:---:|
-| **인증** | <img src="image-assets/온보딩_플로우차트.png" width="500"> |
-| **홈** | <img src="image-assets/홈화면_플로우차트.png" width="500"> |
-| **이미지 분석** | <img src="image-assets/이미지분석_플로우차트.png" width="500"> |
-| **마이페이지** | <img src="image-assets/마이페이지_플로우차트.png" width="500"> |
+| **인증** | <img src="./image-assets/onboarding_flow_chart.png" width="500"> |
+| **홈** | <img src="./image-assets/home_flow_chart.png" width="500"> |
+| **이미지 분석** | <img src="./image-assets/image_analysis_flow_chart.png" width="500"> |
+| **마이페이지** | <img src="./image-assets/mypage_flow_chart.png" width="500"> |
 
 
 ## ⚽️ Trouble Shooting
