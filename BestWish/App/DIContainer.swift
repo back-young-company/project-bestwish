@@ -14,8 +14,6 @@ import Foundation
 /// 의존성 주입 컨테이너
 final class DIContainer {
 
-    static let shared = DIContainer()
-
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
@@ -36,7 +34,7 @@ final class DIContainer {
     private let productSyncUseCase: ProductSyncUseCase
     private let wishListUseCase: WishListUseCase
 
-    private init() {
+    init() {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
         self.supabaseOAuthManager = SupabaseOAuthManagerImpl()

@@ -23,7 +23,7 @@ final class AppCoordinator {
     init(window: UIWindow) {
         self.window = window
         self.navigationController = UINavigationController()
-        self.diContainer = DIContainer.shared // 기존 싱글턴 DIContainer 사용
+        self.diContainer = DIContainer() // 기존 싱글턴 DIContainer 사용
         navigationController.setNavigationBarHidden(true, animated: false)
         window.rootViewController = navigationController // 초기 루트 뷰 컨트롤러 설정
         window.backgroundColor = .gray0
