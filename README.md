@@ -1,8 +1,10 @@
 
-# BEST WISH <img src="https://github.com/user-attachments/assets/ee49baed-655b-4bae-8c40-2e3ff616f740" align=left width =100/> 
+
+# BEST WISH  <img src="./image-assets/icon.png" width="100" align=left>
 ### 다양한 쇼핑 플랫폼의 위시리스트를 통합 관리 서비스
 
-![iPhone 13 mini - 180 (1)](https://github.com/user-attachments/assets/0f7a9e35-88bb-4d23-be4c-e95f90d2d0bb)
+<img src="../image-assets/표지.png">
+
 
 ### 🍎 앱 스토어 바로가기
  <a href="https://apps.apple.com/kr/app/bestwish/id6747424430">
@@ -21,21 +23,22 @@
 
 
 ## MVP
+## MVP
 <table>
-    <tr>
-      <td><img src="https://github.com/user-attachments/assets/a7240494-2927-48b4-9be9-fa9d608c1283" width="300"/></td>
-      <td><img src="https://github.com/user-attachments/assets/8d9b2f2d-f1b8-4620-ac3b-e83a943ac701" width="300"/></td>
-      <td><img src="https://github.com/user-attachments/assets/4f75dd81-8819-418a-8226-222671c02c6d" width="300"/></td>
-    </tr>
-      <tr>
-      <td><img src="https://github.com/user-attachments/assets/6936d578-851c-4daa-93d9-ba8722cc94c9" width="300"/></td>
-      <td><img src="https://github.com/user-attachments/assets/03761d2d-5a25-4bd4-9a81-1a3328f18c13" width="300"/></td>
-      <td><img src="https://github.com/user-attachments/assets/4b4126b7-224b-4806-b211-4d539df60b75" width="300"/></td>
-    </tr>
+  <tr>
+    <td><img src="./image-assets/홈.png" width="300" /></td>
+    <td><img src="./image-assets/링.png" width="300" /></td>
+    <td><img src="./image-assets/공.png" width="300" /></td>
+  </tr>
+  <tr>
+    <td><img src="./image-assets/상.png" width="300" /></td>
+    <td><img src="./image-assets/패.png" width="300" /></td>
+    <td><img src="./image-assets/키.png" width="300" /></td>
+  </tr>
 </table>
 
 ## Developers
-<img width="160px" src="https://avatars.githubusercontent.com/u/88128192?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/31721255?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/105594739?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/43426556?v=4"/> | 
+|<img width="160px" src="https://avatars.githubusercontent.com/u/88128192?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/31721255?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/105594739?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/43426556?v=4"/> | 
 |:-----:|:-----:|:-----:|:-----:|
 |[백래훈](https://github.com/RaeBaek)|[유영웅](https://github.com/QuaRang1225)|[이수현](https://github.com/LeeeeSuHyeon)|[이세준](https://github.com/Yimkeul)|
 |리더 👑|부리더 👑|팀원 👨🏻‍💻|팀원 👨🏻‍💻|
@@ -45,9 +48,8 @@
 
 
 ## 프로젝트 아키텍처
-![image](https://github.com/user-attachments/assets/65c8ad20-f05b-4d07-be1e-9d1fa08b2485)
+<img src="./image-assets/아키텍쳐.png">
 
- 
 
 ## 기술 스택
 | Name          | Description   |
@@ -94,7 +96,9 @@ merge: #(해당이슈) - Commit Merge
 </details>
 <details>
   <summary><strong>Branch Convention</strong></summary>
-**브랜치 구조**
+  
+#### 브랜치 구조
+
 - `main`
     - 운영 배포용 브랜치 (항상 안정 상태 유지)
     - 실제 배포 시 `main`에 머지하고 태그 버전(`v1.0.0`) 생성
@@ -146,6 +150,18 @@ ex) feature/#4-home-ui
   </tr>
 </table>
 
+## TroubleShoting
+백래훈
+
+유영웅
+- [카메라 관련](https://quarang.tistory.com/110)
+- [이미지 분석뷰 관련](https://quarang.tistory.com/111)
+- [CoreML 관련](https://quarang.tistory.com/112)
+- [CI/CD 관련](https://quarang.tistory.com/113)
+
+이수현
+
+이세준
 
 ## Usage
 ```
