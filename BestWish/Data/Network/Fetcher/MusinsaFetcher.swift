@@ -10,7 +10,7 @@ import Foundation
 import SwiftSoup
 
 /// 무신사 Fetcher
-final class MusinsaFetcher: ProductDTORepository {
+final class MusinsaFetcher: ProductDTOFetcher {
     /// 상품 데이터 fetch
     func fetchProductDTO(deepLink: URL?, productURL: URL?, html: String?) async throws -> ProductDTO {
         guard let html else {
