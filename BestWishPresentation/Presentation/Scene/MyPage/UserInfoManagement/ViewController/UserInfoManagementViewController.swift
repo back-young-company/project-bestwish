@@ -12,6 +12,9 @@ internal import RxSwift
 
 /// 유저 정보 관리 View Controller
 public final class UserInfoManagementViewController: UIViewController {
+
+    public weak var flowDelegate: MyPageFlowDelegate?
+
     private let viewModel: UserInfoManagementViewModel
     private let managementView = UserInfoManagementView()
     private let disposeBag = DisposeBag()
@@ -47,6 +50,7 @@ public final class UserInfoManagementViewController: UIViewController {
     private func bindView() {
         managementView.userInfoArrowButton.rx.tap
             .bind(with: self) { owner, _ in
+                owner.flowDelegate?.didTapUserInfoUpdateCell()
 //                let nextVC = DIContainer.shared.makeUserInfoUpdateViewController()
 //                owner.navigationController?.pushViewController(nextVC, animated: true)
             }.disposed(by: disposeBag)
@@ -70,7 +74,8 @@ public final class UserInfoManagementViewController: UIViewController {
 
         viewModel.state.isWithdraw
             .observe(on: MainScheduler.instance)
-            .bind { _ in
+            .bind(with: self) { owner, _ in
+                owner.flowDelegate?.didTapWithdraw()
 //                DummyCoordinator.shared.showLoginView()
             }.disposed(by: disposeBag)
 

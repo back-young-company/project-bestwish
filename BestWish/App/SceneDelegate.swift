@@ -11,7 +11,8 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    
+    var appCoordinator: AppCoordinator? // AppCoordinator 인스턴스 저장
+
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let url = URLContexts.first?.url else { return }
         
@@ -43,54 +44,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             /// Task 구현이 안전하지 않을시 다른 방법 고려 가능
 
 
-            let window = UIWindow(windowScene: windowScene)
-            self.window = window
-
-            // placeholder 루트 설정
-            window.rootViewController = UIViewController()
-            window.makeKeyAndVisible()
-
-            // LaunchScreen.storyboard에서 Splash 뷰 로드
-            let launchStoryboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-            guard let splashVC = launchStoryboard.instantiateInitialViewController(),
-                let splashView = splashVC.view else {
-                fatalError("LaunchScreen.storyboard initial VC 또는 view를 찾을 수 없습니다.")
-            }
-            splashView.frame = window.bounds
-            splashView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            window.addSubview(splashView)
-
-            // TODO: - 수정하기 (with DIContainer)
-            let repo = DIContainer.shared.makeAccountRepository()
-
-            // 초기화 로직 수행 후 화면 전환
-            Task {
-                let isAlive = await repo.checkSupabaseSession()
-
-                if isAlive {
-                    do {
-                        let didSignIn = try await repo.checkSignInState()
-                        await MainActor.run {
-                            splashView.removeFromSuperview()
-                            if didSignIn {
-                                self.showMainView()
-                            } else {
-                                self.showSignInView()
-                            }
-                        }
-                    } catch {
-                        await MainActor.run {
-                            splashView.removeFromSuperview()
-                            self.showLoginView()
-                        }
-                    }
-                } else {
-                    await MainActor.run {
-                        splashView.removeFromSuperview()
-                        self.showLoginView()
-                    }
-                }
-            }
+            window = UIWindow(windowScene: windowScene)
+            appCoordinator = AppCoordinator(window: window!)
+            appCoordinator?.start()
+            window?.makeKeyAndVisible()
         }
 
     // 나중에 지울 코드

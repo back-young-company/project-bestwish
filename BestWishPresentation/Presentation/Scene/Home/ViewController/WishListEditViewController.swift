@@ -19,7 +19,7 @@ public final class WishListEditViewController: UIViewController {
     private let wishEditView = WishListEditView()
     private let disposeBag = DisposeBag()
 
-    weak var delegate: HomeViewControllerUpdate?
+    public weak var delegate: HomeViewControllerUpdate?
 
     private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<WishListEditSectionModel>(
         configureCell: { dataSource, collectionView, indexPath, item in

@@ -14,6 +14,9 @@ internal import RxSwift
 
 /// 마이페이지 ViewController
 public final class MyPageViewController: UIViewController {
+
+    public weak var flowDelegate: MyPageFlowDelegate?
+
     private let viewModel: MyPageViewModel
     private let myPageView = MyPageView()
     private let disposeBag = DisposeBag()
@@ -42,8 +45,6 @@ public final class MyPageViewController: UIViewController {
     public init(viewModel: MyPageViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-
-        setNavigationBar(alignment: .left, title: "마이페이지")
     }
 
     required init?(coder: NSCoder) {
@@ -57,6 +58,7 @@ public final class MyPageViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        setNavigationBar(alignment: .left, title: "마이페이지")
         bindViewModel()
         bindView()
         viewModel.action.onNext(.getSection)
@@ -64,7 +66,8 @@ public final class MyPageViewController: UIViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
+        self.navigationController?.navigationBar.isHidden = false
         showTabBar()
         viewModel.action.onNext(.getUserInfo)
     }
@@ -76,6 +79,7 @@ public final class MyPageViewController: UIViewController {
                 switch MyPageCellType(indexPath: indexPath) {
                 case .userInfo:
                     owner.hidesTabBar()
+                    owner.flowDelegate?.didTapUserInfoManagementCell()
 //                    let managementViewController = DIContainer.shared.makeUserInfoManagementViewController()
 //                    owner.navigationController?.pushViewController(managementViewController, animated: true)
                 case .question:
@@ -87,6 +91,7 @@ public final class MyPageViewController: UIViewController {
                     let nextVC = PDFViewController(type: .privacyPolicy)
                     self.present(nextVC, animated: true)
                 case .onboarding:
+                    owner.flowDelegate?.didTapOnboardingCell()
 //                    let nextVC = DIContainer.shared.makeOnboardingViewController()
 //                    self.present(nextVC, animated: true)
                     return
@@ -104,6 +109,7 @@ public final class MyPageViewController: UIViewController {
         headerTapGesture.rx.event
             .bind(with: self) { owner, _ in
                 owner.hidesTabBar()
+                owner.flowDelegate?.didTapProflieUpateCell()
 //                let updateVC = DIContainer.shared.makeProfileUpdateViewController()
 //                owner.navigationController?.pushViewController(updateVC, animated: true)
             }.disposed(by: disposeBag)
@@ -123,8 +129,9 @@ public final class MyPageViewController: UIViewController {
 
         viewModel.state.isLogOut
             .observe(on: MainScheduler.instance)
-            .bind { _ in
+            .bind(with: self) { owner,  _ in
 //                DummyCoordinator.shared.showLoginView()
+                owner.flowDelegate?.didTapLogout()
             }
             .disposed(by: disposeBag)
 

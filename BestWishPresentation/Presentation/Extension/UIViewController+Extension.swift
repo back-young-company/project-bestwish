@@ -17,6 +17,7 @@ extension UIViewController {
 
     /// 내비게이션 바 설정
     func setNavigationBar(alignment: UIViewController.Alignment, title: String) {
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.tintColor = .gray900
         self.navigationItem.backButtonDisplayMode = .minimal
         let backImage = UIImage(systemName: "chevron.backward")?
@@ -38,7 +39,7 @@ extension UIViewController {
         case .left:
             let label = UILabel()
             label.text = title
-            label.textColor = .black
+            label.textColor = .gray900
             label.font = .font(.pretendardBold, ofSize: 20)
             let leftBarItem = UIBarButtonItem(customView: label)
             self.navigationItem.setLeftBarButton(leftBarItem, animated: true)

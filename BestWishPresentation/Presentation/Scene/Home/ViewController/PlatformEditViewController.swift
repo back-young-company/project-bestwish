@@ -22,7 +22,7 @@ public final class PlatformEditViewController: UIViewController {
 
     private var updatedIndices: [Int] = []
 
-    weak var delegate: HomeViewControllerUpdate?
+    public weak var delegate: HomeViewControllerUpdate?
 
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<PlatformEditSectionModel> (configureCell: { dataSource, tableView, indexPath, item in
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PlatformEditCell.identifier, for: indexPath) as? PlatformEditCell else { return UITableViewCell() }
@@ -151,7 +151,7 @@ extension PlatformEditViewController: UITableViewDelegate {
 }
 
 /// 플랫폼 및 위시리스트 업데이트를 위한 Protocol
-protocol HomeViewControllerUpdate: AnyObject {
+public protocol HomeViewControllerUpdate: AnyObject {
     /// 플랫폼 업데이트
     func updatePlatforms()
     /// 위시리스트 업데이트

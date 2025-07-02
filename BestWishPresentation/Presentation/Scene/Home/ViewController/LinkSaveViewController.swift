@@ -18,7 +18,7 @@ public final class LinkSaveViewController: UIViewController {
     private let linkSaveView = LinkSaveView()
     private let disposeBag = DisposeBag()
 
-    weak var delegate: HomeViewControllerUpdate?
+    public weak var delegate: HomeViewControllerUpdate?
 
     public init(viewModel: LinkSaveViewModel) {
         self.viewModel = viewModel

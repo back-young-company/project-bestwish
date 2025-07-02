@@ -14,6 +14,8 @@ internal import RxSwift
 /// 카메라 뷰 컨트롤러
 public final class CameraViewController: UIViewController {
 
+    public weak var flowDelegate: CameraFlowDelegate?
+
     // MARK: - Private Property
     private let viewModel = CameraViewModel()
     private let cameraView = CameraView()
@@ -117,6 +119,11 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
     /// 이미지 크로퍼 뷰 present
     public func presentImageCropper(with image: UIImage) {
         guard let imageData = image.pngData() else { return }
+        flowDelegate?.presentImageCropper(
+            imageData: imageData,
+            session: session,
+            queue: globalQueue
+        )
 //        let imageEditVC = DIContainer.shared.makeImageEditController(imageData: imageData)
 //        imageEditVC.onDismiss = { [weak self] in
 //            guard let self else { return }

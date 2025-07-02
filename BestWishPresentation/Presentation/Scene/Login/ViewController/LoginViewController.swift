@@ -13,6 +13,8 @@ internal import RxSwift
 /// 로그인 View Controller
 public final class LoginViewController: UIViewController {
 
+    public weak var flowDelegate: LoginFlowDelegate?
+
     private let loginView = LoginView()
     private let viewModel: LoginViewModel
     private let disposeBag = DisposeBag()
@@ -44,11 +46,12 @@ public final class LoginViewController: UIViewController {
         viewModel.state.readyToUseService
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, state in
-                if state {
+                owner.flowDelegate?.readyToUseService(state: state)
+//                if state {
 //                    DummyCoordinator.shared.showMainView()
-                } else {
+//                } else {
 //                    DummyCoordinator.shared.showSignInView()
-                }
+//                }
             }.disposed(by: disposeBag)
 
         /// oauth & 회원가입 에러시 alert

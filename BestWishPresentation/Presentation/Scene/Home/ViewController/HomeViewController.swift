@@ -14,6 +14,8 @@ internal import RxRelay
 /// 홈 View Controller
 public final class HomeViewController: UIViewController {
 
+    public weak var flowDelegate: HomeFlowDelegate?
+
     // MARK: - Private Property
     private let homeViewModel: HomeViewModel
     private let homeView = HomeView()
@@ -85,6 +87,7 @@ public final class HomeViewController: UIViewController {
                 headerView.configure(title: section.header.rawValue)
                 headerView.editButton.rx.tap
                     .bind(with: self) { owner, _ in
+                        owner.flowDelegate?.didTapPlatformEditButton(self)
 //                        let vc = DIContainer.shared.makePlatformEditViewController()
 //                        vc.delegate = owner
 //                        owner.navigationController?.pushViewController(vc, animated: true)
@@ -103,6 +106,7 @@ public final class HomeViewController: UIViewController {
 
                 headerView.linkButton.rx.tap
                     .bind(with: self) { owner, _ in
+                        owner.flowDelegate?.didTapLinkButton(self)
 //                        let alertViewController = DIContainer.shared.makeLinkSaveViewController()
 //                        alertViewController.modalPresentationStyle = .overFullScreen
 //                        alertViewController.modalTransitionStyle = .crossDissolve
@@ -142,6 +146,7 @@ public final class HomeViewController: UIViewController {
 
                 headerView.linkButton.rx.tap
                     .bind(with: self) { owner, _ in
+                        owner.flowDelegate?.didTapLinkButton(self)
 //                        let alertViewController = DIContainer.shared.makeLinkSaveViewController()
 //                        alertViewController.modalPresentationStyle = .overFullScreen
 //                        alertViewController.modalTransitionStyle = .crossDissolve
@@ -152,6 +157,7 @@ public final class HomeViewController: UIViewController {
 
                 headerView.editButton.rx.tap
                     .bind(with: self) { owner, _ in
+                        owner.flowDelegate?.didTapWishListEditButton(self)
 //                        let vc = DIContainer.shared.makeWishlistEditViewController()
 //                        vc.delegate = owner
 //                        owner.navigationController?.pushViewController(vc, animated: true)
@@ -249,12 +255,12 @@ private extension HomeViewController {
 // MARK: - Protocol 구현부
 extension HomeViewController: HomeViewControllerUpdate {
     /// 플랫폼 업데이트
-    func updatePlatforms() {
+    public func updatePlatforms() {
         self.homeViewModel.action.onNext(.platformUpdate)
     }
 
     /// 위시리스트 업데이트
-    func updateWishlists() {
+    public func updateWishlists() {
         self.homeViewModel.action.onNext(.wishListUpdate)
     }
 }
@@ -286,7 +292,7 @@ private extension HomeViewController {
     func setOnboarding() {
         let onboardingDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
         if let bool = onboardingDefaults?.bool(forKey: "onboarding"), !bool {
-
+            flowDelegate?.setOnboarding()
 //            let vc = DIContainer.shared.makeOnboardingViewController()
 //            present(vc, animated: true)
 

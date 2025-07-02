@@ -14,6 +14,8 @@ internal import RxSwift
 /// 회원가입 View Controller
 public final class SignInViewController: UIViewController {
 
+    public weak var flowDelegate: SignInFlowDelegate?
+
     private let viewModel: SignInViewModel
     private let policyViewModel: PolicyViewModel
     private let firstView = SignInFirstView()
@@ -93,8 +95,9 @@ public final class SignInViewController: UIViewController {
         /// 회원가입 결과에 따른 화면 이동
         viewModel.state.readyToUseService
             .observe(on: MainScheduler.instance)
-            .bind { _ in
+            .bind(with: self) { owner, _ in
 //                DummyCoordinator.shared.showMainView()
+                owner.flowDelegate?.readyToUse()
             }
             .disposed(by: disposeBag)
 

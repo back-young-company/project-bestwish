@@ -15,13 +15,15 @@ internal import RxSwift
 /// 이미지 편집 뷰 컨트롤러
 public final class ImageEditViewController: UIViewController {
 
+    public weak var flowDelegate: ImageEditFlowDelegate?
+
     // MARK: - Private Property
     private let imageEditView: ImageEditView
     private let cropperVC: CropViewController
     private let viewModel: ImageEditViewModel
     
     // MARK: - Internal Property
-    var onDismiss: (()-> Void)?
+    public var onDismiss: (()-> Void)?
     var disposeBag = DisposeBag()
     
     public init(imageData: Data, viewModel: ImageEditViewModel) {
@@ -85,13 +87,15 @@ public final class ImageEditViewController: UIViewController {
             .subscribe(with: self) { owner, _ in
                 let vc = owner.cropperVC
                 vc.delegate?.cropViewController?(vc, didFinishCancelled: true)
-                owner.dismiss(animated: false)
+                owner.flowDelegate?.didTapCancelButton()
+//                owner.dismiss(animated: false)
             }
             .disposed(by: disposeBag)
         
         // 라벨 데이터 요청
         viewModel.state.labelData
-            .subscribe(with: self, onNext: { owner, labelData in            
+            .subscribe(with: self, onNext: { owner, labelData in
+                owner.flowDelegate?.didSetLabelData(labelData: labelData)
 //                let vc = DIContainer.shared.makeAnalysisViewController(labelData: labelData)
 //                if let sheet = vc.sheetPresentationController {
 //                    sheet.detents = [
