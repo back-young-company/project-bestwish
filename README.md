@@ -1,9 +1,9 @@
 
 
-# BEST WISH  <img src="./image-assets/icon.png" width="100" align=left>
+# BEST WISH  <img src="./image-assets/ICON.png" width="100" align=left>
 ### 다양한 쇼핑 플랫폼의 위시리스트를 통합 관리 서비스
 
-<img src="../image-assets/표지.png">
+<img src="./image-assets/표지.png">
 
 
 ### 🍎 앱 스토어 바로가기
@@ -22,7 +22,6 @@
 - 분석과 검색, 저장까지 연결된 **개인화된 쇼핑 어시스턴트**를 지향합니다.
 
 
-## MVP
 ## MVP
 <table>
   <tr>
