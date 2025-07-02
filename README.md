@@ -26,7 +26,7 @@
   <a href="https://www.instagram.com/bestwish___official">
     <img
       alt="인스타"
-      src="./image-assets/인스타그램.png"
+      src="./image-assets/인스타그램.png"
       height="50"
       width="150"
     />
@@ -34,7 +34,7 @@
     <a href="mailto:bycompany02@gmail.com">
     <img
       alt="이메일"
-      src="./image-assets/지메일.png"
+      src="./image-assets/지메일.png"
       height="50"
       width="150"
     />
