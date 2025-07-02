@@ -182,6 +182,8 @@ ex) feature/#4-home-ui
 
 ## TroubleShoting
 백래훈
+- [Share Extension - Keychain Sharing 문제를 해결하다!](https://rb-ios.tistory.com/21)
+- [UIButton 가변 너비 & 줄바꿈 문제: titleLineBreakMode로 해결!](https://rb-ios.tistory.com/20)
 
 유영웅
 - [카메라 관련](https://quarang.tistory.com/110)
@@ -193,9 +195,9 @@ ex) feature/#4-home-ui
 - [Clean Architecture 구조에서의 Error 설계에 대한 고찰](https://soo-hyn.tistory.com/153)
 
 이세준
-- [키보드 UI 관련](https://buly.kr/7QMM3rN)
-- [OAuth 관련](https://velog.io/@yimkeul/Supabase-Auth)
-- [메모리 누수 관련](https://buly.kr/jZYms2)
+- [IQKeyboardManager 사용 중 실기기 UI 오류 해결](https://buly.kr/7QMM3rN)
+- [Supabase Auth](https://velog.io/@yimkeul/Supabase-Auth)
+- [소셜 로그인 관련 메모리 누수 해결](https://buly.kr/jZYms2)
 
 ## Usage
 ```
