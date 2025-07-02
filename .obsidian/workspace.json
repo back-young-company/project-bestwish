@@ -102,8 +102,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "321e8bd6f7ba1406",
@@ -196,6 +195,10 @@
   },
   "active": "e62b01cb248d757d",
   "lastOpenFiles": [
+    "Untitled.canvas",
+    "README.md",
+    "BestWish/Data/Network/Fetcher/Interface/ProductDTOFetcher.swift",
+    "BestWish/Data/Network/Fetcher/Interface",
     "image-assets/아키텍쳐.png",
     "image-assets/스크린샷 2025-07-02 오후 3.15.13.png",
     "image-assets/키.png",
@@ -206,7 +209,6 @@
     "image-assets/홈.png",
     "image-assets/6.7_8.png",
     "image-assets/6.7_7.png",
-    "image-assets/6.7_6.png",
     "BestWishTests/ViewModelTests/OnboardingViewModel/OnboardingViewModelTests.swift",
     "BestWishTests/ViewModelTests/OnboardingViewModel",
     "BestWish/Resource/Assets.xcassets/SignIn/radioOn.imageset/Contents.json",
@@ -215,10 +217,6 @@
     "BestWish/Resource/Assets.xcassets/SignIn/radioOn.imageset",
     "BestWish/Resource/Assets.xcassets/SignIn/radioOff.imageset",
     "BestWish/Resource/Assets.xcassets/SignIn/Contents.json",
-    "BestWish/Resource/Assets.xcassets/SignIn/calendar.imageset",
-    "BestWish/Resource/Assets.xcassets/SignIn",
-    "Untitled.canvas",
-    "README.md",
     "2025-07-02.md"
   ]
 }
