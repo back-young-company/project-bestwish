@@ -16,7 +16,7 @@
   <a href="https://linktr.ee/bestwish___official">
     <img
       alt="Linktree"
-      src="./image-assets/링크트리.png"
+      src="image-assets/링크트리.png"
       height="50"
       width="150"
     />
@@ -24,7 +24,7 @@
   <a href="https://www.instagram.com/bestwish___official">
     <img
       alt="인스타"
-      src="./image-assets/인스타그램.png"
+      src="image-assets/인스타그램.png"
       height="50"
       width="150"
     />
@@ -32,7 +32,7 @@
     <a href="mailto:bycompany02@gmail.com">
     <img
       alt="이메일"
-      src="./image-assets/지메일.png"
+      src="image-assets/지메일.png"
       height="50"
       width="150"
     />
@@ -192,10 +192,10 @@ ex) feature/#4-home-ui
 
 |로직|플로우차트|
 |:---:|:---:|
-| **인증** | <img src="./image-assets/온보딩_플로우차트.png" width="500"> |
-| **홈** | <img src="./image-assets/홈화면_플로우차트.png" width="500"> |
-| **이미지 분석** | <img src="./image-assets/이미지분석_플로우차트.png" width="500"> |
-| **마이페이지** | <img src="./image-assets/마이페이지_플로우차트.png" width="500"> |
+| **인증** | <img src="image-assets/온보딩_플로우차트.png" width="500"> |
+| **홈** | <img src="image-assets/홈화면_플로우차트.png" width="500"> |
+| **이미지 분석** | <img src="image-assets/이미지분석_플로우차트.png" width="500"> |
+| **마이페이지** | <img src="image-assets/마이페이지_플로우차트.png" width="500"> |
 
 
 ## ⚽️ Trouble Shooting
