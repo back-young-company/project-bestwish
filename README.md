@@ -5,18 +5,42 @@
 
 <img src="./image-assets/표지.png">
 
+> 바로가기 
 
-### 🍎 앱 스토어 바로가기
- <a href="https://apps.apple.com/kr/app/bestwish/id6747424430">
-  <img alt='Available on the App Store' src="https://user-images.githubusercontent.com/67373938/227817078-7aab7bea-3af0-4930-b341-1a166a39501d.svg" height="50px" /> 
-</a> 
+ <!-- 방법 1: p 태그의 align 속성 사용 -->
+<p align="left">
+  <a href="https://apps.apple.com/kr/app/bestwish/id6747424430">
+    <img
+      alt="Available on the App Store"
+      src="https://user-images.githubusercontent.com/67373938/227817078-7aab7bea-3af0-4930-b341-1a166a39501d.svg"
+      height="50"
+      width="200"
+    />
+  </a>
+  <a href="https://linktr.ee/bestwish___official">
+    <img
+      alt="Linktree"
+      src="./image-assets/링크트리.png"
+      height="50"
+      width="150"
+    />
+  </a>
+</p>
+
+
 
 ---- 
 
-## 프로젝트 소개
-### 서비스 이름: **BestWish**
-### 개발 기간: 2025.05.29 ~
-### 프로젝트 내용
+## Introduce
+> 서비스 이름
+
+**BestWish**
+
+> 개발 기간
+
+2025.05.29 ~
+
+## Contents
 - **분산된 위시리스트 통합**: 다양한 쇼핑 플랫폼의 상품 정보를 하나의 앱에서 관리할 수 있도록 지원합니다.
 - **이미지 기반 정보 추출 및 키워드화**: CoreML을 통해 코디 이미지에서 키워드를 자동으로 추출하고, 이를 활용해 외부 플랫폼에서 상품 검색까지 가능합니다.
 - 분석과 검색, 저장까지 연결된 **개인화된 쇼핑 어시스턴트**를 지향합니다.
@@ -46,11 +70,11 @@
 <br/>
 
 
-## 프로젝트 아키텍처
+## Architecture
 <img src="./image-assets/아키텍쳐.png">
 
 
-## 기술 스택
+## Skills
 | Name          | Description   |
 | ------------  | ------------- |
 | **UIKit** | iOS 앱의 UI를 구축하고 사용자 인터페이스를 관리하는 기본 프레임워크 |
@@ -129,7 +153,7 @@ ex) feature/#4-home-ui
 ```
 </details>
 
-## 시연영상
+## Demonstration
 <table>
   <tr>
     <td align="center">온보딩</td>
@@ -148,6 +172,16 @@ ex) feature/#4-home-ui
     <td><img src="https://github.com/user-attachments/assets/4905ed25-dda9-44f7-8077-ca9706d36df5" width="200"></td>
   </tr>
 </table>
+
+## Flow Chart
+
+|로직|플로우차트|
+|:---:|:---:|
+|인증|<img src="./image-assets/온보딩_플로우차트.png">|
+|홈 |<img src="./image-assets/홈화면_플로우차트.png">|
+|이미지 분석|<img src="./image-assets/이미지분석_플로우차트.png">|
+|마이페이지|<img src="./image-assets/마이페이지_플로우차트.png">|
+
 
 ## TroubleShoting
 백래훈
