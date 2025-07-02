@@ -8,6 +8,7 @@
 import AVFoundation
 import Foundation
 
+/// 카메라 화면 이동 플로우
 public protocol CameraFlowDelegate: AnyObject {
     /// 이미지 크로퍼 뷰 present
     func presentImageCropper(

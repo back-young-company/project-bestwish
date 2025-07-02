@@ -13,11 +13,10 @@ internal import RxSwift
 /// 유저 정보 관리 View Controller
 public final class UserInfoManagementViewController: UIViewController {
 
-    public weak var flowDelegate: MyPageFlowDelegate?
-
     private let viewModel: UserInfoManagementViewModel
     private let managementView = UserInfoManagementView()
     private let disposeBag = DisposeBag()
+    public weak var flowDelegate: MyPageFlowDelegate? // 화면 이동 딜리게이트
 
     public init(viewModel: UserInfoManagementViewModel) {
         self.viewModel = viewModel

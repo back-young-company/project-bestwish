@@ -52,27 +52,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     // 나중에 지울 코드
     //----------------------------------
-    func showSignInView() {
-        let nav = UINavigationController(rootViewController: DIContainer.shared.makeSignInViewController())
-        nav.setNavigationBarHidden(true, animated: true)
-        self.window?.rootViewController = nav
-        self.window?.makeKeyAndVisible()
-    }
-
-    func showLoginView() {
-        self.window?.rootViewController = DIContainer.shared.makeLoginViewController()
-        self.window?.makeKeyAndVisible()
-    }
-
-    func showMainView() {
-        let vc = TabBarViewController(viewControllers: [
-            UINavigationController(rootViewController: DIContainer.shared.makeHomeViewController()),
-            UINavigationController(rootViewController: DIContainer.shared.makeCameraViewController()),
-            UINavigationController(rootViewController: DIContainer.shared.makeMyPageViewController())
-        ])
-        window?.rootViewController = vc
-        window?.makeKeyAndVisible()
-        window?.backgroundColor = .gray0
-    }
+//    func showSignInView() {
+//        let nav = UINavigationController(rootViewController: DIContainer.shared.makeSignInViewController())
+//        nav.setNavigationBarHidden(true, animated: true)
+//        self.window?.rootViewController = nav
+//        self.window?.makeKeyAndVisible()
+//    }
+//
+//    func showLoginView() {
+//        self.window?.rootViewController = DIContainer.shared.makeLoginViewController()
+//        self.window?.makeKeyAndVisible()
+//    }
+//
+//    func showMainView() {
+//        let vc = TabBarViewController(viewControllers: [
+//            UINavigationController(rootViewController: DIContainer.shared.makeHomeViewController()),
+//            UINavigationController(rootViewController: DIContainer.shared.makeCameraViewController()),
+//            UINavigationController(rootViewController: DIContainer.shared.makeMyPageViewController())
+//        ])
+//        window?.rootViewController = vc
+//        window?.makeKeyAndVisible()
+//        window?.backgroundColor = .gray0
+//    }
 }
 //----------------------------------

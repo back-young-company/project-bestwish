@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 회원가입 화면 이동 플로우
 public protocol SignInFlowDelegate: AnyObject {
     /// 회원가입 결과에 따른 화면 이동
     func readyToUse()

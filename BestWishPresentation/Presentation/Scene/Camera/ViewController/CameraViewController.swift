@@ -14,13 +14,12 @@ internal import RxSwift
 /// 카메라 뷰 컨트롤러
 public final class CameraViewController: UIViewController {
 
-    public weak var flowDelegate: CameraFlowDelegate?
-
     // MARK: - Private Property
     private let viewModel = CameraViewModel()
     private let cameraView = CameraView()
     private let disposeBag = DisposeBag()
-    
+    public weak var flowDelegate: CameraFlowDelegate? // 화면 이동 딜리게이트
+
     private var session: AVCaptureSession?                      // 카메라 입력, 출력을 연결하는 세션 객체
     private let output = AVCapturePhotoOutput()                 // 사진 촬영을 담당하는 출력 객체
     private var currentCameraPosition: AVCaptureDevice.Position = .back

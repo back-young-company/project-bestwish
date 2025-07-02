@@ -15,11 +15,11 @@ internal import RxSwift
 /// 마이페이지 ViewController
 public final class MyPageViewController: UIViewController {
 
-    public weak var flowDelegate: MyPageFlowDelegate?
-
     private let viewModel: MyPageViewModel
     private let myPageView = MyPageView()
     private let disposeBag = DisposeBag()
+    public weak var flowDelegate: MyPageFlowDelegate? // 화면 이동 딜리게이트
+
     private lazy var dataSource = RxTableViewSectionedReloadDataSource<MyPageSection>(
         configureCell: { dataSource, tableView, indexPath, item in
             switch item {

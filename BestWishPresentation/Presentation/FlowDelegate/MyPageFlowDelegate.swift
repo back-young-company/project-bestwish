@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 마이페이지 화면 이동 플로우
 public protocol MyPageFlowDelegate: AnyObject {
     /// 유저 정보 관리 뷰 탭
     func didTapUserInfoManagementCell()

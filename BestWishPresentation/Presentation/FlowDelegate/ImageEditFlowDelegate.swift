@@ -8,6 +8,7 @@
 import BestWishDomain
 import Foundation
 
+/// 이미지 편집 화면 이동 플로우
 public protocol ImageEditFlowDelegate: AnyObject {
     /// 뒤로가기 버튼 터치
     func didTapCancelButton()

@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// 홈 화면 이동 플로우
 public protocol HomeFlowDelegate: AnyObject {
     /// 플랫폼 편집 버튼 탭
     func didTapPlatformEditButton(_ delegate: HomeViewControllerUpdate)

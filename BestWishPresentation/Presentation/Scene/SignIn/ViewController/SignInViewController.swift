@@ -14,13 +14,13 @@ internal import RxSwift
 /// 회원가입 View Controller
 public final class SignInViewController: UIViewController {
 
-    public weak var flowDelegate: SignInFlowDelegate?
-
     private let viewModel: SignInViewModel
     private let policyViewModel: PolicyViewModel
     private let firstView = SignInFirstView()
     private let secondView = SignInSecondView()
     private let disposeBag = DisposeBag()
+    public weak var flowDelegate: SignInFlowDelegate? // 화면 이동 딜리게이트
+
     private let signInViews: [UIView]
     private let returnManager: IQKeyboardReturnManager = .init()
 

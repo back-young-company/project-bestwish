@@ -13,11 +13,10 @@ internal import RxSwift
 /// 로그인 View Controller
 public final class LoginViewController: UIViewController {
 
-    public weak var flowDelegate: LoginFlowDelegate?
-
     private let loginView = LoginView()
     private let viewModel: LoginViewModel
     private let disposeBag = DisposeBag()
+    public weak var flowDelegate: LoginFlowDelegate? // 화면 이동 딜리게이트
 
     public init(viewModel: LoginViewModel) {
         self.viewModel = viewModel

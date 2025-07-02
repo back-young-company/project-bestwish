@@ -15,13 +15,12 @@ internal import RxSwift
 /// 이미지 편집 뷰 컨트롤러
 public final class ImageEditViewController: UIViewController {
 
-    public weak var flowDelegate: ImageEditFlowDelegate?
-
     // MARK: - Private Property
     private let imageEditView: ImageEditView
     private let cropperVC: CropViewController
     private let viewModel: ImageEditViewModel
-    
+    public weak var flowDelegate: ImageEditFlowDelegate? // 화면 이동 딜리게이트
+
     // MARK: - Internal Property
     public var onDismiss: (()-> Void)?
     var disposeBag = DisposeBag()

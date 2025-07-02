@@ -14,12 +14,11 @@ internal import RxRelay
 /// 홈 View Controller
 public final class HomeViewController: UIViewController {
 
-    public weak var flowDelegate: HomeFlowDelegate?
-
     // MARK: - Private Property
     private let homeViewModel: HomeViewModel
     private let homeView = HomeView()
     private let disposeBag = DisposeBag()
+    public weak var flowDelegate: HomeFlowDelegate? // 화면 이동 딜리게이트
 
     private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<HomeSectionModel>(
         configureCell: { [weak self] dataSource, collectionView, indexPath, item in
