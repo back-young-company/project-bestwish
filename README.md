@@ -8,24 +8,21 @@
 > 바로가기 
 
  <!-- 방법 1: p 태그의 align 속성 사용 -->
-<p align="left">
-  <a href="https://apps.apple.com/kr/app/bestwish/id6747424430">
+<a href="https://apps.apple.com/kr/app/bestwish/id6747424430">
     <img
       alt="Available on the App Store"
       src="https://user-images.githubusercontent.com/67373938/227817078-7aab7bea-3af0-4930-b341-1a166a39501d.svg"
       height="50"
-      width="200"
     />
   </a>
   <a href="https://linktr.ee/bestwish___official">
     <img
       alt="Linktree"
-      src="./image-assets/링크트리.png"
+      src="./image-assets/링크트리.png"
       height="50"
       width="150"
     />
   </a>
-</p>
 
 
 
@@ -177,10 +174,10 @@ ex) feature/#4-home-ui
 
 |로직|플로우차트|
 |:---:|:---:|
-|인증|<img src="./image-assets/온보딩_플로우차트.png">|
-|홈 |<img src="./image-assets/홈화면_플로우차트.png">|
-|이미지 분석|<img src="./image-assets/이미지분석_플로우차트.png">|
-|마이페이지|<img src="./image-assets/마이페이지_플로우차트.png">|
+|인증|<img src="./image-assets/온보딩_플로우차트.png" width="500">|
+|홈 |<img src="./image-assets/홈화면_플로우차트.png" width="500">|
+|이미지 분석|<img src="./image-assets/이미지분석_플로우차트.png" width="500">|
+|마이페이지|<img src="./image-assets/마이페이지_플로우차트.png" width="500">|
 
 
 ## TroubleShoting
