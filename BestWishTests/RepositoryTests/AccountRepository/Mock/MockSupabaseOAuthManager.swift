@@ -5,8 +5,9 @@
 //  Created by 이수현 on 6/26/25.
 //
 
+@testable import BestWishData
+@testable import BestWishDomain
 import Foundation
-@testable import BestWish
 
 import Supabase
 
@@ -14,7 +15,7 @@ import Supabase
 final class MockSupabaseOAuthManager: SupabaseOAuthManager {
     var shouldThrow = false
 
-    func checkSupabaseSession(_ keychain: any BestWish.KeyChainManager) async -> Bool {
+    func checkSupabaseSession(_ keychain: KeyChainManager) async -> Bool {
         true
     }
     
@@ -25,21 +26,21 @@ final class MockSupabaseOAuthManager: SupabaseOAuthManager {
         return true
     }
     
-    func logIn(type: BestWish.SocialType, _ keyChain: any BestWish.KeyChainManager) async throws {
+    func logIn(type: SocialType, _ keyChain: KeyChainManager) async throws {
         if shouldThrow {
             throw AuthError.appleDidCompleteFailed
         }
         return
     }
     
-    func logOut(_ keyChain: any BestWish.KeyChainManager) async throws {
+    func logOut(_ keyChain: KeyChainManager) async throws {
         if shouldThrow {
             throw AuthError.appleDidCompleteFailed
         }
         return
     }
     
-    func withdraw(_ keyChain: any BestWish.KeyChainManager) async throws {
+    func withdraw(_ keyChain: KeyChainManager) async throws {
         if shouldThrow {
             throw AuthError.appleDidCompleteFailed
         }
@@ -50,7 +51,7 @@ final class MockSupabaseOAuthManager: SupabaseOAuthManager {
         throw AuthError.appleDidCompleteFailed
     }
     
-    func requestClientSecret(_ keyChain: any BestWish.KeyChainManager) async throws -> String {
+    func requestClientSecret(_ keyChain:KeyChainManager) async throws -> String {
         if shouldThrow {
             throw AuthError.appleDidCompleteFailed
         }

@@ -5,8 +5,9 @@
 //  Created by 이수현 on 6/24/25.
 //
 
+@testable import BestWishData
+@testable import BestWishDomain
 import Foundation
-@testable import BestWish
 
 // MARK: - Error 타입 반환을 손쉽게 하기 위해 사용
 extension String: @retroactive Error { }

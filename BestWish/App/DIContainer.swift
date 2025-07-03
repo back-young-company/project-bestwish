@@ -5,12 +5,14 @@
 //  Created by 이수현 on 6/5/25.
 //
 
+import BestWishData
+import BestWishDomain
+import BestWishPresentation
+
 import Foundation
 
 /// 의존성 주입 컨테이너
 final class DIContainer {
-
-    static let shared = DIContainer()
 
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
@@ -32,7 +34,7 @@ final class DIContainer {
     private let productSyncUseCase: ProductSyncUseCase
     private let wishListUseCase: WishListUseCase
 
-    private init() {
+    init() {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
         self.supabaseOAuthManager = SupabaseOAuthManagerImpl()

@@ -5,8 +5,9 @@
 //  Created by 이수현 on 6/24/25.
 //
 
+@testable import BestWishData
+@testable import BestWishDomain
 import Foundation
-@testable import BestWish
 
 /// Mock AccountUseCase
 final class MockAccountUseCase: AccountUseCase {

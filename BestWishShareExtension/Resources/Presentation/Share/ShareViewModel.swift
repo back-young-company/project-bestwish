@@ -5,12 +5,13 @@
 //  Created by 백래훈 on 6/18/25.
 //
 
+import BestWishDomain
 import Foundation
 
-import RxSwift
-import RxRelay
+internal import RxSwift
+internal import RxRelay
 
-final class ShareViewModel: ViewModel {
+public final class ShareViewModel: ViewModel {
     enum Action {
         case addProduct(NSItemProvider)
     }
@@ -33,7 +34,7 @@ final class ShareViewModel: ViewModel {
     
     private let disposeBag = DisposeBag()
     
-    init(
+    public init(
         wishListUseCase: WishListUseCase,
         productSyncUseCase: ProductSyncUseCase
     ) {
