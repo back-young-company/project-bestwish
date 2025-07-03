@@ -77,7 +77,7 @@ extension String {
             let productId = self.replacingOccurrences(of: domain, with: "")
             return "aglo://webview?url=https://4910.kr/goods/\(productId)"
         case .hiver:
-            let domain = "https://www.hiver.co.kr/products/"
+            let domain = "https://www.hiver.co.kr/onelink?type=products"
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")
             return "hiverapplication://applink/products/\(productId)"

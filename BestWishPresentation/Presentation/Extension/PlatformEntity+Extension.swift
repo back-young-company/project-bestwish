@@ -78,7 +78,7 @@ extension PlatformEntity {
         case ._29cm:
             return "https://29cm.onelink.me/1080201211"
         case .hiver:
-            return "https://hiver.onelink.me/orq2"
+            return "hiverapplication://applink" //"https://hiver.onelink.me/orq2"
         default:
             return "notFound"
         }
