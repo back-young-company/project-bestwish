@@ -21,6 +21,7 @@ enum AuthError: AppErrorProtocol {
     case supabaseSetSessionFailed(Error)
     case missProvider
     case supabaseRequestRoleFailed(Error)
+    case supabaseRPCFailed(Error)
 }
 
 // MARK: - AuthError 케이스 별 텍스트
@@ -55,6 +56,8 @@ extension AuthError {
             "Supabase Request Client Secret Return Nil"
         case let .supabaseSetSessionFailed(error):
             "Supabase Set Session Failed : \(error.localizedDescription)"
+        case let .supabaseRPCFailed(error):
+            "Supabase RPC Failed : \(error.localizedDescription)"
         case .missProvider:
             "Missing Provider"
 
