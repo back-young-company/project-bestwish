@@ -19,6 +19,7 @@ final class AppCoordinator {
     private var homeNavigation: UINavigationController?
     private var cameraNavigation: UINavigationController?
     private var myPageNavigation: UINavigationController?
+    private var imageEditVC: ImageEditViewController?
 
     init(window: UIWindow) {
         self.window = window
@@ -164,6 +165,7 @@ final class AppCoordinator {
 
         let navVC = UINavigationController(rootViewController: imageEditVC)
         navVC.modalPresentationStyle = .fullScreen
+        self.imageEditVC = imageEditVC
         cameraNavigation?.present(navVC, animated: false)
     }
 
@@ -183,8 +185,7 @@ final class AppCoordinator {
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
-
-        cameraNavigation?.viewControllers.last?.present(vc, animated: false)
+        imageEditVC?.present(vc, animated: true)
     }
 
     // MARK: - 마이페이지 관련 뷰
