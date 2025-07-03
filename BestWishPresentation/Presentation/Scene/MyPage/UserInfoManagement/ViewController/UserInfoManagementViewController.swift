@@ -76,6 +76,13 @@ public final class UserInfoManagementViewController: UIViewController {
 //                DummyCoordinator.shared.showLoginView()
             }.disposed(by: disposeBag)
 
+        viewModel.state.isLoading
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, isLoading in
+                owner.managementView.showLoading(isLoading)
+            }
+            .disposed(by: disposeBag)
+
         viewModel.state.error
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, error in
