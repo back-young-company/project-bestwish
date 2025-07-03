@@ -8,25 +8,33 @@
 
 /* Begin PBXBuildFile section */
 		14B8B6432DF6861400B7F5F8 /* BestWishShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8175BE502E169E590092713E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 8175BE4F2E169E590092713E /* Supabase */; };
+		8175BE532E16A0FC0092713E /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6A2DEF363A003242CA /* RxCocoa */; };
+		8175BE542E16A0FC0092713E /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6C2DEF363A003242CA /* RxRelay */; };
+		8175BE552E16A0FC0092713E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6F2DEF364D003242CA /* SnapKit */; };
+		8175BE562E16A0FC0092713E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA722DEF3656003242CA /* Then */; };
+		8175BE572E16A0FC0092713E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA752DEF370B003242CA /* Kingfisher */; };
+		8175BE582E16A0FC0092713E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BB0A2DEFD165003242CA /* Supabase */; };
+		8175BE592E16A0FC0092713E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
+		8175BE5A2E16A0FC0092713E /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CB4FBCED2DF6B66B00149D86 /* RxDataSources */; };
+		8175BE5B2E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */; };
+		8175BE5C2E16A0FC0092713E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63A2E1402B100E5CDC3 /* Kingfisher */; };
+		8175BE5D2E16A0FC0092713E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63C2E1402B100E5CDC3 /* Supabase */; };
+		8175BE5E2E16A0FC0092713E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63E2E1402B100E5CDC3 /* Alamofire */; };
+		8175BE5F2E16A0FC0092713E /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6402E1402B100E5CDC3 /* RxDataSources */; };
+		8175BE602E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */; };
+		8175BE612E16A0FC0092713E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6482E1402B100E5CDC3 /* SwiftSoup */; };
+		8175C0B72E16A2940092713E /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0B62E16A2940092713E /* CropViewController */; };
+		8175C0B92E16A2940092713E /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0B82E16A2940092713E /* TOCropViewController */; };
+		8175C0BB2E16A3550092713E /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0BA2E16A3550092713E /* CropViewController */; };
 		CB2597A52E15429D00632E12 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B66E2DF691AA00B7F5F8 /* RxSwift */; };
 		CB2597A62E15429D00632E12 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6702DF691B300B7F5F8 /* SnapKit */; };
 		CB2597A72E15429D00632E12 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
 		CB2597A82E15429D00632E12 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
 		CB2597A92E15429D00632E12 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 14C3CB612E026200002F341A /* RxRelay */; };
-		CB2597AA2E15429D00632E12 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63A2E1402B100E5CDC3 /* Kingfisher */; };
-		CB259A0C2E15432600632E12 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E0A2E13AF2900E29D1C /* TOCropViewController */; };
-		CB259A0D2E15432600632E12 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */; };
-		CB259A0E2E15432600632E12 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63C2E1402B100E5CDC3 /* Supabase */; };
-		CB259A0F2E15432600632E12 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63E2E1402B100E5CDC3 /* Alamofire */; };
-		CB259A102E15432600632E12 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6402E1402B100E5CDC3 /* RxDataSources */; };
-		CB259A112E15432600632E12 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6422E1402B100E5CDC3 /* CropViewController */; };
-		CB259A122E15432600632E12 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6442E1402B100E5CDC3 /* TOCropViewController */; };
-		CB259A132E15432600632E12 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */; };
-		CB259A142E15432600632E12 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6482E1402B100E5CDC3 /* SwiftSoup */; };
 		CB259C6D2E1544B200632E12 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CB259C6C2E1544B200632E12 /* RxCocoa */; };
 		CB259C6F2E1544B200632E12 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB259C6E2E1544B200632E12 /* RxSwift */; };
 		CB27AB902E13F7C400E5CDC3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */; };
-		CB387E0F2E13AFFB00E29D1C /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E0E2E13AFFB00E29D1C /* CropViewController */; };
 		CB387E142E13B02E00E29D1C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E132E13B02E00E29D1C /* IQKeyboardManagerSwift */; };
 		CB9F14922E13A8BC0042BB47 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA392E12769D00F6288C /* RxCocoa */; };
 		CB9F14932E13A8BC0042BB47 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA3B2E12769D00F6288C /* RxSwift */; };
@@ -286,14 +294,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB259A142E15432600632E12 /* SwiftSoup in Frameworks */,
-				CB259A132E15432600632E12 /* IQKeyboardManagerSwift in Frameworks */,
-				CB259A122E15432600632E12 /* TOCropViewController in Frameworks */,
-				CB259A112E15432600632E12 /* CropViewController in Frameworks */,
-				CB259A102E15432600632E12 /* RxDataSources in Frameworks */,
-				CB259A0F2E15432600632E12 /* Alamofire in Frameworks */,
-				CB259A0E2E15432600632E12 /* Supabase in Frameworks */,
-				CB2597AA2E15429D00632E12 /* Kingfisher in Frameworks */,
+				8175BE612E16A0FC0092713E /* SwiftSoup in Frameworks */,
+				8175BE602E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */,
+				8175BE5F2E16A0FC0092713E /* RxDataSources in Frameworks */,
+				8175BE5E2E16A0FC0092713E /* Alamofire in Frameworks */,
+				8175BE5D2E16A0FC0092713E /* Supabase in Frameworks */,
+				8175BE5C2E16A0FC0092713E /* Kingfisher in Frameworks */,
 				CB2597A92E15429D00632E12 /* RxRelay in Frameworks */,
 				CB2597A82E15429D00632E12 /* RxCocoa in Frameworks */,
 				CB2597A72E15429D00632E12 /* Then in Frameworks */,
@@ -324,13 +330,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB9F14972E13A8BC0042BB47 /* RxDataSources in Frameworks */,
+				8175C0B92E16A2940092713E /* TOCropViewController in Frameworks */,
 				CB387E142E13B02E00E29D1C /* IQKeyboardManagerSwift in Frameworks */,
 				CB9F14962E13A8BC0042BB47 /* Kingfisher in Frameworks */,
 				CB9F14952E13A8BC0042BB47 /* Then in Frameworks */,
 				CB9F14942E13A8BC0042BB47 /* SnapKit in Frameworks */,
+				8175C0B72E16A2940092713E /* CropViewController in Frameworks */,
 				CB9F14932E13A8BC0042BB47 /* RxSwift in Frameworks */,
 				CB9F14922E13A8BC0042BB47 /* RxCocoa in Frameworks */,
-				CB387E0F2E13AFFB00E29D1C /* CropViewController in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,8 +345,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB259A0D2E15432600632E12 /* IQKeyboardManagerSwift in Frameworks */,
-				CB259A0C2E15432600632E12 /* TOCropViewController in Frameworks */,
+				8175BE5B2E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */,
+				8175BE5A2E16A0FC0092713E /* RxDataSources in Frameworks */,
+				8175BE592E16A0FC0092713E /* Alamofire in Frameworks */,
+				8175C0BB2E16A3550092713E /* CropViewController in Frameworks */,
+				8175BE582E16A0FC0092713E /* Supabase in Frameworks */,
+				8175BE572E16A0FC0092713E /* Kingfisher in Frameworks */,
+				8175BE562E16A0FC0092713E /* Then in Frameworks */,
+				8175BE552E16A0FC0092713E /* SnapKit in Frameworks */,
+				8175BE542E16A0FC0092713E /* RxRelay in Frameworks */,
+				8175BE532E16A0FC0092713E /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +364,7 @@
 			files = (
 				CB259C6F2E1544B200632E12 /* RxSwift in Frameworks */,
 				CB259C6D2E1544B200632E12 /* RxCocoa in Frameworks */,
+				8175BE502E169E590092713E /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,8 +460,6 @@
 				CB27B63C2E1402B100E5CDC3 /* Supabase */,
 				CB27B63E2E1402B100E5CDC3 /* Alamofire */,
 				CB27B6402E1402B100E5CDC3 /* RxDataSources */,
-				CB27B6422E1402B100E5CDC3 /* CropViewController */,
-				CB27B6442E1402B100E5CDC3 /* TOCropViewController */,
 				CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */,
 				CB27B6482E1402B100E5CDC3 /* SwiftSoup */,
 			);
@@ -530,8 +544,9 @@
 				CBC7EA3F2E12769D00F6288C /* Then */,
 				CBC7EA412E12769D00F6288C /* Kingfisher */,
 				CBC7EA432E12769D00F6288C /* RxDataSources */,
-				CB387E0E2E13AFFB00E29D1C /* CropViewController */,
 				CB387E132E13B02E00E29D1C /* IQKeyboardManagerSwift */,
+				8175C0B62E16A2940092713E /* CropViewController */,
+				8175C0B82E16A2940092713E /* TOCropViewController */,
 			);
 			productName = BestWishPresentation;
 			productReference = CBC7E9B52E12715800F6288C /* BestWishPresentation.framework */;
@@ -568,9 +583,8 @@
 				CBD6BB0A2DEFD165003242CA /* Supabase */,
 				86F6FD002DF66C8B00CAF678 /* Alamofire */,
 				CB4FBCED2DF6B66B00149D86 /* RxDataSources */,
-				81E50BB32DF93B0E005954F4 /* CropViewController */,
-				CB387E0A2E13AF2900E29D1C /* TOCropViewController */,
 				CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */,
+				8175C0BA2E16A3550092713E /* CropViewController */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -599,6 +613,7 @@
 			packageProductDependencies = (
 				CB259C6C2E1544B200632E12 /* RxCocoa */,
 				CB259C6E2E1544B200632E12 /* RxSwift */,
+				8175BE4F2E169E590092713E /* Supabase */,
 			);
 			productName = BestWishTests;
 			productReference = CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */;
@@ -653,9 +668,9 @@
 				CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 				CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -1504,7 +1519,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
+		8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/TOCropViewController";
 			requirement = {
@@ -1612,9 +1627,24 @@
 			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxRelay;
 		};
-		81E50BB32DF93B0E005954F4 /* CropViewController */ = {
+		8175BE4F2E169E590092713E /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			package = CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		8175C0B62E16A2940092713E /* CropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = CropViewController;
+		};
+		8175C0B82E16A2940092713E /* TOCropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = TOCropViewController;
+		};
+		8175C0BA2E16A3550092713E /* CropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */;
 			productName = CropViewController;
 		};
 		86F6FD002DF66C8B00CAF678 /* Alamofire */ = {
@@ -1657,16 +1687,6 @@
 			package = CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
 		};
-		CB27B6422E1402B100E5CDC3 /* CropViewController */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
-			productName = CropViewController;
-		};
-		CB27B6442E1402B100E5CDC3 /* TOCropViewController */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
-			productName = TOCropViewController;
-		};
 		CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
@@ -1676,16 +1696,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
-		};
-		CB387E0A2E13AF2900E29D1C /* TOCropViewController */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
-			productName = TOCropViewController;
-		};
-		CB387E0E2E13AFFB00E29D1C /* CropViewController */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
-			productName = CropViewController;
 		};
 		CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;

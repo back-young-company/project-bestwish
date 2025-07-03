@@ -187,6 +187,12 @@ final class AppCoordinator {
         }
         imageEditVC?.present(vc, animated: true)
     }
+    
+    /// 상품 추가 후 이미지 분석 모달에서 홈 화면으로 바로 이동
+    func removeAnalysisView() {
+        cameraNavigation?.dismiss(animated: true)
+        showMainView()
+    }
 
     // MARK: - 마이페이지 관련 뷰
 
