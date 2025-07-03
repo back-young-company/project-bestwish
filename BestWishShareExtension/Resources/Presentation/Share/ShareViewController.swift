@@ -5,14 +5,13 @@
 //  Created by 백래훈 on 6/9/25.
 //
 
+import BestWishDomain
+import BestWishData
 import UIKit
 import Social
 
-import Supabase
-import RxSwift
-import RxCocoa
-import SnapKit
-import Then
+internal import RxSwift
+internal import RxCocoa
 
 /// 공유 View Controller
 final class ShareViewController: UIViewController {

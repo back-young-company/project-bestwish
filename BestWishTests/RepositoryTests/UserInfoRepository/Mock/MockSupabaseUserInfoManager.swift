@@ -5,8 +5,8 @@
 //  Created by 이수현 on 6/25/25.
 //
 
+@testable import BestWishData
 import Foundation
-@testable import BestWish
 
 /// MockSupabaseUserInfoManager 클래스
 final class MockSupabaseUserInfoManager: SupabaseUserInfoManager {

@@ -5,8 +5,8 @@
 //  Created by 이수현 on 6/26/25.
 //
 
+@testable import BestWishData
 import Foundation
-@testable import BestWish
 
 import Supabase
 
@@ -20,7 +20,7 @@ final class MockKeyChainManager: KeyChainManager {
         return
     }
     
-    func read(token: BestWish.Token) -> String? {
+    func read(token: Token) -> String? {
         nil
     }
 }

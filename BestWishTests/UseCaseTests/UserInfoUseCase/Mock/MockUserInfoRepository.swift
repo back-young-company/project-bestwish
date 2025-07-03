@@ -5,8 +5,8 @@
 //  Created by 이수현 on 6/25/25.
 //
 
+@testable import BestWishDomain
 import Foundation
-@testable import BestWish
 
 /// Mock UserInfoRepository
 final class MockUserInfoRepository: UserInfoRepository {

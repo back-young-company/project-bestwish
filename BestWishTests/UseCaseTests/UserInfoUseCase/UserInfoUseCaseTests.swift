@@ -5,9 +5,10 @@
 //  Created by 이수현 on 6/25/25.
 //
 
+@testable import BestWishData
+@testable import BestWishDomain
 import Foundation
 import XCTest
-@testable import BestWish
 
 /// 유저 정보 유스케이스 테스트 클래스
 final class UserInfoUseCaseTests: XCTestCase {
