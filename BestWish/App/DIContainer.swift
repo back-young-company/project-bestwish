@@ -20,6 +20,7 @@ final class DIContainer {
     private let keyChainManager: KeyChainManager
     private let productSyncManager: ProductSyncManager
     private let coreMLManager: CoreMLManager
+    private let firebaseAnalyticsManager: FirebaseAnalyticsManager
 
     private let accountRepository: AccountRepository
     private let userInfoRepository: UserInfoRepository
@@ -41,6 +42,7 @@ final class DIContainer {
         self.keyChainManager = KeyChainManagerImpl()
         self.productSyncManager = ProductSyncManager()
         self.coreMLManager = CoreMLManager()
+        self.firebaseAnalyticsManager = FirebaseAnalyticsManagerImpl()
 
         self.accountRepository = AccountRepositoryImpl(
             manager: supabaseOAuthManager,
@@ -48,7 +50,7 @@ final class DIContainer {
         )
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
         self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
-        self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager)
+        self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager, firebaseAnalyticsManager: firebaseAnalyticsManager)
         self.wishListRepository = WishListRepositoryImpl(
             manager: supabaseManager,
             userInfoManager: supabaseUserInfoManager

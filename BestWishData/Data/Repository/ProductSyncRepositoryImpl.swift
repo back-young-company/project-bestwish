@@ -12,13 +12,39 @@ import Foundation
 public final class ProductSyncRepositoryImpl: ProductSyncRepository {
 
     private let manager: ProductSyncManager
+    private let firebaseAnalyticsManager: FirebaseAnalyticsManager
 
-    public init(manager: ProductSyncManager) {
+    public init(manager: ProductSyncManager, firebaseAnalyticsManager: FirebaseAnalyticsManager) {
         self.manager = manager
+        self.firebaseAnalyticsManager = firebaseAnalyticsManager
     }
 
     /// 상품 동기 메서드
     public func syncProduct(from sharedText: String) async throws -> ProductEntity {
-        return try await manager.fetchProductSync(from: sharedText).toEntity()
+        do {
+            let entity =  try await manager.fetchProductSync(from: sharedText).toEntity()
+            firebaseAnalyticsManager.logEvent("SuccessSyncProduct", parameters:
+            [
+                "platform" : entity.platform ?? 0,
+                "productURL" : entity.productURL ?? ""
+            ])
+
+            return entity
+
+        } catch let error as ProductSyncError {
+            switch error {
+            case let .invaildURL(data):
+                firebaseAnalyticsManager.logEvent("InvalidURL", parameters: data)
+            case let .platformDetectionFailed(data):
+                firebaseAnalyticsManager.logEvent("PlatformDetectionFailed", parameters: data)
+            case let .redirectionFailed(data):
+                firebaseAnalyticsManager.logEvent("RedirectionFailed", parameters: data)
+            case let .urlExtractionFailed(data):
+                firebaseAnalyticsManager.logEvent("UrlExtractionFailed", parameters: data)
+            default:
+                break
+            }
+        }
+        throw ProductSyncError.unknown
     }
 }

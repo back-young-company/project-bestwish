@@ -180,6 +180,8 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
         case .kakao:
             let session = try await logInKakao()
             return session
+        default:
+            return nil
         }
     }
 

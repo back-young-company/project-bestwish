@@ -26,7 +26,8 @@ final class ShareViewController: UIViewController {
         ),
         productSyncUseCase: ProductSyncUseCaseImpl(
             repository: ProductSyncRepositoryImpl(
-                manager: ProductSyncManager()
+                manager: ProductSyncManager(),
+                firebaseAnalyticsManager: FirebaseAnalyticsManagerImpl()
             )
         )
     )

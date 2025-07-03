@@ -27,6 +27,12 @@
 		8175C0B72E16A2940092713E /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0B62E16A2940092713E /* CropViewController */; };
 		8175C0B92E16A2940092713E /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0B82E16A2940092713E /* TOCropViewController */; };
 		8175C0BB2E16A3550092713E /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0BA2E16A3550092713E /* CropViewController */; };
+		86FB35FC2E17885300B5F386 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8620AA192E16A72200395BF5 /* FirebaseAnalytics */; };
+		86FB35FD2E17885300B5F386 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8620AA1B2E16A72200395BF5 /* FirebaseCore */; };
+		86FB35FE2E17885300B5F386 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8620A9F12E16614600395BF5 /* FirebaseAnalytics */; };
+		86FB35FF2E17885300B5F386 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8620A9F32E16614600395BF5 /* FirebaseCore */; };
+		86FB38562E17888A00B5F386 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 86FB38552E17888A00B5F386 /* FirebaseAnalytics */; };
+		86FB38582E17888A00B5F386 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 86FB38572E17888A00B5F386 /* FirebaseCore */; };
 		CB2597A52E15429D00632E12 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B66E2DF691AA00B7F5F8 /* RxSwift */; };
 		CB2597A62E15429D00632E12 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6702DF691B300B7F5F8 /* SnapKit */; };
 		CB2597A72E15429D00632E12 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
@@ -294,6 +300,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86FB35FD2E17885300B5F386 /* FirebaseCore in Frameworks */,
+				86FB35FC2E17885300B5F386 /* FirebaseAnalytics in Frameworks */,
 				8175BE612E16A0FC0092713E /* SwiftSoup in Frameworks */,
 				8175BE602E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */,
 				8175BE5F2E16A0FC0092713E /* RxDataSources in Frameworks */,
@@ -312,6 +320,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86FB35FF2E17885300B5F386 /* FirebaseCore in Frameworks */,
+				86FB35FE2E17885300B5F386 /* FirebaseAnalytics in Frameworks */,
 				CBC7E9AF2E126E4900F6288C /* Alamofire in Frameworks */,
 				CBC7E9AD2E126D5100F6288C /* Supabase in Frameworks */,
 				CB27AB902E13F7C400E5CDC3 /* SwiftSoup in Frameworks */,
@@ -351,9 +361,11 @@
 				8175C0BB2E16A3550092713E /* CropViewController in Frameworks */,
 				8175BE582E16A0FC0092713E /* Supabase in Frameworks */,
 				8175BE572E16A0FC0092713E /* Kingfisher in Frameworks */,
+				86FB38562E17888A00B5F386 /* FirebaseAnalytics in Frameworks */,
 				8175BE562E16A0FC0092713E /* Then in Frameworks */,
 				8175BE552E16A0FC0092713E /* SnapKit in Frameworks */,
 				8175BE542E16A0FC0092713E /* RxRelay in Frameworks */,
+				86FB38582E17888A00B5F386 /* FirebaseCore in Frameworks */,
 				8175BE532E16A0FC0092713E /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -462,6 +474,8 @@
 				CB27B6402E1402B100E5CDC3 /* RxDataSources */,
 				CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */,
 				CB27B6482E1402B100E5CDC3 /* SwiftSoup */,
+				8620AA192E16A72200395BF5 /* FirebaseAnalytics */,
+				8620AA1B2E16A72200395BF5 /* FirebaseCore */,
 			);
 			productName = BestWishShareExtension;
 			productReference = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */;
@@ -490,6 +504,8 @@
 				CBC7E9AC2E126D5100F6288C /* Supabase */,
 				CBC7E9AE2E126E4900F6288C /* Alamofire */,
 				CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */,
+				8620A9F12E16614600395BF5 /* FirebaseAnalytics */,
+				8620A9F32E16614600395BF5 /* FirebaseCore */,
 			);
 			productName = BestWishData;
 			productReference = CBC7E9482E1263E500F6288C /* BestWishData.framework */;
@@ -585,6 +601,8 @@
 				CB4FBCED2DF6B66B00149D86 /* RxDataSources */,
 				CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */,
 				8175C0BA2E16A3550092713E /* CropViewController */,
+				86FB38552E17888A00B5F386 /* FirebaseAnalytics */,
+				86FB38572E17888A00B5F386 /* FirebaseCore */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -671,6 +689,7 @@
 				CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */,
+				86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -1533,12 +1552,28 @@
 				minimumVersion = 2.7.4;
 			};
 		};
+		86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.15.0;
+			};
+		};
 		86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.10.2;
+			};
+		};
+		86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.15.0;
 			};
 		};
 		CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
@@ -1653,10 +1688,40 @@
 			package = 8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */;
 			productName = CropViewController;
 		};
+		8620A9F12E16614600395BF5 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		8620A9F32E16614600395BF5 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		8620AA192E16A72200395BF5 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		8620AA1B2E16A72200395BF5 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
 		86F6FD002DF66C8B00CAF678 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		86FB38552E17888A00B5F386 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		86FB38572E17888A00B5F386 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
 		};
 		CB259C6C2E1544B200632E12 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
