@@ -54,18 +54,28 @@ final class WishListHeaderView: UICollectionReusableView, ReuseIdentifier {
         _disposeBag = DisposeBag()
     }
 
-    /// 위시리스트 자체에 상품이 없을 경우
-    func configure(isEmpty: Bool) {
-        _productCountLabel.isHidden = isEmpty
-        _editButton.isHidden = isEmpty
-        _contentView.isHidden = !isEmpty
-        _noMatchView.isHidden = isEmpty
-    }
-
-    /// 위시리스트에는 상품이 있지만 검색 결과가 0개인 경우
-    func configure(count: Int, isEmpty: Bool) {
-        _productCountLabel.text = "\(count)개"
-        _noMatchView.isHidden = !isEmpty
+    func configure(totalCount: Int, filteredCount: Int) {
+        if totalCount == 0 {
+            // 상품이 아예 없음
+            _productCountLabel.isHidden = true
+            _editButton.isHidden = true
+            _contentView.isHidden = false
+            _noMatchView.isHidden = true
+        } else if filteredCount == 0 {
+            // 상품은 있으나 검색 결과 없음
+            _productCountLabel.isHidden = false
+            _editButton.isHidden = false
+            _productCountLabel.text = "\(totalCount)개"
+            _contentView.isHidden = true
+            _noMatchView.isHidden = false
+        } else {
+            // 검색 결과 있음
+            _productCountLabel.isHidden = false
+            _editButton.isHidden = false
+            _productCountLabel.text = "\(filteredCount)개"
+            _contentView.isHidden = true
+            _noMatchView.isHidden = true
+        }
     }
 }
 
@@ -99,6 +109,10 @@ private extension WishListHeaderView {
             $0.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 17)
         }
 
+        _contentView.do {
+            $0.isHidden = true
+        }
+
         _emptyImageView.do {
             $0.image = UIImage(named: "noProduct")
             $0.contentMode = .scaleAspectFit
@@ -130,6 +144,10 @@ private extension WishListHeaderView {
             $0.layer.borderColor = UIColor.primary200?.cgColor
             $0.layer.borderWidth = 1.5
             $0.clipsToBounds = true
+        }
+
+        _noMatchView.do {
+            $0.isHidden = true
         }
 
         _noMatchImage.do {

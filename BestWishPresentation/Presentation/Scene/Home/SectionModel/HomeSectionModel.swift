@@ -28,6 +28,7 @@ enum HomeItem: Equatable {
 struct HomeSectionModel {
     let header: HomeHeader
     var items: [HomeItem]
+    var totalCount: Int?
 }
 
 // MARK: - 홈 Section Model 초기값 설정

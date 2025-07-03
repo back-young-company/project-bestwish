@@ -131,7 +131,7 @@ private extension HomeViewModel {
 
                 let platformsSection = HomeSectionModel(header: .platform, items: platforms.map { .platform($0) })
                 let filterSection = HomeSectionModel(header: .filter, items: filters.map { .filter($0.0, $0.0 == 0) })
-                let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists.map { .wishlist($0) })
+                let wishlistSection = HomeSectionModel(header: .wishlist, items: wishLists.map { .wishlist($0) }, totalCount: wishLists.count)
 
                 _sections.accept([platformsSection, filterSection, wishlistSection])
             } catch {
@@ -165,6 +165,7 @@ private extension HomeViewModel {
 
                 var currentSections = _sections.value
                 currentSections[1].items = filters.map { .filter($0.0, $0.0 == 0) }
+                currentSections[2].totalCount = wishlists.count
                 currentSections[2].items = wishlists.map { .wishlist($0) }
 
                 _sections.accept(currentSections)
