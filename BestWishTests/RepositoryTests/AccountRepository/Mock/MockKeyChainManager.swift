@@ -8,11 +8,10 @@
 @testable import BestWishData
 import Foundation
 
-import Supabase
 
 /// Mock 키체인 매니저
 final class MockKeyChainManager: KeyChainManager {
-    func saveAllToken(session: Auth.Session) async {
+    func save(token: Token) async {
         return
     }
     
