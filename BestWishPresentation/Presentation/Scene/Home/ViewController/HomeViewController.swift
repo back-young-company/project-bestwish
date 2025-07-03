@@ -140,8 +140,10 @@ public final class HomeViewController: UIViewController {
                     for: indexPath
                 ) as? WishListHeaderView else { return UICollectionReusableView() }
 
-                headerView.configure(isEmpty: dataSource.sectionModels[1].items.isEmpty)
-                headerView.configure(count: items.count, isEmpty: items.isEmpty)
+                let totalCount = section.totalCount
+                let filteredCount = items.count
+
+                headerView.configure(totalCount: totalCount ?? 0, filteredCount: filteredCount)
 
                 headerView.linkButton.rx.tap
                     .bind(with: self) { owner, _ in
