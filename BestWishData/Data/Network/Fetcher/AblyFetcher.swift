@@ -22,11 +22,13 @@ final class AblyFetcher: ProductDTOFetcher {
             // SwiftSoup으로 파싱 헤더에 데이터가 있을 때만 가능
             let title = try doc.title()
             let imageURL = try doc.select("meta[property=og:image]").attr("content")
+            let deepLink = try doc.select("meta[property=og:url]").attr("content").convertProductURLToDeepLink(.ably)
             
             // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추추출
             let price = html.htmlExtractValue(pattern: #""thumbnail_price"\s*:\s*(\d+)"#) { Int($0) }
             let discountRate = html.htmlExtractValue(pattern: #""discount_rate"\s*:\s*(\d+)"#) { $0 }
             let brand = try doc.select("p.typography.typography__subtitle2.color__gray70").first()?.text()
+            
             
             return ProductDTO(
                 id: nil,
@@ -37,7 +39,7 @@ final class AblyFetcher: ProductDTOFetcher {
                 discountRate: discountRate ?? "0",
                 brand: brand,
                 imagePathURL: imageURL,
-                productURL: deepLink?.absoluteString,
+                productURL: deepLink,
                 createdAt: nil
             )
         } catch {
