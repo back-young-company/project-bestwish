@@ -1,4 +1,4 @@
-# BEST WISH  <img src="./image-assets/icon.png" width="100" align=left>
+# BEST WISH  <img src="./image-assets/ICON.png" width="100" align=left>
 ### 다양한 쇼핑 플랫폼의 위시리스트를 통합 관리 서비스
 
 <img src="./image-assets/cover.png">
