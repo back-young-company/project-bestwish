@@ -25,7 +25,7 @@ public final class ProductSyncManager {
             throw ProductSyncError.invaildURL(
                 data: ProductSyncLogDTO(
                     type: .invaildURL,
-                    productURL: originalUrl?.absoluteString,
+                    productURL: originalUrl?.absoluteString
                 ).toParameters()
             )
         }
@@ -74,7 +74,7 @@ private extension ProductSyncManager {
             throw ProductSyncError.urlExtractionFailed(
                 data: ProductSyncLogDTO(
                     type: .platformDetectionFailed,
-                    productURL: text,
+                    productURL: text
                 ).toParameters()
             )
         }
