@@ -23,9 +23,10 @@ public final class ProductSyncManager {
             let deepLink = URL(string: originalUrl?.absoluteString.convertProductURLToDeepLink(platform) ?? "")
             else {
             throw ProductSyncError.invaildURL(
-                data: [
-                    "originalURL": originalUrl ?? sharedText
-                ]
+                data: ProductSyncLogDTO(
+                    type: .invaildURL,
+                    productURL: originalUrl?.absoluteString,
+                ).toParameters()
             )
         }
 
@@ -38,21 +39,13 @@ public final class ProductSyncManager {
               metaData.productURL != nil
         else {
             throw ProductSyncError.platformDetectionFailed(
-                data: [
-                    "platform": platform.rawValue,
-                    "productURL": productURL,
-                    "deepLink": deepLink
-                ]
+                data: ProductSyncLogDTO(
+                    type: .platformDetectionFailed,
+                    platform: platform.rawValue,
+                    productURL: originalUrl?.absoluteString,
+                    deepLink: deepLink.absoluteString
+                ).toParameters()
             )
-
-//        guard let metaData = try await platform.fetcher?.fetchProductDTO(deepLink: deepLink, productURL: productURL, html: html) else {
-//            throw ProductSyncError.platformDetectionFailed(
-//                data: [
-//                    "platform": platform.rawValue,
-//                    "productURL": productURL,
-//                    "deepLink": deepLink
-//                ]
-//            )
         }
         return metaData
     }
@@ -78,7 +71,12 @@ private extension ProductSyncManager {
             )
             return matches.first?.url
         } catch {
-            throw ProductSyncError.urlExtractionFailed(data: ["originalURL": text])
+            throw ProductSyncError.urlExtractionFailed(
+                data: ProductSyncLogDTO(
+                    type: .platformDetectionFailed,
+                    productURL: text,
+                ).toParameters()
+            )
         }
     }
 
@@ -100,19 +98,21 @@ private extension ProductSyncManager {
             let (data, _) = try await URLSession.shared.data(for: request)
             guard let html = String(data: data, encoding: .utf8) else {
                 throw ProductSyncError.redirectionFailed(
-                    data: [
-                        "platform": platform.rawValue,
-                        "productURL": url
-                    ]
+                    data: ProductSyncLogDTO(
+                        type: .redirectionFailed,
+                        platform: platform.rawValue,
+                        productURL: url.absoluteString
+                    ).toParameters()
                 )
             }
             return html
         } catch {
             throw ProductSyncError.redirectionFailed(
-                data: [
-                    "platform": platform.rawValue,
-                    "productURL": url
-                ]
+                data: ProductSyncLogDTO(
+                    type: .redirectionFailed,
+                    platform: platform.rawValue,
+                    productURL: url.absoluteString
+                ).toParameters()
             )
         }
     }

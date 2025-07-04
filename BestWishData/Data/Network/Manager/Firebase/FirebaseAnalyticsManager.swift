@@ -10,4 +10,5 @@ import BestWishDomain
 
 public protocol FirebaseAnalyticsManager {
     func logEvent(_ name: String, parameters: [String: Any]?)
+    func logProductSync(parameters: [String : Any]?)
 }

@@ -15,14 +15,15 @@ public final class FirebaseAnalyticsManagerImpl: FirebaseAnalyticsManager {
 
     public init() {
         if FirebaseApp.app() == nil {
-            NSLog("TT!")
             FirebaseApp.configure()
-        } else {
-            NSLog("TT2")
         }
     }
 
     public func logEvent(_ name: String, parameters: [String : Any]?) {
         Analytics.logEvent(name, parameters: parameters)
+    }
+
+    public func logProductSync(parameters: [String : Any]?) {
+        Analytics.logEvent("ProductSyncFailed", parameters: parameters)
     }
 }
