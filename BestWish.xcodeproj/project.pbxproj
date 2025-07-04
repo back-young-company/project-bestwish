@@ -203,6 +203,28 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		140618B72E17B5A500880745 /* Exceptions for "BestWishData" folder in "BestWishData" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				Resource/Info.plist,
+			);
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+		};
+		140618B82E17B5BE00880745 /* Exceptions for "BestWishDomain" folder in "BestWishDomain" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resource/Info.plist,
+			);
+			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
+		};
+		140618BD2E17B8D600880745 /* Exceptions for "BestWish" folder in "BestWishData" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+		};
 		14B8B6482DF6861400B7F5F8 /* Exceptions for "BestWishShareExtension" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -229,6 +251,7 @@
 		CB387E272E13C18E00E29D1C /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"GoogleService-Info.plist",
 				"Resource/Fonts/Pretendard-Bold.otf",
 				"Resource/Fonts/Pretendard-Medium.otf",
 			);
@@ -244,7 +267,9 @@
 		CBC7E9C72E12716B00F6288C /* Exceptions for "BestWishPresentation" folder in "BestWishPresentation" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Presentation/Resource/Info.plist,
 				Presentation/Scene/Dummy/ViewController/MyWebViewController.swift,
+				Resource/Info.plist,
 			);
 			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
 		};
@@ -261,11 +286,17 @@
 		};
 		CBC7E9492E1263E500F6288C /* BestWishData */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				140618B72E17B5A500880745 /* Exceptions for "BestWishData" folder in "BestWishData" target */,
+			);
 			path = BestWishData;
 			sourceTree = "<group>";
 		};
 		CBC7E97B2E12662D00F6288C /* BestWishDomain */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				140618B82E17B5BE00880745 /* Exceptions for "BestWishDomain" folder in "BestWishDomain" target */,
+			);
 			path = BestWishDomain;
 			sourceTree = "<group>";
 		};
@@ -283,6 +314,7 @@
 			exceptions = (
 				81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */,
 				CB387E272E13C18E00E29D1C /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */,
+				140618BD2E17B8D600880745 /* Exceptions for "BestWish" folder in "BestWishData" target */,
 				CB387E2D2E13C23300E29D1C /* Exceptions for "BestWish" folder in "BestWishPresentation" target */,
 			);
 			path = BestWish;
@@ -947,6 +979,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishData/Resource/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -993,6 +1026,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishData/Resource/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -1037,6 +1071,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishDomain/Resource/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -1082,6 +1117,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishDomain/Resource/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -1126,7 +1162,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = BestWishPresentation/Resource/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
@@ -1173,7 +1209,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = BestWishPresentation/Resource/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
