@@ -10,10 +10,10 @@ import Foundation
 
 /// 상품 동기 Error
 enum ProductSyncError: AppErrorProtocol {
-    case invaildURL
-    case urlExtractionFailed
-    case platformDetectionFailed
-    case redirectionFailed
+    case invaildURL(data: [String: Any])
+    case urlExtractionFailed(data: [String: Any])
+    case platformDetectionFailed(data: [String: Any])
+    case redirectionFailed(data: [String: Any])
     case htmlParsingFailed
     case dataLoadingFailed
     case jsonScriptParsingFailed
