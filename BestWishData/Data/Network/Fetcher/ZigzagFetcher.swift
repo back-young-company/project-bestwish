@@ -24,11 +24,12 @@ final class ZigzagFetcher: ProductDTOFetcher {
             let title = try doc.title()
             let imageURL = try doc.select("meta[property=og:image]").attr("content")
             let brand = try doc.select("meta[property=product:brand]").attr("content")
+            let productId = try doc.select("meta[property=product:retailer_item_id]").attr("content")
+            let deepLink = "zigzag:///product_detail?browsing_type=INTERNAL_BROWSER&url=https://store.zigzag.kr/app/catalog/products/\(productId)?catalog_product_id=\(productId)"
             
             // JsonData 혹은 Body에 필요한 데이터가 있는 경우 추출
             let discountRate = html.htmlExtractValue(pattern: #""discount_rate"\s*:\s*"?([0-9]+)"?"#) { $0 }
             let price = html.htmlExtractValue(pattern: #""discount_price"\s*:\s*"?([0-9]+)"?"#) { Int($0) }
-            let deepLinkURL = html.htmlExtractValue(pattern: #""deeplink_url"\s*:\s*"([^"]+)""#) { $0 }
 
             return ProductDTO(
                 id: nil,
@@ -39,7 +40,7 @@ final class ZigzagFetcher: ProductDTOFetcher {
                 discountRate: discountRate ?? "0",
                 brand: brand,
                 imagePathURL: imageURL,
-                productURL: deepLinkURL ?? deepLink?.absoluteString,
+                productURL: deepLink,
                 createdAt: nil
             )
         } catch {

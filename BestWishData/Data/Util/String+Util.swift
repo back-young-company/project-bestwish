@@ -61,26 +61,26 @@ extension String {
     /// 사이트링크 -> 딥 링크 (상품 바로가기 링크 추출을 위함)
     func convertProductURLToDeepLink(_ type: PlatformEntity) -> String {
         switch type {
-        case .zigzag:
-            let domain = "https://zigzag.kr/p/"
+        case .ably:
+            let domain = "https://m.a-bly.com/goods/"
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")
-            return "zigzag:///product_detail?browsing_type=INTERNAL_BROWSER\\u0026catalog_product_id=\(productId)\\u0026url=https://store.zigzag.kr/app/catalog/products/\(productId)?catalog_product_id=\(productId)\\u0026shop_id=795\\u0026uau=bdeb5ae3-0a5c-4f58-a7aa-094f7f72f21f\\u0026catalog_product_id=\(productId)"
+            return "ably://goods/\(productId)"
         case .brandi:
             let domain = "https://www.brandi.co.kr/products/"
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")
-            return "https://www.brandi.co.kr/onelink?type=products&id=\(productId)&shareType=share_pdp_url"
+            return "brandiapplication://applink/products/\(productId)"
         case ._4910:
             let domain = "https://4910.kr/goods/"
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")
             return "aglo://webview?url=https://4910.kr/goods/\(productId)"
         case .hiver:
-            let domain = "https://www.hiver.co.kr/products/"
+            let domain = "https://www.hiver.co.kr/onelink?type=products"
             guard self.contains(domain) else { return self }
             let productId = self.replacingOccurrences(of: domain, with: "")
-            return "https://www.hiver.co.kr/onelink?type=products&id=\(productId)&shareType=share_pdp_url&deep_link_value=hiverapplication://applink/products/\(productId)"
+            return "hiverapplication://applink/products/\(productId)"
         default: return self
         }
     }

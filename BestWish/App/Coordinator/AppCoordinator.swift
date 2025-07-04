@@ -19,6 +19,7 @@ final class AppCoordinator {
     private var homeNavigation: UINavigationController?
     private var cameraNavigation: UINavigationController?
     private var myPageNavigation: UINavigationController?
+    private var imageEditVC: ImageEditViewController?
 
     init(window: UIWindow) {
         self.window = window
@@ -164,6 +165,7 @@ final class AppCoordinator {
 
         let navVC = UINavigationController(rootViewController: imageEditVC)
         navVC.modalPresentationStyle = .fullScreen
+        self.imageEditVC = imageEditVC
         cameraNavigation?.present(navVC, animated: false)
     }
 
@@ -183,8 +185,13 @@ final class AppCoordinator {
             sheet.prefersGrabberVisible = true
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
-
-        cameraNavigation?.viewControllers.last?.present(vc, animated: false)
+        imageEditVC?.present(vc, animated: true)
+    }
+    
+    /// 상품 추가 후 이미지 분석 모달에서 홈 화면으로 바로 이동
+    func removeAnalysisView() {
+        cameraNavigation?.dismiss(animated: true)
+        showMainView()
     }
 
     // MARK: - 마이페이지 관련 뷰

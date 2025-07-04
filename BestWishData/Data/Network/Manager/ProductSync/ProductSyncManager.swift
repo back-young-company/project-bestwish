@@ -24,7 +24,13 @@ public final class ProductSyncManager {
         
         let html = try await requestHTML(platform: platform, url: productURL)
         
-        guard let metaData = try await platform.fetcher?.fetchProductDTO(deepLink: deepLink, productURL: productURL, html: html) else {
+        guard let metaData = try await platform.fetcher?.fetchProductDTO(deepLink: deepLink, productURL: productURL, html: html),
+              metaData.title != nil,
+              metaData.price != nil,
+              metaData.brand != nil,
+              metaData.imagePathURL != nil,
+              metaData.productURL != nil
+        else {
             throw ProductSyncError.platformDetectionFailed
         }
         return metaData
