@@ -8,6 +8,7 @@
 .LSOverride
 
 *.xcconfig
+GoogleService-Info.plist
 
 # Icon must end with two \r
 Icon
