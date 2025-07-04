@@ -7,18 +7,10 @@
 
 import Foundation
 
-public import Supabase
-
 /// 비동기 저장/삭제 (actor 격리 유지)
 public actor KeyChainManagerImpl: KeyChainManager {
 
     public init() { }
-
-    ///  모든 토큰 저장
-    public func saveAllToken(session: Supabase.Session) async {
-        await save(token: Token(service: .access, value: session.accessToken))
-        await save(token: Token(service: .refresh, value: session.refreshToken))
-    }
 
     ///  모든 토큰 삭제
     public func deleteAllToken() async {
@@ -27,7 +19,7 @@ public actor KeyChainManagerImpl: KeyChainManager {
     }
 
     /// 토큰 저장
-    private func save(token: Token) async {
+    public func save(token: Token) async {
         let baseQuery: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrService: token.service.type,

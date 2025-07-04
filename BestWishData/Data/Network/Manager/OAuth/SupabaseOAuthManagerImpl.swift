@@ -9,7 +9,7 @@ import AuthenticationServices
 import BestWishDomain
 import Foundation
 
-public import Supabase
+internal import Supabase
 
 /// OAuthManager 구현부
 public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
@@ -40,7 +40,9 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
             )
 
             Task.detached(priority: .utility) {
-                await keychain.saveAllToken(session: session)
+                async let saveAccessToken:() =  keychain.save(token: Token(service: .access, value: session.accessToken))
+                async let saveRefreshToken:() =  keychain.save(token: Token(service: .refresh, value: session.refreshToken))
+                _ = await (saveAccessToken,saveRefreshToken)
                 NSLog("로그인 세션 유지 성공")
             }
             return true
@@ -82,7 +84,9 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
 
         if let session = session {
             Task.detached(priority: .utility) {
-                await keyChain.saveAllToken(session: session)
+                async let saveAccessToken:() =  keyChain.save(token: Token(service: .access, value: session.accessToken))
+                async let saveRefreshToken:() =  keyChain.save(token: Token(service: .refresh, value: session.refreshToken))
+                _ = await (saveAccessToken,saveRefreshToken)
             }
         }
     }
@@ -176,6 +180,8 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
         case .kakao:
             let session = try await logInKakao()
             return session
+        default:
+            return nil
         }
     }
 
