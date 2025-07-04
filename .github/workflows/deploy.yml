@@ -31,8 +31,8 @@ jobs:
       ENCRYPTED_DATA_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Data.mobileprovision.gpg' }}
       DECRYPTED_DATA_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Data.mobileprovision' }}
       
-      ENCRYPTED_DOMAIN_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Domian.mobileprovision.gpg' }}
-      DECRYPTED_DOMAIN_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Domian.mobileprovision' }}
+      ENCRYPTED_DOMAIN_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Domain.mobileprovision.gpg' }}
+      DECRYPTED_DOMAIN_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Domain.mobileprovision' }}
           
       ENCRYPTED_PRESENTATION_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Presentation.mobileprovision.gpg' }}
       DECRYPTED_PRESENTATION_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Presentation.mobileprovision' }}
