@@ -120,20 +120,15 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
             NSLog("Success - 1: \(session)")
             try await unlinkKakaoAccount(providerToken)
             NSLog("Success - 2: withdraw")
-            try await client.rpc("delete_current_user").execute()
-            NSLog("Success - 3: delete supabase")
-
-            // 회원탈퇴 후 키체인 삭제
-            Task.detached(priority: .utility) {
-                await keyChain.deleteAllToken()
-            }
-
         case .apple:
-            // 애플 AccessToken 요청
-            let (code, _) = try await logInApple()
+            async let loginResult = logInApple()
+            async let clientSecretResult = requestClientSecret(keyChain)
+
+            let (code, _) = try await loginResult
             NSLog("Success - 1: \(code)")
-            let clientSecret = try await requestClientSecret(keyChain)
+            let clientSecret = try await clientSecretResult
             NSLog("Success - 2: \(clientSecret)")
+            // 애플 AccessToken 요청
             let requestAppleAccessToken = try await requestAppleAccessToken(code: code, clientSecret: clientSecret)
             NSLog("Success - 3: \(requestAppleAccessToken)")
             let appleAccessToken = try parsingAccessToken(data: requestAppleAccessToken)
@@ -142,16 +137,19 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
             // 애플 회원탈퇴 요청
             try await revokeAccount(appleAccessToken, clientSecret)
             NSLog("Success - 5: withdraw")
-            try await client.rpc("delete_current_user").execute()
-            NSLog("Success - 6: delete supabase")
-
-            // 회원탈퇴 후 키체인 삭제
-            Task.detached(priority: .utility) {
-                await keyChain.deleteAllToken()
-            }
-
         default:
             break
+        }
+        async let rpc = client.rpc("delete_current_user").execute()
+        async let deleteKeychain: () = keyChain.deleteAllToken()
+
+        do {
+            _ = try await rpc
+            NSLog("Success - : delete supabase")
+            await deleteKeychain
+            NSLog("Success - : 토큰 삭제 ")
+        } catch {
+            throw AuthError.supabaseRPCFailed(error)
         }
     }
 

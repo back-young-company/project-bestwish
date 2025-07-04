@@ -57,9 +57,7 @@ public final class UserInfoManagementViewController: UIViewController {
         managementView.withdrawButton.rx.tap
             .bind(with: self) { owner, _ in
                 AlertBuilder(baseViewController: owner, type: .withdraw) {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        owner.viewModel.action.onNext(.withdraw)
-                    }
+                    owner.viewModel.action.onNext(.withdraw)
                 }.show()
             }.disposed(by: disposeBag)
     }
@@ -77,6 +75,13 @@ public final class UserInfoManagementViewController: UIViewController {
                 owner.flowDelegate?.didTapWithdraw()
 //                DummyCoordinator.shared.showLoginView()
             }.disposed(by: disposeBag)
+
+        viewModel.state.isLoading
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, isLoading in
+                owner.managementView.showLoading(isLoading)
+            }
+            .disposed(by: disposeBag)
 
         viewModel.state.error
             .observe(on: MainScheduler.instance)

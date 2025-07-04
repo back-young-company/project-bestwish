@@ -25,6 +25,7 @@ public final class UserInfoManagementViewModel: ViewModel {
         let authProvider: Observable<String?>
         let isWithdraw: Observable<Void>
         let error: Observable<AppError>
+        let isLoading: Observable<Bool>
     }
 
     // MARK: - Internal Property
@@ -37,6 +38,7 @@ public final class UserInfoManagementViewModel: ViewModel {
     private let _authProvider = PublishSubject<String?>()
     private let _isWithdraw = PublishRelay<Void>()
     private let _error = PublishSubject<AppError>()
+    private let _isLoading = PublishRelay<Bool>()
 
     private let userInfoUseCase: UserInfoUseCase
     private let accountUseCase: AccountUseCase
@@ -51,7 +53,8 @@ public final class UserInfoManagementViewModel: ViewModel {
         state = State(
             authProvider: _authProvider.asObservable(),
             isWithdraw: _isWithdraw.asObservable(),
-            error: _error.asObservable()
+            error: _error.asObservable(),
+            isLoading: _isLoading.asObservable()
         )
 
         bindAction()
@@ -83,7 +86,11 @@ public final class UserInfoManagementViewModel: ViewModel {
 
     /// 회원 탈퇴
     private func withdraw() {
+        _isLoading.accept(true)
         Task {
+            defer {
+                    _isLoading.accept(false)
+            }
             do {
                 try await accountUseCase.withdraw()
                 _isWithdraw.accept(())

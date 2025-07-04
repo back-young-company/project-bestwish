@@ -34,10 +34,12 @@ final class UserInfoManagementView: UIView {
         title: "회원 정보를 삭제하시겠어요?",
         subTitle: "회원탈퇴"
     )
+    private let _activityIndicator = UIActivityIndicatorView(style: .large)
 
     // MARK: - Internal Property
     var userInfoArrowButton: UIButton { _userInfoHorizontalStackView.arrowButton }
     var withdrawButton: UIButton { _withdrawStackView.arrowButton }
+    var activityIndicator: UIActivityIndicatorView { _activityIndicator }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,6 +60,13 @@ final class UserInfoManagementView: UIView {
     func addUnderLine() {
         _snsInfoHorizontalStackView.addUnderLine()
     }
+
+    func showLoading(_ loading: Bool) {
+        _activityIndicator.isHidden = !loading
+        loading
+            ? _activityIndicator.startAnimating()
+            : _activityIndicator.stopAnimating()
+    }
 }
 
 // MARK: - View 설정
@@ -70,10 +79,15 @@ private extension UserInfoManagementView {
 
     func setAttributes() {
         self.backgroundColor = .gray0
+        _activityIndicator.do {
+            $0.color = .primary400
+            $0.hidesWhenStopped = true
+            $0.isHidden = true
+        }
     }
 
     func setHierarchy() {
-        self.addSubviews(_stackView)
+        self.addSubviews(_stackView, _activityIndicator)
         _stackView.addArrangedSubviews(_userInfoManagementStackView, _snsInfoStackView)
         _userInfoManagementStackView.addArrangedSubviews(
             _userInfoManagementTitlelabel,
@@ -90,6 +104,9 @@ private extension UserInfoManagementView {
         _stackView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).inset(32)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+        }
+        _activityIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
 }

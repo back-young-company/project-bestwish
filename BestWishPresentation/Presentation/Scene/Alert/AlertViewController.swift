@@ -54,9 +54,11 @@ final class AlertViewController: UIViewController {
 
         alertView.confirmButton.rx.tap
             .bind(with: self) { owner, _ in
-                owner.confirmAction?()
-                owner.dismiss(animated: true)
-            }.disposed(by: disposeBag)
+                owner.dismiss(animated: true) {
+                    owner.confirmAction?()
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
 
