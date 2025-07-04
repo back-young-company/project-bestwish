@@ -27,6 +27,16 @@ jobs:
 
       ENCRYPTED_SHARE_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_ShareExtension.mobileprovision.gpg' }}
       DECRYPTED_SHARE_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_ShareExtension.mobileprovision' }}
+
+      ENCRYPTED_DATA_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Data.mobileprovision.gpg' }}
+      DECRYPTED_DATA_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Data.mobileprovision' }}
+      
+      ENCRYPTED_DOMAIN_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Domian.mobileprovision.gpg' }}
+      DECRYPTED_DOMAIN_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Domian.mobileprovision' }}
+          
+      ENCRYPTED_PRESENTATION_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Presentation.mobileprovision.gpg' }}
+      DECRYPTED_PRESENTATION_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_Presentation.mobileprovision' }}
+        
       PROVISIONING_ENCRYPTION_KEY: ${{ secrets.PROVISION_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
       # certification export key
       CERT_EXPORT_KEY: ${{ secrets.CERT_EXPORT_PWD }}
@@ -62,6 +72,10 @@ jobs:
         gpg -d -o "$DECRYPTED_CERT_FILE_PATH" --pinentry-mode=loopback --passphrase "$CERT_ENCRYPTION_KEY" "$ENCRYPTED_CERT_FILE_PATH"
         gpg -d -o "$DECRYPTED_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_PROVISION_FILE_PATH"
         gpg -d -o "$DECRYPTED_SHARE_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_SHARE_PROVISION_FILE_PATH"
+        gpg -d -o "$DECRYPTED_DATA_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_DATA_PROVISION_FILE_PATH"
+        gpg -d -o "$DECRYPTED_DOMAIN_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_DOMAIN_PROVISION_FILE_PATH"
+        gpg -d -o "$DECRYPTED_PRESENTATION_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_PRESENTATION_PROVISION_FILE_PATH"
+        
         security import "$DECRYPTED_CERT_FILE_PATH" -k "$KEYCHAIN" -P "$CERT_EXPORT_KEY" -A
         security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
 
