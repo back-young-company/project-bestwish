@@ -48,13 +48,11 @@
 		CB9F14952E13A8BC0042BB47 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA3F2E12769D00F6288C /* Then */; };
 		CB9F14962E13A8BC0042BB47 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA412E12769D00F6288C /* Kingfisher */; };
 		CB9F14972E13A8BC0042BB47 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA432E12769D00F6288C /* RxDataSources */; };
-		CBC7E99A2E1269C000F6288C /* BestWishDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E97A2E12662D00F6288C /* BestWishDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CBC7E9A42E126A6200F6288C /* BestWishData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E9482E1263E500F6288C /* BestWishData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CBC7E9A82E126A6200F6288C /* BestWishDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E97A2E12662D00F6288C /* BestWishDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CBC7E9AD2E126D5100F6288C /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7E9AC2E126D5100F6288C /* Supabase */; };
 		CBC7E9AF2E126E4900F6288C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7E9AE2E126E4900F6288C /* Alamofire */; };
 		CBC7E9BC2E12715800F6288C /* BestWishPresentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E9B52E12715800F6288C /* BestWishPresentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		CBC7E9C12E12715E00F6288C /* BestWishDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E97A2E12662D00F6288C /* BestWishDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,13 +98,6 @@
 			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
 			remoteInfo = BestWishDomain;
 		};
-		CBC7E99B2E1269C000F6288C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
-			remoteInfo = BestWishDomain;
-		};
 		CBC7E9A52E126A6200F6288C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
@@ -127,13 +118,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = CBC7E9B42E12715800F6288C;
 			remoteInfo = BestWishPresentation;
-		};
-		CBC7E9C22E12715E00F6288C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
-			remoteInfo = BestWishDomain;
 		};
 		CBD6BA282DEF1B3B003242CA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -156,17 +140,6 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CBC7E99D2E1269C000F6288C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				CBC7E99A2E1269C000F6288C /* BestWishDomain.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CBC7E9AB2E126A6300F6288C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -176,17 +149,6 @@
 				CBC7E9A42E126A6200F6288C /* BestWishData.framework in Embed Frameworks */,
 				CBC7E9A82E126A6200F6288C /* BestWishDomain.framework in Embed Frameworks */,
 				CBC7E9BC2E12715800F6288C /* BestWishPresentation.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CBC7E9C42E12715E00F6288C /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				CBC7E9C12E12715E00F6288C /* BestWishDomain.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,13 +180,6 @@
 			);
 			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
 		};
-		140618BD2E17B8D600880745 /* Exceptions for "BestWish" folder in "BestWishData" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"GoogleService-Info.plist",
-			);
-			target = CBC7E9472E1263E500F6288C /* BestWishData */;
-		};
 		14B8B6482DF6861400B7F5F8 /* Exceptions for "BestWishShareExtension" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -238,6 +193,13 @@
 				Resource/Info.plist,
 			);
 			target = CBD6BA102DEF1B39003242CA /* BestWish */;
+		};
+		813BAE452E17C0AA00A3F3C2 /* Exceptions for "BestWish" folder in "BestWishData" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
 		};
 		CB27B64E2E14034200E5CDC3 /* Exceptions for "BestWishPresentation" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -314,7 +276,7 @@
 			exceptions = (
 				81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */,
 				CB387E272E13C18E00E29D1C /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */,
-				140618BD2E17B8D600880745 /* Exceptions for "BestWish" folder in "BestWishData" target */,
+				813BAE452E17C0AA00A3F3C2 /* Exceptions for "BestWish" folder in "BestWishData" target */,
 				CB387E2D2E13C23300E29D1C /* Exceptions for "BestWish" folder in "BestWishPresentation" target */,
 			);
 			path = BestWish;
@@ -521,12 +483,10 @@
 				CBC7E9442E1263E500F6288C /* Sources */,
 				CBC7E9452E1263E500F6288C /* Frameworks */,
 				CBC7E9462E1263E500F6288C /* Resources */,
-				CBC7E99D2E1269C000F6288C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CBC7E99C2E1269C000F6288C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CBC7E9492E1263E500F6288C /* BestWishData */,
@@ -574,12 +534,10 @@
 				CBC7E9B12E12715800F6288C /* Sources */,
 				CBC7E9B22E12715800F6288C /* Frameworks */,
 				CBC7E9B32E12715800F6288C /* Resources */,
-				CBC7E9C42E12715E00F6288C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CBC7E9C32E12715E00F6288C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CBC7E9B62E12715800F6288C /* BestWishPresentation */,
@@ -859,11 +817,6 @@
 			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
 			targetProxy = CB27AB8A2E13F77E00E5CDC3 /* PBXContainerItemProxy */;
 		};
-		CBC7E99C2E1269C000F6288C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
-			targetProxy = CBC7E99B2E1269C000F6288C /* PBXContainerItemProxy */;
-		};
 		CBC7E9A62E126A6200F6288C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CBC7E9472E1263E500F6288C /* BestWishData */;
@@ -878,11 +831,6 @@
 			isa = PBXTargetDependency;
 			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
 			targetProxy = CBC7E9B92E12715800F6288C /* PBXContainerItemProxy */;
-		};
-		CBC7E9C32E12715E00F6288C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
-			targetProxy = CBC7E9C22E12715E00F6288C /* PBXContainerItemProxy */;
 		};
 		CBD6BA292DEF1B3B003242CA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
