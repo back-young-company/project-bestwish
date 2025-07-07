@@ -7,26 +7,52 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1419CEB42E0273B0006D62BB /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 1419CEB32E0273B0006D62BB /* Supabase */; };
 		14B8B6432DF6861400B7F5F8 /* BestWishShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		14B8B66F2DF691AA00B7F5F8 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B66E2DF691AA00B7F5F8 /* RxSwift */; };
-		14B8B6712DF691B300B7F5F8 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6702DF691B300B7F5F8 /* SnapKit */; };
-		14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
-		14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
-		14C3CB622E026200002F341A /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 14C3CB612E026200002F341A /* RxRelay */; };
-		81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */; };
-		8170B3BA2E0E4E8800FF71CF /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 8170B3B92E0E4E8800FF71CF /* SwiftSoup */; };
-		8170B5F12E0E56A700FF71CF /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 8170B5F02E0E56A700FF71CF /* SwiftSoup */; };
-		81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 81E50BB32DF93B0E005954F4 /* CropViewController */; };
-		861BAD572DFD2B960043B83E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */; };
-		86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
-		CB4FBCEE2DF6B66B00149D86 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CB4FBCED2DF6B66B00149D86 /* RxDataSources */; };
-		CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6A2DEF363A003242CA /* RxCocoa */; };
-		CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6C2DEF363A003242CA /* RxRelay */; };
-		CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6F2DEF364D003242CA /* SnapKit */; };
-		CBD6BA732DEF3656003242CA /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA722DEF3656003242CA /* Then */; };
-		CBD6BA762DEF370B003242CA /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA752DEF370B003242CA /* Kingfisher */; };
-		CBD6BB0B2DEFD165003242CA /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BB0A2DEFD165003242CA /* Supabase */; };
+		8175BE502E169E590092713E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 8175BE4F2E169E590092713E /* Supabase */; };
+		8175BE532E16A0FC0092713E /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6A2DEF363A003242CA /* RxCocoa */; };
+		8175BE542E16A0FC0092713E /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6C2DEF363A003242CA /* RxRelay */; };
+		8175BE552E16A0FC0092713E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA6F2DEF364D003242CA /* SnapKit */; };
+		8175BE562E16A0FC0092713E /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA722DEF3656003242CA /* Then */; };
+		8175BE572E16A0FC0092713E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BA752DEF370B003242CA /* Kingfisher */; };
+		8175BE582E16A0FC0092713E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CBD6BB0A2DEFD165003242CA /* Supabase */; };
+		8175BE592E16A0FC0092713E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 86F6FD002DF66C8B00CAF678 /* Alamofire */; };
+		8175BE5A2E16A0FC0092713E /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CB4FBCED2DF6B66B00149D86 /* RxDataSources */; };
+		8175BE5B2E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */; };
+		8175BE5C2E16A0FC0092713E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63A2E1402B100E5CDC3 /* Kingfisher */; };
+		8175BE5D2E16A0FC0092713E /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63C2E1402B100E5CDC3 /* Supabase */; };
+		8175BE5E2E16A0FC0092713E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B63E2E1402B100E5CDC3 /* Alamofire */; };
+		8175BE5F2E16A0FC0092713E /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6402E1402B100E5CDC3 /* RxDataSources */; };
+		8175BE602E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */; };
+		8175BE612E16A0FC0092713E /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27B6482E1402B100E5CDC3 /* SwiftSoup */; };
+		8175C0B72E16A2940092713E /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0B62E16A2940092713E /* CropViewController */; };
+		8175C0B92E16A2940092713E /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0B82E16A2940092713E /* TOCropViewController */; };
+		8175C0BB2E16A3550092713E /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 8175C0BA2E16A3550092713E /* CropViewController */; };
+		86FB35FC2E17885300B5F386 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8620AA192E16A72200395BF5 /* FirebaseAnalytics */; };
+		86FB35FD2E17885300B5F386 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8620AA1B2E16A72200395BF5 /* FirebaseCore */; };
+		86FB35FE2E17885300B5F386 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8620A9F12E16614600395BF5 /* FirebaseAnalytics */; };
+		86FB35FF2E17885300B5F386 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8620A9F32E16614600395BF5 /* FirebaseCore */; };
+		86FB38562E17888A00B5F386 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 86FB38552E17888A00B5F386 /* FirebaseAnalytics */; };
+		86FB38582E17888A00B5F386 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 86FB38572E17888A00B5F386 /* FirebaseCore */; };
+		CB2597A52E15429D00632E12 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B66E2DF691AA00B7F5F8 /* RxSwift */; };
+		CB2597A62E15429D00632E12 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6702DF691B300B7F5F8 /* SnapKit */; };
+		CB2597A72E15429D00632E12 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6722DF691BC00B7F5F8 /* Then */; };
+		CB2597A82E15429D00632E12 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 14B8B6782DF6C57000B7F5F8 /* RxCocoa */; };
+		CB2597A92E15429D00632E12 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 14C3CB612E026200002F341A /* RxRelay */; };
+		CB259C6D2E1544B200632E12 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CB259C6C2E1544B200632E12 /* RxCocoa */; };
+		CB259C6F2E1544B200632E12 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB259C6E2E1544B200632E12 /* RxSwift */; };
+		CB27AB902E13F7C400E5CDC3 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */; };
+		CB387E142E13B02E00E29D1C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CB387E132E13B02E00E29D1C /* IQKeyboardManagerSwift */; };
+		CB9F14922E13A8BC0042BB47 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA392E12769D00F6288C /* RxCocoa */; };
+		CB9F14932E13A8BC0042BB47 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA3B2E12769D00F6288C /* RxSwift */; };
+		CB9F14942E13A8BC0042BB47 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA3D2E12769D00F6288C /* SnapKit */; };
+		CB9F14952E13A8BC0042BB47 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA3F2E12769D00F6288C /* Then */; };
+		CB9F14962E13A8BC0042BB47 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA412E12769D00F6288C /* Kingfisher */; };
+		CB9F14972E13A8BC0042BB47 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7EA432E12769D00F6288C /* RxDataSources */; };
+		CBC7E9A42E126A6200F6288C /* BestWishData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E9482E1263E500F6288C /* BestWishData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CBC7E9A82E126A6200F6288C /* BestWishDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E97A2E12662D00F6288C /* BestWishDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CBC7E9AD2E126D5100F6288C /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7E9AC2E126D5100F6288C /* Supabase */; };
+		CBC7E9AF2E126E4900F6288C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CBC7E9AE2E126E4900F6288C /* Alamofire */; };
+		CBC7E9BC2E12715800F6288C /* BestWishPresentation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CBC7E9B52E12715800F6288C /* BestWishPresentation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +62,62 @@
 			proxyType = 1;
 			remoteGlobalIDString = 14B8B6382DF6861400B7F5F8;
 			remoteInfo = BestWishShareExtension;
+		};
+		CB259C662E15447B00632E12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9472E1263E500F6288C;
+			remoteInfo = BestWishData;
+		};
+		CB259C682E15447B00632E12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
+			remoteInfo = BestWishDomain;
+		};
+		CB259C6A2E15447B00632E12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9B42E12715800F6288C;
+			remoteInfo = BestWishPresentation;
+		};
+		CB27AB882E13F77E00E5CDC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9472E1263E500F6288C;
+			remoteInfo = BestWishData;
+		};
+		CB27AB8A2E13F77E00E5CDC3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
+			remoteInfo = BestWishDomain;
+		};
+		CBC7E9A52E126A6200F6288C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9472E1263E500F6288C;
+			remoteInfo = BestWishData;
+		};
+		CBC7E9A92E126A6200F6288C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9792E12662D00F6288C;
+			remoteInfo = BestWishDomain;
+		};
+		CBC7E9B92E12715800F6288C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CBD6BA092DEF1B39003242CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CBC7E9B42E12715800F6288C;
+			remoteInfo = BestWishPresentation;
 		};
 		CBD6BA282DEF1B3B003242CA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -58,74 +140,50 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CBC7E9AB2E126A6300F6288C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CBC7E9A42E126A6200F6288C /* BestWishData.framework in Embed Frameworks */,
+				CBC7E9A82E126A6200F6288C /* BestWishDomain.framework in Embed Frameworks */,
+				CBC7E9BC2E12715800F6288C /* BestWishPresentation.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BestWishShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBC7E9482E1263E500F6288C /* BestWishData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BestWishData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBC7E97A2E12662D00F6288C /* BestWishDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BestWishDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBC7E9B52E12715800F6288C /* BestWishPresentation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BestWishPresentation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6BA112DEF1B39003242CA /* BestWish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestWish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestWishTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1419CEA72E0271B7006D62BB /* Exceptions for "BestWishShareExtension" folder in "BestWish" target */ = {
+		140618B72E17B5A500880745 /* Exceptions for "BestWishData" folder in "BestWishData" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Resources/Presentation/Share/ShareViewModel.swift,
+				Info.plist,
+				Resource/Info.plist,
 			);
-			target = CBD6BA102DEF1B39003242CA /* BestWish */;
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+		};
+		140618B82E17B5BE00880745 /* Exceptions for "BestWishDomain" folder in "BestWishDomain" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resource/Info.plist,
+			);
+			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
 		};
 		14B8B6482DF6861400B7F5F8 /* Exceptions for "BestWishShareExtension" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-			);
-			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
-		};
-		14B8B6632DF68EEF00B7F5F8 /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Data/KeyChain/Error/KeyChainError.swift,
-				Data/KeyChain/Manager/KeyChainManager.swift,
-				Data/KeyChain/Manager/Token.swift,
-				Data/Network/DTO/ProductDTO.swift,
-				Data/Network/DTO/UserDTO.swift,
-				Data/Network/Error/CoreMLError.swift,
-				Data/Network/Error/MappingError.swift,
-				Data/Network/Error/ProductSyncError.swift,
-				Data/Network/Error/SupabaseError.swift,
-				Data/Network/Fetcher/_29CMFetcher.swift,
-				Data/Network/Fetcher/_4910Fetcher.swift,
-				Data/Network/Fetcher/AblyFetcher.swift,
-				Data/Network/Fetcher/BrandiFetcher.swift,
-				Data/Network/Fetcher/HiverFetcher.swift,
-				Data/Network/Fetcher/Interface/ProductDTOFetcher.swift,
-				Data/Network/Fetcher/KreamFetcher.swift,
-				Data/Network/Fetcher/MusinsaFetcher.swift,
-				Data/Network/Fetcher/ZigzagFetcher.swift,
-				Data/Network/Manager/ProductSync/ProductSyncManager.swift,
-				Data/Network/Manager/Supabase/SupabaseManager.swift,
-				Data/Network/Manager/Supabase/SupabaseTable.swift,
-				Data/Network/Manager/Supabase/SupabaseUserInfoManager.swift,
-				Data/Repository/ProductSyncRepositoryImpl.swift,
-				Data/Repository/WishListRepositoryImpl.swift,
-				"Data/Util/Bundle+Util.swift",
-				"Data/Util/PlatformEntity+Util.swift",
-				"Data/Util/String+Util.swift",
-				Domain/Entity/PlatformEntity.swift,
-				Domain/Entity/ProductEntity.swift,
-				Domain/Entity/SocialType.swift,
-				Domain/Entity/User.swift,
-				Domain/Error/AppError.swift,
-				Domain/Interface/ProductSyncRepository.swift,
-				Domain/Interface/WishListRepository.swift,
-				Domain/UseCase/ProductSyncUseCase.swift,
-				Domain/UseCase/WishListUseCase.swift,
-				"Presentation/Extension/UIColor+Extension.swift",
-				"Presentation/Extension/UIFont+Extension.swift",
-				Presentation/Interface/ViewModel.swift,
-				Presentation/Model/ProductModel.swift,
-				"Resource/Fonts/Pretendard-Bold.otf",
-				"Resource/Fonts/Pretendard-Medium.otf",
 			);
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
 		};
@@ -136,23 +194,90 @@
 			);
 			target = CBD6BA102DEF1B39003242CA /* BestWish */;
 		};
+		813BAE452E17C0AA00A3F3C2 /* Exceptions for "BestWish" folder in "BestWishData" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+			);
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+		};
+		CB27B64E2E14034200E5CDC3 /* Exceptions for "BestWishPresentation" folder in "BestWishShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Presentation/Extension/UIColor+Extension.swift",
+				"Presentation/Extension/UIFont+Extension.swift",
+				Presentation/Interface/ViewModel.swift,
+			);
+			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
+		};
+		CB387E272E13C18E00E29D1C /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"GoogleService-Info.plist",
+				"Resource/Fonts/Pretendard-Bold.otf",
+				"Resource/Fonts/Pretendard-Medium.otf",
+			);
+			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
+		};
+		CB387E2D2E13C23300E29D1C /* Exceptions for "BestWish" folder in "BestWishPresentation" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resource/Assets.xcassets,
+			);
+			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
+		};
+		CBC7E9C72E12716B00F6288C /* Exceptions for "BestWishPresentation" folder in "BestWishPresentation" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Presentation/Resource/Info.plist,
+				Presentation/Scene/Dummy/ViewController/MyWebViewController.swift,
+				Resource/Info.plist,
+			);
+			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				1419CEA72E0271B7006D62BB /* Exceptions for "BestWishShareExtension" folder in "BestWish" target */,
 				14B8B6482DF6861400B7F5F8 /* Exceptions for "BestWishShareExtension" folder in "BestWishShareExtension" target */,
 			);
 			path = BestWishShareExtension;
+			sourceTree = "<group>";
+		};
+		CBC7E9492E1263E500F6288C /* BestWishData */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				140618B72E17B5A500880745 /* Exceptions for "BestWishData" folder in "BestWishData" target */,
+			);
+			path = BestWishData;
+			sourceTree = "<group>";
+		};
+		CBC7E97B2E12662D00F6288C /* BestWishDomain */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				140618B82E17B5BE00880745 /* Exceptions for "BestWishDomain" folder in "BestWishDomain" target */,
+			);
+			path = BestWishDomain;
+			sourceTree = "<group>";
+		};
+		CBC7E9B62E12715800F6288C /* BestWishPresentation */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CB27B64E2E14034200E5CDC3 /* Exceptions for "BestWishPresentation" folder in "BestWishShareExtension" target */,
+				CBC7E9C72E12716B00F6288C /* Exceptions for "BestWishPresentation" folder in "BestWishPresentation" target */,
+			);
+			path = BestWishPresentation;
 			sourceTree = "<group>";
 		};
 		CBD6BA132DEF1B39003242CA /* BestWish */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */,
-				14B8B6632DF68EEF00B7F5F8 /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */,
+				CB387E272E13C18E00E29D1C /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */,
+				813BAE452E17C0AA00A3F3C2 /* Exceptions for "BestWish" folder in "BestWishData" target */,
+				CB387E2D2E13C23300E29D1C /* Exceptions for "BestWish" folder in "BestWishPresentation" target */,
 			);
 			path = BestWish;
 			sourceTree = "<group>";
@@ -169,13 +294,54 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14B8B6712DF691B300B7F5F8 /* SnapKit in Frameworks */,
-				14B8B66F2DF691AA00B7F5F8 /* RxSwift in Frameworks */,
-				1419CEB42E0273B0006D62BB /* Supabase in Frameworks */,
-				14B8B6792DF6C57000B7F5F8 /* RxCocoa in Frameworks */,
-				14B8B6732DF691BC00B7F5F8 /* Then in Frameworks */,
-				14C3CB622E026200002F341A /* RxRelay in Frameworks */,
-				8170B5F12E0E56A700FF71CF /* SwiftSoup in Frameworks */,
+				86FB35FD2E17885300B5F386 /* FirebaseCore in Frameworks */,
+				86FB35FC2E17885300B5F386 /* FirebaseAnalytics in Frameworks */,
+				8175BE612E16A0FC0092713E /* SwiftSoup in Frameworks */,
+				8175BE602E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */,
+				8175BE5F2E16A0FC0092713E /* RxDataSources in Frameworks */,
+				8175BE5E2E16A0FC0092713E /* Alamofire in Frameworks */,
+				8175BE5D2E16A0FC0092713E /* Supabase in Frameworks */,
+				8175BE5C2E16A0FC0092713E /* Kingfisher in Frameworks */,
+				CB2597A92E15429D00632E12 /* RxRelay in Frameworks */,
+				CB2597A82E15429D00632E12 /* RxCocoa in Frameworks */,
+				CB2597A72E15429D00632E12 /* Then in Frameworks */,
+				CB2597A62E15429D00632E12 /* SnapKit in Frameworks */,
+				CB2597A52E15429D00632E12 /* RxSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9452E1263E500F6288C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86FB35FF2E17885300B5F386 /* FirebaseCore in Frameworks */,
+				86FB35FE2E17885300B5F386 /* FirebaseAnalytics in Frameworks */,
+				CBC7E9AF2E126E4900F6288C /* Alamofire in Frameworks */,
+				CBC7E9AD2E126D5100F6288C /* Supabase in Frameworks */,
+				CB27AB902E13F7C400E5CDC3 /* SwiftSoup in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9772E12662D00F6288C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9B22E12715800F6288C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB9F14972E13A8BC0042BB47 /* RxDataSources in Frameworks */,
+				8175C0B92E16A2940092713E /* TOCropViewController in Frameworks */,
+				CB387E142E13B02E00E29D1C /* IQKeyboardManagerSwift in Frameworks */,
+				CB9F14962E13A8BC0042BB47 /* Kingfisher in Frameworks */,
+				CB9F14952E13A8BC0042BB47 /* Then in Frameworks */,
+				CB9F14942E13A8BC0042BB47 /* SnapKit in Frameworks */,
+				8175C0B72E16A2940092713E /* CropViewController in Frameworks */,
+				CB9F14932E13A8BC0042BB47 /* RxSwift in Frameworks */,
+				CB9F14922E13A8BC0042BB47 /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,18 +349,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBD6BA702DEF364D003242CA /* SnapKit in Frameworks */,
-				86F6FD012DF66C8B00CAF678 /* Alamofire in Frameworks */,
-				81E50BB42DF93B0E005954F4 /* CropViewController in Frameworks */,
-				CBD6BA6D2DEF363A003242CA /* RxRelay in Frameworks */,
-				CBD6BB0B2DEFD165003242CA /* Supabase in Frameworks */,
-				8170B3BA2E0E4E8800FF71CF /* SwiftSoup in Frameworks */,
-				81276F522E0015FC0032B85D /* IQKeyboardManagerSwift in Frameworks */,
-				CBD6BA6B2DEF363A003242CA /* RxCocoa in Frameworks */,
-				CB4FBCEE2DF6B66B00149D86 /* RxDataSources in Frameworks */,
-				CBD6BA732DEF3656003242CA /* Then in Frameworks */,
-				CBD6BA762DEF370B003242CA /* Kingfisher in Frameworks */,
-				861BAD572DFD2B960043B83E /* IQKeyboardManagerSwift in Frameworks */,
+				8175BE5B2E16A0FC0092713E /* IQKeyboardManagerSwift in Frameworks */,
+				8175BE5A2E16A0FC0092713E /* RxDataSources in Frameworks */,
+				8175BE592E16A0FC0092713E /* Alamofire in Frameworks */,
+				8175C0BB2E16A3550092713E /* CropViewController in Frameworks */,
+				8175BE582E16A0FC0092713E /* Supabase in Frameworks */,
+				8175BE572E16A0FC0092713E /* Kingfisher in Frameworks */,
+				86FB38562E17888A00B5F386 /* FirebaseAnalytics in Frameworks */,
+				8175BE562E16A0FC0092713E /* Then in Frameworks */,
+				8175BE552E16A0FC0092713E /* SnapKit in Frameworks */,
+				8175BE542E16A0FC0092713E /* RxRelay in Frameworks */,
+				86FB38582E17888A00B5F386 /* FirebaseCore in Frameworks */,
+				8175BE532E16A0FC0092713E /* RxCocoa in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +368,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB259C6F2E1544B200632E12 /* RxSwift in Frameworks */,
+				CB259C6D2E1544B200632E12 /* RxCocoa in Frameworks */,
+				8175BE502E169E590092713E /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +390,9 @@
 				CBD6BA132DEF1B39003242CA /* BestWish */,
 				CBD6BA2A2DEF1B3B003242CA /* BestWishTests */,
 				14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */,
+				CBC7E9492E1263E500F6288C /* BestWishData */,
+				CBC7E97B2E12662D00F6288C /* BestWishDomain */,
+				CBC7E9B62E12715800F6288C /* BestWishPresentation */,
 				14C3CB582E0261D0002F341A /* Frameworks */,
 				CBD6BA122DEF1B39003242CA /* Products */,
 			);
@@ -232,11 +404,38 @@
 				CBD6BA112DEF1B39003242CA /* BestWish.app */,
 				CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */,
 				14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */,
+				CBC7E9482E1263E500F6288C /* BestWishData.framework */,
+				CBC7E97A2E12662D00F6288C /* BestWishDomain.framework */,
+				CBC7E9B52E12715800F6288C /* BestWishPresentation.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CBC7E9432E1263E500F6288C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9752E12662D00F6288C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9B02E12715800F6288C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */ = {
@@ -250,6 +449,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				CB27AB892E13F77E00E5CDC3 /* PBXTargetDependency */,
+				CB27AB8B2E13F77E00E5CDC3 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				14B8B63A2DF6861400B7F5F8 /* BestWishShareExtension */,
@@ -261,12 +462,101 @@
 				14B8B6722DF691BC00B7F5F8 /* Then */,
 				14B8B6782DF6C57000B7F5F8 /* RxCocoa */,
 				14C3CB612E026200002F341A /* RxRelay */,
-				1419CEB32E0273B0006D62BB /* Supabase */,
-				8170B5F02E0E56A700FF71CF /* SwiftSoup */,
+				CB27B63A2E1402B100E5CDC3 /* Kingfisher */,
+				CB27B63C2E1402B100E5CDC3 /* Supabase */,
+				CB27B63E2E1402B100E5CDC3 /* Alamofire */,
+				CB27B6402E1402B100E5CDC3 /* RxDataSources */,
+				CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */,
+				CB27B6482E1402B100E5CDC3 /* SwiftSoup */,
+				8620AA192E16A72200395BF5 /* FirebaseAnalytics */,
+				8620AA1B2E16A72200395BF5 /* FirebaseCore */,
 			);
 			productName = BestWishShareExtension;
 			productReference = 14B8B6392DF6861400B7F5F8 /* BestWishShareExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		CBC7E9472E1263E500F6288C /* BestWishData */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBC7E94E2E1263E500F6288C /* Build configuration list for PBXNativeTarget "BestWishData" */;
+			buildPhases = (
+				CBC7E9432E1263E500F6288C /* Headers */,
+				CBC7E9442E1263E500F6288C /* Sources */,
+				CBC7E9452E1263E500F6288C /* Frameworks */,
+				CBC7E9462E1263E500F6288C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CBC7E9492E1263E500F6288C /* BestWishData */,
+			);
+			name = BestWishData;
+			packageProductDependencies = (
+				CBC7E9AC2E126D5100F6288C /* Supabase */,
+				CBC7E9AE2E126E4900F6288C /* Alamofire */,
+				CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */,
+				8620A9F12E16614600395BF5 /* FirebaseAnalytics */,
+				8620A9F32E16614600395BF5 /* FirebaseCore */,
+			);
+			productName = BestWishData;
+			productReference = CBC7E9482E1263E500F6288C /* BestWishData.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CBC7E9792E12662D00F6288C /* BestWishDomain */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBC7E9802E12662D00F6288C /* Build configuration list for PBXNativeTarget "BestWishDomain" */;
+			buildPhases = (
+				CBC7E9752E12662D00F6288C /* Headers */,
+				CBC7E9762E12662D00F6288C /* Sources */,
+				CBC7E9772E12662D00F6288C /* Frameworks */,
+				CBC7E9782E12662D00F6288C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CBC7E97B2E12662D00F6288C /* BestWishDomain */,
+			);
+			name = BestWishDomain;
+			packageProductDependencies = (
+			);
+			productName = BestWishDomain;
+			productReference = CBC7E97A2E12662D00F6288C /* BestWishDomain.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		CBC7E9B42E12715800F6288C /* BestWishPresentation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CBC7E9BD2E12715800F6288C /* Build configuration list for PBXNativeTarget "BestWishPresentation" */;
+			buildPhases = (
+				CBC7E9B02E12715800F6288C /* Headers */,
+				CBC7E9B12E12715800F6288C /* Sources */,
+				CBC7E9B22E12715800F6288C /* Frameworks */,
+				CBC7E9B32E12715800F6288C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CBC7E9B62E12715800F6288C /* BestWishPresentation */,
+			);
+			name = BestWishPresentation;
+			packageProductDependencies = (
+				CBC7EA392E12769D00F6288C /* RxCocoa */,
+				CBC7EA3B2E12769D00F6288C /* RxSwift */,
+				CBC7EA3D2E12769D00F6288C /* SnapKit */,
+				CBC7EA3F2E12769D00F6288C /* Then */,
+				CBC7EA412E12769D00F6288C /* Kingfisher */,
+				CBC7EA432E12769D00F6288C /* RxDataSources */,
+				CB387E132E13B02E00E29D1C /* IQKeyboardManagerSwift */,
+				8175C0B62E16A2940092713E /* CropViewController */,
+				8175C0B82E16A2940092713E /* TOCropViewController */,
+			);
+			productName = BestWishPresentation;
+			productReference = CBC7E9B52E12715800F6288C /* BestWishPresentation.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		CBD6BA102DEF1B39003242CA /* BestWish */ = {
 			isa = PBXNativeTarget;
@@ -276,11 +566,15 @@
 				CBD6BA0E2DEF1B39003242CA /* Frameworks */,
 				CBD6BA0F2DEF1B39003242CA /* Resources */,
 				14B8B6442DF6861400B7F5F8 /* Embed Foundation Extensions */,
+				CBC7E9AB2E126A6300F6288C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				14B8B6422DF6861400B7F5F8 /* PBXTargetDependency */,
+				CBC7E9A62E126A6200F6288C /* PBXTargetDependency */,
+				CBC7E9AA2E126A6200F6288C /* PBXTargetDependency */,
+				CBC7E9BA2E12715800F6288C /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CBD6BA132DEF1B39003242CA /* BestWish */,
@@ -295,9 +589,10 @@
 				CBD6BB0A2DEFD165003242CA /* Supabase */,
 				86F6FD002DF66C8B00CAF678 /* Alamofire */,
 				CB4FBCED2DF6B66B00149D86 /* RxDataSources */,
-				81E50BB32DF93B0E005954F4 /* CropViewController */,
-				81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */,
-				8170B3B92E0E4E8800FF71CF /* SwiftSoup */,
+				CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */,
+				8175C0BA2E16A3550092713E /* CropViewController */,
+				86FB38552E17888A00B5F386 /* FirebaseAnalytics */,
+				86FB38572E17888A00B5F386 /* FirebaseCore */,
 			);
 			productName = BestWish;
 			productReference = CBD6BA112DEF1B39003242CA /* BestWish.app */;
@@ -314,6 +609,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				CB259C672E15447B00632E12 /* PBXTargetDependency */,
+				CB259C692E15447B00632E12 /* PBXTargetDependency */,
+				CB259C6B2E15447B00632E12 /* PBXTargetDependency */,
 				CBD6BA292DEF1B3B003242CA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
@@ -321,6 +619,9 @@
 			);
 			name = BestWishTests;
 			packageProductDependencies = (
+				CB259C6C2E1544B200632E12 /* RxCocoa */,
+				CB259C6E2E1544B200632E12 /* RxSwift */,
+				8175BE4F2E169E590092713E /* Supabase */,
 			);
 			productName = BestWishTests;
 			productReference = CBD6BA272DEF1B3B003242CA /* BestWishTests.xctest */;
@@ -333,11 +634,20 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					14B8B6382DF6861400B7F5F8 = {
 						CreatedOnToolsVersion = 16.3;
+					};
+					CBC7E9472E1263E500F6288C = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					CBC7E9792E12662D00F6288C = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					CBC7E9B42E12715800F6288C = {
+						CreatedOnToolsVersion = 16.4;
 					};
 					CBD6BA102DEF1B39003242CA = {
 						CreatedOnToolsVersion = 16.4;
@@ -366,9 +676,10 @@
 				CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
-				81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
-				8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */,
+				86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CBD6BA122DEF1B39003242CA /* Products */;
@@ -378,12 +689,36 @@
 				CBD6BA102DEF1B39003242CA /* BestWish */,
 				CBD6BA262DEF1B3B003242CA /* BestWishTests */,
 				14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */,
+				CBC7E9472E1263E500F6288C /* BestWishData */,
+				CBC7E9792E12662D00F6288C /* BestWishDomain */,
+				CBC7E9B42E12715800F6288C /* BestWishPresentation */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		14B8B6372DF6861400B7F5F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9462E1263E500F6288C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9782E12662D00F6288C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9B32E12715800F6288C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -414,6 +749,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CBC7E9442E1263E500F6288C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9762E12662D00F6288C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBC7E9B12E12715800F6288C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CBD6BA0D2DEF1B39003242CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -436,6 +792,46 @@
 			target = 14B8B6382DF6861400B7F5F8 /* BestWishShareExtension */;
 			targetProxy = 14B8B6412DF6861400B7F5F8 /* PBXContainerItemProxy */;
 		};
+		CB259C672E15447B00632E12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+			targetProxy = CB259C662E15447B00632E12 /* PBXContainerItemProxy */;
+		};
+		CB259C692E15447B00632E12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
+			targetProxy = CB259C682E15447B00632E12 /* PBXContainerItemProxy */;
+		};
+		CB259C6B2E15447B00632E12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
+			targetProxy = CB259C6A2E15447B00632E12 /* PBXContainerItemProxy */;
+		};
+		CB27AB892E13F77E00E5CDC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+			targetProxy = CB27AB882E13F77E00E5CDC3 /* PBXContainerItemProxy */;
+		};
+		CB27AB8B2E13F77E00E5CDC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
+			targetProxy = CB27AB8A2E13F77E00E5CDC3 /* PBXContainerItemProxy */;
+		};
+		CBC7E9A62E126A6200F6288C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9472E1263E500F6288C /* BestWishData */;
+			targetProxy = CBC7E9A52E126A6200F6288C /* PBXContainerItemProxy */;
+		};
+		CBC7E9AA2E126A6200F6288C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9792E12662D00F6288C /* BestWishDomain */;
+			targetProxy = CBC7E9A92E126A6200F6288C /* PBXContainerItemProxy */;
+		};
+		CBC7E9BA2E12715800F6288C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CBC7E9B42E12715800F6288C /* BestWishPresentation */;
+			targetProxy = CBC7E9B92E12715800F6288C /* PBXContainerItemProxy */;
+		};
 		CBD6BA292DEF1B3B003242CA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CBD6BA102DEF1B39003242CA /* BestWish */;
@@ -452,7 +848,7 @@
 				CODE_SIGN_ENTITLEMENTS = BestWishShareExtension/BestWishShareExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWishShareExtension/Info.plist;
@@ -464,7 +860,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -488,7 +884,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -501,7 +897,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishShareExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -517,6 +913,281 @@
 			};
 			name = Release;
 		};
+		CBC7E94F2E1263E500F6288C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config_Debug.xcconfig;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishData/Resource/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_SWIFT_FLAGS = "-no-verify-emitted-module-interface";
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishData;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CBC7E9502E1263E500F6288C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config_Release.xcconfig;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishData/Resource/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_SWIFT_FLAGS = "-no-verify-emitted-module-interface";
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishData;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		CBC7E9812E12662D00F6288C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config_Debug.xcconfig;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishDomain/Resource/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishDomain;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CBC7E9822E12662D00F6288C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config_Release.xcconfig;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishDomain/Resource/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishDomain;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		CBC7E9BE2E12715800F6288C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config_Debug.xcconfig;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3BLN747VAP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishPresentation/Resource/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_SWIFT_FLAGS = "-no-verify-emitted-module-interface";
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishPresentation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CBC7E9BF2E12715800F6288C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
+			baseConfigurationReferenceRelativePath = Config_Release.xcconfig;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BestWishPresentation/Resource/Info.plist;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_SWIFT_FLAGS = "-no-verify-emitted-module-interface";
+				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish.BestWishPresentation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		CBD6BA3B2DEF1B3B003242CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
@@ -527,7 +1198,7 @@
 				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BestWish/Resource/Info.plist;
@@ -544,7 +1215,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACH_O_TYPE = mh_execute;
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -569,7 +1240,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3BLN747VAP;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -587,7 +1258,7 @@
 					"@executable_path/Frameworks",
 				);
 				MACH_O_TYPE = mh_execute;
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -658,6 +1329,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = BestWish/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -719,6 +1391,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = BestWish/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -774,7 +1447,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWishTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "BestWish Tests";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -794,6 +1467,33 @@
 			buildConfigurations = (
 				14B8B6452DF6861400B7F5F8 /* Debug */,
 				14B8B6462DF6861400B7F5F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CBC7E94E2E1263E500F6288C /* Build configuration list for PBXNativeTarget "BestWishData" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBC7E94F2E1263E500F6288C /* Debug */,
+				CBC7E9502E1263E500F6288C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CBC7E9802E12662D00F6288C /* Build configuration list for PBXNativeTarget "BestWishDomain" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBC7E9812E12662D00F6288C /* Debug */,
+				CBC7E9822E12662D00F6288C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CBC7E9BD2E12715800F6288C /* Build configuration list for PBXNativeTarget "BestWishPresentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CBC7E9BE2E12715800F6288C /* Debug */,
+				CBC7E9BF2E12715800F6288C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -828,23 +1528,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.0.1;
-			};
-		};
-		8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.8.8;
-			};
-		};
-		81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
+		8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TimOliver/TOCropViewController";
 			requirement = {
@@ -852,12 +1536,12 @@
 				minimumVersion = 2.7.4;
 			};
 		};
-		861BAD552DFD2B960043B83E /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+		86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 8.0.1;
+				minimumVersion = 11.15.0;
 			};
 		};
 		86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
@@ -866,6 +1550,30 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.10.2;
+			};
+		};
+		86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.15.0;
+			};
+		};
+		CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.8;
+			};
+		};
+		CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.1;
 			};
 		};
 		CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
@@ -919,11 +1627,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1419CEB32E0273B0006D62BB /* Supabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */;
-			productName = Supabase;
-		};
 		14B8B66E2DF691AA00B7F5F8 /* RxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
@@ -949,37 +1652,157 @@
 			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxRelay;
 		};
-		81276F512E0015FC0032B85D /* IQKeyboardManagerSwift */ = {
+		8175BE4F2E169E590092713E /* Supabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 81276F502E0015FC0032B85D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
+			package = CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
 		};
-		8170B3B92E0E4E8800FF71CF /* SwiftSoup */ = {
+		8175C0B62E16A2940092713E /* CropViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */;
-			productName = SwiftSoup;
-		};
-		8170B5F02E0E56A700FF71CF /* SwiftSoup */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8170B3B82E0E4E8800FF71CF /* XCRemoteSwiftPackageReference "SwiftSoup" */;
-			productName = SwiftSoup;
-		};
-		81E50BB32DF93B0E005954F4 /* CropViewController */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 81E50BB22DF93B0E005954F4 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			package = 8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */;
 			productName = CropViewController;
 		};
-		861BAD562DFD2B960043B83E /* IQKeyboardManagerSwift */ = {
+		8175C0B82E16A2940092713E /* TOCropViewController */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 861BAD552DFD2B960043B83E /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
+			package = 8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = TOCropViewController;
+		};
+		8175C0BA2E16A3550092713E /* CropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8175C0B52E16A2940092713E /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = CropViewController;
+		};
+		8620A9F12E16614600395BF5 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		8620A9F32E16614600395BF5 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		8620AA192E16A72200395BF5 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		8620AA1B2E16A72200395BF5 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86BE8C5C2E165CFC00D85E2B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
 		};
 		86F6FD002DF66C8B00CAF678 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
+		86FB38552E17888A00B5F386 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		86FB38572E17888A00B5F386 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86FB38542E17888A00B5F386 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		CB259C6C2E1544B200632E12 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		CB259C6E2E1544B200632E12 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		CB27AB8F2E13F7C400E5CDC3 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		CB27B63A2E1402B100E5CDC3 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		CB27B63C2E1402B100E5CDC3 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		CB27B63E2E1402B100E5CDC3 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		CB27B6402E1402B100E5CDC3 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
+		CB27B6462E1402B100E5CDC3 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+		CB27B6482E1402B100E5CDC3 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB27AB8C2E13F7B000E5CDC3 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		CB387E112E13B01000E29D1C /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+		CB387E132E13B02E00E29D1C /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB387E102E13B01000E29D1C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
 		CB4FBCED2DF6B66B00149D86 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
+		CBC7E9AC2E126D5100F6288C /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BB092DEFD165003242CA /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+		CBC7E9AE2E126E4900F6288C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F6FCFF2DF66C8B00CAF678 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		CBC7EA392E12769D00F6288C /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		CBC7EA3B2E12769D00F6288C /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA692DEF363A003242CA /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		CBC7EA3D2E12769D00F6288C /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA6E2DEF364D003242CA /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		CBC7EA3F2E12769D00F6288C /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA712DEF3656003242CA /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		CBC7EA412E12769D00F6288C /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBD6BA742DEF370B003242CA /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		CBC7EA432E12769D00F6288C /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CB4FBCEC2DF6B66B00149D86 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;

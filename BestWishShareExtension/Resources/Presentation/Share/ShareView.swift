@@ -7,8 +7,8 @@
 
 import UIKit
 
-import SnapKit
-import Then
+internal import SnapKit
+internal import Then
 
 /// 공유 View
 final class ShareView: UIView {

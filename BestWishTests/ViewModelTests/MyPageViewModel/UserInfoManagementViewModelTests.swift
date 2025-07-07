@@ -5,11 +5,12 @@
 //  Created by 이수현 on 6/24/25.
 //
 
+@testable import BestWishDomain
+@testable import BestWishPresentation
 import Foundation
 import XCTest
-@testable import BestWish
 
-import RxSwift
+internal import RxSwift
 
 /// 유저 정보 관리 뷰 모델 테스트 클래스
 final class UserInfoManagementViewModelTests: XCTestCase {

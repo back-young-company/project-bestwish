@@ -5,12 +5,14 @@
 //  Created by 이수현 on 6/5/25.
 //
 
+import BestWishData
+import BestWishDomain
+import BestWishPresentation
+
 import Foundation
 
 /// 의존성 주입 컨테이너
 final class DIContainer {
-
-    static let shared = DIContainer()
 
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
@@ -18,6 +20,7 @@ final class DIContainer {
     private let keyChainManager: KeyChainManager
     private let productSyncManager: ProductSyncManager
     private let coreMLManager: CoreMLManager
+    private let firebaseAnalyticsManager: FirebaseAnalyticsManager
 
     private let accountRepository: AccountRepository
     private let userInfoRepository: UserInfoRepository
@@ -32,13 +35,14 @@ final class DIContainer {
     private let productSyncUseCase: ProductSyncUseCase
     private let wishListUseCase: WishListUseCase
 
-    private init() {
+    init() {
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
         self.supabaseOAuthManager = SupabaseOAuthManagerImpl()
         self.keyChainManager = KeyChainManagerImpl()
         self.productSyncManager = ProductSyncManager()
         self.coreMLManager = CoreMLManager()
+        self.firebaseAnalyticsManager = FirebaseAnalyticsManagerImpl()
 
         self.accountRepository = AccountRepositoryImpl(
             manager: supabaseOAuthManager,
@@ -46,7 +50,7 @@ final class DIContainer {
         )
         self.userInfoRepository = UserInfoRepositoryImpl(manager: supabaseUserInfoManager)
         self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
-        self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager)
+        self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager, firebaseAnalyticsManager: firebaseAnalyticsManager)
         self.wishListRepository = WishListRepositoryImpl(
             manager: supabaseManager,
             userInfoManager: supabaseUserInfoManager

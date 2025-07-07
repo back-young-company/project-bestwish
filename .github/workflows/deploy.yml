@@ -27,6 +27,7 @@ jobs:
 
       ENCRYPTED_SHARE_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_ShareExtension.mobileprovision.gpg' }}
       DECRYPTED_SHARE_PROVISION_FILE_PATH: ${{ '.github/secrets/BestWish_GitHub_Actions_ShareExtension.mobileprovision' }}
+        
       PROVISIONING_ENCRYPTION_KEY: ${{ secrets.PROVISION_ENCRYPTION_PWD }} # gpg로 파일 암호화할 때 사용한 암호
       # certification export key
       CERT_EXPORT_KEY: ${{ secrets.CERT_EXPORT_PWD }}
@@ -62,6 +63,7 @@ jobs:
         gpg -d -o "$DECRYPTED_CERT_FILE_PATH" --pinentry-mode=loopback --passphrase "$CERT_ENCRYPTION_KEY" "$ENCRYPTED_CERT_FILE_PATH"
         gpg -d -o "$DECRYPTED_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_PROVISION_FILE_PATH"
         gpg -d -o "$DECRYPTED_SHARE_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_SHARE_PROVISION_FILE_PATH"
+        
         security import "$DECRYPTED_CERT_FILE_PATH" -k "$KEYCHAIN" -P "$CERT_EXPORT_KEY" -A
         security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
 
@@ -85,6 +87,7 @@ jobs:
         echo "SUPABASE_URL = ${{ secrets.CONFIG_SUPABASE_URL }}" >> BestWish/Config_ShareExtension_Release.xcconfig
         echo "CLIENT_ID = ${{ secrets.CONFIG_CLIENT_ID }}" >> BestWish/Config_ShareExtension_Release.xcconfig
         echo "SHARING_KEY = ${{ secrets.CONFIG_SHARING_KEY }}" >> BestWish/Config_ShareExtension_Release.xcconfig
+        echo "${{ secrets.GOOGLESERVICE_INFO_PLIST }}" >> BestWish/GoogleService-Info.plist
         
     - name: Archive app
       run: |
