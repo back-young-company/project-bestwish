@@ -194,13 +194,6 @@
 			);
 			target = CBD6BA102DEF1B39003242CA /* BestWish */;
 		};
-		813BAE452E17C0AA00A3F3C2 /* Exceptions for "BestWish" folder in "BestWishData" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"GoogleService-Info.plist",
-			);
-			target = CBC7E9472E1263E500F6288C /* BestWishData */;
-		};
 		CB27B64E2E14034200E5CDC3 /* Exceptions for "BestWishPresentation" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -213,7 +206,6 @@
 		CB387E272E13C18E00E29D1C /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"GoogleService-Info.plist",
 				"Resource/Fonts/Pretendard-Bold.otf",
 				"Resource/Fonts/Pretendard-Medium.otf",
 			);
@@ -276,7 +268,6 @@
 			exceptions = (
 				81276D6A2E0012610032B85D /* Exceptions for "BestWish" folder in "BestWish" target */,
 				CB387E272E13C18E00E29D1C /* Exceptions for "BestWish" folder in "BestWishShareExtension" target */,
-				813BAE452E17C0AA00A3F3C2 /* Exceptions for "BestWish" folder in "BestWishData" target */,
 				CB387E2D2E13C23300E29D1C /* Exceptions for "BestWish" folder in "BestWishPresentation" target */,
 			);
 			path = BestWish;
@@ -1193,8 +1184,10 @@
 			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
 			baseConfigurationReferenceRelativePath = Config_Debug.xcconfig;
 			buildSettings = {
+				API_KEY = "${API_KEY}";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLIENT_ID = "${CLIENT_ID}";
 				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1219,6 +1212,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.baekyeong.BestWish;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SHARING_KEY = "${SHARING_KEY}";
+				SUPABASE_URL = "${SUPABASE_URL}";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1234,8 +1229,10 @@
 			baseConfigurationReferenceAnchor = CBD6BA132DEF1B39003242CA /* BestWish */;
 			baseConfigurationReferenceRelativePath = Config_Release.xcconfig;
 			buildSettings = {
+				API_KEY = "${API_KEY}";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLIENT_ID = "${CLIENT_ID}";
 				CODE_SIGN_ENTITLEMENTS = BestWish/BestWish.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
@@ -1263,6 +1260,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "BestWish GitHub Actions";
+				SHARING_KEY = "${SHARING_KEY}";
+				SUPABASE_URL = "${SUPABASE_URL}";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
