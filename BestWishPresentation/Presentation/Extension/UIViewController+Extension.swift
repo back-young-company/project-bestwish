@@ -80,4 +80,25 @@ extension UIViewController {
         alertController.addAction(confirmAction)
         present(alertController, animated: true)
     }
+
+    func showDeepLinkAlert() {
+        let alertController = UIAlertController(
+            title: "해당 앱이 설치되어 있지 않습니다.",
+            message: "원하시는 실행 방법을 선택해 주세요.",
+            preferredStyle: .alert
+        )
+        
+        let webAction = UIAlertAction(title: "웹으로 이동", style: .default) { _ in
+            UIApplication.shared.open(URL(string: "https://www.naver.com")!)
+        }
+
+        let appStoreAction = UIAlertAction(title: "앱스토어로 이동", style: .default) { _ in
+            UIApplication.shared.open(URL(string: "https://apps.apple.com/kr/app/%EB%B2%A0%EC%8A%A4%ED%8A%B8%EC%9C%84%EC%8B%9C/id6747424430")!)
+        }
+
+        alertController.addAction(webAction)
+        alertController.addAction(appStoreAction)
+
+        present(alertController, animated: true)
+    }
 }

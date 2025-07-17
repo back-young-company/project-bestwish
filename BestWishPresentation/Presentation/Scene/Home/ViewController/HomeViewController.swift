@@ -242,12 +242,14 @@ private extension HomeViewController {
             return
         }
 
-        UIApplication.shared.open(url) { success in
+        UIApplication.shared.open(url) { [weak self] success in
+            guard let self else { return }
+
             if success {
                 NSLog("✅ 앱 전환 성공: \(url.absoluteString)")
             } else {
                 NSLog("❌ 앱 전환 실패: \(url.absoluteString)")
-                self.showBasicAlert(title: "미지원 플랫폼", message: "해당 플랫폼은 추후 업데이트될 예정입니다.\n감사합니다.")
+                self.showDeepLinkAlert()
             }
         }
     }
