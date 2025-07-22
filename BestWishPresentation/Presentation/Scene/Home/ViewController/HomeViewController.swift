@@ -5,6 +5,7 @@
 //  Created by 백래훈 on 6/10/25.
 //
 
+import BestWishDomain
 import UIKit
 
 internal import RxDataSources
@@ -249,7 +250,7 @@ private extension HomeViewController {
                 NSLog("✅ 앱 전환 성공: \(url.absoluteString)")
             } else {
                 NSLog("❌ 앱 전환 실패: \(url.absoluteString)")
-                self.showDeepLinkAlert()
+                self.showDeepLinkAlert(link)
             }
         }
     }

@@ -40,7 +40,7 @@ public final class AnalysisViewModel: ViewModel {
     let state: State
     
     // MARK: - Private Property
-    private var previousCategory = ""                       // 카테고리 비교 용도
+    private var previousCategory = ""                                // 카테고리 비교 용도
     private var currentQuery = BehaviorRelay<String>(value: "")
     private var currentPlatform = BehaviorRelay<PlatformEntity?>(value: nil)
     
