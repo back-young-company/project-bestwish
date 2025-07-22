@@ -5,6 +5,7 @@
 //  Created by 이수현 on 6/9/25.
 //
 
+import BestWishDomain
 import UIKit
 
 extension UIViewController {
@@ -78,6 +79,29 @@ extension UIViewController {
 
         let confirmAction = UIAlertAction(title: "확인", style: .default)
         alertController.addAction(confirmAction)
+        present(alertController, animated: true)
+    }
+
+    func showDeepLinkAlert(_ link: String) {
+        let alertController = UIAlertController(
+            title: "해당 앱이 설치되어 있지 않습니다.",
+            message: "원하시는 실행 방법을 선택해 주세요.",
+            preferredStyle: .alert
+        )
+
+        guard let platformEntity = PlatformEntity(text: link) else { return }
+
+        let webAction = UIAlertAction(title: "웹으로 이동", style: .default) { _ in
+            UIApplication.shared.open(URL(string: platformEntity.platformWebLink)!)
+        }
+
+        let appStoreAction = UIAlertAction(title: "앱스토어로 이동", style: .default) { _ in
+            UIApplication.shared.open(URL(string: platformEntity.platformAppStoreLink)!)
+        }
+
+        alertController.addAction(webAction)
+        alertController.addAction(appStoreAction)
+
         present(alertController, animated: true)
     }
 }

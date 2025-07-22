@@ -37,7 +37,16 @@ extension String {
             return Int(result[numberRange])
         }
     }
-    
+
+    /// 특정 쿼리 파라미터 값을 추출하는 메서드
+    func extractQueryValue(for key: String) -> String? {
+        guard let components = URLComponents(string: self),
+              let queryItems = components.queryItems else {
+            return nil
+        }
+        return queryItems.first(where: { $0.name == key })?.value
+    }
+
     /// 딥링크 → 사이트 링크 (상품 페이지 URL 추출)
     func convertDeepLinkToProductURL(_ type: PlatformEntity) -> String {
         guard let url = URLComponents(string: self),
@@ -77,15 +86,11 @@ extension String {
             let productId = self.replacingOccurrences(of: domain, with: "")
             return "aglo://webview?url=https://4910.kr/goods/\(productId)"
         case .hiver:
-            let domain = "https://www.hiver.co.kr/onelink?type=products"
-            guard self.contains(domain) else { return self }
-            let productId = self.replacingOccurrences(of: domain, with: "")
-            return "hiverapplication://applink/products/\(productId)"
+            return self.extractQueryValue(for: "deep_link_value") ?? "hiverapplication://applink/products/\(String(describing: self.extractQueryValue(for: "id")))"
         default: return self
         }
     }
 }
-
 
 // MARK: 무신사
 // 앱을 통해 복사한 링크
