@@ -14,6 +14,7 @@ import Foundation
 /// 의존성 주입 컨테이너
 final class DIContainer {
 
+    private let userDefaultsManager: UserDefaultsManager
     private let supabaseManager: SupabaseManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
@@ -22,12 +23,14 @@ final class DIContainer {
     private let coreMLManager: CoreMLManager
     private let firebaseAnalyticsManager: FirebaseAnalyticsManager
 
+    private let userDefaultsRepository: UserDefaultsRepository
     private let accountRepository: AccountRepository
     private let userInfoRepository: UserInfoRepository
     private let coreMLRepository: CoreMLRepository
     private let productSyncRepository: ProductSyncRepository
     private let wishListRepository: WishListRepository
 
+    private let userDefaultsUseCase: UserDefaultsUseCase
     private let accountUseCase: AccountUseCase
     private let userInfoUseCase: UserInfoUseCase
     private let coreMLUseCase: CoreMLUseCase
@@ -36,6 +39,7 @@ final class DIContainer {
     private let wishListUseCase: WishListUseCase
 
     init() {
+        self.userDefaultsManager = UserDefaultsManager(suiteName: "group.com.bycompany.bestwish")
         self.supabaseManager = SupabaseManager()
         self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
         self.supabaseOAuthManager = SupabaseOAuthManagerImpl()
@@ -44,6 +48,7 @@ final class DIContainer {
         self.coreMLManager = CoreMLManager()
         self.firebaseAnalyticsManager = FirebaseAnalyticsManagerImpl()
 
+        self.userDefaultsRepository = UserDefaultsRepositoryImpl(manager: userDefaultsManager)
         self.accountRepository = AccountRepositoryImpl(
             manager: supabaseOAuthManager,
             keyChain: keyChainManager
@@ -56,6 +61,7 @@ final class DIContainer {
             userInfoManager: supabaseUserInfoManager
         )
 
+        self.userDefaultsUseCase = UserDefaultsUseCaseImpl(repository: userDefaultsRepository)
         self.accountUseCase = AccountUseCaseImpl(repository: accountRepository)
         self.userInfoUseCase = UserInfoUseCaseImpl(repository: userInfoRepository)
         self.coreMLUseCase = CoreMLUserCaseImpl(repository: coreMLRepository)
@@ -79,7 +85,10 @@ final class DIContainer {
 
     /// 홈 뷰 컨트롤러 생성
     func makeHomeViewController() -> HomeViewController {
-        let viewModel = HomeViewModel(useCase: wishListUseCase)
+        let viewModel = HomeViewModel(
+            wishListUseCase: wishListUseCase,
+            userDefaultsUseCase: userDefaultsUseCase
+        )
         return HomeViewController(homeViewModel: viewModel)
     }
 

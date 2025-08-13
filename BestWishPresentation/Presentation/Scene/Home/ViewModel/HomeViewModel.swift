@@ -42,11 +42,16 @@ public final class HomeViewModel: ViewModel {
     private let _selectedPlatform = BehaviorRelay<Int>(value: 0)
     private let _error = PublishRelay<Error>()
 
-    private let useCase: WishListUseCase
+    private let wishListUseCase: WishListUseCase
+    private let userDefaultsUseCase: UserDefaultsUseCase
     private let disposeBag = DisposeBag()
 
-    public init(useCase: WishListUseCase) {
-        self.useCase = useCase
+    public init(
+        wishListUseCase: WishListUseCase,
+        userDefaultsUseCase: UserDefaultsUseCase
+    ) {
+        self.wishListUseCase = wishListUseCase
+        self.userDefaultsUseCase = userDefaultsUseCase
 
         state = State(
             sections: _sections.asObservable(),
@@ -82,7 +87,7 @@ public final class HomeViewModel: ViewModel {
 private extension HomeViewModel {
     /// Supabase 플랫폼 시퀀스 가져오기
     func getPlatformSequence() async throws -> [PlatformEntity] {
-        let result = try await self.useCase.getPlatformSequence()
+        let result = try await self.wishListUseCase.getPlatformSequence()
         return result.compactMap { platform in
             guard platform <= 8 else { return nil }
             return PlatformEntity.allCases[platform]
@@ -91,7 +96,7 @@ private extension HomeViewModel {
 
     /// Supabase 위시리스트 가져오기
     func getWishLists(query: String? = nil, platform: Int? = nil) async throws -> [WishListProductItem] {
-        let result = try await self.useCase.searchWishListItems(query: query, platform: platform)
+        let result = try await self.wishListUseCase.searchWishListItems(query: query, platform: platform)
         return result.map { item in
             WishListProductItem(
                 uuid: item.id,
@@ -109,7 +114,7 @@ private extension HomeViewModel {
 
     /// Supabase 위시리스트 필터 가져오기
     func getPlatformInWishList() async throws -> [(Int, Int)] {
-        var result = try await self.useCase.getPlatformsInWishList(isEdit: false)
+        var result = try await self.wishListUseCase.getPlatformsInWishList(isEdit: false)
         if result.isEmpty {
             return result
         } else {
