@@ -275,19 +275,15 @@ private extension HomeViewController {
     func setNotification() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(sceneWillEnterForground),
+            selector: #selector(sceneWillEnterForeground),
             name: UIApplication.willEnterForegroundNotification,
             object: nil
         )
     }
 
     /// App Group UserDefaults 값 및 이벤트 전달
-    @objc private func sceneWillEnterForground() {
-        let sharedDefaults = UserDefaults(suiteName: "group.com.bycompany.bestwish")
-        if let bool = sharedDefaults?.bool(forKey: "AddProduct"), bool {
-            homeViewModel.action.onNext(.getDataSource)
-            sharedDefaults?.set(false, forKey: "AddProduct")
-        }
+    @objc private func sceneWillEnterForeground() {
+        homeViewModel.action.onNext(.appForegrounded)
     }
 }
 

@@ -16,6 +16,7 @@ public final class HomeViewModel: ViewModel {
 
     // MARK: - Action
     enum Action {
+        case appForegrounded
         case getDataSource
         case platformUpdate
         case wishListUpdate
@@ -66,6 +67,8 @@ public final class HomeViewModel: ViewModel {
         _action
             .subscribe(with: self) { owner, action in
                 switch action {
+                case .appForegrounded:
+                    owner.sceneWillEnterForeground()
                 case .getDataSource:
                     owner.setDataSources()
                 case .platformUpdate:
@@ -223,6 +226,18 @@ private extension HomeViewModel {
             } catch {
                 _error.accept(error)
             }
+        }
+    }
+}
+
+private extension HomeViewModel {
+    /// App Group UserDefaults 값 및 이벤트 전달
+    func sceneWillEnterForeground() {
+        if userDefaultsUseCase.bool(forKey: "AddProduct") {
+            action.onNext(.getDataSource)
+            userDefaultsUseCase.set(false, forKey: "AddProduct")
+        } else {
+            return
         }
     }
 }

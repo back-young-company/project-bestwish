@@ -23,7 +23,8 @@ public final class ShareViewModel: ViewModel {
     
     private let _completed = PublishRelay<Void>()
     private let _error = PublishRelay<Error>()
-    
+
+    private let userDefaultsUseCase: UserDefaultsUseCase
     private let wishListUseCase: WishListUseCase
     private let productSyncUseCase: ProductSyncUseCase
 
@@ -35,9 +36,11 @@ public final class ShareViewModel: ViewModel {
     private let disposeBag = DisposeBag()
     
     public init(
+        userDefaultsUseCase: UserDefaultsUseCase,
         wishListUseCase: WishListUseCase,
         productSyncUseCase: ProductSyncUseCase
     ) {
+        self.userDefaultsUseCase = userDefaultsUseCase
         self.wishListUseCase = wishListUseCase
         self.productSyncUseCase = productSyncUseCase
 
@@ -90,10 +93,17 @@ private extension ShareViewModel {
             do {
                 let entity = try await productSyncUseCase.sendProductEntity(from: text)
                 try await addProductToWishList(product: entity)
-                _completed.accept(())
+                markAddProductFlag()
+                _completed.accept(())                
             } catch {
                 _error.accept(error)
             }
         }
+    }
+}
+
+private extension ShareViewModel {
+    func markAddProductFlag() {
+        userDefaultsUseCase.set(true, forKey: "AddProduct")
     }
 }
