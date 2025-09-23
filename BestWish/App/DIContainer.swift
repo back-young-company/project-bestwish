@@ -11,10 +11,12 @@ import BestWishPresentation
 
 import Foundation
 
+import Supabase
+
 /// 의존성 주입 컨테이너
 final class DIContainer {
 
-    private let supabaseManager: SupabaseManager
+    private let supabaseProductManager: SupabaseProductManager
     private let supabaseUserInfoManager: SupabaseUserInfoManager
     private let supabaseOAuthManager: SupabaseOAuthManager
     private let keyChainManager: KeyChainManager
@@ -36,9 +38,11 @@ final class DIContainer {
     private let wishListUseCase: WishListUseCase
 
     init() {
-        self.supabaseManager = SupabaseManager()
-        self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
-        self.supabaseOAuthManager = SupabaseOAuthManagerImpl()
+        let supabase = SupabaseActor()
+
+        self.supabaseProductManager = SupabaseProductManager(supabase)
+        self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl(supabase)
+        self.supabaseOAuthManager = SupabaseOAuthManagerImpl(supabase)
         self.keyChainManager = KeyChainManagerImpl()
         self.productSyncManager = ProductSyncManager()
         self.coreMLManager = CoreMLManager()
@@ -52,7 +56,7 @@ final class DIContainer {
         self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
         self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager, firebaseAnalyticsManager: firebaseAnalyticsManager)
         self.wishListRepository = WishListRepositoryImpl(
-            manager: supabaseManager,
+            productManager: supabaseProductManager,
             userInfoManager: supabaseUserInfoManager
         )
 

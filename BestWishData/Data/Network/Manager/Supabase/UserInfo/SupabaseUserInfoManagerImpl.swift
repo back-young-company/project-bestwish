@@ -1,44 +1,28 @@
 //
-//  SupabaseUserInfoManager.swift
-//  BestWish
+//  SupabaseUserInfoManagerImpl.swift
+//  BestWishData
 //
-//  Created by 이수현 on 6/16/25.
+//  Created by 이수현 on 9/23/25.
 //
 
 import Foundation
 
-internal import Supabase
-
-public protocol SupabaseUserInfoManager {
-    /// 유저 정보 불러오기
-    func getUserInfo() async throws -> UserDTO
-    
-    /// 유저 정보 업데이트
-    func updateUserInfo(
-        profileImageCode: Int?,
-        nickname: String?,
-        gender: Int?,
-        birth: Date?
-    ) async throws
-}
+public import Supabase
 
 /// Supabase 유저 정보 매니저
 public final class SupabaseUserInfoManagerImpl: SupabaseUserInfoManager {
-    private let supabase: SupabaseClient
+    private let supabase: SupabaseActor
 
-    public init() {
-        supabase = SupabaseClient(
-            supabaseURL: Bundle.main.supabaseURL,
-            supabaseKey: Bundle.main.apiKey
-        )
+    public init(_ supabase: SupabaseActor) {
+        self.supabase = supabase
     }
 
     /// 유저 정보 불러오기
     public func getUserInfo() async throws -> UserDTO {
         do {
-            let userID = try await supabase.auth.session.user.id
+            let userID = try await supabase.client.auth.session.user.id
 
-            return try await supabase
+            return try await supabase.client
                 .from(SupabaseTable.userInfo.rawValue)
                 .select()
                 .eq(UserInfoAttributes.id.rawValue, value: userID)
@@ -73,10 +57,13 @@ public final class SupabaseUserInfoManagerImpl: SupabaseUserInfoManager {
         )
 
         do {
-            try await supabase
+            try await supabase.client
                 .from(SupabaseTable.userInfo.rawValue)
                 .update(updateUserInfo)
-                .eq(UserInfoAttributes.id.rawValue, value: supabase.auth.session.user.id)
+                .eq(
+                    UserInfoAttributes.id.rawValue,
+                    value: supabase.client.auth.session.user.id
+                )
                 .execute()
         } catch {
             throw SupabaseError.updateError(error)

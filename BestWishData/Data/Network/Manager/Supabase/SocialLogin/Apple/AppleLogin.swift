@@ -46,7 +46,7 @@ extension SupabaseOAuthManagerImpl {
 
         do {
             let endPoint = "swift-api/generate-client-secret"
-            let response: [String: String] = try await client.functions.invoke(
+            let response: [String: String] = try await supabase.client.functions.invoke(
                 endPoint,
                 options: .init(
                     method: .get,
@@ -198,7 +198,7 @@ extension SupabaseOAuthManagerImpl: ASAuthorizationControllerDelegate {
 
         Task {
             do {
-                let session = try await client.auth.signInWithIdToken(
+                let session = try await supabase.client.auth.signInWithIdToken(
                     credentials: .init(
                         provider: .apple,
                         idToken: idTokenString,
@@ -206,10 +206,10 @@ extension SupabaseOAuthManagerImpl: ASAuthorizationControllerDelegate {
                     )
                 )
                 if !name.isEmpty {
-                    try await client.auth.update(user: .init(data: ["full_name": .string(name)]))
+                    try await supabase.client.auth.update(user: .init(data: ["full_name": .string(name)]))
                     NSLog("auth.users 이름 갱신 성공")
 
-                    try await client
+                    try await supabase.client
                         .from("UserInfo")
                         .update(["name": name])
                         .eq("id", value: session.user.id)

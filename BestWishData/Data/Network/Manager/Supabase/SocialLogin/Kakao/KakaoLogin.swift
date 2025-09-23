@@ -17,7 +17,7 @@ extension SupabaseOAuthManagerImpl {
     public func logInKakao() async throws -> Supabase.Session? {
         let redirectURL = Bundle.main.redirectURL
         do {
-            let session = try await client.auth.signInWithOAuth(
+            let session = try await supabase.client.auth.signInWithOAuth(
                 provider: Provider.kakao,
                 redirectTo: redirectURL
             ) { [weak self] session in
