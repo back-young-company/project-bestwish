@@ -11,18 +11,18 @@ public import Supabase
 
 /// Supabase 유저 정보 매니저
 public final class SupabaseUserInfoManagerImpl: SupabaseUserInfoManager {
-    private let supabase: SupabaseClient
+    private let supabase: SupabaseActor
 
-    public init(_ client: SupabaseClient) {
-        supabase = client
+    public init(_ supabase: SupabaseActor) {
+        self.supabase = supabase
     }
 
     /// 유저 정보 불러오기
     public func getUserInfo() async throws -> UserDTO {
         do {
-            let userID = try await supabase.auth.session.user.id
+            let userID = try await supabase.client.auth.session.user.id
 
-            return try await supabase
+            return try await supabase.client
                 .from(SupabaseTable.userInfo.rawValue)
                 .select()
                 .eq(UserInfoAttributes.id.rawValue, value: userID)
@@ -57,10 +57,13 @@ public final class SupabaseUserInfoManagerImpl: SupabaseUserInfoManager {
         )
 
         do {
-            try await supabase
+            try await supabase.client
                 .from(SupabaseTable.userInfo.rawValue)
                 .update(updateUserInfo)
-                .eq(UserInfoAttributes.id.rawValue, value: supabase.auth.session.user.id)
+                .eq(
+                    UserInfoAttributes.id.rawValue,
+                    value: supabase.client.auth.session.user.id
+                )
                 .execute()
         } catch {
             throw SupabaseError.updateError(error)

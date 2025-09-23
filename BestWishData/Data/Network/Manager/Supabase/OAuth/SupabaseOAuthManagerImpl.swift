@@ -18,10 +18,10 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
     var kakaoAuthSession: ASWebAuthenticationSession?
     var currentNonce: String?
 
-    let client: SupabaseClient
+    let supabase: SupabaseActor
 
-    public init(_ client: SupabaseClient) {
-        self.client = client
+    public init(_ supabase: SupabaseActor) {
+        self.supabase = supabase
         super.init()
     }
 
@@ -32,7 +32,7 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
         let session: Supabase.Session
 
         do {
-            session = try await client.auth.setSession(
+            session = try await supabase.client.auth.setSession(
                 accessToken: accessToken,
                 refreshToken: refreshToken
             )
@@ -59,7 +59,7 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
     public func checkSignInState() async throws -> Bool {
         struct Role: Codable { let role: String }
         do {
-            let roles: [Role] = try await client
+            let roles: [Role] = try await supabase.client
                 .from("UserInfo")
                 .select("role")
                 .execute()
@@ -92,7 +92,7 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
     /// 로그아웃
     public func logOut(_ keyChain: KeyChainManager) async throws {
         do {
-            try await client.auth.signOut()
+            try await supabase.client.auth.signOut()
             // 로그아웃 후 키체인 삭제
             Task.detached(priority: .utility) {
                 await keyChain.deleteAllToken()
@@ -105,7 +105,7 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
 
     /// 회원 탈퇴
     public func withdraw(_ keyChain: KeyChainManager) async throws {
-        let session = try await client.auth.session
+        let session = try await supabase.client.auth.session
         guard
             let rawProvider = session.user.appMetadata["provider"]?.rawValue,
             let socialProvider = Provider(rawValue: rawProvider)
@@ -142,7 +142,7 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
         default:
             break
         }
-        async let rpc = client.rpc("delete_current_user").execute()
+        async let rpc = supabase.client.rpc("delete_current_user").execute()
         async let deleteKeychain: () = keyChain.deleteAllToken()
 
         do {

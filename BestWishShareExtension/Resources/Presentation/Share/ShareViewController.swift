@@ -17,23 +17,35 @@ internal import RxCocoa
 final class ShareViewController: UIViewController {
 
     // MARK: - Private Property
-    private let shareViewModel = ShareViewModel(
-        wishListUseCase: WishListUseCaseImpl(
-            repository: WishListRepositoryImpl(
-                manager: SupabaseManager(),
-                userInfoManager: SupabaseUserInfoManagerImpl()
-            )
-        ),
-        productSyncUseCase: ProductSyncUseCaseImpl(
-            repository: ProductSyncRepositoryImpl(
-                manager: ProductSyncManager(),
-                firebaseAnalyticsManager: FirebaseAnalyticsManagerImpl()
-            )
-        )
-    )
+    private let shareViewModel: ShareViewModel
     private let shareView = ShareView()
     private let disposeBag = DisposeBag()
 
+    init() {
+        let supabase = SupabaseActor()
+
+        self.shareViewModel = ShareViewModel(
+            wishListUseCase: WishListUseCaseImpl(
+                repository: WishListRepositoryImpl(
+                    productManager: SupabaseProductManager(supabase),
+                    userInfoManager: SupabaseUserInfoManagerImpl(supabase)
+                )
+            ),
+            productSyncUseCase: ProductSyncUseCaseImpl(
+                repository: ProductSyncRepositoryImpl(
+                    manager: ProductSyncManager(),
+                    firebaseAnalyticsManager: FirebaseAnalyticsManagerImpl()
+                )
+            )
+        )
+
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func loadView() {
         view = shareView
     }

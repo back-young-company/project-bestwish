@@ -11,19 +11,19 @@ public import Supabase
 
 /// 위시 리스트 관련 매니저
 public final class SupabaseProductManager {
-    private let supabase: SupabaseClient
+    private let supabase: SupabaseActor
 
-    public init(_ client: SupabaseClient) {
-        supabase = client
+    public init(_ supabase: SupabaseActor) {
+        self.supabase = supabase
     }
 
     /// 플랫폼 순서 조회
     func getPlatformSequence() async throws -> PlatformSequenceDTO {
         do {
-            return try await supabase
+            return try await supabase.client
                 .from(SupabaseTable.userInfo.rawValue)
                 .select(UserInfoAttributes.platform_sequence.rawValue)
-                .eq(UserInfoAttributes.id.rawValue, value: supabase.auth.session.user.id)
+                .eq(UserInfoAttributes.id.rawValue, value: supabase.client.auth.session.user.id)
                 .single()
                 .execute()
                 .value
@@ -35,10 +35,10 @@ public final class SupabaseProductManager {
     /// 플랫폼 순서 편집
     func updatePlatformSequence(to sequence: [Int16]) async throws {
         do {
-            try await supabase
+            try await supabase.client
                 .from(SupabaseTable.userInfo.rawValue)
                 .update([UserInfoAttributes.platform_sequence.rawValue: sequence])
-                .eq(UserInfoAttributes.id.rawValue, value: supabase.auth.session.user.id)
+                .eq(UserInfoAttributes.id.rawValue, value: supabase.client.auth.session.user.id)
                 .execute()
         } catch {
             throw SupabaseError.updateError(error)
@@ -50,10 +50,10 @@ public final class SupabaseProductManager {
         let sequence = userInfo.platformSequence ?? []
         do {
             // product 테이블에서 사용자와 일치하는 platform들만 가져오기
-            let result: [PlatformDTO] = try await supabase
+            let result: [PlatformDTO] = try await supabase.client
                 .from(SupabaseTable.product.rawValue)
                 .select(ProductAttributes.platform.rawValue)
-                .eq(ProductAttributes.user_id.rawValue, value: supabase.auth.session.user.id)
+                .eq(ProductAttributes.user_id.rawValue, value: supabase.client.auth.session.user.id)
                 .execute()
                 .value
             let platforms = result.map { Int($0.platform) }
@@ -86,10 +86,10 @@ public final class SupabaseProductManager {
     /// 위시 아이템 검색
     func searchWishListItems(query: String?, platform: Int?) async throws -> [ProductDTO] {
         do {
-            var builder = try await supabase
+            var builder = try await supabase.client
                 .from(SupabaseTable.product.rawValue)
                 .select()
-                .eq(ProductAttributes.user_id.rawValue, value: supabase.auth.session.user.id)
+                .eq(ProductAttributes.user_id.rawValue, value: supabase.client.auth.session.user.id)
 
             if let query {
                 // ilike: 대소문자 구분 X
@@ -115,10 +115,10 @@ public final class SupabaseProductManager {
     /// 위시 아이템 삭제
     func deleteWishListItem(id: UUID) async throws {
         do {
-            try await supabase
+            try await supabase.client
                 .from(SupabaseTable.product.rawValue)
                 .delete()
-                .eq(ProductAttributes.user_id.rawValue, value: supabase.auth.session.user.id)
+                .eq(ProductAttributes.user_id.rawValue, value: supabase.client.auth.session.user.id)
                 .eq(ProductAttributes.id.rawValue, value: id)
                 .execute()
         } catch {
@@ -129,7 +129,7 @@ public final class SupabaseProductManager {
     /// 위시 아이템 등록
     func addProductToWishList(product: ProductDTO) async throws {
         do {
-            let userID = try await supabase.auth.session.user.id
+            let userID = try await supabase.client.auth.session.user.id
             let product = ProductDTO(
                 id: product.id,
                 userID: userID,
@@ -143,7 +143,7 @@ public final class SupabaseProductManager {
                 createdAt: nil
             )
 
-            try await supabase
+            try await supabase.client
                 .from(SupabaseTable.product.rawValue)
                 .insert(product)
                 .execute()

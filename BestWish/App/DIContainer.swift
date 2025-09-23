@@ -38,9 +38,11 @@ final class DIContainer {
     private let wishListUseCase: WishListUseCase
 
     init() {
-        self.supabaseManager = SupabaseManager()
-        self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl()
-        self.supabaseOAuthManager = SupabaseOAuthManagerImpl()
+        let supabase = SupabaseActor()
+
+        self.supabaseProductManager = SupabaseProductManager(supabase)
+        self.supabaseUserInfoManager = SupabaseUserInfoManagerImpl(supabase)
+        self.supabaseOAuthManager = SupabaseOAuthManagerImpl(supabase)
         self.keyChainManager = KeyChainManagerImpl()
         self.productSyncManager = ProductSyncManager()
         self.coreMLManager = CoreMLManager()
@@ -54,7 +56,7 @@ final class DIContainer {
         self.coreMLRepository = CoreMLRepositoryImpl(manager: coreMLManager)
         self.productSyncRepository = ProductSyncRepositoryImpl(manager: productSyncManager, firebaseAnalyticsManager: firebaseAnalyticsManager)
         self.wishListRepository = WishListRepositoryImpl(
-            manager: supabaseProductManager,
+            productManager: supabaseProductManager,
             userInfoManager: supabaseUserInfoManager
         )
 
