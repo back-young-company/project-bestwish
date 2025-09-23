@@ -12,18 +12,18 @@ import Foundation
 public final class WishListRepositoryImpl: WishListRepository {
 
     // FIXME: SupabaseManager 네이밍 변경 필요
-    private let manager: SupabaseManager
+    private let productManager: SupabaseProductManager
     private let userInfoManager: SupabaseUserInfoManager
 
-    public init(manager: SupabaseManager, userInfoManager: SupabaseUserInfoManager) {
-        self.manager = manager
+    public init(productManager: SupabaseProductManager, userInfoManager: SupabaseUserInfoManager) {
+        self.productManager = productManager
         self.userInfoManager = userInfoManager
     }
 
     /// 플랫폼 순서 가져오기
     public func getPlatformSequence() async throws -> [Int] {
         do {
-            return try await manager.getPlatformSequence()
+            return try await productManager.getPlatformSequence()
                 .platformSequence
                 .map { Int($0) }
         } catch let error as SupabaseError {
@@ -34,7 +34,7 @@ public final class WishListRepositoryImpl: WishListRepository {
     /// 플랫폼 순서 업데이트
     public func updatePlatformSequence(to sequence: [Int]) async throws {
         do {
-            try await manager.updatePlatformSequence(to: sequence.map { Int16($0) })
+            try await productManager.updatePlatformSequence(to: sequence.map { Int16($0) })
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
         }
@@ -45,7 +45,7 @@ public final class WishListRepositoryImpl: WishListRepository {
         let userInfo = try await userInfoManager.getUserInfo()
         
         do {
-            return try await manager.getPlatformsInWishList(userInfo: userInfo, isEdit: isEdit)
+            return try await productManager.getPlatformsInWishList(userInfo: userInfo, isEdit: isEdit)
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
         }
@@ -54,7 +54,7 @@ public final class WishListRepositoryImpl: WishListRepository {
     /// 아이템 검색
     public func searchWishListItems(query: String?, platform: Int?) async throws -> [ProductEntity] {
         do {
-            let result = try await manager.searchWishListItems(query: query, platform: platform)
+            let result = try await productManager.searchWishListItems(query: query, platform: platform)
             return try result.map { try convertToProduct(from: $0) }
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
@@ -66,7 +66,7 @@ public final class WishListRepositoryImpl: WishListRepository {
     /// 위시 아이템 삭제
     public func deleteWishListItem(id: UUID) async throws {
         do {
-            try await manager.deleteWishListItem(id: id)
+            try await productManager.deleteWishListItem(id: id)
         } catch let error as SupabaseError {
             throw AppError.supabaseError(error)
         }
@@ -75,7 +75,7 @@ public final class WishListRepositoryImpl: WishListRepository {
     /// 위시 아이템 추가
     public func addProductToWishList(product: ProductEntity) async throws {
         do {
-            try await manager.addProductToWishList(
+            try await productManager.addProductToWishList(
                 product: convertToProductDTO(from: product)
             )
         } catch let error as SupabaseError {

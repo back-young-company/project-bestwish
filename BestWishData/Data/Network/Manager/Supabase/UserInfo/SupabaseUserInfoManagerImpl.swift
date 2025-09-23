@@ -1,36 +1,20 @@
 //
-//  SupabaseUserInfoManager.swift
-//  BestWish
+//  SupabaseUserInfoManagerImpl.swift
+//  BestWishData
 //
-//  Created by 이수현 on 6/16/25.
+//  Created by 이수현 on 9/23/25.
 //
 
 import Foundation
 
-internal import Supabase
-
-public protocol SupabaseUserInfoManager {
-    /// 유저 정보 불러오기
-    func getUserInfo() async throws -> UserDTO
-    
-    /// 유저 정보 업데이트
-    func updateUserInfo(
-        profileImageCode: Int?,
-        nickname: String?,
-        gender: Int?,
-        birth: Date?
-    ) async throws
-}
+public import Supabase
 
 /// Supabase 유저 정보 매니저
 public final class SupabaseUserInfoManagerImpl: SupabaseUserInfoManager {
     private let supabase: SupabaseClient
 
-    public init() {
-        supabase = SupabaseClient(
-            supabaseURL: Bundle.main.supabaseURL,
-            supabaseKey: Bundle.main.apiKey
-        )
+    public init(_ client: SupabaseClient) {
+        supabase = client
     }
 
     /// 유저 정보 불러오기

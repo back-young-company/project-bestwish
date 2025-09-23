@@ -1,5 +1,5 @@
 //
-//  SupabaseManager.swift
+//  SupabaseProductManager.swift
 //  BestWish
 //
 //  Created by 이수현 on 6/5/25.
@@ -7,17 +7,14 @@
 
 import Foundation
 
-internal import Supabase
+public import Supabase
 
 /// 위시 리스트 관련 매니저
-public final class SupabaseManager {
+public final class SupabaseProductManager {
     private let supabase: SupabaseClient
 
-    public init() {
-        supabase = SupabaseClient(
-            supabaseURL: Bundle.main.supabaseURL,
-            supabaseKey: Bundle.main.apiKey
-        )
+    public init(_ client: SupabaseClient) {
+        supabase = client
     }
 
     /// 플랫폼 순서 조회

@@ -9,7 +9,7 @@ import AuthenticationServices
 import BestWishDomain
 import Foundation
 
-internal import Supabase
+public import Supabase
 
 /// OAuthManager 구현부
 public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
@@ -18,12 +18,10 @@ public final class SupabaseOAuthManagerImpl: NSObject, SupabaseOAuthManager {
     var kakaoAuthSession: ASWebAuthenticationSession?
     var currentNonce: String?
 
-    let client = SupabaseClient(
-        supabaseURL: Bundle.main.supabaseURL,
-        supabaseKey: Bundle.main.apiKey
-    )
+    let client: SupabaseClient
 
-    public override init() {
+    public init(_ client: SupabaseClient) {
+        self.client = client
         super.init()
     }
 
